@@ -1,0 +1,40 @@
+<?php
+
+namespace App\Models;
+use DB;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Invoice extends Model
+{
+    use HasFactory;
+    public function getOneInvoiceDetail($transactionId){
+        $query = DB::table('detail_transactions as dt')
+        ->select(
+            DB::raw('concat(sp.name,    " ",s.name,         " ",i.name) as goods'),
+            DB::raw('concat(dt.amount,  " ",p.shortname)                as quantity'),
+            DB::raw('(dt.amount * i.weightbase) as netweight'),
+            'dt.amount as amount',
+            'dt.price as price',
+
+            //DB::raw('(CASE WHEN t.valutaType ="1" THEN "Rp"
+                //WHEN t.valutaType ="2" then "USD"
+                //WHEN t.valutaType ="3" then "RMB" END) AS valutaType'),
+
+            DB::raw('(dt.price * dt.amount * i.weightbase) as totalPrice')
+        )
+        ->join('transactions as t', 't.id', '=', 'dt.transactionId')
+        ->join('items as i', 'i.id', '=', 'dt.itemId')
+        ->join('freezings as f', 'i.freezingid', '=', 'f.id')
+        ->join('grades as g', 'i.gradeid', '=', 'g.id')
+        ->join('packings as p', 'i.packingid', '=', 'p.id')
+        ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->where('t.id','=', $transactionId)
+        ->get();  
+
+
+        return $query;
+    }
+}

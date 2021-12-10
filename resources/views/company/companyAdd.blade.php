@@ -1,0 +1,174 @@
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+
+@extends('layouts.layout')
+
+@section('content')
+@if (Auth::check() and (Auth::user()->isAdmin() or Auth::user()->isMarketing()))
+
+
+<script type="text/javascript"> 
+    $(document).ready(function() {
+        var i=1;
+        $('#add').click(function(){
+            i++;  
+            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control"></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon"></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email"></div><div class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>'); 
+        });
+        $(document).on('click', '.btn_remove', function(){  
+            var button_id = $(this).attr("id");   
+            $('#row'+button_id+'').remove();  
+        });
+    });
+</script>
+@if (session('success'))
+<script type="text/javascript">
+    swal("Success", "Data stock berhasil ditambahkan", "info");
+</script>
+@endif
+
+@if ($errors->any())
+<div class="alert alert-success">
+    <div class="row form-inline" onclick='$(this).parent().remove();'>
+        <div class="col-11">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        <div class="col-md-1 text-center">
+            <span class="label"><strong >x</strong></span>
+        </div>
+    </div>
+</div>
+@endif
+
+
+<div class="container-fluid">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb primary-color">
+                <li class="breadcrumb-item">
+                    <a class="white-text" href="{{ url('/home') }}">Home</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <a class="white-text" href="{{ url('companyList')}}">Company</a>
+                </li>
+                <li class="breadcrumb-item active">Tambah</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <form id="CompanyForm" action="{{route('companyStore')}}"  method="get" name="CompanyForm">
+            @csrf
+            <div class="d-grid gap-1">
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Nama</span>
+                    </div>
+                    <div class="col-md-4">
+                        <input id="name" name="name" class="form-control" value="{{ old('name') }}">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Alamat</span>
+                    </div>
+                    <div class="col-md-7">
+                        <textarea id="address" name="address" rows="4"  class="form-control">{{ old('address') }}</textarea>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Negara</span>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select w-100" id="countryId" name="countryId">
+                            <option value="-1">--Choose One--</option>
+                            @foreach ($countries as $country)
+                            @if ( $country->id == old('countryId') )
+                            <option value="{{ $country->id }}" selected>{{ $country->name }}</option>
+                            @else
+                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                            @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <table width="100%">
+                    <tr>
+                        <td><hr /></td>
+                        <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h3>Contact  Person</h3></td>
+                        <td><hr /></td>
+                    </tr>
+                </table>               
+                <div class="row form-group">
+                    <div class="row col-md-2">
+                        <button style="width:100%" type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Contact Person</button>
+                    </div>
+                </div>
+                <br>
+                <div class="row form-group">
+                    <div class="row col-md-12">
+                        <div class="table-responsive">  
+                            <table class="table" id="dynamic_field">
+                            </table> 
+                        </div>  
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-3 text-end"></div>
+                <div class="">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <input type="reset" value="Reset" class="btn btn-secondary">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+
+@if ($errors->any())
+@if (!empty(old('contactName')))
+<script type="text/javascript">
+    var $cn = @json(old('contactName'));
+    var $p = @json(old('phone'));
+    var $e = @json(old('email'));
+    for ($i=0; $i<$cn.length; $i++){
+        alert($i);
+        $('#dynamic_field').append('<tr id="row'+$i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control" value="'+$cn[$i]+'"></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon" value="'+$p[$i]+'"></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email" value="'+$e[$i]+'"></div><div class="col-md-1"><button type="button" name="remove" id="'+$i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>');  
+    }
+</script>
+@endif
+@endif
+
+@else
+@include('partial.noAccess')
+@endif
+
+@endsection
+
+
+
+
+@section('footer')
+@include('partial.footer')
+@endsection
+
+
+@section('header')
+@include('partial.header')
+@endsection
+
+
+
+
+
+
+
