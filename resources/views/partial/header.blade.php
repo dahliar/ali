@@ -5,6 +5,27 @@
 	<meta name="description" content="AliSeafood Stocks Information Systems">
 	<meta name="author" content="ALISeafood">
 </head>
+
+
+<style type="text/css">
+	.dropdown-menu li {
+		position: relative;
+	}
+	.dropdown-menu .dropdown-submenu {
+		display: none;
+		position: absolute;
+		left: 100%;
+		top: -7px;
+	}
+	.dropdown-menu .dropdown-submenu-left {
+		right: 100%;
+		left: auto;
+	}
+	.dropdown-menu > li:hover > .dropdown-submenu {
+		display: block;
+	}
+</style>
+
 <body>	
 	@if (Auth::check())
 	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -64,7 +85,38 @@
 							Master Data
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="{{ url('speciesList')}}">Species</a></li>
+							<li>
+								<a class="dropdown-item" href="{{ url('speciesList')}}">Species</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="#">
+									Organisasi &raquo;
+								</a>
+								<ul class="dropdown-menu dropdown-submenu">
+										<!--
+										<li>
+										<a class="dropdown-item" href="#">Submenu item 3 &raquo; </a>
+										<ul class="dropdown-menu dropdown-submenu">
+											<li>
+												<a class="dropdown-item" href="#">Multi level 1</a>
+											</li>
+											<li>
+												<a class="dropdown-item" href="#">Multi level 2</a>
+											</li>
+										</ul>
+										</li>
+									-->
+									<li>
+										<a class="dropdown-item" href="{{ url('organizationStructureList')}}">Struktur Organisasi</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ url('structuralPositionList') }}">Jabatan</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ url('workPositionList')}}">Bagian</a>
+									</li>
+								</ul>
+							</li>
 						</ul>
 					</li>
 					@endif

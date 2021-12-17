@@ -21,7 +21,7 @@
 </script>
 @if (session('success'))
 <script type="text/javascript">
-    swal("Success", "Data stock berhasil ditambahkan", "info");
+    swal("Success", "Data perusahaan berhasil ditambahkan", "info");
 </script>
 @endif
 
@@ -60,8 +60,7 @@
 </div>
 
 <div class="row">
-    <div class="col-1"></div>
-    <div class="col-10">
+    <div class="col-12">
         <form id="CompanyForm" action="{{route('companyStore')}}"  method="get" name="CompanyForm">
             @csrf
             <div class="d-grid gap-1">
@@ -98,40 +97,36 @@
                         </select>
                     </div>
                 </div>
-                <br>
-                <br>
-                <table width="100%">
-                    <tr>
-                        <td><hr /></td>
-                        <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h3>Contact  Person</h3></td>
-                        <td><hr /></td>
-                    </tr>
-                </table>               
                 <div class="row form-group">
-                    <div class="row col-md-2">
-                        <button style="width:100%" type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Add Contact Person</button>
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Kontak Person</span>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Kontak</button>
                     </div>
                 </div>
-                <br>
+
+
                 <div class="row form-group">
-                    <div class="row col-md-12">
+                    <div class="col-md-2 text-end"></div>
+                    <div class="col-md-10">
                         <div class="table-responsive">  
                             <table class="table" id="dynamic_field">
                             </table> 
                         </div>  
                     </div>
                 </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-3 text-end"></div>
-                <div class="">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <input type="reset" value="Reset" class="btn btn-secondary">
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <input type="reset" value="Reset" class="btn btn-secondary">
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
-</div>
+        </form>
+    </div>
 </div>
 
 @if ($errors->any())

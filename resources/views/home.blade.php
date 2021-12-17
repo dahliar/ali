@@ -13,7 +13,6 @@
 @if (Auth::check())
 <div class="container-fluid">
     <div class="row">
-        <!--
         <ol class="primary-color">
             <li>DONE. Update jumlah stock langsung setelah penambahan detail transaksi</li>
             <li>DONE. Form delete detail transaksi dan mengembalikan jumlah stock</li>
@@ -67,13 +66,18 @@
                     <li>DONE. Admin : ALl</li>
                 </ol>
             </li>
-            <li>Packed Unpacked</li>
-            <li></li>
+            <li>DONE. Packed Unpacked</li>
+            <li>Struktur Organisasi
+                <ol>
+                    <li>DONE. Work Position</li>
+                    <li>DONE. Structural Position</li>
+                    <li>DONE. Org Structure</li>
+                </ol>
+            </li>
             <li></li>
             <li>INI ADA DI /users/dahliar/DocumentRoot</li>
 
         </ol>
-    -->
     </div>
 </div>
 @else

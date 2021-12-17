@@ -24,8 +24,8 @@ class CompanyController extends Controller
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
             $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Contact Person" onclick="ContactList('."'".$row->id."'".')">
-            <i class="fa fa-plus" style="font-size:20px"></i>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Company" onclick="editCompany('."'".$row->id."'".')">
+            <i class="fa fa-edit" style="font-size:20px"></i>
             </button>
             '
             ;
@@ -56,26 +56,46 @@ class CompanyController extends Controller
     {
         //
         $request->validate([
-            'name' => 'required|max:100',
-            'alamat' => 'required|max:4000',
+            'name' => 'required|max:100|unique:companies',
+            'address' => 'required|max:4000',
             'countryId' => 'required|gt:0'
         ]);
 
 
-        /*
-        if (!empty($request->contactName)){
-            $a=0;
+        $company = [
+            'name'      => $request->name,
+            'nation'    => $request->countryId,
+            'address'   =>  $request->address,
+            'isActive'  =>  1
+        ];
 
-            foreach ($request->pinotes as $notes){            
-                $notesData[$a] = [
-                    'transactionId' =>  $lastTransactionIdStored,
-                    'note' => $notes
+        $companyId = DB::table('companies')->insertGetId($company);
+        //insert dlu ke tabel company
+        //ambil idnya
+        //masukin ke $companyId=lastInsert
+        //insert kontak
+
+        //dd(count($request->contactName));
+        if ((count($request->contactName)>0) or (count($request->phone)>0) or (count($request->email)>0)){
+            $max = max(count($request->contactName), count($request->phone), count($request->email));
+
+            for ($a=0; $a<$max; $a++){
+                $contact[$a] = [
+                    'name' =>  $request->contactName[$a],
+                    'phone' =>  $request->phone[$a],
+                    'email' =>  $request->email[$a],
+                    'companyId' =>  $companyId
                 ];
-                $a=$a+1;
             }
-            $this->transaction->storeNotes($notesData);
+
+            //dd($contact);
+
+            DB::table('contact')->insert($contact);
+
+            return redirect('companyList')
+            ->with('status','Data company berhasil ditambahkan.');
+
         }
-        */
     }
 
     /**
@@ -97,7 +117,11 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
-        //
+        $countries = DB::table('countries')
+        ->orderBy('name')
+        ->get();
+
+        return view('company.companyEdit', compact('company', 'countries'));
     }
 
     /**

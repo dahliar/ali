@@ -19,9 +19,8 @@
     });
 
 
-    function ContactList(id){
-        alert("ke daftar kontak");
-        //window.open(('{{ url("detailtransactionList") }}'+"/"+id), '_blank');
+    function editCompany(id){
+        window.open(('{{ url("companyEdit") }}'+"/"+id), '_blank');
     }
     function tambahCompany(){
         window.open('{{ url("companyAdd") }}', '_blank');

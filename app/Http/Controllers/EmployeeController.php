@@ -58,16 +58,10 @@ class EmployeeController extends Controller
 
     public function orgStructureList(Request $request)
     {
-        //$structPos = $request->structPosId;
-        //$workPos = $request->workPosId;
-
-
-        $orgstructure = DB::table("org_structures")
+        $orgstructure = DB::table("organization_structures")
         ->where("idstructuralpos", $request->structPosId)
         ->where("idworkpos", $request->workPosId)
         ->pluck("name", "id");
-
-
         return response()->json($orgstructure);
     }
 
@@ -179,7 +173,7 @@ class EmployeeController extends Controller
         ->select('mapping.idorgstructure as idorgstructure','wp.id as workPosition','sp.id as structuralPosition')
         ->where('e.id', $employee->id)
         ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-        ->join('org_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->first();
@@ -200,7 +194,7 @@ class EmployeeController extends Controller
         ->where('e.id', $employee->id)
         ->where('mapping.isactive', 1)
         ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-        ->join('org_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->first();
@@ -227,7 +221,7 @@ class EmployeeController extends Controller
         ->select('mapping.idorgstructure as idorgstructure','wp.id as workPosition','sp.id as structuralPosition')
         ->where('e.id', $employee->id)
         ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-        ->join('org_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->first();

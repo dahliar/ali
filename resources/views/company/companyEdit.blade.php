@@ -1,111 +1,29 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
+
 @extends('layouts.layout')
-
-@section('header')
-@include('partial.header')
-@endsection
-
-@section('footer')
-@include('partial.footer')
-@endsection
-
 
 @section('content')
 @if (Auth::check() and (Auth::user()->isAdmin() or Auth::user()->isMarketing()))
+
+
 <script type="text/javascript"> 
-    var i=1;
-
-    function disableForm() {        
-        @if($transaction->status > 1)
-        var inputs = document.getElementsByTagName("input");
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].disabled = true;
-        }
-        var selects = document.getElementsByTagName("select");
-        for (var i = 0; i < selects.length; i++) {
-            selects[i].disabled = true;
-        }
-        var textareas = document.getElementsByTagName("textarea");
-        for (var i = 0; i < textareas.length; i++) {
-            textareas[i].disabled = true;
-        }
-        var textareas = document.getElementsByTagName("button");
-        for (var i = 0; i < textareas.length; i++) {
-            textareas[i].disabled = true;
-        }
-        @endif
-    }
-
     $(document).ready(function() {
         var i=1;
         $('#add').click(function(){
             i++;  
-            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">notes</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>'); 
+            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control"></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon"></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email"></div><div class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>'); 
         });
         $(document).on('click', '.btn_remove', function(){  
             var button_id = $(this).attr("id");   
             $('#row'+button_id+'').remove();  
         });
-        $('#rekening').on('change', function() {
-            var rekening = $(this).val();
-            if (rekening>0){
-                $.ajax({
-                    url: '{{ url("getOneRekening") }}'+"/"+rekening,
-                    type: "GET",
-                    data : {"_token":"{{ csrf_token() }}"},
-                    dataType: "json",
-                    success:function(data){
-                        if(data){
-                            $('[name="swiftcode"]').val(data.swiftcode);
-                            $('[name="valuta"]').val(data.valuta);
-
-                        }else{
-                        }
-                    }
-                });
-            }else{
-                swal('warning','Choose Rekening first!','info');
-            }
-        });
-        $('#company').on('change', function() {
-            var company = $(this).val();
-            if (company>0){
-                $.ajax({
-                    url: '{{ url("getOneCompany") }}'+"/"+company,
-                    type: "GET",
-                    data : {"_token":"{{ csrf_token() }}"},
-                    dataType: "json",
-                    success:function(data){
-                        if(data){
-                            $('[name="companydetail"]').val(data.address+'. '+data.nation);
-                        }else{
-                        }
-                    }
-                });
-            }else{
-                swal('warning','Choose Company first!','info');
-            }
-        });
-        $('#valutaType').on('change', function() {
-            var e = document.getElementById("valutaType");
-            var valutaType = e.options[e.selectedIndex].value;
-            var valText = e.options[e.selectedIndex].text;
-
-            if (valutaType>0){
-                document.getElementById("spanAm").textContent=valText;
-                document.getElementById("spanAd").textContent=valText;
-            }else{
-                swal('warning','Choose Payment Valuta first!','info');
-            }
-        });
     });
 </script>
 @if (session('success'))
 <script type="text/javascript">
-    swal("Success", "Data stock berhasil ditambahkan", "info");
+    swal("Success", "Data perusahaan berhasil ditambahkan", "info");
 </script>
 @endif
-
 
 @if ($errors->any())
 <div class="alert alert-success">
@@ -123,404 +41,103 @@
     </div>
 </div>
 @endif
-<body onload="disableForm()">
-    <div class="container-fluid">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="row">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb primary-color">
-                            <li class="breadcrumb-item">
-                                <a class="white-text" href="{{ url('/home') }}">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active">
-                                <a class="white-text" href="{{ url('transactionList')}}">Transaksi</a>
-                            </li>
-                            <li class="breadcrumb-item active">Edit</li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-10">
-                <form id="TransactionForm" action="{{route('transactionUpdate')}}"  method="get" name="TransactionForm">
-                    <div class="d-grid gap-1">
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">Transaction Number*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="transactionNum" name="transactionNum"  class="form-control"  value="{{ $transaction->transactionNum}}" readonly>
-                                <input id="isEdit" name="isEdit"  class="form-control"  value="isEdit" type="hidden" readonly>
-                                <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
-                            </div>
-                        </div>                   
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">PI Number*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="pinum" name="pinum"  class="form-control"  value="{{ $transaction->pinum}}" readonly>
-                                <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
-                            </div>
-                        </div>                   
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">Shipper*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="shipper" name="shipper"  class="form-control" value="{{ $transaction->shipper}}">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">Shipper Address*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <textarea id="shipperAddress" name="shipperAddress" rows="4"  class="form-control" style="min-width: 100%">{{ $transaction->shipperAddress}}</textarea>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanBank">Bank*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <select class="form-select w-100" id="rekening" name="rekening">
-                                    <option value="-1">--Choose One--</option>
-                                    @foreach ($rekenings as $rekening)
-                                    @if ( $rekening->id == $transaction->rekeningid)
-                                    <option value="{{ $rekening->id }}" selected>{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }} </option>
-                                    @else
-                                    <option value="{{ $rekening->id }}">{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>                    
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanBank">Registration Number*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-select w-100" id="countryId" name="countryId">
-                                    <option value="-1">--Choose One--</option>
-                                    @foreach ($countryRegister as $register)
-                                    @if ( $register->id == $transaction->countryId )
-                                    <option value="{{ $register->id }}" selected>{{ $register->name }} - {{ $register->registration }}</option>
-                                    @else
-                                    <option value="{{ $register->id }}">{{ $register->name }} - {{ $register->registration }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span class="input-group-text">Swiftcode</span>
-                                    <input id="swiftcode" name="swiftcode" class="form-control" value="{{ $transaction->swiftcode}}" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span class="input-group-text col-3">Valuta</span>
-                                    <input id="valuta" name="valuta" rows="4"  class="form-control" value="{{ $transaction->valuta}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="companyName">Company*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <select id="company" name="company" class="form-select">
-                                    <option value="-1">--Choose One--</option>
-                                    @foreach ($companies as $company)
-                                    @if ( $company->id == $transaction->companyId)
-                                    <option value="{{ $company->id }}" selected>{{ $company->name }}</option>
-                                    @else
-                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanConsignee">Consignee Details*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <textarea id="companydetail" name="companydetail" rows="4"  class="form-control" style="min-width: 100%">{{ $transaction->companydetail}}</textarea>
-                            </div>  
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Packer*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="packer" value="{{ $transaction->packer}}" name="packer" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLoading">Port of Loading*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="loadingPort" value="{{ $transaction->loadingport}}" name="loadingPort" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanDestination">Port of Destination*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="destinationPort" name="destinationPort" type="text" value="{{ $transaction->destinationport}}" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label">Order Type*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <select id="orderType" name="orderType" class="form-select" >
-                                    <option value="-1" selected>--Choose One--</option>
-                                    <option value="1" @if($transaction->orderType == 1) selected @endif>FOB</option>
-                                    <option value="2" @if($transaction->orderType == 2) selected @endif>CNF</option>
-                                    <option value="3" @if($transaction->orderType == 3) selected @endif>CFO</option>
-                                </select>
-                            </div>
-                        </div>  
 
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanParty">Party*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="containerParty" name="containerParty" type="text" value="{{ $transaction->containerParty}}" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">Created at</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="creationDate" name="creationDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->creationDate)) }}" readonly >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">Tanggal Transaksi*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="transactionDate" name="transactionDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->transactionDate)) }}" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">Tanggal Loading*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="loadingDate" name="loadingDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->loadingDate)) }}" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">ETD*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="departureDate" name="departureDate" value="{{ date('Y-m-d', strtotime($transaction->departureDate)) }}" class="form-control text-end">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">ETA*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="arrivalDate" name="arrivalDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->arrivaldate)) }}" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Container Number*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <input id="containerNumber" value="{{ $transaction->containerNumber }}" name="containerNumber" type="text" class="form-control" placeholder="Container number">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Seal Number*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <input id="containerSeal" value="{{ $transaction->containerSeal }}" name="containerSeal" type="text" class="form-control" placeholder="Seal number">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Vessel*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <input id="containerVessel" value="{{ $transaction->containerVessel }}" name="containerVessel" type="text" class="form-control" placeholder="Vessel name & number">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Container Type*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="containerType" name="containerType" class="form-select" >
-                                    <option value="-1" selected>--Choose One--</option>
-                                    <option value="1" @if($transaction->containerType) == 1) selected @endif>Dry</option>
-                                    <option value="2" @if($transaction->containerType == 2) selected @endif>Reefer</option>
-                                </select>
-                            </div>                    
-                        </div>                           
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Payment Valuta*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="valutaType" name="valutaType" class="form-select" >
-                                    <option value="-1" selected>--Choose One--</option>
-                                    <option value="1" @if($transaction->valutaType == 1) selected @endif>Rupiah</option>
-                                    <option value="2" @if($transaction->valutaType == 2) selected @endif>US Dollar</option>
-                                    <option value="3" @if($transaction->valutaType == 3) selected @endif>Renminbi</option>
-                                </select>
-                            </div>                    
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Payment Amount*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span name="spanAm" id="spanAm" class="input-group-text">-</span>
 
-                                    <input id="payment" name="payment" type="number" step="0.01" value="{{ $transaction->payment }}" class="form-control text-end" placeholder="use commas">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Advance*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span name="spanAd" id="spanAd" class="input-group-text">-</span>
-
-                                    <input id="advance" name="advance" type="number" step="0.01" value="{{ $transaction->advance }}" class="form-control text-end" placeholder="use commas">
-                                </div>
-                            </div>
-                        </div>
-                        @if($transaction->status == 1)
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label">Status</span>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="status" name="status" class="form-select" >
-                                    <option value="-1">--Choose One--</option>
-                                    <option value="1" @if($transaction->status == 1) selected @endif>On Progress</option>
-                                    <option value="2" @if($transaction->status == 2) selected @endif>Finished</option>
-                                    <option value="3" @if($transaction->status == 3) selected @endif>Cancelled</option>
-                                </select>
-                            </div>
-                        </div> 
-                        @endif
-                        <table width="100%">
-                            <tr>
-                                <td><hr /></td>
-                                <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h3>Proforma invoce additional data</h3></td>
-                                <td><hr /></td>
-                            </tr>
-                        </table>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Shipped Date Plan*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="shippedDatePlan" value="{{ $transaction->shippedDatePlan }}" name="shippedDatePlan" type="text" class="form-control" placeholder="such as latest shipment">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Payment Plan*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="paymentPlan" value="{{ $transaction->paymentPlan }}" name="paymentPlan" type="text" class="form-control" placeholder="payment terms such as LC or direct transfers">
-                            </div>
-                        </div>                
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">PI Notes</span>
-                            </div>
-                            <div class="col-md-9">
-                                <span class="label">Used to describe terms and condition for the next transaction</span>
-                                <button style="width:100%" type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Add PI Notes</button>
-                                <br>
-                                <div class="table-responsive">  
-                                    <table class="table" id="dynamic_field">
-                                      <td class="col-md-12">
-                                      </td>  
-                                  </table>   
-                              </div>
-                          </div>
-                      </div>                        
-                      @if($transaction->status == 1)
-
-                      <div class="row form-group">
-                        <div class="col-md-3 text-end">
-                        </div>
-                        <div class="col-md-8 text-center">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <input type="reset" value="Reset" class="btn btn-secondary">
-                        </div>
-                        @endif
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="col-1"></div>
+<div class="container-fluid">
+    <div class="row">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb primary-color">
+                <li class="breadcrumb-item">
+                    <a class="white-text" href="{{ url('/home') }}">Home</a>
+                </li>
+                <li class="breadcrumb-item active">
+                    <a class="white-text" href="{{ url('companyList')}}">Company</a>
+                </li>
+                <li class="breadcrumb-item active">Tambah</li>
+            </ol>
+        </nav>
     </div>
 </div>
-</body>
 
-@if (!empty($pinotes))
-<script type="text/javascript"> 
-    $("#dynamic_field tr").remove(); 
-</script>
-@foreach ($pinotes as $note)
-<script type="text/javascript"> 
-    i++;  
-    $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">'+{!! json_encode($note->note) !!}+'</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');  
-</script>
-@endforeach
-@endif
+<div class="row">
+    <div class="col-12">
+        <form id="CompanyForm" action="{{route('companyStore')}}"  method="get" name="CompanyForm">
+            @csrf
+            <div class="d-grid gap-1">
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Nama</span>
+                    </div>
+                    <div class="col-md-4">
+                        <input id="name" name="name" class="form-control" value="{{ old('name', $company->name) }}">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Alamat</span>
+                    </div>
+                    <div class="col-md-7">
+                        <textarea id="address" name="address" rows="4"  class="form-control">{{ old('address', $company->address) }}</textarea>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Negara</span>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select w-100" id="countryId" name="countryId">
+                            <option value="-1">--Choose One--</option>
+                            @foreach ($countries as $country)
+                            @if ( $country->id == old('countryId', $company->nation) )
+                            <option value="{{ $country->id }}" selected>{{ $country->name }}</option>
+                            @else
+                            <option value="{{ $country->id }}">{{ $country->name }}</option>
+                            @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Kontak Person</span>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Kontak</button>
+                    </div>
+                </div>
 
+
+                <div class="row form-group">
+                    <div class="col-md-2 text-end"></div>
+                    <div class="col-md-10">
+                        <div class="table-responsive">  
+                            <table class="table" id="dynamic_field">
+                            </table> 
+                        </div>  
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <input type="reset" value="Reset" class="btn btn-secondary">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
 @if ($errors->any())
-@if (!empty(old('pinotes')))
+@if (!empty(old('contactName')))
 <script type="text/javascript">
-    $("#dynamic_field tr").remove(); 
-    var i=1;
-    var $arr = @json(old('pinotes'));
-    for ($note of $arr){
-        i++;  
-        $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">'+$note+'</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');  
+    var $cn = @json(old('contactName'));
+    var $p = @json(old('phone'));
+    var $e = @json(old('email'));
+    for ($i=0; $i<$cn.length; $i++){
+        alert($i);
+        $('#dynamic_field').append('<tr id="row'+$i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control" value="'+$cn[$i]+'"></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon" value="'+$p[$i]+'"></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email" value="'+$e[$i]+'"></div><div class="col-md-1"><button type="button" name="remove" id="'+$i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>');  
     }
 </script>
 @endif
@@ -531,3 +148,22 @@
 @endif
 
 @endsection
+
+
+
+
+@section('footer')
+@include('partial.footer')
+@endsection
+
+
+@section('header')
+@include('partial.header')
+@endsection
+
+
+
+
+
+
+

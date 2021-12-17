@@ -10,6 +10,9 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\SizeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\OrganizationStructureController;
+use App\Http\Controllers\StructuralPositionController;
+use App\Http\Controllers\WorkPositionController;
 use App\Models\Rekening; 
 use App\Models\Company; 
 use App\Models\Item; 
@@ -140,8 +143,8 @@ Route::get('itemEditStore',[SpeciesController::class, 'updateItem'])->middleware
 //COMPANIES
 Route::get('companyList',[CompanyController::class, 'index'])->middleware(['auth']);
 Route::get('companyAdd',[CompanyController::class, 'create'])->middleware(['auth']);
-Route::get('companyView',[CompanyController::class, 'show'])->middleware(['auth']);
-Route::get('companyEdit/{companies}',[CompanyController::class, 'edit'])->middleware(['auth']);
+//Route::get('companyView',[CompanyController::class, 'show'])->middleware(['auth']);
+Route::get('companyEdit/{company}',[CompanyController::class, 'edit'])->middleware(['auth']);
 Route::get('companyStore',[CompanyController::class, 'store'])->middleware(['auth'])->name('companyStore');
 Route::get('companyUpdate',[CompanyController::class, 'update'])->middleware(['auth'])->name('companyUpdate');
 Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middleware(['auth']);
@@ -151,7 +154,6 @@ Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middle
 
 
 
-Route::post('orgStructureList', [EmployeeController::class, 'orgStructureList'])->middleware(['auth']);
 Route::GET('getAllTransaction', [TransactionController::class, 'getAlltransaction'])->middleware(['auth']);
 Route::GET('getAllDetail/{transactionId}', [DetailTransactionController::class, 'getAllDetail'])->middleware(['auth']);
 
@@ -192,6 +194,33 @@ Route::GET('employeeAdd',[EmployeeController::class, 'create'])->middleware('aut
 Route::GET('employeeEdit/{employee}',[EmployeeController::class, 'edit'])->middleware('auth');
 Route::GET('profileEdit/{employee}',[EmployeeController::class, 'employeePersonalDataEdit'])->middleware('auth');
 Route::GET('employeeMappingEdit/{employee}',[EmployeeController::class, 'editMapping'])->middleware('auth');
+
+
+Route::GET('organizationStructureList',[OrganizationStructureController::class, 'index'])->middleware('auth');
+Route::GET('organizationStructureAdd',[OrganizationStructureController::class, 'create'])->middleware('auth');
+Route::POST('organizationStructureStore',[OrganizationStructureController::class, 'store'])->middleware('auth');
+Route::POST('organizationStructureUpdate',[OrganizationStructureController::class, 'update'])->middleware('auth');
+Route::GET('organizationStructureEdit/{organization_structure}',[OrganizationStructureController::class, 'edit'])->middleware('auth');
+
+Route::GET('structuralPositionList',[StructuralPositionController::class, 'index'])->middleware('auth');
+Route::GET('structuralPositionAdd',[StructuralPositionController::class, 'create'])->middleware('auth');
+Route::POST('structuralPositionStore',[StructuralPositionController::class, 'store'])->middleware('auth');
+Route::POST('structuralPositionUpdate',[StructuralPositionController::class, 'update'])->middleware('auth');
+Route::GET('structuralPositionEdit/{structural_position}',[StructuralPositionController::class, 'edit'])->middleware('auth');
+
+Route::GET('workPositionList',[WorkPositionController::class, 'index'])->middleware('auth');
+Route::GET('workPositionAdd',[WorkPositionController::class, 'create'])->middleware('auth');
+Route::POST('workPositionStore',[WorkPositionController::class, 'store'])->middleware('auth');
+Route::POST('workPositionUpdate',[WorkPositionController::class, 'update'])->middleware('auth');
+Route::GET('workPositionEdit/{work_position}',[WorkPositionController::class, 'edit'])->middleware('auth');
+
+Route::GET('getAllOrgStructure',[OrganizationStructureController::class, 'list'])->middleware('auth');
+Route::GET('getAllStructuralPosition',[StructuralPositionController::class, 'getAllStructuralPosition'])->middleware('auth');
+Route::GET('getAllWorkPosition',[WorkPositionController::class, 'getAllWorkPosition'])->middleware('auth');
+
+
+
+
 
 
 
