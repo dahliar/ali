@@ -15,3 +15,7 @@ storage/*.key
 Homestead.yaml
 Homestead.json
 /.vagrant
+/config/app.php
+/config/database.php
+config/app.php
+config/database.php
