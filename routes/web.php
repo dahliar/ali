@@ -55,10 +55,12 @@ Route::get('/dashboard', function () {
 Route::get('/home', function () {
     return view('home');
 })->middleware(['auth']);
+
+/*
 Route::get('/homeTwo', function () {
     return view('home2');
 })->middleware(['auth']);
-
+*/
 
 Route::get('unauthenticated', function () {
     return view('partial.footer');

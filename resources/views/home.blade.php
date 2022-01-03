@@ -13,6 +13,7 @@
 
 @if (Auth::check())
 <div class="container-fluid">
+<!--
     <div class="row">
         <ol class="primary-color">
             <li>DONE. Update jumlah stock langsung setelah penambahan detail transaksi</li>
@@ -80,6 +81,7 @@
 
         </ol>
     </div>
+-->
 </div>
 @else
 @include('partial.noAccess')
