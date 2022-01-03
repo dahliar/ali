@@ -120,7 +120,7 @@
                     </nav>
                 </div>
                 <div class="modal-body d-grid gap-1">
-                    <form id="StructureAddForm" action="{{url('structureUpdate')}}" method="POST" name="StructureAddForm" autocomplete="off">
+                    <form id="StructureAddForm" action="{{url('organizationStructureUpdate')}}" method="POST" name="StructureAddForm" autocomplete="off">
                         @csrf
                         <div class="p-1 row form-group">
                             <div class="col-md-2 text-end">
@@ -194,6 +194,17 @@
                                 <select id="reportTo" name="reportTo" class="form-control" >
                                     <option value="-1">--Choose First--</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="p-1 row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Max Employee</span>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="maxemployee" name="maxemployee" type="number" class="form-control text-end" autocomplete="none" value="{{ old('maxemployee', $organization_structure->maxemployee) }}">
+                                    <span class="input-group-text" id="basic-addon2">posisi</span>
+                                </div>
                             </div>
                         </div>
                         <div class="p-1 row form-group">

@@ -24,7 +24,7 @@ class OrganizationStructureController extends Controller
     {
         $structpos = StructuralPosition::where('isActive', '>','0')->get();
         $workpos = WorkPosition::all();
-        return view('structure.structure.organizationStructureAdd', compact('structpos', 'workpos'));
+        return view('structure.organizationStructureAdd', compact('structpos', 'workpos'));
     }
     public function store(Request $request)
     {
@@ -35,6 +35,7 @@ class OrganizationStructureController extends Controller
             'workPosition'          => ['required', 'gt:0'],
             'structuralPosition'    => ['required', 'gt:0'],
             'reportTo'              => ['required', 'gt:0'],
+            'maxemployee'           => ['required', 'integer', 'gt:0'],
             'gajiPokok'             => ['required', 'integer', 'gte:0'],
             'uangHarian'            => ['required', 'integer', 'gte:0'],
             'uangTransport'         => ['required', 'integer', 'gte:0'],
@@ -46,10 +47,11 @@ class OrganizationStructureController extends Controller
 
         //insert ke table employees
         $orgStructure = [
-            'name'                => $request->name,
-            'idworkpos'        => $request->workPosition,
-            'idstructuralpos'  => $request->structuralPosition,
-            'reportTo'            => $request->reportTo,
+            'name'                  => $request->name,
+            'idworkpos'             => $request->workPosition,
+            'idstructuralpos'       => $request->structuralPosition,
+            'reportTo'              => $request->reportTo,
+            'maxemployee'            => $request->maxemployee,
             'defGajiPokok'           => $request->gajiPokok,
             'defUangHarian'          => $request->uangHarian,
             'defUangTransport'       => $request->uangTransport,
@@ -59,7 +61,7 @@ class OrganizationStructureController extends Controller
         //$empid = $this->orgStructure->orgStructureStore($employee);
         DB::table('organization_structures')->insert($orgStructure);
 
-        return redirect('structure.organizationStructureList')
+        return redirect('organizationStructureList')
         ->with('status','Struktur organisasi baru berhasil ditambahkan.');
     }
     public function update(Request $request)
@@ -68,6 +70,7 @@ class OrganizationStructureController extends Controller
             'filterWorkPosition'          => ['required', 'gt:0'],
             'filterStructuralPosition'    => ['required', 'gt:0'],
             'reportTo'              => ['required', 'gt:0'],
+            'maxemployee'           => ['required', 'integer', 'gt:0'],
             'gajiPokok'             => ['required', 'integer', 'gte:0'],
             'uangHarian'            => ['required', 'integer', 'gte:0'],
             'uangTransport'         => ['required', 'integer', 'gte:0'],
@@ -80,6 +83,7 @@ class OrganizationStructureController extends Controller
         //insert ke table employees
         $orgStructure = [
             'reportTo'               => $request->reportTo,
+            'maxemployee'            => $request->maxemployee,
             'defGajiPokok'           => $request->gajiPokok,
             'defUangHarian'          => $request->uangHarian,
             'defUangTransport'       => $request->uangTransport,
@@ -90,7 +94,7 @@ class OrganizationStructureController extends Controller
         $action = OrganizationStructure::where('id', $request->idStructure)
         ->update($orgStructure);
 
-        return redirect('structure.organizationStructureList')
+        return redirect('organizationStructureList')
         ->with('status','Struktur Organisasi berhasil diubah.');
     }
     public function edit(OrganizationStructure $organization_structure)
@@ -111,6 +115,7 @@ class OrganizationStructureController extends Controller
             'sp.name as spname', 
             'wp.name as wpname', 
             'os2.name as reportToName', 
+            'os.maxemployee as maxemployee', 
             'os.defGajiPokok as gajiPokok', 
             'os.defUangLembur as uangLembur', 
             'os.defUangTransport as uangTransport', 

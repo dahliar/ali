@@ -10,6 +10,7 @@
 
 
 @section('content')
+
 @if (Auth::check())
 <div class="container-fluid">
     <div class="row">

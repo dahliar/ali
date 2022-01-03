@@ -55,6 +55,9 @@ Route::get('/dashboard', function () {
 Route::get('/home', function () {
     return view('home');
 })->middleware(['auth']);
+Route::get('/homeTwo', function () {
+    return view('home2');
+})->middleware(['auth']);
 
 
 Route::get('unauthenticated', function () {
@@ -72,7 +75,15 @@ Route::get('employeeEdit',[EmployeeController::class, 'edit'])->middleware(['aut
 Route::get('transactionList',[TransactionController::class, 'index'])->middleware(['auth']);
 Route::get('transactionAdd',[TransactionController::class, 'create'])->middleware(['auth']);
 Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth']);
+
+
+
 Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'])->middleware(['auth']);
+
+
+
+
+
 Route::get('transactionStore',[TransactionController::class, 'store'])->middleware(['auth'])->name('transactionStore');
 Route::get('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth'])->name('transactionUpdate');
 
