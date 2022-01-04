@@ -199,12 +199,7 @@
                             <option value="-1">--Choose One--</option>
                             @foreach ($companies as $company)
                             @if ( $company->id == old('company'))
-
-
                             <option value="{{ $company->id }}" selected>{{ $company->name }}</option>
-
-
-
                             @else
                             <option value="{{ $company->id }}">{{ $company->name }}</option>
                             @endif
@@ -377,6 +372,36 @@
                             <input id="advance" name="advance" type="number" step="0.01" value="{{ old('advance') }}" class="form-control text-end" placeholder="use commas for decimals">
                         </div>
                     </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-3 text-md-right">
+                        <span class="label" id="forwarderName">Forwarder*</span>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="forwarder" name="forwarder" class="form-select" >
+                            <option value="-1">--Choose One--</option>
+                            @foreach ($forwarders as $forwarder)
+                            @if ( $forwarder->id == old('forwarder'))
+                            <option value="{{ $forwarder->id }}" selected>{{ $forwarder->name }}</option>
+                            @else
+                            <option value="{{ $forwarder->id }}">{{ $forwarder->name }}</option>
+                            @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-3 text-md-right">
+                        <span class="label" id="undername">Undername*</span>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="undername" name="undername" class="form-select" >
+                            <option value="-1" selected>--Choose One--</option>
+                            <option value="1" @if(old('undername') == 1) selected @endif>Internal</option>
+                            <option value="2" @if(old('undername') == 2) selected @endif>Undername</option>
+                        </select>
+                    </div>                    
                 </div>
                 <br>
                 <br>

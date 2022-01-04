@@ -13,9 +13,18 @@
 
 @if (Auth::check())
 <div class="container-fluid">
-<!--
     <div class="row">
         <ol class="primary-color">
+            <li>DONE. Forwarder</li>
+            <li>DONE. Status undername</li>
+            <li>PI dan IPL</li>
+            <ol class="primary-color">
+                <li>No PI dan IPL bisa berbeda</li>
+                <li>Format no surat</li>
+                <li>jika isundername is true, data payment di IPL diambilkan dari payment, jika false diambilkan dari total transaksi</li>
+                <li>no IPL, tahun diambil dari tahun finished</li>
+            </ol>
+
             <li>DONE. Update jumlah stock langsung setelah penambahan detail transaksi</li>
             <li>DONE. Form delete detail transaksi dan mengembalikan jumlah stock</li>
             <li>Status transaksi</li>
@@ -81,7 +90,6 @@
 
         </ol>
     </div>
--->
 </div>
 @else
 @include('partial.noAccess')

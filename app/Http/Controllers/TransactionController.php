@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Rekening;
 use App\Models\Countries;
 use App\Models\TransactionNote;
+use App\Models\Forwarder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use DB;
@@ -41,11 +42,12 @@ class TransactionController extends Controller
     {
         $companies = Company::all();
         $rekenings = Rekening::all();
+        $forwarders = Forwarder::orderBy('name', 'ASC')->get();
         $countryRegister = Countries::where('isActive',1)->get();
 
         //$notes = TransactionNote::where('transactionId',$transaction->id)->get();
 
-        return view('transaction.transactionAdd', compact('countryRegister', 'companies', 'rekenings'));
+        return view('transaction.transactionAdd', compact('countryRegister', 'companies', 'rekenings', 'forwarders'));
     }
 
 
@@ -87,6 +89,8 @@ class TransactionController extends Controller
                 'valutaType' => 'required|gt:0',
                 'payment' => 'required|gt:0',
                 'advance' => 'required|gt:0',
+                'forwarder' => 'required|gt:0',
+                'undername' => 'required|gt:0',
                 'transactionDate' => 'required|date|before_or_equal:today',
                 'loadingDate' => 'required|date',
                 'departureDate' => 'required|date|after_or_equal:loadingDate',
@@ -100,6 +104,9 @@ class TransactionController extends Controller
                 'containerType.gt'=> 'Pilih salah satu jenis pengiriman',
                 'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
                 'transactionNum.unique'=> 'Nomor transaksi harus unik',
+                'countryId.gt'=>'Pilih salah satu negara',
+                'forwarder.gt'=>'Pilih forwarder',
+                'undername.gt'=>'Pilih status jenis undername'
             ]
         );
 
@@ -129,6 +136,8 @@ class TransactionController extends Controller
             'containerVessel' =>  $request->containerVessel,
             'payment' =>  $request->payment,
             'advance' =>  $request->advance,
+            'forwarderid' => $request->forwarder,
+            'isundername' => $request->undername,
             'valutaType' =>  $request->valutaType,
             'creationDate' =>  date('Y-m-d'),
             'transactionDate' => $request->transactionDate,

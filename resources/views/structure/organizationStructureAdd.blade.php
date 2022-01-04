@@ -111,7 +111,7 @@
             </nav>
         </div>
         <div class="modal-body d-grid gap-1">
-            <form id="StructureAddForm" action="{{url('organizationStructure    Store')}}" method="POST" name="StructureAddForm" autocomplete="off">
+            <form id="StructureAddForm" action="{{url('organizationStructureStore')}}" method="POST" name="StructureAddForm" autocomplete="off">
                 @csrf
                 <div class="p-1 row form-group">
                     <div class="col-md-2 text-end">

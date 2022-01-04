@@ -28,7 +28,24 @@
         }
 
         body {
-            margin: 10px;
+            margin-left: 1cm;
+            margin-right: 1cm;
+        }
+        @page {
+            margin: 225px 25px;
+        }
+
+        header {
+            position: fixed;
+            top: -200px;
+            text-align: center;
+        }
+
+        footer {
+            position: fixed;
+            bottom: -200px;
+            height: 50px;
+            text-align: center;
         }
     </style>
     <head>
@@ -36,43 +53,46 @@
         <title>Invoice - {{$transaction->pinum}}</title>
     </head>
     <body>
-        <table width="100%">
-            <tr>
-                <td width="30%" align="center">
-                    <img src="{{ asset('/images/ali-logo.png') }}" alt="Logo" width="120" class="logo"/>
-                </td>
-                <td width="70%" style="text-align: center; vertical-align: top;">
-                    <h3 align="center">
-                        PT. ANUGRAH LAUT INDONESIA
-                    </h3>
-                    <h4 align="center">
-                        Jl. Raya Rembang - Tuban KM 40, 
-                        <br>Desa Bancar, Kecamatan Bancar, Kabupaten Tuban, 
-                        <br>East Java, Indonesia
-                        <br>www.aliseafood.co.id
-                    </h4>
-                </td>
-            </tr>
-        </table>
+        <header>
+            <table width="90%" style="margin-bottom: 0;">
+                <tr>
+                    <td width="30%" align="center">
+                        <img src="{{ asset('/images/ali-logo.png') }}" alt="Logo" width="120" class="logo"/>
+                    </td>
+                    <td width="70%" style="text-align: center; vertical-align: top;">
+                        <h3 align="center">
+                            PT. ANUGRAH LAUT INDONESIA
+                        </h3>
+                        <h5 align="left">
+                            <div style="text-align: justify;">
+                                Office : Jl. Kahuripan Terrace III no. 30, Kahuripan Nirwana, Desa Sumput, Kecamatan Sidoarjo, Kabupaten Sidoarjo, Provinsi Jawa Timur 
+                            </div>
+                            <div style="text-align: justify;">
+                                Factory : Jl. Raya Rembang - Tuban KM 40, Desa Bancar, Kecamatan Bancar, Kabupaten Tuban, Provinsi Jawa Timur 
+                            </div>
+                            <div>
+                                www.aliseafood.co.id
+                            </div>
+                        </h5>
+                    </td>
+                </tr>
+            </table>
+            <hr class="solid" style="width: 90%; margin-top: 0; margin-bottom: 0;">
+        </header>        
     </div>
-    <hr class="solid">
-
     <div class="row form-group">
         <div>
-            <h1 align="center">
-                PROFORMA INVOICE
-            </h1>
-            <h3 align="center">
+            <h1 align="center" style="margin-top: 0; margin-bottom: 0;">
+            PROFORMA INVOICE</h1>
+            <h3 align="center"  style="margin-top: 0; margin-bottom: 10px;">
                 No : {{$transaction->pinum}}
             </h3>
-            <br>
         </div>
-
     </div>
     <table width="100%" id="invoice">
         <tr>
             <td>
-                <span class="label" id="spanLabel"><b>SHIPPER</b></span>
+                <span class="label" id="spanLabel"><b>Shipper</b></span>
             </td>
             <td>:</td>
             <td>
@@ -174,7 +194,11 @@
     $totalTransactionPrice=0;
     @endphp
 
-
+    @if ($transaction->isundername==2)
+    @php
+    $totalTransactionPrice =$transaction->payment;
+    @endphp
+    @else
     <table width="100%" id="invoice">
         <thead style="text-align: center;">
             <tr >
@@ -229,6 +253,10 @@
         Amounts Payments
         Amounts Payments
     -->
+
+
+    @endif
+
     <table width="100%" id="invoice">
         <tr>
             <td width="30%">
@@ -306,8 +334,12 @@
     @endif
     <table width="100%">
         <tr>
-            <td>
-                Sidoarjo, {{ date('d F Y', strtotime(today())); }}
+            <td width="40%">
+                _________,___ {{ date(' F Y', strtotime(today())); }}
+            </td>
+            <td width="20%"></td>
+            <td width="40%">
+                _________,__________________
             </td>
         </tr>
         <tr>
@@ -315,6 +347,12 @@
                 Authorized Signature
                 <br><br><br><br><br><br>
                 {{$transaction->packer}}
+            </td>
+            <td width="20%"></td>
+            <td width="40%" style="text-align: left;vertical-align: top;">
+                Buyer
+                <br><br><br><br><br><br>
+                {{$companyName->name}}
             </td>
         </tr>       
     </table>
