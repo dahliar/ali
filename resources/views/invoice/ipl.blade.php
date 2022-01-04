@@ -193,7 +193,9 @@
             @php
             $totalAmount=0;
             $totalNetWeight=0;
+            $totalGrossWeight=0;
             $totalTransactionPrice=0;
+
             @endphp
 
             @if ($transaction->isundername==2)
@@ -219,6 +221,7 @@
                     @php
                     $totalAmount            +=$detail->amount;
                     $totalNetWeight         +=$detail->netweight;
+                    $totalGrossWeight       +=$detail->grossweight;
                     $totalTransactionPrice  +=$detail->totalPrice;
                     @endphp            
                     <tr >
@@ -254,6 +257,19 @@
             <br>
             <br>
             <table width="100%" id="invoice">
+                @if ($transaction->isundername==1)
+                <tr>
+                    <td width="30%">
+                        <span class="label" id="spanLabel"><b>Gross Weight</b></span>
+                    </td>
+                    <td width="3%">:</td>
+                    <td width="67%">
+                        @php
+                        echo $totalGrossWeight.' Kg'
+                        @endphp
+                    </td>
+                </tr>
+                @endif
                 <tr>
                     <td width="30%">
                         <span class="label" id="spanLabel"><b>Total Amount</b></span>

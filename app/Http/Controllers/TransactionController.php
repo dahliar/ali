@@ -197,13 +197,14 @@ class TransactionController extends Controller
         $companies = Company::all();
         $rekenings = Rekening::all();
         $countryRegister = Countries::where('isActive',1)->get();
+        $forwarders = Forwarder::orderBy('name', 'ASC')->get();
 
 
         //$pinotes=TransactionNote::select('note')->where('transactionId', $transaction->id)->get();
 
         $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
-        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes','companies', 'rekenings', 'transaction'));
+        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction'));
     }
 
     /**
@@ -242,6 +243,9 @@ class TransactionController extends Controller
             'valutaType' => 'required|gt:0',
             'payment' => 'required|gt:0',
             'advance' => 'required|gt:0',
+            'forwarder' => 'required|gt:0',
+            'undername' => 'required|gt:0',
+
             'transactionDate' => 'required|date|before_or_equal:today',
             'loadingDate' => 'required|date',
             'departureDate' => 'required|date|after_or_equal:loadingDate',
@@ -290,6 +294,10 @@ class TransactionController extends Controller
             'containerVessel' =>  $request->containerVessel,
             'payment' =>  $request->payment,
             'advance' =>  $request->advance,
+            'forwarderid' => $request->forwarder,
+            'isundername' => $request->undername,
+
+
             'valutaType' =>  $request->valutaType,
             'transactionDate' => $request->transactionDate,
             'departureDate' =>  $request->departureDate,

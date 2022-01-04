@@ -426,6 +426,36 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-3 text-md-right">
+                                <span class="label" id="forwarderName">Forwarder*</span>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="forwarder" name="forwarder" class="form-select" >
+                                    <option value="-1">--Choose One--</option>
+                                    @foreach ($forwarders as $forwarder)
+                                    @if ( $forwarder->id == old('forwarder', $transaction->forwarderid))
+                                    <option value="{{ $forwarder->id }}" selected>{{ $forwarder->name }}</option>
+                                    @else
+                                    <option value="{{ $forwarder->id }}">{{ $forwarder->name }}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-md-right">
+                                <span class="label" id="spanundername">Undername*</span>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="undername" name="undername" class="form-select" >
+                                    <option value="-1" selected>--Choose One--</option>
+                                    <option value="1" @if(old('undername', $transaction->isundername) == 1) selected @endif>Internal</option>
+                                    <option value="2" @if(old('undername', $transaction->isundername) == 2) selected @endif>Undername</option>
+                                </select>
+                            </div>                    
+                        </div> 
                         @if($transaction->status == 1)
                         <div class="row form-group">
                             <div class="col-md-3 text-md-right">

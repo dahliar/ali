@@ -15,6 +15,7 @@ class Invoice extends Model
             DB::raw('concat(sp.name,    " ",s.name,         " ",i.name) as goods'),
             DB::raw('concat(dt.amount,  " ",p.shortname)                as quantity'),
             DB::raw('(dt.amount * i.weightbase) as netweight'),
+            DB::raw('(dt.amount * (i.weightbase+0.5)) as grossweight'),
             'dt.amount as amount',
             'dt.price as price',
 
