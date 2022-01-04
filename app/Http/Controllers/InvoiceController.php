@@ -20,16 +20,18 @@ class InvoiceController extends Controller
     }
 
     public function createtransactionnum($transactionId){
-        $bagian="SALES";
-        $documentType="INV";
+        $bagian="INV-ALI";
+        $year = date('Y');
+        $month = date('m');
         $year = date('Y');
         $isActive=1;
         $createdAt=date('Y-m-d');
 
         $result = DB::table('document_numbers as dn')
+        ->where('month', $month)
         ->where('year', $year)
         ->where('bagian', $bagian)
-        ->where('documentType', $documentType)
+        //->where('documentType', $documentType)
         ->orderBy('id', 'desc')
         ->first();
 
@@ -44,28 +46,30 @@ class InvoiceController extends Controller
             'nomor'=>$nomor,
             'transactionId'=>$transactionId,
             'bagian'=>$bagian,
-            'documentType'=>$documentType,
+            //'documentType'=>$documentType,
+            'month'=>$month,
             'year'=>$year,
             'isActive'=>$isActive,
             'createdAt'=>$createdAt,
         ];
-        $tnum = $nomor.'/'.$bagian.'/'.$documentType.'/'.$year;
+        $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
         DB::table('document_numbers')->insert($data);
         return $tnum;
     }
 
 
     public function createpinum($transactionId){
-        $bagian="SALES";
-        $documentType="PI";
+        $bagian="PI-ALI";
         $year = date('Y');
+        $month = date('m');
         $isActive=1;
         $createdAt=date('Y-m-d');
 
         $result = DB::table('document_numbers as dn')
+        ->where('month', $month)
         ->where('year', $year)
         ->where('bagian', $bagian)
-        ->where('documentType', $documentType)
+        //->where('documentType', $documentType)
         ->orderBy('id', 'desc')
         ->first();
 
@@ -81,12 +85,13 @@ class InvoiceController extends Controller
             'nomor'=>$nomor,
             'transactionId'=>$transactionId,
             'bagian'=>$bagian,
-            'documentType'=>$documentType,
+            'month'=>$month,
+            //'documentType'=>$documentType,
             'year'=>$year,
             'isActive'=>$isActive,
             'createdAt'=>$createdAt,
         ];
-        $pinum = $nomor.'/'.$bagian.'/'.$documentType.'/'.$year;
+        $pinum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
         DB::table('document_numbers')->insert($data);
         DB::table('transactions')
         ->where('id', $transactionId)
