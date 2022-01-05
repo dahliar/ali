@@ -25,7 +25,9 @@ class TransactionController extends Controller
     }
     public function index()
     {
-        return view('transaction.transactionList');
+        $nations = Countries::where('isActive',1)->get();
+
+        return view('transaction.transactionList', compact('nations'));
     }
     public function getAllTransaction(){
         return $this->transaction->getAllItemData();
@@ -155,6 +157,14 @@ class TransactionController extends Controller
         //create PI Number
         $this->inv = new InvoiceController();
         $pinum = $this->inv->createpinum($lastTransactionIdStored);
+
+
+        //ketika transaksi adalah undername
+        if ($request->undername==2){
+            $tnum = $this->transaction->whenUndernameIsTrue($lastTransactionIdStored);
+        }
+
+
 
         if (!empty($request->pinotes)){
             $a=0;

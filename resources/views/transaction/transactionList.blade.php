@@ -49,10 +49,11 @@
             {   "width": "21%", "targets":  [1], "className": "text-left"   },
             {   "width": "10%",  "targets": [2], "className": "text-left" },
             {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "15%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-center" },
-            {   "width": "15%", "targets":  [7], "className": "text-center" }
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "10%", "targets":  [5], "className": "text-left" },
+            {   "width": "10%", "targets":  [6], "className": "text-left" },
+            {   "width": "10%", "targets":  [7], "className": "text-center" },
+            {   "width": "15%", "targets":  [8], "className": "text-center" }
             ], 
 
             columns: [
@@ -62,6 +63,7 @@
             {data: 'nosurat', name: 'nosurat'},
             {data: 'etd', name: 'etd'},
             {data: 'eta', name: 'eta'},
+            {data: 'undername', name: 'undername'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -107,10 +109,106 @@
                         <li class="breadcrumb-item active">Transactions</li>
                     </ol>
                 </nav>
-                <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Transaksi"><i class="fa fa-plus" style="font-size:20px"></i>
-                </button>
+                
             </div>
+
             <div class="modal-body">
+                <div class="row">
+                    <p>
+                        <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Transaksi">
+                            <i class="fa fa-plus" style="font-size:20px"></i> Transaksi
+                        </button>
+                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapsePart" role="button" aria-expanded="false" aria-controls="collapsePart">
+                            <i class="fas fa-filter" style="font-size:20px"></i> List Transaksi
+                        </a>
+                    </p>
+
+                    <div class="collapse" id="collapsePart">
+                        <div class="card card-body">
+                            <div class="row form-group">
+                                <div class="col-md-3">
+                                    <span class="label">Negara</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="negara" name="negara">
+                                        <option value="-1">--Pilih Negara--</option>
+                                        @foreach ($nations as $nation)
+                                        @if ( $nation->id == old('negara') )
+                                        <option value="{{ $nation->id }}" selected>{{ $nation->name }} - {{ $nation->registration }}</option>
+                                        @else
+                                        <option value="{{ $nation->id }}">{{ $nation->name }} - {{ $nation->registration }}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> 
+                            <div class="row form-group">
+                                <div class="col-md-3">
+                                    <span class="label">Jenis Transaksi</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="jenis" name="jenis" >
+                                        <option value="-1" selected>--Pilih Jenis--</option>
+                                        <option value="1" @if(old('jenis') == 1) selected @endif>Internal</option>
+                                        <option value="2" @if(old('jenis') == 2) selected @endif>Undername</option>
+                                    </select>
+                                </div>
+                            </div> 
+                            <div class="row form-group">
+                                <div class="col-md-3">
+                                    <span class="label">Status Transaksi</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
+                                        <option value="-1" selected>--Pilih Status--</option>
+                                        <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
+                                        <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Finished</option>
+                                        <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Canceled</option>
+                                    </select>
+                                </div>
+                            </div> 
+                            <div class="row form-group">
+                                <div class="col-md-3">
+                                    <span class="label">Rentang Waktu</span>
+                                </div>
+                                <div class="col-md-4 row form-group">
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d'))}}" > 
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 text-center">
+                                        <span>
+                                            <i class="fas fa-arrows-alt-h"></i>
+                                        </span>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="input-group">
+                                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="row form-group">
+                                <div class="col-md-3">
+                                    <span class="label"></span>
+                                </div>
+                                <div class="col-md-4">
+                                    <button onclick="refreshTableTransactionList()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-search-plus">Search</i>
+                                    </button>
+                                </div>
+                            </div> 
+
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="row form-inline">
                     <div class="card-body">
                         <table class="table cell-border stripe hover row-border data-table"  id="datatable">
@@ -122,6 +220,7 @@
                                     <th>No Surat</th>
                                     <th>ETD</th>
                                     <th>ETA</th>
+                                    <th>Jenis</th>
                                     <th>Status</th>
                                     <th>Act</th>
                                 </tr>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Http\Controllers\InvoiceController;
 use App\Models\Stock;
 use DB;
 
@@ -19,17 +20,20 @@ class Transaction extends Model
             't.id as id', 
             't.transactionnum as nosurat', 
             'c.name as name', 
-            'c.nation as nation', 
+            'n.name as nation', 
             't.departureDate as etd',
             't.arrivalDate as eta',
             't.transactiondate as tanggaltransaksi',
             't.status as status',
+            DB::raw('(CASE WHEN t.isundername ="1" THEN "Internal"
+                WHEN t.isundername ="2" then "Undername" END) AS undername'),
             DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
                 WHEN t.status ="1" then "On Progress"
                 WHEN t.status ="2" then "Finished"
                 ELSE "Cancelled" END) AS status')
         )
-        ->join('companies as c', 'c.id', '=', 't.companyid');
+        ->join('companies as c', 'c.id', '=', 't.companyid')
+        ->join('countries as n', 'n.id', '=', 'c.nation');
         $query->get();  
 
 
@@ -52,6 +56,26 @@ class Transaction extends Model
         })->addIndexColumn()->toJson();
     }
 
+
+    public function whenUndernameIsTrue($transactionId){
+        /****
+         * ketika isundername=2
+         * 1. create transaction Number
+         * 2. set status transaksi jadi finished status=>2
+         * 
+        */
+        $this->inv = new InvoiceController();
+        $tnum = $this->inv->createtransactionnum($transactionId);
+
+        $affected = DB::table('transactions')
+        ->where('id', $transactionId)
+        ->update([
+            'status' => 2,
+            'transactionNum' => $tnum
+        ]);
+
+
+    }
     public function storeOneTransaction($data){
         //insert into table transactions, untuk setiap penambahan
         $id = DB::table('transactions')->insertGetId($data);
