@@ -25,7 +25,7 @@ class Item extends Model
             DB::raw('concat(i.amount, " ",p.shortname) as amountPacked'),
             DB::raw('concat(ifnull(sum(dt.amount),0), " ",p.shortname) as onProgress'),
             DB::raw('concat(amountUnpacked, " Kg") as amountUnpacked'),
-            DB::raw('concat((((i.amount+sum(dt.amount)) * weightbase) + amountUnpacked), " Kg") as total'),
+            DB::raw('concat(ifnull((((i.amount+sum(dt.amount)) * weightbase) + amountUnpacked),0)," Kg") as total'),
             DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
             'baseprice',
             'weightbase'
