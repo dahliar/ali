@@ -19,6 +19,5 @@ Homestead.json
 /config/database.php
 config/app.php
 config/database.php
-resources/views/home.blade.php
-resources/views/home.blade.php
+/resources/views/home.blade.php
 resources/views/home.blade.php
