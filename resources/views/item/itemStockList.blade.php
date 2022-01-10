@@ -40,13 +40,15 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "25%", "targets":  [1], "className": "text-left"   },
-            {   "width": "20%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "5%",  "targets":  [0], "className": "text-end" },
+            {   "width": "15%", "targets":  [1], "className": "text-left"   },
+            {   "width": "15%", "targets":  [2], "className": "text-left" },
+            {   "width": "10%", "targets":  [3], "className": "text-end" },
+            {   "width": "10%", "targets":  [4], "className": "text-end" },
             {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "20%", "targets":  [6], "className": "text-center" }
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
+            {   "width": "10%", "targets":  [7], "className": "text-end" },
+            {   "width": "10%", "targets":  [8], "className": "text-left" }
             ], 
 
             columns: [
@@ -54,8 +56,10 @@
             {data: 'itemName', name: 'itemName'},
             {data: 'sizeblockgrade', name: 'sizeblockgrade'},
             {data: 'wb', name: 'wb'},
-            {data: 'amountweightbase', name: 'amountweightbase'},
-            {data: 'totalWeight', name: 'totalWeight'},
+            {data: 'amountPacked', name: 'amountPacked'},
+            {data: 'onProgress', name: 'onProgress'},
+            {data: 'amountUnpacked', name: 'amountUnpacked'},
+            {data: 'total', name: 'total'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -143,8 +147,10 @@
                                         <th>Name</th>
                                         <th>Size Block Grade</th>
                                         <th>Packaging</th>
-                                        <th>Amount</th>
-                                        <th>Total (Kg)</th>
+                                        <th>Packed</th>
+                                        <th>On Progress</th>
+                                        <th>Unpacked</th>
+                                        <th>Total</th>
                                         <th>Act</th>
                                     </tr>
                                 </thead>

@@ -14,19 +14,24 @@ class Item extends Model
     protected $primaryKey = 'id';
 
     public function getAllItemData($speciesId){
+
+        //ini masih belum ngitung yang lagi onProgress
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
             'i.name as itemName', 
             DB::raw('concat(s.name, " ",f.name, " ", g.name) as sizeblockgrade'),
             'sp.name as speciesName', 
-            'amount',
-            DB::raw('concat(amount, " ",p.shortname) as amountweightbase'),
+            DB::raw('concat(i.amount, " ",p.shortname) as amountPacked'),
+            DB::raw('concat(ifnull(sum(dt.amount),0), " ",p.shortname) as onProgress'),
+            DB::raw('concat(amountUnpacked, " Kg") as amountUnpacked'),
+            DB::raw('concat((((i.amount+sum(dt.amount)) * weightbase) + amountUnpacked), " Kg") as total'),
             DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
-            DB::raw('(amount * weightbase) as totalWeight'),
             'baseprice',
             'weightbase'
         )
+        ->groupBy('i.id')
+        ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')

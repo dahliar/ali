@@ -21,7 +21,6 @@ class InvoiceController extends Controller
 
     public function createtransactionnum($transactionId){
         $bagian="INV-ALI";
-        $year = date('Y');
         $month = date('m');
         $year = date('Y');
         $isActive=1;
@@ -60,8 +59,8 @@ class InvoiceController extends Controller
 
     public function createpinum($transactionId){
         $bagian="PI-ALI";
-        $year = date('Y');
         $month = date('m');
+        $year = date('Y');
         $isActive=1;
         $createdAt=date('Y-m-d');
 

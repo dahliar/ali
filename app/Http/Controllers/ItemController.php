@@ -29,6 +29,14 @@ class ItemController extends Controller
     public function getAllStockItem($speciesId){
         return $this->item->getAllItemData($speciesId);
         //$item = Item::all();
+        //item list
+        //item list
+        //item list
+        //item list
+        //item list
+
+
+
     }
     public function getItemHistory($itemId){
         return $this->item->getItemHistory($itemId);
