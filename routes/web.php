@@ -112,11 +112,22 @@ Route::GET('getAllStockItem/{speciesId}', [ItemController::class, 'getAllStockIt
 
 
 Route::get('itemStockView/{itemId}',[ItemController::class, 'show'])->middleware(['auth']);
+Route::get('itemStockViewUnpacked/{itemId}',[ItemController::class, 'showUnpacked'])->middleware(['auth']);
+
+
+
 Route::GET('getItemHistory/{speciesId}', [ItemController::class, 'getItemHistory'])->middleware(['auth']);
+Route::GET('getUnpackedHistory/{speciesId}', [ItemController::class, 'getUnpackedItemHistory'])->middleware(['auth']);
+
+Route::get('editUnpacked/{itemId}',[StoreController::class, 'editUnpacked'])->middleware(['auth'])->name('editUnpacked');
+Route::get('unpackedUpdate',[StoreController::class, 'unpackedUpdate'])->middleware(['auth'])->name('unpackedUpdate');
+
+
 
 
 
 Route::get('itemStockAdd/{itemId}',[StoreController::class, 'create'])->middleware(['auth'])->name('itemStockAdd');
+
 Route::get('itemStockEdit/{store}',[StoreController::class, 'edit'])->middleware(['auth'])->name('itemStockAdd');
 Route::get('itemStoreDetail/{storeId}',[StoreController::class, 'itemStoreDetail'])->middleware(['auth']);
 Route::get('storeAdd',[StoreController::class, 'store'])->middleware(['auth'])->name('storeAdd');
@@ -168,6 +179,7 @@ Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middle
 
 
 Route::GET('getAllTransaction', [TransactionController::class, 'getAlltransaction'])->middleware(['auth']);
+Route::GET('getAllTransactionTes', [TransactionController::class, 'getAllTransactionTes'])->middleware(['auth'])->name('getAllTransactionTes');
 Route::GET('getAllDetail/{transactionId}', [DetailTransactionController::class, 'getAllDetail'])->middleware(['auth']);
 
 

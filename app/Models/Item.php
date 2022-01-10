@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Auth;
 
 
 class Item extends Model
@@ -17,16 +18,9 @@ class Item extends Model
         ->select(
             'i.id as id', 
             'i.name as itemName', 
+            DB::raw('concat(s.name, " ",f.name, " ", g.name) as sizeblockgrade'),
             'sp.name as speciesName', 
-            's.name as sizeName',
-            'g.name as gradeName',
-            'p.name as packingName',
-            'f.name as freezingName',
             'amount',
-            
-
-            //DB::raw('concat(g.name, " - ", s.name) as gradesize'),
-            //DB::raw('concat(f.name, " - ", p.name) as freezepacking'),
             DB::raw('concat(amount, " ",p.shortname) as amountweightbase'),
             DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
             DB::raw('(amount * weightbase) as totalWeight'),
@@ -48,13 +42,25 @@ class Item extends Model
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
-            $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Stock Barang">
-            <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus" style="font-size:20px"></i>
-            </button>
-            <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" title="History Tambah Stock">
-            <i class="fa fa-history" style="font-size:20px"></i>
+            $html = '<button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Stock Add">
+            <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-box"></i>
             </button>';
+            if (Auth::user()->isAdmin() or Auth::user()->isProduction()){
+                $html .= '
+                <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update Unpacked Stock">
+                <i class="fa fa-box-open"></i>
+                </button>
+                ';
+            }
+            $html .= '
+            <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Stock History">
+            <i class="far fa-list-alt"></i>
+            </button>';
+            $html .= '
+            <button onclick="unpackedHistory('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Unpacked Stock History"><i class="fas fa-list-alt"></i>
+            </button>';
+
+
             return $html;
         })->addIndexColumn()->toJson();
     }
@@ -70,7 +76,6 @@ class Item extends Model
             'str.dateProcess as dateProcess',
             'str.dateInsert as dateInsert',
             'us.name as username',
-            'str.amount as amount',
             'str.amountPacked as amountPacked',
             'str.amountUnpacked as amountUnpacked',
             'i.weightbase'
@@ -87,10 +92,53 @@ class Item extends Model
         $query->get();  
 
         return datatables()->of($query)
-        ->addColumn('action', function ($row) {
+            /*
+            ->addColumn('action', function ($row) {
             $html = '<button type="button"  data-toggle="tooltip" data-placement="top" data-container="body" title="Detail & edit penyimpanan" class="btn btn-primary" onclick="editStoreDetail('."'".$row->id."'".')" data-bs-target="#exampleModal"><i class="fa fa-edit" style="font-size:20px"></i></button>';
             return $html;
-        })->addIndexColumn()->toJson();    
+            
+        })
+        */
+        ->addIndexColumn()->toJson();    
+    }
+
+    public function getUnpackedItemHistory($itemId){
+        $query = DB::table('unpacked_histories as u')
+        ->select('u.id', 
+            'i.name as item', 
+            's.name as size',
+            'g.name as grade',
+            'p.name as packing',
+            'f.name as freezing',
+            'u.createdAt as tanggalPacking',
+            'us.name as username',
+            DB::raw('concat(u.amountPacked, " ", p.shortname) as amountPacked'),
+            DB::raw('concat(u.amountUnpacked, " Kg") as amountUnpacked'),
+
+            //'u.amountPacked as amountPacked',
+            //'u.amountUnpacked as amountUnpacked',
+            'i.weightbase'
+        )
+        ->join('users as us', 'us.id', '=', 'u.userId')
+        ->join('items as i', 'i.id', '=', 'u.itemId')
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        ->where('i.isActive','=', 1)
+        ->where('i.id','=', $itemId);
+        $query->get();  
+
+        return datatables()->of($query)
+            /*
+            ->addColumn('action', function ($row) {
+            $html = '<button type="button"  data-toggle="tooltip" data-placement="top" data-container="body" title="Detail & edit penyimpanan" class="btn btn-primary" onclick="editStoreDetail('."'".$row->id."'".')" data-bs-target="#exampleModal"><i class="fa fa-edit" style="font-size:20px"></i></button>';
+            return $html;
+            
+        })
+        */
+        ->addIndexColumn()->toJson();    
     }
 
     public function getItemForSelectOption($speciesId){
@@ -130,8 +178,10 @@ class Item extends Model
             's.name as sizeName',
             'g.name as gradeName',
             'p.name as packingName',
+            'p.shortname as packingShortname',
             'f.name as freezingName',
             'amount',
+            'amountUnpacked',
             'baseprice',
             'weightbase'
         )

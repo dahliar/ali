@@ -21,8 +21,14 @@
     function tambahStockItem(id){
         window.open(('{{ url("itemStockAdd") }}' + "/"+ id), '_self');
     }
+    function UpdateStockUnpacked(id){
+        window.open(('{{ url("editUnpacked") }}' + "/"+ id), '_self');
+    }
     function historyStockItem(id){
         window.open(('{{ url("itemStockView") }}' + "/"+ id), '_blank');
+    }
+    function unpackedHistory(id){
+        window.open(('{{ url("itemStockViewUnpacked") }}' + "/"+ id), '_blank');
     }
 
     function myFunction(speciesId){
@@ -34,27 +40,21 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "3%",  "targets":  [0], "className": "text-center" },
-            {   "width": "17%", "targets":  [1], "className": "text-left"   },
-            {   "width": "5%",  "targets": [2], "className": "text-center" },
+            {   "width": "5%",  "targets":  [0], "className": "text-center" },
+            {   "width": "25%", "targets":  [1], "className": "text-left"   },
+            {   "width": "20%", "targets":  [2], "className": "text-left" },
             {   "width": "10%", "targets":  [3], "className": "text-left" },
             {   "width": "10%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "7%", "targets":  [6], "className": "text-left" },
-            {   "width": "8%", "targets":  [7], "className": "text-end" },
-            {   "width": "10%", "targets":  [8], "className": "text-end" },
-            {   "width": "8%", "targets":  [9], "className": "text-center" }
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
+            {   "width": "20%", "targets":  [6], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'itemName', name: 'itemName'},
-            {data: 'gradeName', name: 'gradeName'},
-            {data: 'sizeName', name: 'sizeName'},
-            {data: 'freezingName', name: 'freezingName'},
-            {data: 'packingName', name: 'packingName'},
-            {data: 'amountweightbase', name: 'amountweightbase'},
+            {data: 'sizeblockgrade', name: 'sizeblockgrade'},
             {data: 'wb', name: 'wb'},
+            {data: 'amountweightbase', name: 'amountweightbase'},
             {data: 'totalWeight', name: 'totalWeight'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -141,12 +141,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Grade </th>
-                                        <th>Size</th>
-                                        <th>Freeze</th>
-                                        <th>Packing</th>
-                                        <th>Amount</th>
+                                        <th>Size Block Grade</th>
                                         <th>Packaging</th>
+                                        <th>Amount</th>
                                         <th>Total (Kg)</th>
                                         <th>Act</th>
                                     </tr>

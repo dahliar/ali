@@ -75,7 +75,7 @@
 							Stock Barang
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="{{ url('itemStockList')}}">All Item</a></li>
+							<li><a class="dropdown-item" href="{{ url('itemStockList')}}">Items</a></li>
 						</ul>
 					</li>
 					@endif

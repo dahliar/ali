@@ -20,12 +20,37 @@ class Store extends Model
         //update table item, untuk tambahkan jumlah stock
         $affected = DB::table('items')
         ->where('id', $data['itemId'])
-        ->increment('amount', $data['amount']);
+        ->update([
+            'amount' => DB::raw('amount + '.$data['amountPacked']),
+            'amountUnpacked' => DB::raw('amountUnpacked + '.$data['amountUnpacked']),
+        ]);
 
         return $affected;
 
     }
-    public function updateOneStore($itemId, $storeId, $amountPacked, $amountUnpacked, $pastAmount, $newAmount, $tanggalPacking){
+    public function unpackedUpdate($data){
+        //insert kedalam table history perubahan unpacked
+        DB::table('unpacked_histories')->insert($data);
+
+        //update table item, untuk update jumlah amount dan amountUnpacked
+        $affected = DB::table('items')
+        ->where('id', $data['itemId'])
+        ->update([
+            'amount' => DB::raw('amount + '.$data['amountPacked']),
+            'amountUnpacked' => DB::raw('amountUnpacked - '.$data['amountUnpacked']),
+        ]);
+
+        return $affected;
+
+    }
+
+
+
+
+
+
+//    public function updateOneStore($itemId, $storeId, $amountPacked, $amountUnpacked, $pastAmount, $newAmount, $tanggalPacking){
+    public function updateOneStore($itemId, $storeId, $pastAmount, $newAmount, $tanggalPacking){
 
     /*
         1. Perubahan amount dalam tabel Item dengan id $itemId
@@ -44,8 +69,8 @@ class Store extends Model
         $affected = DB::table('stores')
         ->where('id', $storeId)
         ->update([
-            'amountPacked' => $amountPacked,
-            'amountUnpacked' => $amountUnpacked,
+            //'amountPacked' => $amountPacked,
+            //'amountUnpacked' => $amountUnpacked,
             'amount' => $newAmount
         ]);
 

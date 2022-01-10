@@ -32,6 +32,10 @@ class TransactionController extends Controller
     public function getAllTransaction(){
         return $this->transaction->getAllItemData();
     }
+    public function getAllTransactionTes(Request $request){
+        //dd($request->all());
+        return $this->transaction->getAllTransactionData($request->jenis, $request->negara, $request->statusTransaksi, $request->start, $request->end);
+    }
 
     /**
      * Show the form for creating a new resource.

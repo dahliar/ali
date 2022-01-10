@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Store;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
 use DB;
 
 
@@ -47,6 +49,39 @@ class StoreController extends Controller
         $oneItem = $this->item->getOneItem($speciesId);
         return view('item.itemStockAdd', compact('oneItem'));
     }
+    
+    public function editUnpacked($speciesId)
+    {
+        $oneItem = $this->item->getOneItem($speciesId);
+        return view('item.itemStockEditUnpacked', compact('oneItem'));
+    }
+
+    public function unpackedUpdate(Request $request)
+    {
+        //dd($request->amountMetric);
+
+        $request->validate([
+            'itemId' => ['required',
+            Rule::exists('items', 'id')->where('id', $request->itemId),], 
+            'amountPacking' => 'required|gt:0|lte:maxUpdate',
+            'tanggalPacking' => 'required|date|before_or_equal:today'
+        ]);
+
+
+        $data = [
+            'itemId' => $request->itemId,
+            'amountPacked' =>  $request->amountPacking,
+            'amountUnpacked' =>  $request->amountMetric,
+            'userId' =>  auth()->user()->id
+        ];
+        $oneItemStore = $this->store->unpackedUpdate($data);
+
+        $teks1 = $request->speciesName." ".$request->sizeName." ".$request->gradeName;
+        $teks2 = $request->amountPacking.' '.$request->input('packingName');
+        return redirect('itemStockList')
+        ->with('status','Item '.$teks1.' sebanyak '.$teks2.' berhasil di-pack dan disimpan.');
+    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -57,18 +92,17 @@ class StoreController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'amountPacked' => 'required|gte:0', 
-            'amountUnpacked' => 'required|gte:0',
+            'packedTambah' => 'required|gte:0', 
+            'unpackedTambah' => 'required|gte:0',
             'tanggalProses' => 'required|date|before_or_equal:today',
             'tanggalPacking' => 'required|date|after_or_equal:tanggalProses|before_or_equal:today'
         ]);
 
 
         $data = [
-            'itemId' => $request->itemId,            
-            'amount' =>  $request->amount,
-            'amountPacked' =>  $request->amountPacked,
-            'amountUnpacked' =>  $request->amountUnpacked,
+            'itemId' => $request->itemId,
+            'amountPacked' =>  $request->packedTambah,
+            'amountUnpacked' =>  $request->unpackedTambah,
             'datePackage' =>  $request->tanggalPacking,
             'dateProcess' =>  $request->tanggalProses,
             'dateInsert' =>  date('Y-m-d'),
@@ -137,8 +171,8 @@ class StoreController extends Controller
 
         //dd($request);
         $request->validate([
-            'amountPacked' => 'required', 
-            'amountUnpacked' => 'required',
+            //'amountPacked' => 'required', 
+            //'amountUnpacked' => 'required',
             'tanggalPacking' => 'required|date|after_or_equal:tanggalProses'
         ]);
 
@@ -146,8 +180,8 @@ class StoreController extends Controller
         $data = [
             'storeId' => $request->storeId,            
             'amount' =>  $request->amount,
-            'amountPacked' =>  $request->amountPacked,
-            'amountUnpacked' =>  $request->amountUnpacked,
+            //'amountPacked' =>  $request->amountPacked,
+            //'amountUnpacked' =>  $request->amountUnpacked,
             'datePackage' =>  $request->tanggalPacking,
             'dateProcess' =>  $request->tanggalProses,
             'dateInsert' =>  date('Y-m-d'),

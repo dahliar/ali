@@ -18,7 +18,6 @@
         }
     });
 
-
     function tambahItem(id){
         window.open(('{{ url("detailtransactionList") }}'+"/"+id), '_blank');
     }
@@ -36,9 +35,75 @@
         window.open(('{{ url("transaction/ipl") }}'+"/"+id), '_blank');
     }
 
+    function refreshTableTransactionList(){
+        var e = document.getElementById("negara");
+        var negara = e.options[e.selectedIndex].value;       
+        //var companyName = e.options[e.selectedIndex].text;
+        var e = document.getElementById("jenis");
+        var jenis = e.options[e.selectedIndex].value;       
+
+        var e = document.getElementById("statusTransaksi");
+        var statusTransaksi = e.options[e.selectedIndex].value;       
+
+        var start = document.getElementById("start").value;
+        var end = document.getElementById("end").value;
+
+
+        $('#datatable').DataTable({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            ajax:'{{ route("getAllTransactionTes") }}',
+            dataType: 'json',
+            data: {
+                negara : negara,
+                jenis: jenis,
+                statusTransaksi : statusTransaksi,
+                start : start,
+                end : end
+            },
+            serverSide: false,
+            processing: true,
+            deferRender: true,
+            type: 'GET',
+            destroy:true,
+            columnDefs: [
+            {   "width": "4%",  "targets":  [0], "className": "text-center" },
+            {   "width": "21%", "targets":  [1], "className": "text-left"   },
+            {   "width": "10%",  "targets": [2], "className": "text-left" },
+            {   "width": "10%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "10%", "targets":  [5], "className": "text-left" },
+            {   "width": "10%", "targets":  [6], "className": "text-left" },
+            {   "width": "10%", "targets":  [7], "className": "text-center" },
+            {   "width": "15%", "targets":  [8], "className": "text-center" }
+            ], 
+
+            columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'name', name: 'name'},
+            {data: 'nation', name: 'nation'},
+            {data: 'nosurat', name: 'nosurat'},
+            {data: 'etd', name: 'etd'},
+            {data: 'eta', name: 'eta'},
+            {data: 'undername', name: 'undername'},
+            {data: 'status', name: 'status'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
+            ]
+        });
+    }
+
+
     function myFunction(){
         $('#datatable').DataTable({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             ajax:'{{ url("getAllTransaction") }}',
+            //data: {
+            //    structPosId : structuralPos,
+            //    workPosId: workPos
+            //},
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -76,8 +141,6 @@
 
 
 
-
-
 @if (session('status'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -90,12 +153,6 @@
     </div>
 </div>
 @endif
-
-
-
-
-
-
 <body onload="myFunction(0)">
     {{ csrf_field() }}
     <div class="container-fluid">
@@ -168,71 +225,73 @@
                                 </div>
                             </div> 
                             <div class="row form-group">
-                                <div class="col-md-3">
+                                <div class="col-md-3 ">
                                     <span class="label">Rentang Waktu</span>
                                 </div>
-                                <div class="col-md-4 row form-group">
+                                <div class="col-md-8 row form-group">
                                     <div class="col-md-5">
                                         <div class="input-group">
-                                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d'))}}" > 
+                                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 year')))}}" > 
                                         </div>
                                     </div>
-                                    <div class="col-md-1 text-center">
-                                        <span>
-                                            <i class="fas fa-arrows-alt-h"></i>
-                                        </span>
+                                    <div class="col-md-1" style="display: flex;
+                                    justify-content: center;
+                                    align-items: center;">
+                                    <span>
+                                        <i class="fas fa-arrows-alt-h"></i>
+                                    </span>
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="input-group">
+                                        <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
                                     </div>
-                                    <div class="col-md-5">
-                                        <div class="input-group">
-                                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
-                                        </div>
-                                    </div>
                                 </div>
-                            </div> 
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <span class="label"></span>
-                                </div>
-                                <div class="col-md-4">
-                                    <button onclick="refreshTableTransactionList()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-search-plus">Search</i>
-                                    </button>
-                                </div>
-                            </div> 
+                            </div>
+                        </div> 
+                        <div class="row form-group">
+                            <div class="col-md-3">
+                                <span class="label"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <button onclick="refreshTableTransactionList()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-search-plus">Search</i>
+                                </button>
+                            </div>
+                        </div> 
 
 
 
 
 
 
-                        </div>
                     </div>
                 </div>
+            </div>
 
 
-                <div class="row form-inline">
-                    <div class="card-body">
-                        <table class="table cell-border stripe hover row-border data-table"  id="datatable">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Perusahaan</th>
-                                    <th>Negara</th>
-                                    <th>No Surat</th>
-                                    <th>ETD</th>
-                                    <th>ETA</th>
-                                    <th>Jenis</th>
-                                    <th>Status</th>
-                                    <th>Act</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>                
-                    </div>
+            <div class="row form-inline">
+                <div class="card-body">
+                    <table class="table cell-border stripe hover row-border data-table"  id="datatable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Perusahaan</th>
+                                <th>Negara</th>
+                                <th>No Surat</th>
+                                <th>ETD</th>
+                                <th>ETA</th>
+                                <th>Jenis</th>
+                                <th>Status</th>
+                                <th>Act</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>                
                 </div>
-            </div>    
-        </div>
+            </div>
+        </div>    
     </div>
+</div>
 </div>
 </body>
 @else

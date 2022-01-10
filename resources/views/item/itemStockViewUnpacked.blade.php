@@ -25,7 +25,7 @@
     function myFunction(itemId){
         //alert(itemId);
         $('#datatable').DataTable({ 
-            ajax:'{{ url("getItemHistory") }}' + "/"+ itemId,
+            ajax:'{{ url("getUnpackedHistory") }}' + "/"+ itemId,
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -38,19 +38,15 @@
             {   "width": "10%",  "targets": [2], "className": "text-center" },
             {   "width": "10%", "targets":  [3], "className": "text-center" },
             {   "width": "10%", "targets":  [4], "className": "text-center" },
-            {   "width": "15%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" }
+            {   "width": "10%", "targets":  [5], "className": "text-end" }
             ], 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
             {data: 'item', name: 'item'},
-            {data: 'datePackage', name: 'datePackage'},
-            {data: 'dateProcess', name: 'dateProcess'},
-            {data: 'dateInsert', name: 'dateInsert'},
+            {data: 'tanggalPacking', name: 'tanggalPacking'},
             {data: 'username', name: 'username'},
-            {data: 'amountPacked', name: 'amountUnpacked'},
-            {data: 'amountPacked', name: 'amountPacked'}
+            {data: 'amountPacked', name: 'amountPacked'},
+            {data: 'amountUnpacked', name: 'amountUnpacked'}
             ]
         });
     }
@@ -68,7 +64,7 @@
                         <li class="breadcrumb-item active">
                             <a class="white-text" href="{{ url('itemList')}}">Items</a>
                         </li>
-                        <li class="breadcrumb-item active">Item History</li>
+                        <li class="breadcrumb-item active">Unpacked Item History</li>
                     </ol>
                 </nav>
             </div>
@@ -83,8 +79,6 @@
                                             <th>No</th>
                                             <th>Name</th>
                                             <th>Tanggal Package</th>
-                                            <th>Tanggal Proses</th>
-                                            <th>Tanggal Input</th>
                                             <th>Employee</th>
                                             <th>Packed</th>
                                             <th>Unpacked</th>

@@ -14,13 +14,19 @@
 @if (Auth::check() and (Auth::user()->isProduction() or Auth::user()->isAdmin()))
 <script type="text/javascript">
     function totalAmount(){
-        var addedPacked = parseFloat(document.getElementById("amountPacked").value);
-        var addedUnpacked = parseFloat(document.getElementById("amountUnpacked").value);
-        var addedAmount = addedPacked+addedUnpacked;
-        var lama = parseFloat(document.getElementById("jumlahLama").value);
-        var total = lama+addedAmount;
-        document.getElementById('amount').value = addedAmount;
-        document.getElementById('jumlahTotal').value = total;
+        var packedLama = parseFloat(document.getElementById("packedLama").value);
+        var packedTambah = parseFloat(document.getElementById("packedTambah").value);
+        document.getElementById("packedTotal").value = new Number(packedTambah + packedLama);
+
+        var unpackedLama = parseFloat(document.getElementById("unpackedLama").value);
+        var unpackedTambah = parseFloat(document.getElementById("unpackedTambah").value);
+        document.getElementById("unpackedTotal").value = new Number(unpackedTambah + unpackedLama);
+
+        var wb=parseFloat(document.getElementById("wb").value);
+        var ap   = packedLama + packedTambah + ((unpackedLama+unpackedTambah)/wb);
+        var am   = ((packedLama + packedTambah)*wb) + unpackedLama+unpackedTambah;
+        document.getElementById("amountPacking").value = new Number(Math.round(ap*100)) / 100;
+        document.getElementById("amountMetric").value = new Number(Math.round(am*100)) / 100;
     }
 </script>
 @if (session('success'))
@@ -117,7 +123,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="input-group">
-                                        <input id="jumlahAdd" name="jumlahAdd" type="number" class="form-control text-end" value="{{$oneItem->weightbase}}" disabled="true">
+                                        <input id="wb" name="wb" type="number" class="form-control text-end" value="{{$oneItem->weightbase}}" disabled="true">
                                         <span class="input-group-text col-3">Kg</span>
                                     </div>
                                 </div>
@@ -128,11 +134,107 @@
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
                             </div>
-                            <div class="col-md-6 text-end">
+                            <div class="col-md-6">
                                 <table width="100%">
                                     <tr>
                                         <td><hr /></td>
-                                        <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h4>Amount</h4></td>
+                                        <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h4>Packed</h4></td>
+                                        <td><hr /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-end">
+                                <span class="label">Current</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input id="packedLama" name="packedLama" type="number" class="form-control text-end" value="{{old('packedLama', $oneItem->amount)}}" disabled="true">
+                                    <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row form-group">
+                            <div class="col-md-3 text-end">
+                                <span class="label">Add*</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input oninput="totalAmount()" id="packedTambah" name="packedTambah" value="{{ old('packedTambah',0) }}" type="number" class="form-control text-end">
+                                    <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-end">
+                                <span class="label">Total Packed*</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input id="packedTotal" name="packedTotal" type="number" class="form-control text-end" value="{{old('packedTotal', $oneItem->amount)}}" disabled="true">
+                                    <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
+                                </div>
+                            </div>
+                        </div> 
+
+                        <br>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-end">
+                            </div>
+                            <div class="col-md-6">
+                                <table width="100%">
+                                    <tr>
+                                        <td><hr /></td>
+                                        <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h4>Unpacked</h4></td>
+                                        <td><hr /></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-end">
+                                <span class="label">Current</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input id="unpackedLama" name="unpackedLama" type="number" class="form-control text-end" value="{{old('unpackedLama', $oneItem->amountUnpacked)}}" disabled="true">
+                                    <span class="input-group-text col-3">Kg</span>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row form-group">
+                            <div class="col-md-3 text-end">
+                                <span class="label">Add*</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input oninput="totalAmount()" id="unpackedTambah" name="unpackedTambah" value="{{ old('unpackedTambah',0) }}" type="number" class="form-control text-end">
+                                    <span class="input-group-text col-3">Kg</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-end">
+                                <span class="label">Total Unpacked*</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input oninput="totalAmount()" id="unpackedTotal" name="unpackedTotal" value="{{ old('unpackedTotal',$oneItem->amountUnpacked) }}" type="number" class="form-control text-end" disabled="true">
+                                    <span class="input-group-text col-3">Kg</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <br>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-end">
+                            </div>
+                            <div class="col-md-6">
+                                <table width="100%">
+                                    <tr>
+                                        <td><hr /></td>
+                                        <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h4>Total</h4></td>
                                         <td><hr /></td>
                                     </tr>
                                 </table>
@@ -141,62 +243,24 @@
 
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
-                                <span class="label">Current</span>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <input id="jumlahLama" name="jumlahLama" type="number" class="form-control text-end" value="{{$oneItem->amount}}" disabled="true">
-                                    <span class="input-group-text col-3">MC or Bag</span>
-                                </div>
-                            </div>
-                        </div> 
-
-                        <div class="row form-group">
-                            <div class="col-md-3 text-end">
-                                <span class="label">Packed Add*</span>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <input oninput="totalAmount()" id="amountPacked" name="amountPacked" value="{{ old('amountPacked',0) }}" type="number" class="form-control text-end">
-                                    <span class="input-group-text col-3">MC or Bag</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-end">
-                                <span class="label">Unpacked Add*</span>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <input oninput="totalAmount()" id="amountUnpacked" name="amountUnpacked" value="{{ old('amountUnpacked',0) }}" type="number" class="form-control text-end">
-                                    <span class="input-group-text col-3">MC or Bag</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-end">
-                                <span class="label">Add*</span>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="input-group">
-                                    <input oninput="totalAmount()" id="amount" name="amount" value="{{ old('amount',0) }}" type="number" class="form-control text-end" readonly>
-                                    <span class="input-group-text col-3">MC or Bag</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-md-3 text-end">
                                 <span class="label">Total*</span>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-2">
                                 <div class="input-group">
-                                    <input id="jumlahTotal" name="jumlahTotal" type="number" value="{{$oneItem->amount}}" class="form-control text-end" disabled="true">
-                                    <span class="input-group-text col-3">MC or Bag</span>
+                                    <input id="amountPacking" name="amountPacking" type="number" value="{{ old('amountPacking',($oneItem->amount+round(($oneItem->amountUnpacked/$oneItem->weightbase),2))) }}" class="form-control text-end" disabled="true">
+                                    <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="display: flex; justify-content: center; align-items: center;">
+                                <h2>/</h2>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <input id="amountMetric" name="amountMetric" type="number" value="{{ old('amountMetric',(($oneItem->amount*$oneItem->weightbase)+$oneItem->amountUnpacked)) }}" class="form-control text-end" disabled="true">
+                                    <span class="input-group-text col-3">Kg</span>
                                 </div>
                             </div>
                         </div>
-
                         <br>
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
@@ -218,7 +282,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input type="date" id="tanggalProses" name="tanggalProses" class="form-control text-end" value="{{ old('tanggalProses') }}" >
+                                    <input type="date" id="tanggalProses" name="tanggalProses" class="form-control text-end" value="{{ old('tanggalProses', date('Y-m-d', strtotime('-1 days'))) }}" >
                                 </div>
                             </div>
                         </div>
@@ -228,7 +292,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input type="date" id="tanggalPacking" name="tanggalPacking" class="form-control text-end" value="{{ old('tanggalPacking') }}" >
+                                    <input type="date" id="tanggalPacking" name="tanggalPacking" class="form-control text-end" value="{{ old('tanggalPacking', date('Y-m-d')) }}" >
                                 </div>
                             </div>
                         </div>

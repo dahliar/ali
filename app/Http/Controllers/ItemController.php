@@ -33,6 +33,9 @@ class ItemController extends Controller
     public function getItemHistory($itemId){
         return $this->item->getItemHistory($itemId);
     }
+    public function getUnpackedItemHistory($itemId){
+        return $this->item->getUnpackedItemHistory($itemId);
+    }
 
     public function index(Request $request)
     {
@@ -71,6 +74,11 @@ class ItemController extends Controller
     {
         //
         return view('item.itemStockView', compact('itemId'));
+    }
+    public function showUnpacked($itemId)
+    {
+        //
+        return view('item.itemStockViewUnpacked', compact('itemId'));
     }
 
     /**

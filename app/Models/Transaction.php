@@ -56,7 +56,59 @@ class Transaction extends Model
         })->addIndexColumn()->toJson();
     }
 
+    public function getAllTransactionData($jenis, $negara, $statusTransaksi, $start, $end){
+        
+       $query = DB::table('transactions as t')
+        ->select(
+            't.id as id', 
+            't.transactionnum as nosurat', 
+            'c.name as name', 
+            'n.name as nation', 
+            't.departureDate as etd',
+            't.arrivalDate as eta',
+            't.transactiondate as tanggaltransaksi',
+            't.status as status',
+            DB::raw('(CASE WHEN t.isundername ="1" THEN "Internal"
+                WHEN t.isundername ="2" then "Undername" END) AS undername'),
+            DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
+                WHEN t.status ="1" then "On Progress"
+                WHEN t.status ="2" then "Finished"
+                ELSE "Cancelled" END) AS status')
+        )
+        ->whereBetween('transactionDate', [$end, $start])
+        ->join('companies as c', 'c.id', '=', 't.companyid')
+        ->join('countries as n', 'n.id', '=', 'c.nation');
 
+        if ($jenis!=-1){
+            $query->where('t.isundername', $jenis);
+        }
+        if ($negara!=-1){
+            $query->where('n.id', $negara);
+        }
+        if ($statusTransaksi!=-1){
+            $query->where('t.status', $statusTransaksi);
+        }
+        $query->get();  
+
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')">
+            <i class="fa fa-plus" style="font-size:20px"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
+            <i class="fa fa-edit" style="font-size:20px"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="PI" onclick="cetakPI('."'".$row->id."'".')">PI
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="IPL" onclick="cetakIPL('."'".$row->id."'".')">IPL
+            </button>
+            ';
+            return $html;
+        })->addIndexColumn()->toJson();
+    }
     public function whenUndernameIsTrue($transactionId){
         /****
          * ketika isundername=2
