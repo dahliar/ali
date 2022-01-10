@@ -21,3 +21,4 @@ config/app.php
 config/database.php
 resources/views/home.blade.php
 resources/views/home.blade.php
+resources/views/home.blade.php
