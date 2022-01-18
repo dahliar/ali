@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\DetailTransaction;
+use App\Models\Purchase;
+use App\Models\DetailPurchase;
 use App\Models\Rekening;
 use App\Models\Invoice;
 use App\Models\Company;
@@ -18,6 +20,42 @@ class InvoiceController extends Controller
     public function __construct(){
         $this->invoice = new Invoice();
     }
+    public function getPurchaseNumber($purchaseId){
+        $bagian="PURCHASE-ALI";
+        $month = date('m');
+        $year = date('Y');
+        $isActive=1;
+        $createdAt=date('Y-m-d');
+
+        $result = DB::table('document_numbers as dn')
+        ->where('month', $month)
+        ->where('year', $year)
+        ->where('bagian', $bagian)
+        ->where('purchaseId','!=', null)
+        ->orderBy('id', 'desc')
+        ->first();
+
+        if ($result){
+            $nomor=($result->nomor)+1;
+        }
+        else{
+            $nomor=1;
+        }
+
+        $data = [
+            'nomor'=>$nomor,
+            'purchaseId'=>$purchaseId,
+            'bagian'=>$bagian,
+            'month'=>$month,
+            'year'=>$year,
+            'isActive'=>$isActive,
+            'createdAt'=>$createdAt,
+        ];
+        $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
+        DB::table('document_numbers')->insert($data);
+        return $tnum;
+    }
+
 
     public function createtransactionnum($transactionId){
         $bagian="INV-ALI";
@@ -132,6 +170,9 @@ class InvoiceController extends Controller
         return $pdf->download($filename);
 
     }
+
+
+
     public function cetak_ipl(Transaction $transaction)
     {
         $detailTransactions = $this->invoice->getOneInvoiceDetail($transaction->id);
@@ -159,4 +200,27 @@ class InvoiceController extends Controller
         $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
         return $pdf->download($filename);
     }
+
+
+    public function cetakNotaPembelian(Purchase $purchase)
+    {
+        //dd($purchase);
+        $purchaseDetails = $this->invoice->getOnePurchaseDetail($purchase->id);
+        $company = Company::where('id',$purchase->companyId)->first();
+
+
+        $valutaType = "";
+        switch($purchase->valutaType){
+            case(1) : $valutaType="Rp";   break;
+            case(2) : $valutaType="USD";  break;
+            case(3) : $valutaType="RMB";  break;
+        }
+
+
+
+        $pdf = PDF::loadview('invoice.notaPembelian', compact('valutaType', 'company','purchase', 'purchaseDetails'));
+        $filename = 'NotaPembelian '.$purchase->id.' '.$company->name.' '.today().'.pdf';
+        return $pdf->download($filename);
+    }
+
 }

@@ -118,6 +118,35 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
+                                <span class="label">Pendidikan*</span>
+                            </div>
+                            <div class="col-md-4">
+                                <select id="pendidikan" name="pendidikan" class="form-select" >
+                                    <option value="-1" @if(old('pendidikan', $employee->jenjangPendidikan) == -1) selected @endif>--Pilih Jenjang Pendidikan--</option>
+                                    <option value="Tidak Sekolah" @if(old('pendidikan', $employee->jenjangPendidikan) == "Tidak Sekolah") selected @endif>Tidak Sekolah</option>
+                                    <option value="SD/Sederajat" @if(old('pendidikan', $employee->jenjangPendidikan) == "SD/Sederajat") selected @endif>SD/Sederajat</option>
+                                    <option value="SMP/Sederajat" @if(old('pendidikan', $employee->jenjangPendidikan) == "SMP/Sederajaat") selected @endif>SMP/Sederajat</option>
+                                    <option value="SMA/Sederajat" @if(old('pendidikan', $employee->jenjangPendidikan) == "SMA/Sederajat") selected @endif>SMA/Sederajat</option>
+                                    <option value="Diploma 1" @if(old('pendidikan', $employee->jenjangPendidikan) == "Diploma 1") selected @endif>Diploma 1</option>
+                                    <option value="Diploma 2" @if(old('pendidikan', $employee->jenjangPendidikan) == "Diploma 2") selected @endif>Diploma 2</option>
+                                    <option value="Diploma 3" @if(old('pendidikan', $employee->jenjangPendidikan) == "Diploma 3") selected @endif>Diploma 3</option>
+                                    <option value="Diploma 4" @if(old('pendidikan', $employee->jenjangPendidikan) == "Diploma 4") selected @endif>Diploma 4</option>
+                                    <option value="Sarjana" @if(old('pendidikan', $employee->jenjangPendidikan) == "Sarjana") selected @endif>Sarjana</option>
+                                    <option value="Master" @if(old('pendidikan', $employee->jenjangPendidikan) == "Master") selected @endif>Master</option>
+                                    <option value="Doktor" @if(old('pendidikan', $employee->jenjangPendidikan) == "Doktor") selected @endif>Doktor</option>
+                                </select>
+                            </div>      
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Bidang Pendidikan*</span>
+                            </div>
+                            <div class="col-md-8">
+                                <textarea class="form-control" id="bidangPendidikan" name="bidangPendidikan" rows="4" cols="50" required autocomplete="none">{{old('bidangPendidikan', $employee->bidangPendidikan)}}</textarea>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
                                 <span class="label">Tanggal Lahir*</span>
                             </div>
                             <div class="col-md-4">
@@ -179,7 +208,7 @@
                                 <span class="label">Bank</span>
                             </div>
                             <div class="col-md-8">
-                                <select id="bankid" name="bankid" class="form-control" >
+                                <select id="bankid" name="bankid" class="form-select" >
                                     <option value="">--Choose First--</option>
                                     @foreach ($banks as $bank)
                                     @if ( old('bankid', $bank->id) == $employee->bankid)

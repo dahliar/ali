@@ -190,6 +190,35 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
+                            <span class="label">Pendidikan*</span>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="pendidikan" name="pendidikan" class="form-select" >
+                                <option value="-1" @if(old('pendidikan') == -1) selected @endif>--Pilih Jenjang Pendidikan--</option>
+                                <option value="Tidak Sekolah" @if(old('pendidikan') == 1) selected @endif>Tidak Sekolah</option>
+                                <option value="SD/Sederajat" @if(old('pendidikan') == 2) selected @endif>SD/Sederajat</option>
+                                <option value="SMP/Sederajat" @if(old('pendidikan') == 3) selected @endif>SMP/Sederajat</option>
+                                <option value="SMA/Sederajat" @if(old('pendidikan') == 4) selected @endif>SMA/Sederajat</option>
+                                <option value="Diploma 1" @if(old('pendidikan') == 5) selected @endif>Diploma 1</option>
+                                <option value="Diploma 2" @if(old('pendidikan') == 6) selected @endif>Diploma 2</option>
+                                <option value="Diploma 3" @if(old('pendidikan') == 7) selected @endif>Diploma 3</option>
+                                <option value="Diploma 4" @if(old('pendidikan') == 8) selected @endif>Diploma 4</option>
+                                <option value="Sarjana" @if(old('pendidikan') == 9) selected @endif>Sarjana</option>
+                                <option value="Master" @if(old('pendidikan') == 10) selected @endif>Master</option>
+                                <option value="Doktor" @if(old('pendidikan') == 10) selected @endif>Doktor</option>
+                            </select>
+                        </div>      
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Bidang Pendidikan*</span>
+                        </div>
+                        <div class="col-md-8">
+                            <textarea class="form-control" id="bidangPendidikan" name="bidangPendidikan" rows="4" cols="50" required autocomplete="none">{{old('bidangPendidikan')}}</textarea>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 text-end">
                             <span class="label">Tanggal Mulai*</span>
                         </div>
                         <div class="col-md-4">
@@ -210,7 +239,7 @@
                             <span class="label">Jabatan*</span>
                         </div>
                         <div class="col-md-4">
-                            <select id="structural" name="structural" class="form-control" >
+                            <select id="structural" name="structural" class="form-select" >
                                 <option value="-1" selected>--Choose First--</option>
                                 @foreach ($structpos as $position)
                                 @if ( $position->id == old('structural') )
@@ -227,7 +256,7 @@
                             <span class="label">Bagian*</span>
                         </div>
                         <div class="col-md-4">
-                            <select id="workPosition" name="workPosition" class="form-control" >
+                            <select id="workPosition" name="workPosition" class="form-select" >
                                 <option value="-1" selected>--Choose First--</option>
                                 @foreach ($workpos as $workpo)
                                 @if ( $workpo->id == old('workPosition') )
@@ -244,7 +273,7 @@
                             <span class="label">Penempatan*</span>
                         </div>
                         <div class="col-md-4">
-                            <select id="OrgStructureOption" name="OrgStructureOption" class="form-control" >
+                            <select id="OrgStructureOption" name="OrgStructureOption" class="form-select" >
                                 <option value="">--Pilih Jabatan & Bagian dahulu--</option>
                             </select>
                         </div>
@@ -254,7 +283,7 @@
                             <span class="label">Jenis Karyawan*</span>
                         </div>
                         <div class="col-md-4">
-                            <select id="employmentStatus" name="employmentStatus" class="form-control" >
+                            <select id="employmentStatus" name="employmentStatus" class="form-select" >
                                 <option value="-1" @if(old('employmentStatus') == -1) selected @endif>--Choose Jenis Karyawan--</option>
                                 <option value="1" @if(old('employmentStatus') == 1) selected @endif>Bulanan</option>
                                 <option value="2" @if(old('employmentStatus') == 2) selected @endif>Harian</option>

@@ -10,7 +10,7 @@
 
 
 @section('content')
-@if (Auth::check() and (Auth::user()->isAdmin() or Auth::user()->isMarketing()))
+@if (Auth::check() and (Auth::user()->isAdmin() or Auth::user()->isProduction()))
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -18,21 +18,17 @@
         }
     });
 
-    function tambahItem(id){
-        window.open(('{{ url("detailtransactionList") }}'+"/"+id), '_blank');
+    function purchaseAdd(){
+        window.open(('{{ url("purchaseAdd") }}'), '_self');
     }
-    function editTransaksi(id){
+    function purchaseItems(id){
+        window.open(('{{ url("purchaseItems") }}'+"/"+id), '_blank');
+    }
+    function purchaseEdit(id){
         window.open(('{{ url("transactionEdit") }}'+"/"+id), '_blank');
     }
-    function tambahTransaksi(){
-        window.open(('{{ url("transactionAdd") }}'), '_blank');
-    }
-
-    function cetakPI(id){
-        window.open(('{{ url("transaction/pi") }}'+"/"+id), '_blank');
-    }
-    function cetakIPL(id){
-        window.open(('{{ url("transaction/ipl") }}'+"/"+id), '_blank');
+    function purchaseInvoice(id){
+        window.open(('{{ url("purchase/notaPembelian") }}'+"/"+id), '_blank');
     }
 
     function refreshTableTransactionList(){
@@ -53,7 +49,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getAllTransaction") }}',
+            ajax:'{{ route("getAllPurchases") }}',
             dataType: 'json',
             data: {
                 negara : negara,
@@ -84,26 +80,20 @@
             {data: 'name', name: 'name'},
             {data: 'nation', name: 'nation'},
             {data: 'nosurat', name: 'nosurat'},
-            {data: 'etd', name: 'etd'},
-            {data: 'eta', name: 'eta'},
-            {data: 'undername', name: 'undername'},
+            {data: 'tanggalInput', name: 'tanggalInput'},
+            {data: 'tanggaltransaksi', name: 'tanggaltransaksi'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     }
 
-
     function myFunction(){
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getAllTransaction") }}',
-            //data: {
-            //    structPosId : structuralPos,
-            //    workPosId: workPos
-            //},
+            ajax:'{{ url("getPurchaseList") }}',
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -126,9 +116,9 @@
             {data: 'name', name: 'name'},
             {data: 'nation', name: 'nation'},
             {data: 'nosurat', name: 'nosurat'},
-            {data: 'etd', name: 'etd'},
-            {data: 'eta', name: 'eta'},
-            {data: 'undername', name: 'undername'},
+            {data: 'arrivaldate', name: 'arrivaldate'},
+            {data: 'purchasedate', name: 'purchasedate'},
+            {data: 'paymentAmount', name: 'paymentAmount'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -163,7 +153,7 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Transactions</li>
+                        <li class="breadcrumb-item active">Purchase</li>
                     </ol>
                 </nav>
                 
@@ -172,11 +162,11 @@
             <div class="modal-body">
                 <div class="row">
                     <p>
-                        <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Transaksi">
-                            <i class="fa fa-plus" style="font-size:20px"></i> Transaksi
+                        <button onclick="purchaseAdd()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Add purchase">
+                            <i class="fa fa-plus" style="font-size:20px"></i> Purchase
                         </button>
                         <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapsePart" role="button" aria-expanded="false" aria-controls="collapsePart">
-                            <i class="fas fa-filter" style="font-size:20px"></i> List Transaksi
+                            <i class="fas fa-filter" style="font-size:20px"></i> Purchase List
                         </a>
                     </p>
 
@@ -198,19 +188,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div> 
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <span class="label">Jenis Transaksi</span>
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-select" id="jenis" name="jenis" >
-                                        <option value="-1" selected>--Pilih Jenis--</option>
-                                        <option value="1" @if(old('jenis') == 1) selected @endif>Internal</option>
-                                        <option value="2" @if(old('jenis') == 2) selected @endif>Undername</option>
-                                    </select>
-                                </div>
-                            </div> 
+                            </div>                             
                             <div class="row form-group">
                                 <div class="col-md-3">
                                     <span class="label">Status Transaksi</span>
@@ -257,12 +235,6 @@
                                 </button>
                             </div>
                         </div> 
-
-
-
-
-
-
                     </div>
                 </div>
             </div>
@@ -277,9 +249,9 @@
                                 <th>Perusahaan</th>
                                 <th>Negara</th>
                                 <th>No Surat</th>
-                                <th>ETD</th>
-                                <th>ETA</th>
-                                <th>Jenis</th>
+                                <th>Arrival</th>
+                                <th>Purchase</th>
+                                <th>Payment</th>
                                 <th>Status</th>
                                 <th>Act</th>
                             </tr>

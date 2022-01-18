@@ -157,6 +157,15 @@ class SpeciesController extends Controller
 
         $checker = $request->size.':'.$request->grade.':'.$request->packing.':'.$request->freezing.':'.$request->weightbase;
 
+        $file="";
+        $filename="";
+        if($request->hasFile('imageurl')){
+            $file = $request->imageurl;
+            $filename = $request->name.$request->size.$request->grade.$request->packing.$request->freezing.$request->weightbase.".".$file->getClientOriginalExtension();
+
+            $file->move(base_path("/public/images/items/"), $filename);
+        }
+
         $data = [
             'name' => $request->name,
             'sizeId' => $request->size,
@@ -167,9 +176,11 @@ class SpeciesController extends Controller
             'baseprice' => $request->baseprice,
             'weightbase' => $request->weightbase,
             'checker' => $checker,
-            'isActive' =>  1
+            'isActive' =>  1,
+            'imageurl' => "images/items/".$filename
         ];
 
+        //dd($data);
         DB::table('items')->insert($data);
         return redirect('itemList/'.$request->speciesId)
         ->with('status','Item berhasil ditambahkan.');
@@ -182,14 +193,6 @@ class SpeciesController extends Controller
         DB::table('sizes')
         ->where('id', $request->sizeId)
         ->update(['isActive' => $request->isActive]);
-
-        //$speciesId=$request->speciesId;
-
-        //return redirect()->route('sizeList', ['speciesId' => $request->speciesId])
-        //->with('status','Update berhasil dilakukan.');
-
-        //return redirect('sizeList/'+$request->speciesId)
-        //->with('status','Update berhasil dilakukan.');
 
         return redirect()->back()->with('status','Update berhasil dilakukan.');
     }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DetailTransactionController;
+use App\Http\Controllers\DetailPurchaseController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\StoreController;
@@ -13,10 +14,13 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\OrganizationStructureController;
 use App\Http\Controllers\StructuralPositionController;
 use App\Http\Controllers\WorkPositionController;
+use App\Http\Controllers\PurchaseController;
 use App\Models\Rekening; 
 use App\Models\Company; 
 use App\Models\Item; 
 use App\Models\Transaction; 
+use App\Models\Purchase; 
+use App\Models\DetailPurchase; 
 use App\Models\DetailTransaction; 
 use App\Models\User; 
 
@@ -74,18 +78,14 @@ Route::get('employeeEdit',[EmployeeController::class, 'edit'])->middleware(['aut
 */
 
 
+/*
+*   Route Transaksi Penjualan
+*
+*/
 Route::get('transactionList',[TransactionController::class, 'index'])->middleware(['auth']);
 Route::get('transactionAdd',[TransactionController::class, 'create'])->middleware(['auth']);
 Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth']);
-
-
-
 Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'])->middleware(['auth']);
-
-
-
-
-
 Route::get('transactionStore',[TransactionController::class, 'store'])->middleware(['auth'])->name('transactionStore');
 Route::get('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth'])->name('transactionUpdate');
 
@@ -96,12 +96,26 @@ Route::get('itemDetailTransactionAdd',[DetailTransactionController::class, 'stor
 
 Route::get('itemDetailTransactionDelete/{detail_transaction}',[DetailTransactionController::class, 'destroy'])->middleware(['auth'])->name('itemDetailTransactionDelete');
 
+/*
+*   Route Transaksi Pembelian/Purchase
+*
+*/
+Route::get('purchaseList',[PurchaseController::class, 'index'])->middleware(['auth']);
+Route::GET('getPurchaseList', [PurchaseController::class, 'getPurchaseList'])->middleware(['auth']);
+Route::get('purchaseAdd',[PurchaseController::class, 'create'])->middleware(['auth']);
+Route::get('purchaseStore',[PurchaseController::class, 'store'])->middleware(['auth'])->name('purchaseStore');
 
-//Route::get('/detailtransactionAdd/{transaction}', function (Transaction $transaction) { 
-//    return view('detail.detailAdd', compact('transaction'));
-//});
+Route::GET('getAllPurchases', [PurchaseController::class, 'getAllPurchases'])->middleware(['auth'])->name('getAllPurchases');
 
 
+Route::get('purchaseItems/{purchase}',[DetailPurchaseController::class, 'index'])->middleware(['auth'])->name('purchaseItems');
+Route::get('purchaseItemAdd/{purchase}',[DetailPurchaseController::class, 'create'])->middleware(['auth']);
+Route::get('purchaseItemStore',[DetailPurchaseController::class, 'store'])->middleware(['auth']);
+
+Route::GET('getAllPurchaseItems/{purchase}', [DetailPurchaseController::class, 'getAllPurchaseItems'])->middleware(['auth'])->name('getAllPurchaseItems');
+
+
+Route::get('/purchase/notaPembelian/{purchase}', [InvoiceController::class, 'cetakNotaPembelian'])->middleware(['auth']);
 
 //ITEM STOCKS
 //ITEM STOCKS
@@ -158,7 +172,7 @@ Route::get('addSpeciesSize/{speciesId}',[SpeciesController::class, 'createSize']
 Route::get('addSpeciesItem/{speciesId}',[SpeciesController::class, 'createItem'])->middleware(['auth']);
 
 Route::get('sizeCreateStore',[SpeciesController::class, 'storeSize'])->middleware(['auth']);
-Route::get('itemCreateStore',[SpeciesController::class, 'storeItem'])->middleware(['auth']);
+Route::post('itemCreateStore',[SpeciesController::class, 'storeItem'])->middleware(['auth']);
 
 Route::get('sizeEditStore',[SpeciesController::class, 'updateSize'])->middleware(['auth']);
 Route::get('itemEditStore',[SpeciesController::class, 'updateItem'])->middleware(['auth']);
@@ -179,13 +193,13 @@ Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middle
 
 
 Route::GET('getAllTransaction', [TransactionController::class, 'getAlltransaction'])->middleware(['auth']);
-Route::GET('getAllTransactionTes', [TransactionController::class, 'getAllTransactionTes'])->middleware(['auth'])->name('getAllTransactionTes');
 Route::GET('getAllDetail/{transactionId}', [DetailTransactionController::class, 'getAllDetail'])->middleware(['auth']);
 
 
 
 Route::get('/transaction/pi/{transaction}', [InvoiceController::class, 'cetak_pi'])->middleware(['auth']);
 Route::get('/transaction/ipl/{transaction}', [InvoiceController::class, 'cetak_ipl'])->middleware(['auth']);
+
 
 
 //to get size for all species

@@ -20,7 +20,7 @@
 
 
     function editCompany(id){
-        window.open(('{{ url("companyEdit") }}'+"/"+id), '_blank');
+        window.open(('{{ url("companyEdit") }}'+"/"+id), '_self');
     }
     function tambahCompany(){
         window.open('{{ url("companyAdd") }}', '_blank');

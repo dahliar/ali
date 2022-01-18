@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
+
 
 class Species extends Model
 {
@@ -99,6 +102,7 @@ class Species extends Model
             'f.name as familyName', 
             'g.name as gradeName', 
             'p.name as packingName', 
+            'i.imageurl as url', 
             'fr.name as freezingName', 
         )
         ->join('sizes as si', 'i.sizeId', '=', 'si.id')
@@ -115,41 +119,22 @@ class Species extends Model
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
-            $html = '
-            <button onclick="editSpeciesItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Item">
-            <i class="fa fa-edit" style="font-size:20px"></i>
-            </button>';
+            $html="";
+            $html = '<button onclick="editSpeciesItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Item"><i class="fa fa-edit" style="font-size:20px"></i></button>';
+
+            $file = URL::to('/').'/'.$row->url;
+            $path = public_path() .'/'. $row->url;
+
+            if (file_exists($path) and ($row->url!=null)){
+                $html.='<a href="'.URL::to('/').'/'.$row->url.'" target="_blank"><i class="fa fa-image"></i></a>';
+            }
             return $html;
-        })->addIndexColumn()->toJson();
+        })
+        ->addIndexColumn()->toJson();
     }
 
     public function getOneSpecies($speciesId){
-    /*
-        $query = DB::table('items as i')
-        ->select(
-            'i.id as itemId', 
-            'i.name as itemName', 
-            'sp.name as speciesName', 
-            's.name as sizeName',
-            'g.name as gradeName',
-            'p.name as packingName',
-            'f.name as freezingName',
-            'amount',
-            'baseprice',
-            'weightbase'
-        )
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        ->where('i.id','=', $itemId)
-        ->get();    
 
-        return $query->first();
-
-        //jika $query->all() maka untuk multi rows, perlu diolah lagi pada saat hendak ditampilkan dalam view
-        */
     }
     public function getOneSize($sizeId){
         $query = DB::table('sizes as s')
@@ -160,6 +145,7 @@ class Species extends Model
             'sp.id as speciesId', 
             's.isActive as isActive'
         )
+        
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->where('s.id','=', $sizeId)
         ->get();    
@@ -167,6 +153,6 @@ class Species extends Model
         return $query->first();
 
         //jika $query->all() maka untuk multi rows, perlu diolah lagi pada saat hendak ditampilkan dalam view
-        
+
     }
 }

@@ -38,4 +38,28 @@ class Invoice extends Model
 
         return $query;
     }
+
+
+    public function getOnePurchaseDetail($purchaseId){
+        $query = DB::table('detail_purchases as dp')
+        ->select(
+            DB::raw('concat(sp.name,    " ",s.name,         " ",i.name) as goods'),
+            DB::raw('concat(dp.amount,  " ",p.shortname)                as quantity'),
+            'dp.amount as amount',
+            'dp.price as price',
+            DB::raw('(dp.price * dp.amount) as totalPrice')
+        )
+        ->join('purchases as pur', 'pur.id', '=', 'dp.purchasesId')
+        ->join('items as i', 'i.id', '=', 'dp.itemId')
+        ->join('freezings as f', 'i.freezingid', '=', 'f.id')
+        ->join('grades as g', 'i.gradeid', '=', 'g.id')
+        ->join('packings as p', 'i.packingid', '=', 'p.id')
+        ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->where('pur.id','=', $purchaseId)
+        ->get();  
+
+
+        return $query;
+    }
 }

@@ -54,19 +54,17 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
         $request->validate([
             'name' => 'required|max:100|unique:companies',
             'address' => 'required|max:4000',
             'countryId' => 'required|gt:0'
         ]);
 
-
         $company = [
             'name'      => $request->name,
             'nation'    => $request->countryId,
             'address'   =>  $request->address,
-            'isActive'  =>  1
+            'npwp'      => $request->npwp
         ];
 
         $companyId = DB::table('companies')->insertGetId($company);
@@ -75,11 +73,12 @@ class CompanyController extends Controller
         //masukin ke $companyId=lastInsert
         //insert kontak
 
-        //dd(count($request->contactName));
-        if ((count($request->contactName)>0) or (count($request->phone)>0) or (count($request->email)>0)){
+        if ($request->has('contactName') or $request->has('phone') or $request->has('email'))
+        {
             $max = max(count($request->contactName), count($request->phone), count($request->email));
 
             for ($a=0; $a<$max; $a++){
+
                 $contact[$a] = [
                     'name' =>  $request->contactName[$a],
                     'phone' =>  $request->phone[$a],
@@ -90,12 +89,10 @@ class CompanyController extends Controller
 
             //dd($contact);
 
-            DB::table('contact')->insert($contact);
-
-            return redirect('companyList')
-            ->with('status','Data company berhasil ditambahkan.');
-
+            DB::table('contacts')->insert($contact);
         }
+        return redirect('companyList')
+        ->with('status','Data company berhasil ditambahkan.');
     }
 
     /**
@@ -120,8 +117,13 @@ class CompanyController extends Controller
         $countries = DB::table('countries')
         ->orderBy('name')
         ->get();
+        $contacts = DB::table('contacts')
+        ->where('companyId','=',$company->id)
+        ->get();
 
-        return view('company.companyEdit', compact('company', 'countries'));
+        //dd($contact);
+
+        return view('company.companyEdit', compact('company', 'countries', 'contacts'));
     }
 
     /**
@@ -131,9 +133,69 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(Request $request)
     {
-        //
+        //dd($request);
+        $request->validate([
+            'address' => 'required|max:4000',
+            'countryId' => 'required|gt:0'
+        ]);
+
+        $company = [
+            'nation'    => $request->countryId,
+            'address'   =>  $request->address,
+            'npwp'      => $request->npwpnum
+        ];
+
+        Company::where('id', $request->companyId)
+        ->update($company);
+        //insert dlu ke tabel company
+        //ambil idnya
+        //masukin ke $companyId=lastInsert
+        //insert kontak
+
+        if ($request->has('contactName') or $request->has('phone') or $request->has('email'))
+        {
+            $max = max(count($request->contactName), count($request->phone), count($request->email));
+
+            for ($a=0; $a<$max; $a++){
+                $tableid = $request->tableid[$a];
+                if ($request->tableid[$a]==-1){
+                    $tableid=null;
+                }                
+                $email = "";
+                if (!empty($request->email[$a])){
+                    $email=$request->email[$a];
+                }
+                $contactName = "";
+                if (!empty($request->contactName[$a])){
+                    $contactName=$request->contactName[$a];
+                }
+                $phone = "";
+                if (!empty($request->phone[$a])){
+                    $phone=$request->phone[$a];
+                }
+
+
+                $contact[$a] = [
+                    'id'        =>  $tableid,
+                    'name'      =>  $contactName,
+                    'companyId' =>  $request->companyId,
+                    'phone'     =>  $phone,
+                    'email'     =>  $email
+                ];
+            }
+
+            //dd($contact);
+
+            DB::table('contacts')
+            ->upsert($contact, 
+                ['id'], 
+                ['name', 'phone', 'email']
+            );
+        }
+        return redirect('companyList')
+        ->with('status','Data company berhasil ditambahkan.');
     }
 
     /**

@@ -13,7 +13,6 @@
 
 @if (Auth::check())
 <div class="container-fluid">
-    <!--
     <div class="row">
         <ol class="primary-color">
             <li>DONE. Forwarder</li>
@@ -91,8 +90,7 @@
 
         </ol>
     </div>
--->
-</div>
+]</div>
 @else
 @include('partial.noAccess')
 @endif

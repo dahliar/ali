@@ -69,7 +69,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <form id="formTambahItem" action="{{url('itemCreateStore')}}" method="get" name="formTambahItem">
+        <form id="formTambahItem" action="{{url('itemCreateStore')}}" method="post" name="formTambahItem" enctype="multipart/form-data">
             {{ csrf_field() }}
             <div class="modal-content">
                 <div class="modal-header">
@@ -90,7 +90,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Species</span>
+                                <span class="label">Species*</span>
                             </div>
                             <div class="col-md-5">
                                 <input id="speciesId" name="speciesId" type="hidden" class="form-control text-md-right" value="{{$species->id}}" readonly>
@@ -101,7 +101,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Size</span>
+                                <span class="label">Size*</span>
                             </div>
                             <div class="col-md-5">
                                 <select onchange="editChecker()" class="form-select w-100" id="size" name="size">
@@ -119,7 +119,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Grade</span>
+                                <span class="label">Grade*</span>
                             </div>
                             <div class="col-md-5">
                                 <select onchange="editChecker()" class="form-select w-100" id="grade" name="grade">
@@ -137,7 +137,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Packing Type</span>
+                                <span class="label">Packing Type*</span>
                             </div>
                             <div class="col-md-5">
                                 <select class="form-select w-100" id="packing" name="packing">
@@ -155,7 +155,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Freeze Type</span>
+                                <span class="label">Freeze Type*</span>
                             </div>
                             <div class="col-md-5">
                                 <select onchange="editChecker()" class="form-select w-100" id="freezing" name="freezing">
@@ -173,7 +173,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Item Name</span>
+                                <span class="label">Item Name*</span>
                             </div>
                             <div class="col-md-5">
                                 <input id="name" name="name" type="text" class="form-control text-md-right" value="{{old('name')}}" placeholder="Nama harus unik untuk species & size tersebut">
@@ -182,7 +182,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Base Price</span>
+                                <span class="label">Base Price*</span>
                             </div>
                             <div class="col-md-5">
                                 <div class="input-group">
@@ -194,7 +194,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Weight Base</span>
+                                <span class="label">Weight Base*</span>
                             </div>
                             <div class="col-md-5">
                                 <div class="input-group">
@@ -207,7 +207,7 @@
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
-                                <span class="label">Initial Amount</span>
+                                <span class="label">Initial Amount*</span>
                             </div>
                             <div class="col-md-5">
                                 <div class="input-group">
@@ -215,7 +215,18 @@
                                     <span id="spanAmount" class="input-group-text col-4">-</span>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>   
+                        <div class="row form-group">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-3 text-md-right">
+                                <span class="label">Gambar</span>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group">
+                                    <input class="form-control" type="file" id="imageurl" name="imageurl">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="justify-content: center;">

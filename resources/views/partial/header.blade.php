@@ -59,11 +59,15 @@
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li>
-								<a class="dropdown-item" href="{{ url('transactionList')}}">All Transaction
+								<a class="dropdown-item" href="{{ url('transactionList')}}">Sales Transaction
 								</a>
 							</li>
 							<li>
-								<a class="dropdown-item" href="{{ url('companyList')}}">Companies
+								<a class="dropdown-item" href="{{ url('purchaseList')}}">Purchase Transaction
+								</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="{{ url('companyList')}}">Company List
 								</a>
 							</li>
 						</ul>
@@ -72,7 +76,7 @@
 					@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Stock Barang
+							Items Stock
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li><a class="dropdown-item" href="{{ url('itemStockList')}}">Items</a></li>

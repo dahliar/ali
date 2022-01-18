@@ -99,6 +99,15 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-md-2 text-end">
+                        <span class="label" id="npwp">NPWP</span>
+                    </div>
+                    <div class="col-md-4">
+                        <input id="npwpnum" name="npwpnum" class="form-control" value="{{ old('npwpnum') }}" placeholder="NPWP Number">
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
                         <span class="label" id="spanBank">Kontak Person</span>
                     </div>
                     <div class="col-md-2">
@@ -136,7 +145,6 @@
     var $p = @json(old('phone'));
     var $e = @json(old('email'));
     for ($i=0; $i<$cn.length; $i++){
-        alert($i);
         $('#dynamic_field').append('<tr id="row'+$i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control" value="'+$cn[$i]+'"></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon" value="'+$p[$i]+'"></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email" value="'+$e[$i]+'"></div><div class="col-md-1"><button type="button" name="remove" id="'+$i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>');  
     }
 </script>
