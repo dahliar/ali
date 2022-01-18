@@ -105,7 +105,18 @@
                         <input id="npwpnum" name="npwpnum" class="form-control" value="{{ old('npwpnum') }}" placeholder="NPWP Number">
                     </div>
                 </div>
-
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label" id="spanBank">Tax Included</span>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select w-100" id="taxIncluded" name="taxIncluded">
+                            <option value="-1" @if(old('taxIncluded') == 0) selected @endif>--Choose First--</option>
+                            <option value="0" @if(old('taxIncluded') == 0) selected @endif>NO</option>
+                            <option value="1" @if(old('taxIncluded') == 1) selected @endif>YES</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="row form-group">
                     <div class="col-md-2 text-end">
                         <span class="label" id="spanBank">Kontak Person</span>

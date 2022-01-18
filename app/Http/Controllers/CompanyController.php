@@ -57,6 +57,7 @@ class CompanyController extends Controller
         $request->validate([
             'name' => 'required|max:100|unique:companies',
             'address' => 'required|max:4000',
+            'taxIncluded' => 'required|gte:0',
             'countryId' => 'required|gt:0'
         ]);
 
@@ -64,6 +65,7 @@ class CompanyController extends Controller
             'name'      => $request->name,
             'nation'    => $request->countryId,
             'address'   =>  $request->address,
+            'taxIncluded' =>  $request->taxIncluded,
             'npwp'      => $request->npwp
         ];
 
@@ -135,15 +137,16 @@ class CompanyController extends Controller
      */
     public function update(Request $request)
     {
-        //dd($request);
         $request->validate([
             'address' => 'required|max:4000',
+            'taxIncluded' => 'required|gte:0',
             'countryId' => 'required|gt:0'
         ]);
 
         $company = [
             'nation'    => $request->countryId,
             'address'   =>  $request->address,
+            'taxIncluded' =>  $request->taxIncluded,
             'npwp'      => $request->npwpnum
         ];
 
@@ -195,7 +198,7 @@ class CompanyController extends Controller
             );
         }
         return redirect('companyList')
-        ->with('status','Data company berhasil ditambahkan.');
+        ->with('status','Data company berhasil diperbaharui.');
     }
 
     /**
