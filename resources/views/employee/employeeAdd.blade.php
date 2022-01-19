@@ -77,6 +77,9 @@
 </script>
 
 @if ($errors->any())
+<script type="text/javascript"> 
+    alert("123");
+</script>
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
@@ -112,7 +115,7 @@
         </div>
         <div class="modal-body">
 
-            <form id="EmployeeAddForm" action="{{route('employeeStore')}}" method="POST" name="EmployeeAddForm" autocomplete="off">
+            <form id="EmployeeAddForm" action="{{url('employeeStore')}}" method="POST" name="EmployeeAddForm" autocomplete="off">
                 @csrf
 
                 <div class="d-grid gap-1">
@@ -121,7 +124,7 @@
                             <label class="form-label">Name*</label>
                         </div>
                         <div class="col-md-8">
-                            <input id="name" name="name" type="text" class="form-control" required autocomplete="off" value="{{old('name')}}">
+                            <input id="name" name="name" type="text" class="form-control" autocomplete="off" value="{{old('name')}}">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -129,7 +132,7 @@
                             <label class="form-label">Username*</label>
                         </div>
                         <div class="col-md-8">
-                            <input id="username" name="username" type="text" class="form-control" required autocomplete="off" value="{{old('username')}}">
+                            <input id="username" name="username" type="text" class="form-control" autocomplete="off" value="{{old('username')}}">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -159,7 +162,7 @@
                         </div>
 
                         <div class="col-md-8">
-                            <input id="password" class="form-control" type="password" name="password" required autocomplete="new-password"/>
+                            <input id="password" class="form-control" type="password" name="password" autocomplete="new-password"/>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -168,7 +171,7 @@
                         </div>
 
                         <div class="col-md-8">
-                            <input id="password_confirmation" class="form-control" type="password" name="password_confirmation" required autocomplete="new-password"/>
+                            <input id="password_confirmation" class="form-control" type="password" name="password_confirmation" autocomplete="new-password"/>
                         </div>
                     </div>        
                     <div class="row form-group">
@@ -176,7 +179,7 @@
                             <span class="label">NIK*</span>
                         </div>
                         <div class="col-md-4">
-                            <input id="nik" name="nik" type="text" class="form-control" required autocomplete="none" value="{{old('nik')}}">
+                            <input id="nik" name="nik" type="text" class="form-control" autocomplete="none" value="{{old('nik')}}">
                         </div>
                     </div>
                     <div class="row form-group">
@@ -214,7 +217,7 @@
                             <span class="label">Bidang Pendidikan*</span>
                         </div>
                         <div class="col-md-8">
-                            <textarea class="form-control" id="bidangPendidikan" name="bidangPendidikan" rows="4" cols="50" required autocomplete="none">{{old('bidangPendidikan')}}</textarea>
+                            <textarea class="form-control" id="bidangPendidikan" name="bidangPendidikan" rows="4" cols="50" autocomplete="none">{{old('bidangPendidikan')}}</textarea>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -231,7 +234,7 @@
                             <span class="label">Alamat*</span>
                         </div>
                         <div class="col-md-8">
-                            <textarea class="form-control" id="address" name="address" rows="4" cols="50" required autocomplete="none">{{old('address')}}</textarea>
+                            <textarea class="form-control" id="address" name="address" rows="4" cols="50" autocomplete="none">{{old('address')}}</textarea>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -297,7 +300,7 @@
                         <div class="col-md-4">
                             <div class="input-group">
                                 <span class="input-group-text text-end">Rp. </span>
-                                <input id="gajiPokok" name="gajiPokok" value="{{old('gajiPokok',0)}}" type="text" class="form-control text-end" required autocomplete="none">
+                                <input id="gajiPokok" name="gajiPokok" value="{{old('gajiPokok',0)}}" type="text" class="form-control text-end" autocomplete="none">
                                 <span class="input-group-text col-3">per bulan</span>
                             </div>
                         </div>
@@ -309,7 +312,7 @@
                         <div class="col-md-4">
                             <div class="input-group">
                                 <span class="input-group-text text-end">Rp. </span>
-                                <input id="gajiHarian" name="gajiHarian" value="{{old('gajiHarian',0)}}" type="text" class="form-control text-end" required autocomplete="none">
+                                <input id="gajiHarian" name="gajiHarian" value="{{old('gajiHarian',0)}}" type="text" class="form-control text-end" autocomplete="none">
                                 <span class="input-group-text col-3">per hari</span>
                             </div>
                         </div>        
@@ -321,7 +324,7 @@
                         <div class="col-md-4">
                             <div class="input-group">
                                 <span class="input-group-text">Rp. </span>
-                                <input id="uangTransport" name="uangTransport" value="{{old('uangTransport',0)}}" type="text" class="form-control text-end" required autocomplete="none">
+                                <input id="uangTransport" name="uangTransport" value="{{old('uangTransport',0)}}" type="text" class="form-control text-end" autocomplete="none">
                                 <span class="input-group-text col-3">per hari</span>
                             </div>
                         </div>
@@ -333,7 +336,7 @@
                         <div class="col-md-4">
                             <div class="input-group">
                                 <span class="input-group-text">Rp. </span>
-                                <input id="uangMakan" name="uangMakan" value="{{old('uangMakan',0)}}" type="text" class="form-control text-end" required autocomplete="none">
+                                <input id="uangMakan" name="uangMakan" value="{{old('uangMakan',0)}}" type="text" class="form-control text-end" autocomplete="none">
                                 <span class="input-group-text col-3">per hari</span>
                             </div>
                         </div>
@@ -345,7 +348,7 @@
                         <div class="col-md-4">
                             <div class="input-group">
                                 <span class="input-group-text">Rp. </span>
-                                <input id="uangLembur" name="uangLembur" type="text" value="{{old('uangLembur',0)}}" class="form-control text-end" required autocomplete="none">
+                                <input id="uangLembur" name="uangLembur" type="text" value="{{old('uangLembur',0)}}" class="form-control text-end" autocomplete="none">
                                 <span class="input-group-text col-3">per jam</span>
                             </div>
                         </div>
