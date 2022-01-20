@@ -22,10 +22,10 @@
         window.open(('{{ url("detailtransactionList") }}'+"/"+id), '_blank');
     }
     function editTransaksi(id){
-        window.open(('{{ url("transactionEdit") }}'+"/"+id), '_blank');
+        window.open(('{{ url("transactionEdit") }}'+"/"+id), '_self');
     }
     function tambahTransaksi(){
-        window.open(('{{ url("transactionAdd") }}'), '_blank');
+        window.open(('{{ url("transactionAdd") }}'), '_self');
     }
 
     function cetakPI(id){

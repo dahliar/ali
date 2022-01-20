@@ -18,11 +18,11 @@
     });
 
     function editStructure(id){
-        window.open(('{{ url("organizationStructureEdit") }}'+"/"+id), '_blank');
+        window.open(('{{ url("organizationStructureEdit") }}'+"/"+id), '_self');
     }
 
     function tambahStrukturOrganisasi(){
-        window.open(('{{ url("organizationStructureAdd") }}'), '_blank');
+        window.open(('{{ url("organizationStructureAdd") }}'), '_self');
     }
     
     function myFunction(){

@@ -19,10 +19,10 @@
     });
 
     function listItem(speciesId){
-        window.open(('{{ url("itemList") }}' + "/"+ speciesId), '_blank');
+        window.open(('{{ url("itemList") }}' + "/"+ speciesId), '_self');
     }
     function sizeItem(speciesId){
-        window.open(('{{ url("sizeList") }}' + "/"+ speciesId), '_blank');
+        window.open(('{{ url("sizeList") }}' + "/"+ speciesId), '_self');
     }
 
     function myFunction(familyId){

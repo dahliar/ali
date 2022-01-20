@@ -18,14 +18,14 @@
     });
 
     function editEmployee(id){
-        window.open(('{{ url("employeeEdit") }}'+"/"+id), '_blank');
+        window.open(('{{ url("employeeEdit") }}'+"/"+id), '_self');
     }
     function editPemetaan(id){
-        window.open(('{{ url("employeeMappingEdit") }}'+"/"+id), '_blank');
+        window.open(('{{ url("employeeMappingEdit") }}'+"/"+id), '_self');
     }
 
     function tambahTransaksi(){
-        window.open(('{{ url("employeeAdd") }}'), '_blank');
+        window.open(('{{ url("employeeAdd") }}'), '_self');
     }
     
     function myFunction(){

@@ -19,7 +19,7 @@
     });
 
     function tambahDetail(id){
-        window.open(('{{ url("purchaseItemAdd") }}'+"/"+id), '_blank');
+        window.open(('{{ url("purchaseItemAdd") }}'+"/"+id), '_self');
     }
     function deleteItem(detailpurchase){
         /*

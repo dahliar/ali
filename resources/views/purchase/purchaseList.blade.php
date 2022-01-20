@@ -25,10 +25,10 @@
         window.open(('{{ url("purchaseItems") }}'+"/"+id), '_blank');
     }
     function purchaseEdit(id){
-        window.open(('{{ url("transactionEdit") }}'+"/"+id), '_blank');
+        window.open(('{{ url("transactionEdit") }}'+"/"+id), '_self');
     }
     function purchaseInvoice(id){
-        window.open(('{{ url("purchase/notaPembelian") }}'+"/"+id), '_blank');
+        window.open(('{{ url("purchase/notaPembelian") }}'+"/"+id), '_self');
     }
 
     function refreshTableTransactionList(){

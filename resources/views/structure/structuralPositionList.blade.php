@@ -18,11 +18,11 @@
     });
 
     function editJabatan(id){
-        window.open(('{{ url("structuralPositionEdit") }}'+"/"+id), '_blank');
+        window.open(('{{ url("structuralPositionEdit") }}'+"/"+id), '_self');
     }
 
     function tambahJabatan(){
-        window.open(('{{ url("structuralPositionAdd") }}'), '_blank');
+        window.open(('{{ url("structuralPositionAdd") }}'), '_self');
     }
     
     function myFunction(){

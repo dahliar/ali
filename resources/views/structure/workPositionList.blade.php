@@ -18,11 +18,11 @@
     });
 
     function editBagian(id){
-        window.open(('{{ url("workPositionEdit") }}'+"/"+id), '_blank');
+        window.open(('{{ url("workPositionEdit") }}'+"/"+id), '_self');
     }
 
     function tambahBagian(){
-        window.open(('{{ url("workPositionAdd") }}'), '_blank');
+        window.open(('{{ url("workPositionAdd") }}'), '_self');
     }
     
     function myFunction(){

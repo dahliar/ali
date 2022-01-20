@@ -19,7 +19,7 @@
     });
 
     function tambahDetail(id){
-        window.open(('{{ url("detailtransactionAdd") }}'+"/"+id), '_blank');
+        window.open(('{{ url("detailtransactionAdd") }}'+"/"+id), '_self');
     }
     function deleteItem(detailTransaction){
         // e.preventDefault(); // <--- prevent form from submitting
