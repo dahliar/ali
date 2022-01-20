@@ -77,9 +77,6 @@
 </script>
 
 @if ($errors->any())
-<script type="text/javascript"> 
-    alert("123");
-</script>
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
