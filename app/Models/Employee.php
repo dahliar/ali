@@ -29,16 +29,19 @@ class Employee extends Model
         ->where('id', $id)
         ->update(['role' => $role, 'email' => $email]);
     }
-    public function employeeUpdate($address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive){
+    public function employeeUpdate($address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan){
         $affected = DB::table('employees')
         ->where('id', $id)
         ->update([
-            'address' => $address, 
-            'employmentStatus' => $employmentStatus, 
-            'isActive' => $isActive,
-            'noRekening' => $noRekening,
-            'isactive' => $isactive,
-            'bankid' => $bankid]);
+            'address'           => $address, 
+            'employmentStatus'  => $employmentStatus, 
+            'isActive'          => $isActive,
+            'noRekening'        => $noRekening,
+            'isactive'          => $isactive,
+            'jenjangPendidikan' => $pendidikan,
+            'bidangPendidikan'  => $bidangPendidikan,
+            'bankid'            => $bankid
+        ]);
     }
     public function orgStructureStore($data){
         $id = DB::table('employeeorgstructuremapping')->insertGetId($data);

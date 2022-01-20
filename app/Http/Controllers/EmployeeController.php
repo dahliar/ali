@@ -82,6 +82,8 @@ class EmployeeController extends Controller
             'workPosition'          => ['required', 'gt:0'],
             'OrgStructureOption'    => ['required', 'gt:0'],
             'employmentStatus'      => ['required', 'gt:0'],
+            'pendidikan'            => ['required', 'gt:0'],
+            'bidangPendidikan'      => ['required', 'string'],
             'gajiPokok'             => ['required', 'integer', 'gte:0'],
             'gajiHarian'            => ['required', 'integer', 'gte:0'],
             'uangTransport'         => ['required', 'integer', 'gte:0'],
@@ -118,6 +120,9 @@ class EmployeeController extends Controller
             'isActive'              => 1,
             'noRekening'            => $request->noRekening,
             'bankid'                => $request->bankid,
+            'jenjangPendidikan'     => $request->pendidikan,
+            'bidangPendidikan'      => $request->bidangPendidikan
+
         ];
         $empid = $this->employee->employeeStore($employee);
 
@@ -245,14 +250,16 @@ class EmployeeController extends Controller
             'role'                  => ['required', 'gt:0'],
             'address'               => ['required', 'string'],
             'employmentStatus'      => ['required', 'gt:0'],
-            'bankid'            => ['required', 'gt:0'],
-            'noRekening'        => ['required', 'gt:0'],
-            'isactive'          => ['required', 'gt:0']
+            'bankid'                => ['required', 'gt:0'],
+            'noRekening'            => ['required', 'gt:0'],
+            'pendidikan'            => ['required', 'gt:0'],
+            'bidangPendidikan'      => ['required', 'string'],
+            'isactive'              => ['required', 'gt:0']
         ]);
 
 
         $this->employee->userUpdate($request->role, $request->email, $request->userid);
-        $this->employee->employeeUpdate($request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive);
+        $this->employee->employeeUpdate($request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan);
 
         return redirect('employeeList')
         ->with('status','Data Karyawan berhasil diubah.');
