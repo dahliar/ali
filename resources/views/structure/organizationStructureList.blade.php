@@ -40,9 +40,7 @@
             {   "width": "10%", "targets": [3], "className": "text-left"  },
             {   "width": "15%",  "targets": [4], "className": "text-left"   },
             {   "width": "15%",  "targets": [5], "className": "text-end"  },
-            {   "width": "15%",  "targets": [6], "className": "text-end"  },
-            {   "width": "15%",  "targets": [7], "className": "text-end"  },
-            {   "width": "7%",  "targets": [8], "className": "text-center"  }
+            {   "width": "7%",  "targets": [6], "className": "text-center"  }
             ], 
 
             columns: [
@@ -52,8 +50,6 @@
             {data: 'wpname', name: 'wpname'},
             {data: 'reportToName', name: 'reportToName'},
             {data: 'maxemployee', name: 'maxemployee'},
-            {data: 'gajiPokok', name: 'gajiPokok'},
-            {data: 'uangHarian', name: 'uangHarian'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -102,8 +98,6 @@
                                 <th>Bagian</th>
                                 <th>report to</th>
                                 <th>Max Employee</th>
-                                <th>Gaji Pokok</th>
-                                <th>Gaji Harian</th>
                                 <th>Act</th>
                             </tr>
                         </thead>
