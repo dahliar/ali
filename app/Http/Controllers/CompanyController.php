@@ -198,7 +198,7 @@ class CompanyController extends Controller
             );
         }
         return redirect('companyList')
-        ->with('status','Data company berhasil diperbaharui.');
+        ->with('status','Data company berhasil diperbaharui .');
     }
 
     /**

@@ -164,6 +164,9 @@
         </div>
     </div>
 </body>
+<ol>
+    <li>On Progress : Jumlah barang yang sudah tercatat dalam transaksi, namun transaksi belum finished. Jika transaksi di-cancel, barang akan kembali ke dalam daftar packed</li>
+</ol>
 @else
 @include('partial.noAccess')
 @endif

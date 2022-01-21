@@ -16,6 +16,44 @@ class Item extends Model
     public function getAllItemData($speciesId){
 
         //ini masih belum ngitung yang lagi onProgress
+        /*
+        $query = DB::table('items as i')
+        ->select(
+            'i.id as id', 
+            'i.name as itemName', 
+            DB::raw('concat(s.name, " ",f.name, " ", g.name) as sizeblockgrade'),
+            'sp.name as speciesName', 
+            DB::raw('concat(i.amount, " ",p.shortname) as amountPacked'),
+            DB::raw('concat(ifnull(am,0), " ",p.shortname) as onProgress'),
+            DB::raw('concat(amountUnpacked, " Kg") as amountUnpacked'),
+            DB::raw('concat(ifnull((((i.amount+sum(dt.amount)) * weightbase) + amountUnpacked),0)," Kg") as total'),
+            DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
+            'baseprice',
+            'weightbase'
+        )
+        ->groupBy('i.id')
+        ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
+        ->join(DB::raw("select ii.id, sum(dti.amount) as am from detail_transactions dti join transactions ti on dti.transactionId=ti.id join items ii on ii.id=dti.itemId where ti.status=1 group by ii.id").' as op', 'i.id', '=', 'iiid')
+        ->join('transactions as t', 't.id', '=', 'dt.transactionId')
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+
+        ->where('i.isActive','=', 1);
+        */
+
+        $onprogressdata = DB::table('detail_transactions as dti')
+        ->select('i.id as id', DB::raw('sum(dti.amount) as am'))
+        ->join('transactions as ti', 'dti.transactionId', '=', 'ti.id')
+        ->join('items as i', 'i.id', '=', 'dti.itemId')
+        ->where('ti.status', '=', '1')
+        ->groupby('i.id')->toSql();
+        //dd($onprogressdata);
+
+
+
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
@@ -32,13 +70,16 @@ class Item extends Model
         )
         ->groupBy('i.id')
         ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
+        ->join('transactions as t', 't.id', '=', 'dt.transactionId')
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
 
+        ->where('t.status','=', 1)
         ->where('i.isActive','=', 1);
+        //dd($query->toSql());
 
         if ($speciesId>0){
             $query->where('sp.id','=', $speciesId);
