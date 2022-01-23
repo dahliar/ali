@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rule;
 
 
 use App\Models\Employee;
@@ -64,7 +65,6 @@ class EmployeeController extends Controller
         ->pluck("name", "id");
         return response()->json($orgstructure);
     }
-
 
     public function store(Request $request)
     {
@@ -144,6 +144,24 @@ class EmployeeController extends Controller
 
     }
 
+    public function storePassword(Request $request)
+    {
+        $request->validate([
+            'userid'                => [
+                'required', 
+                Rule::exists('users', 'id')->where('id', $request->userid)
+            ],
+            'password'              => ['required', 'confirmed', Rules\Password::defaults()]
+        ]);
+
+        $affected = DB::table('users')
+        ->where('id', $request->userid)
+        ->update(['password' => Hash::make($request->password)]);
+
+        return redirect('employeeList')
+        ->with('status','Password berhasil diubah');
+    }
+
     /**
      * Display the specified resource.
      *
@@ -187,6 +205,11 @@ class EmployeeController extends Controller
         return view('employee.employeeEdit', compact('orgstructure', 'employee', 'choosenUser','structpos', 'workpos', 'banks'));
     }
 
+    public function editPassword(Employee $employee)
+    {
+        $choosenUser = User::where('id', $employee->userid)->first();
+        return view('employee.editPassword', compact('employee', 'choosenUser'));
+    }
 
     public function editMapping(Employee $employee)
     {
@@ -219,8 +242,6 @@ class EmployeeController extends Controller
         $structpos = StructuralPosition::all();
         $workpos = WorkPosition::all();
         $choosenUser = User::where('id', $employee->userid)->first();
-
-
 
         $orgstructure = DB::table('employees as e')
         ->select('mapping.idorgstructure as idorgstructure','wp.id as workPosition','sp.id as structuralPosition')
@@ -314,9 +335,6 @@ class EmployeeController extends Controller
     }
 
 
-    /*
-    select `e`.`id` as `id`, `u`.`name` as `name`, `e`.`nik` as `nik`, `u`.`username` as `username`, `e`.`employmentStatus` as `jenisPenggajian`, `e`.`startDate` as `startDate`, `e`.`startDate` as `lamaKerja`, (CASE WHEN e.isActive='0' THEN 'Non-Aktif' WHEN e.isActive='1' THEN 'Aktif' END) AS statusKepegawaian from `employees` as `e` inner join `users` as `u` on `u`.`id` = `e`.`userid`
-    */
     public function getAllEmployees(){
         $query = DB::table('employees as e')
         ->select(
@@ -348,8 +366,18 @@ class EmployeeController extends Controller
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Penempatan" onclick="editPemetaan('."'".$row->id."'".')">
             <i class="fa fa-address-card" style="font-size:20px"></i>
-            </button>
+            </button>            
             ';            
+
+            if (Auth::user()->isAdmin()){
+                $html .= '
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Password" onclick="editPassword('."'".$row->id."'".')">
+                <i class="fa fa-key" style="font-size:20px"></i>
+                </button>            
+                ';                            
+            }
+
+
 
             return $html;
         })->addIndexColumn()->toJson();

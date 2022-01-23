@@ -11,7 +11,7 @@
 
 @section('content')
 
-@if (Auth::check())
+@if (Auth::check() and Session::has('employeeId'))
 <div class="container-fluid">
     <div class="row">
         <ol class="primary-color">

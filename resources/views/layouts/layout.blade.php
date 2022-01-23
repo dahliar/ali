@@ -14,13 +14,13 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 -->
 <style>
-html, body {
-  font-family: 'Roboto', sans-serif;
-  margin-left: 10px;
-  margin-right: 10px;
-  padding-top: 40px;
-  padding-bottom: 20px;
-}
+  html, body {
+    font-family: 'Roboto', sans-serif;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+  }
 </style>
 
 <script type="text/javascript">
@@ -35,7 +35,6 @@ html, body {
 <body>
   @yield('header')
   @yield('content')
-  @yield('footer')  
-  
+  @yield('footer')    
 </body>
 </html>

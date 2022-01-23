@@ -232,6 +232,17 @@ Route::GET('employeeList',[EmployeeController::class, 'index'])->name('employeeL
 Route::GET('employeeAdd',[EmployeeController::class, 'create'])->middleware('auth');
 Route::GET('employeeEdit/{employee}',[EmployeeController::class, 'edit'])->middleware('auth');
 Route::GET('profileEdit/{employee}',[EmployeeController::class, 'employeePersonalDataEdit'])->middleware('auth');
+Route::GET('passedit/{employee}',[EmployeeController::class, 'editPassword'])->middleware('auth');
+Route::POST('passUpdate',[EmployeeController::class, 'storePassword'])->name('passUpdate')->middleware('auth');
+
+
+
+
+Route::POST('employeeStore',[EmployeeController::class, 'store'])->name('employeeStore')->middleware('auth');
+Route::POST('employeeUpdate',[EmployeeController::class, 'update'])->name('employeeUpdate')->middleware('auth');
+Route::POST('employeeMappingUpdate',[EmployeeController::class, 'updateMapping'])->name('employeeMappingUpdate')->middleware('auth');
+Route::get('getAllEmployees',[EmployeeController::class, 'getAllEmployees'])->middleware('auth');
+
 Route::GET('employeeMappingEdit/{employee}',[EmployeeController::class, 'editMapping'])->middleware('auth');
 
 
@@ -264,10 +275,6 @@ Route::GET('getAllWorkPosition',[WorkPositionController::class, 'getAllWorkPosit
 
 
 
-Route::POST('employeeStore',[EmployeeController::class, 'store'])->name('employeeStore')->middleware('auth');
-Route::POST('employeeUpdate',[EmployeeController::class, 'update'])->name('employeeUpdate')->middleware('auth');
-Route::POST('employeeMappingUpdate',[EmployeeController::class, 'updateMapping'])->name('employeeMappingUpdate')->middleware('auth');
-Route::get('getAllEmployees',[EmployeeController::class, 'getAllEmployees'])->middleware('auth');
 
 Route::post('orgStructureList', [EmployeeController::class, 'orgStructureList'])->name('orgStructureList');
 

@@ -132,7 +132,7 @@
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li>
-								<a class="dropdown-item" href="{{ url('profileEdit', session('employeeId'))}}">Profile empid {{session('employeeId')}}
+								<a class="dropdown-item" href="{{ url('profileEdit', session('employeeId'))}}">Edit Profile
 								</a>								
 							</li>
 							<li>
