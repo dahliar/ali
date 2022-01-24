@@ -11,7 +11,7 @@
 
 
 @section('content')
-@if (Auth::check() and (Auth::user()->isAdmin()))
+@if (Auth::user()->isAdmin())
 
 @if ($errors->any())
 <div class="alert alert-success">

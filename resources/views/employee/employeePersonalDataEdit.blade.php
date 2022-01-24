@@ -11,7 +11,6 @@
 
 
 @section('content')
-@if (Auth::check())
 @if (Auth::user()->isAuthenticatedUserSameAsUserIdChoosen($choosenUser->id) or Auth::user()->isAdmin())
 
 <script type="text/javascript"> 
@@ -378,9 +377,6 @@
     </div>
 
 </body>
-@else
-@include('partial.noAccess')
-@endif
 @else
 @include('partial.noAccess')
 @endif

@@ -12,7 +12,6 @@
 
 @section('content')
 
-@if (Auth::check())
 @if (Auth::user()->isAuthenticatedUserSameAsUserIdChoosen($choosenUser->id) or Auth::user()->isAdmin())
 @if ($errors->any())
 <div class="alert alert-success">
@@ -260,10 +259,6 @@
     </div>
 
 </body>
-@else
-@include('partial.noAccess')
-@endif
-
 @else
 @include('partial.noAccess')
 @endif

@@ -3,7 +3,7 @@
 @extends('layouts.layout')
 
 @section('content')
-@if (Auth::check() and (Auth::user()->isAdmin() or Auth::user()->isProduction()))
+@if (Auth::user()->isAdmin() or Auth::user()->isProduction())
 <script type="text/javascript"> 
     $(document).ready(function() {
         $('#company').on('change', function() {

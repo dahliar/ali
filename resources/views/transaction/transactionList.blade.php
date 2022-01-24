@@ -10,7 +10,7 @@
 
 
 @section('content')
-@if (Auth::check() and (Auth::user()->isAdmin() or Auth::user()->isMarketing()))
+@if (Auth::user()->isAdmin() or Auth::user()->isMarketing())
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {

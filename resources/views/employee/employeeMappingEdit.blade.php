@@ -11,7 +11,6 @@
 
 
 @section('content')
-@if (Auth::check())
 @if (Auth::user()->isAuthenticatedUserSameAsUserIdChoosen($choosenUser->id) or Auth::user()->isAdmin())
 <script type="text/javascript"> 
     function getOrgStructureSelectOptionList(workPos, structuralPos, orgstructure){
@@ -278,10 +277,6 @@
     </div>
 
 </body>
-@else
-@include('partial.noAccess')
-@endif
-
 @else
 @include('partial.noAccess')
 @endif

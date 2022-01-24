@@ -11,7 +11,7 @@
 
 
 @section('content')
-@if (Auth::check() and (Auth::user()->isProduction() or Auth::user()->isAdmin()))
+@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
 <script type="text/javascript">
     function totalAmount(){
         var packedLama = parseFloat(document.getElementById("packedLama").value);

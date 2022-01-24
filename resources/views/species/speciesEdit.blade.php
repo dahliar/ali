@@ -10,7 +10,7 @@
 
 
 @section('content')
-@if (Auth::check() and Auth::user()->isAdmin())
+@if (Auth::user()->isAdmin())
 <div class="container-fluid">
     <div class="row">
         <nav aria-label="breadcrumb">

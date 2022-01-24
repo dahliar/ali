@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-@if (Auth::check() and (Auth::user()->isMarketing() or Auth::user()->isAdmin()))
+@if (Auth::user()->isMarketing() or Auth::user()->isAdmin())
 <script type="text/javascript"> 
     function selectOptionChange(speciesId, itemId){
         $.ajax({

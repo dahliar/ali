@@ -11,7 +11,7 @@
 
 
 @section('content')
-@if (Auth::check() and (Auth::user()->isProduction() or Auth::user()->isAdmin()))
+@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
 $data = json_decode($oneStore);
 
 if ($data[0]->isApproved == 0)

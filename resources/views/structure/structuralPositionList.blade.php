@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@if (Auth::check() and (Auth::user()->isAdmin()))
+@if (Auth::user()->isAdmin())
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {

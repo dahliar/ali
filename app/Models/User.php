@@ -47,19 +47,19 @@ class User extends Authenticatable
     ];
 
     public function isMarketing(){
-        if (Auth::user()->role == 3){
+        if (Auth::check() and (Auth::user()->role == 3)){
             return true;
         }
         return false;
     }
     public function isAdmin(){
-        if (Auth::user()->role == 1){
+        if (Auth::check() and (Auth::user()->role == 1)){
             return true;
         }
         return false;
     }
     public function isProduction(){
-        if (Auth::user()->role == 2){
+        if (Auth::check() and (Auth::user()->role == 2)){
             return true;
         }
         return false;
@@ -67,7 +67,7 @@ class User extends Authenticatable
 
 
     public function isAuthenticatedUserSameAsUserIdChoosen($userId){
-        if (Auth::user()->id == $userId){
+        if (Auth::check() and (Auth::user()->id == $userId)){
             return true;
         }
         return false;

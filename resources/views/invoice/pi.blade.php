@@ -1,4 +1,4 @@
-@if (Auth::check() and (Auth::user()->isMarketing() or Auth::user()->isAdmin()))
+@if (Auth::user()->isMarketing() or Auth::user()->isAdmin())
 <!doctype html>
     <html lang="en">
 
