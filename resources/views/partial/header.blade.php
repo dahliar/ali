@@ -73,6 +73,20 @@
 						</ul>
 					</li>
 					@endif
+					@if (Auth::user()->isHumanResources() or Auth::user()->isAdmin())
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							Presence
+						</a>
+						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+							<li>
+								<a class="dropdown-item" href="{{ url('presenceEmployeeList')}}">Presence
+								</a>
+							</li>
+						</ul>
+					</li>
+					@endif
+
 					@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

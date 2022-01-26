@@ -15,6 +15,8 @@ use App\Http\Controllers\OrganizationStructureController;
 use App\Http\Controllers\StructuralPositionController;
 use App\Http\Controllers\WorkPositionController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PresenceController;
+
 use App\Models\Rekening; 
 use App\Models\Company; 
 use App\Models\Item; 
@@ -23,6 +25,7 @@ use App\Models\Purchase;
 use App\Models\DetailPurchase; 
 use App\Models\DetailTransaction; 
 use App\Models\User; 
+use App\Models\Presence; 
 
 
 
@@ -225,6 +228,11 @@ Route::get('/getOneCompany/{company}', function (Company $company) {
 });
 
 
+Route::GET('presenceEmployeeList',[PresenceController::class, 'index'])->middleware('auth');
+Route::get('getAllEmployeesForPresence/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresence'])->middleware('auth');
+Route::GET('presenceAddBatch',[PresenceController::class, 'createBatch'])->middleware('auth');
+Route::GET('presenceAddImport',[PresenceController::class, 'createImport'])->middleware('auth');
+
 
 
 
@@ -234,9 +242,6 @@ Route::GET('employeeEdit/{employee}',[EmployeeController::class, 'edit'])->middl
 Route::GET('profileEdit/{employee}',[EmployeeController::class, 'employeePersonalDataEdit'])->middleware('auth');
 Route::GET('passedit/{employee}',[EmployeeController::class, 'editPassword'])->middleware('auth');
 Route::POST('passUpdate',[EmployeeController::class, 'storePassword'])->name('passUpdate')->middleware('auth');
-
-
-
 
 Route::POST('employeeStore',[EmployeeController::class, 'store'])->name('employeeStore')->middleware('auth');
 Route::POST('employeeUpdate',[EmployeeController::class, 'update'])->name('employeeUpdate')->middleware('auth');

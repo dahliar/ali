@@ -64,6 +64,12 @@ class User extends Authenticatable
         }
         return false;
     }
+    public function isHumanResources(){
+        if (Auth::check() and (Auth::user()->role == 4)){
+            return true;
+        }
+        return false;
+    }
 
 
     public function isAuthenticatedUserSameAsUserIdChoosen($userId){

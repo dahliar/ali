@@ -122,17 +122,16 @@
                             <div class="col-md-4">
                                 <select id="pendidikan" name="pendidikan" class="form-select" >
                                     <option value="-1" @if(old('pendidikan', $employee->jenjangPendidikan) == -1) selected @endif>--Pilih Jenjang Pendidikan--</option>
-                                    <option value="Tidak Sekolah" @if(old('pendidikan', $employee->jenjangPendidikan) == "Tidak Sekolah") selected @endif>Tidak Sekolah</option>
-                                    <option value="SD/Sederajat" @if(old('pendidikan', $employee->jenjangPendidikan) == "SD/Sederajat") selected @endif>SD/Sederajat</option>
-                                    <option value="SMP/Sederajat" @if(old('pendidikan', $employee->jenjangPendidikan) == "SMP/Sederajaat") selected @endif>SMP/Sederajat</option>
-                                    <option value="SMA/Sederajat" @if(old('pendidikan', $employee->jenjangPendidikan) == "SMA/Sederajat") selected @endif>SMA/Sederajat</option>
-                                    <option value="Diploma 1" @if(old('pendidikan', $employee->jenjangPendidikan) == "Diploma 1") selected @endif>Diploma 1</option>
-                                    <option value="Diploma 2" @if(old('pendidikan', $employee->jenjangPendidikan) == "Diploma 2") selected @endif>Diploma 2</option>
-                                    <option value="Diploma 3" @if(old('pendidikan', $employee->jenjangPendidikan) == "Diploma 3") selected @endif>Diploma 3</option>
-                                    <option value="Diploma 4" @if(old('pendidikan', $employee->jenjangPendidikan) == "Diploma 4") selected @endif>Diploma 4</option>
-                                    <option value="Sarjana" @if(old('pendidikan', $employee->jenjangPendidikan) == "Sarjana") selected @endif>Sarjana</option>
-                                    <option value="Master" @if(old('pendidikan', $employee->jenjangPendidikan) == "Master") selected @endif>Master</option>
-                                    <option value="Doktor" @if(old('pendidikan', $employee->jenjangPendidikan) == "Doktor") selected @endif>Doktor</option>
+                                    <option value="0" @if(old('pendidikan', $employee->jenjangPendidikan) == "0") selected @endif>Tidak Sekolah</option>
+                                    <option value="1" @if(old('pendidikan', $employee->jenjangPendidikan) == "1") selected @endif>SD/Sederajat</option>
+                                    <option value="2" @if(old('pendidikan', $employee->jenjangPendidikan) == "2") selected @endif>SMP/Sederajat</option>
+                                    <option value="3" @if(old('pendidikan', $employee->jenjangPendidikan) == "3") selected @endif>SMA/Sederajat</option>
+                                    <option value="4" @if(old('pendidikan', $employee->jenjangPendidikan) == "4 1") selected @endif>Diploma 1</option>
+                                    <option value="5" @if(old('pendidikan', $employee->jenjangPendidikan) == "5") selected @endif>Diploma 2</option>
+                                    <option value="6" @if(old('pendidikan', $employee->jenjangPendidikan) == "6") selected @endif>Diploma 3</option>
+                                    <option value="7" @if(old('pendidikan', $employee->jenjangPendidikan) == "7") selected @endif>Diploma 4/Sarjana</option>
+                                    <option value="8" @if(old('pendidikan', $employee->jenjangPendidikan) == "8") selected @endif>Master</option>
+                                    <option value="9" @if(old('pendidikan', $employee->jenjangPendidikan) == "9") selected @endif>Doktor</option>
                                 </select>
                             </div>      
                         </div>

@@ -82,7 +82,7 @@ class EmployeeController extends Controller
             'workPosition'          => ['required', 'gt:0'],
             'OrgStructureOption'    => ['required', 'gt:0'],
             'employmentStatus'      => ['required', 'gt:0'],
-            'pendidikan'            => ['required', 'gt:0'],
+            'pendidikan'            => ['required', 'gte:0'],
             'bidangPendidikan'      => ['required', 'string'],
             'gajiPokok'             => ['required', 'integer', 'gte:0'],
             'gajiHarian'            => ['required', 'integer', 'gte:0'],
@@ -273,7 +273,7 @@ class EmployeeController extends Controller
             'employmentStatus'      => ['required', 'gt:0'],
             'bankid'                => ['required', 'gt:0'],
             'noRekening'            => ['required', 'gt:0'],
-            'pendidikan'            => ['required', 'gt:0'],
+            'pendidikan'            => ['required', 'gte:0'],
             'bidangPendidikan'      => ['required', 'string'],
             'isactive'              => ['required', 'gt:0']
         ]);
