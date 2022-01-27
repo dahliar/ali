@@ -16,18 +16,6 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
-    function tambahPresensiBatchInput(){
-        window.open(('{{ url("presenceAddForm") }}'), '_self');
-    }
-    function tambahPresensiImport(){
-        window.open(('{{ url("presenceAddImport") }}'), '_self');
-    }
-
-    function presenceHistory(id){
-        window.open(('{{ url("presenceHistory") }}'+"/"+id), '_blank');
-    }
-
     
     function myFunction(){
         var presenceDate = document.getElementById("presenceDate").value;
@@ -35,7 +23,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getAllEmployeesForPresence") }}'+"/"+presenceDate,
+            ajax:'{{ url("getAllEmployeesForPresenceForm") }}'+"/"+presenceDate,
             dataType: "JSON",
             serverSide: false,
             processing: true,
@@ -87,53 +75,10 @@
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="col-md-9">
-                    <nav aria-label="breadcrumb" class="navbar navbar-expand-lg navbar-light">
-                        <ol class="breadcrumb primary-color">
-                            <li class="breadcrumb-item">
-                                <a class="white-text" href="{{ url('/home') }}">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active">Pegawai</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="col-md-3 text-end">
-                        <!--
-                        <button onclick="tambahPresensiBatchInput()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Form Presensi"><i class="fa fa-user-check" style="font-size:20px"></i>
-                        </button>
-                    -->
-
-                    <button onclick="tambahPresensiImport()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Import Presensi"><i class="fa fa-upload" style="font-size:20px"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-1">
-                        <p>
-                            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapsePart" role="button" aria-expanded="false" aria-controls="collapsePart">
-                                <i class="fas fa-filter" style="font-size:20px"></i>
-                            </a>
-                        </p>
-                    </div>
-                    <div class="col-md-10 text-end">
-                        <div class="collapse" id="collapsePart">
-                            <div class="card card-body">
-                                <div class="row form-group">
-                                    <div class="col-md-2 text-end">
-                                        <button onclick="myFunction()" class="btn btn-primary">
-                                            <i class="fas fa-search-plus">Search</i>
-                                        </button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="input-group">
-                                            <span name="spanAm" id="spanAm" class="input-group-text">Presence Date</span>
-                                            <input type="date" id="presenceDate" name="presenceDate" class="form-control text-end" value="{{ old('presenceDate', date('Y-m-d'))}}">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-                        </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span name="spanAm" id="spanAm" class="input-group-text">Presence Date</span>
+                        <input type="date" id="presenceDate" name="presenceDate" class="form-control text-end" value="{{ old('presenceDate', date('Y-m-d'))}}">
                     </div>
                 </div>
             </div>

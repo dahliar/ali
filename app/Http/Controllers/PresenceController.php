@@ -22,6 +22,46 @@ class PresenceController extends Controller
         return view('presence.presenceList');
     }
 
+    
+
+    public function getAllEmployeesForPresenceForm($presenceDate){
+        $query = DB::table('employees as e')
+        ->select(
+            'e.id as id', 
+            'u.name as name', 
+            'e.nik as nik',
+            DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="1" THEN "Harian" END) AS jenisPenggajian'), 
+            DB::raw('(STR_TO_DATE(p.start,"%Y-%m-%d")) as presenceToday'),
+            'os.name as orgStructure',
+            'sp.name as jabatan',
+            'wp.name as bagian'
+        )
+        ->leftJoin('presences as p', function($join) use ($presenceDate){
+            $join->on('e.id', '=', 'p.employeeId')
+            ->where(DB::raw("(STR_TO_DATE(p.start,'%Y-%m-%d'))"), '=', $presenceDate);
+
+        })
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->where('e.employmentStatus', '1')
+        ->where('mapping.isActive', '1');
+
+        $query->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Presence History" onclick="presenceHistory('."'".$row->id."'".')">
+            <i class="fa fa-save" style="font-size:20px"></i>
+            </button>';
+            return $html;
+        })->addIndexColumn()->toJson();
+    }
+
+
     public function getAllEmployeesForPresence($presenceDate){
         $query = DB::table('employees as e')
         ->select(
@@ -75,9 +115,9 @@ class PresenceController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function createBatch()
+    public function createForm()
     {
-        return view('presence.presenceAddBatch');
+        return view('presence.presenceAddForm');
     }
     public function createImport()
     {

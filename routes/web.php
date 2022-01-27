@@ -230,7 +230,8 @@ Route::get('/getOneCompany/{company}', function (Company $company) {
 
 Route::GET('presenceEmployeeList',[PresenceController::class, 'index'])->middleware('auth');
 Route::get('getAllEmployeesForPresence/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresence'])->middleware('auth');
-Route::GET('presenceAddBatch',[PresenceController::class, 'createBatch'])->middleware('auth');
+Route::GET('presenceAddForm',[PresenceController::class, 'createForm'])->middleware('auth');
+Route::get('getAllEmployeesForPresenceForm/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresenceForm'])->middleware('auth');
 Route::GET('presenceAddImport',[PresenceController::class, 'createImport'])->middleware('auth');
 
 

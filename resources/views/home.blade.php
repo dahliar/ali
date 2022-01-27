@@ -14,7 +14,7 @@
 @if (Auth::check() and Session::has('employeeId'))
 <div class="container-fluid">
 
-]</div>
+</div>
 @else
 @include('partial.noAccess')
 @endif

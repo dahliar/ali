@@ -12,7 +12,17 @@
 
 @section('content')
 @if (Auth::user()->isAdmin())
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
+    function getPresenceLisr(id){
+        window.open(('{{ url("getPresenceList") }}'), '_blank');
+    }
+</script>
 @if ($errors->any())
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -46,10 +56,45 @@
             </nav>
         </div>
         <div class="modal-body">
-
-            <form id="EmployeeAddForm" action="{{url('employeeStore')}}" method="POST" name="EmployeeAddForm" autocomplete="off">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form id="presenceFileStore" action="{{url('presenceFileStore')}}" method="POST" name="presenceFileStore" autocomplete="off">
+                        @csrf
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Presence Date</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="date" id="presenceDate" name="presenceDate" class="form-control text-end" value="{{ old('presenceDate', date('Y-m-d'))}}">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-primary" onclick="getPresenceList()">Get Presence List</button>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-body">
+            <form id="presenceFileStore" action="{{url('presenceFileStore')}}" method="POST" name="presenceFileStore" autocomplete="off">
                 @csrf
-
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                        <span class="label">File</span>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input class="form-control" type="file" id="presenceFile" name="presenceFile">
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-2 text-end">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
