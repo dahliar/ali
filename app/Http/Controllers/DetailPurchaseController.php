@@ -50,7 +50,7 @@ class DetailPurchaseController extends Controller
         }
 
 
-        return view('detail.detailPurchaseAdd', compact('marker','purchase', 'species', 'grades', 'packings'));
+        return view('detail.detailPurchaseCreate', compact('marker','purchase', 'species', 'grades', 'packings'));
     }
 
     /**
