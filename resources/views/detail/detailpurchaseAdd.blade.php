@@ -90,7 +90,7 @@
                 <li class="breadcrumb-item">
                     <a class="white-text" href="{{ url('/transactionList') }}">Transaction</a>
                 </li>
-                <li class="breadcrumb-item active">Tambah Detail Transaction</li>
+                <li class="breadcrumb-item active">Detail Transaction Add</li>
             </ol>
         </nav>
     </div>
