@@ -19,8 +19,9 @@
         }
     });
 
-    function getPresenceLisr(id){
-        window.open(('{{ url("getPresenceList") }}'), '_blank');
+    function getPresenceList(){
+        var presenceDate = document.getElementById("presenceDate").value;
+        window.open('{{ url("getPresenceList")}}'+"/"+presenceDate, '_blank');
     }
 </script>
 @if ($errors->any())

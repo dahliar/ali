@@ -233,7 +233,7 @@ Route::get('getAllEmployeesForPresence/{presenceDate}',[PresenceController::clas
 Route::GET('presenceAddForm',[PresenceController::class, 'createForm'])->middleware('auth');
 Route::get('getAllEmployeesForPresenceForm/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresenceForm'])->middleware('auth');
 Route::GET('presenceAddImport',[PresenceController::class, 'createImport'])->middleware('auth');
-
+Route::get('getPresenceList/{presenceDate}', [PresenceController::class, 'excelPresenceFileGenerator']);
 
 
 

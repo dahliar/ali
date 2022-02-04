@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Presence;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+
+use App\Exports\EmployeePresenceExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use DB;
 use Auth;
 
@@ -123,6 +127,13 @@ class PresenceController extends Controller
     {
         return view('presence.presenceAddImport');
     }
+    public function excelPresenceFileGenerator($presenceDate)
+    {
+        return Excel::download(new EmployeePresenceExport($presenceDate), 'users.xlsx');
+    }
+
+
+
 
     /**
      * Store a newly created resource in storage.
