@@ -47,12 +47,14 @@
             {   "width": "10%", "targets":  [4], "className": "text-left" },
             {   "width": "15%", "targets":  [5], "className": "text-left" },
             {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "15%", "targets":  [7], "className": "text-center" }
+            {   "width": "10%", "targets":  [7], "className": "text-left" },
+            {   "width": "10%", "targets":  [8], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
+            {data: 'nip', name: 'nip'},
             {data: 'nik', name: 'nik'},
             {data: 'username', name: 'username'},
             {data: 'jenisPenggajian', name: 'jenisPenggajian'},
@@ -102,6 +104,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>NIP</th>
                                 <th>NIK</th>
                                 <th>Username</th>
                                 <th>Jenis Karyawan</th>

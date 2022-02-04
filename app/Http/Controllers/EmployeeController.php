@@ -75,6 +75,7 @@ class EmployeeController extends Controller
             'role'                  => ['required', 'gt:0'],
             'email'                 => ['email'],
             'nik'                   => ['required', 'string', 'max:20', 'unique:employees'],
+            'nip'                   => ['required', 'string', 'max:10', 'unique:employees'],
             'birthdate'             => ['required', 'date', 'before:today'],
             'startdate'             => ['required', 'date', 'after:birthdate', 'before:today'],
             'address'               => ['required', 'string'],
@@ -113,6 +114,7 @@ class EmployeeController extends Controller
         $employee = [
             'userid'                => $userid,
             'nik'                   => $request->nik,
+            'nip'                   => $request->nip,
             'birthdate'             => $request->birthdate,
             'startdate'             => $request->startdate,
             'address'               => $request->address,
@@ -341,6 +343,7 @@ class EmployeeController extends Controller
             'e.id as id', 
             'u.name as name', 
             'e.nik as nik', 
+            'e.nip as nip', 
             'u.username as username', 
             'e.startDate as startDate',
             DB::raw('concat(

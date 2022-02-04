@@ -109,10 +109,18 @@
                         </div>        
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">NIK*</span>
+                                <span class="label">Nomor Induk Kependudukan*</span>
                             </div>
                             <div class="col-md-4">
                                 <input id="nik" name="nik" type="text" class="form-control" required autocomplete="none" value="{{$employee->nik}}" readonly>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Nomor Induk Pegawai*</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="nip" name="nip" type="text" class="form-control" required autocomplete="none" value="{{$employee->nip}}" readonly>
                             </div>
                         </div>
                         <div class="row form-group">
