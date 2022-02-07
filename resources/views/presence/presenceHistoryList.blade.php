@@ -16,25 +16,15 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
-    function tambahPresensiBatchInput(){
-        window.open(('{{ url("presenceAddForm") }}'), '_self');
-    }
-    function tambahPresensiImport(){
-        window.open(('{{ url("presenceAddImport") }}'), '_self');
-    }
-
-    function presenceHistory(id){
-        window.open(('{{ url("presenceHistory") }}'+"/"+id), '_blank');
-    }
-
     
     function myFunction(){
+        var start = document.getElementById("start").value;
+        var end = document.getElementById("end").value;
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getAllEmployeesForPresence") }}',
+            ajax:'{{ url("getPresenceHistory") }}'+"/"+start+"/"+end,
             dataType: "JSON",
             serverSide: false,
             processing: true,
@@ -43,24 +33,28 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "25%", "targets":  [1], "className": "text-left"   },
-            {   "width": "15%", "targets":  [2], "className": "text-left" },
+            {   "width": "20%", "targets":  [1], "className": "text-left"   },
+            {   "width": "10%", "targets":  [2], "className": "text-left" },
             {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
             {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-left" }
+            {   "width": "15%", "targets":  [6], "className": "text-left" },
+            {   "width": "15%", "targets":  [7], "className": "text-left" },
+            {   "width": "5%", "targets":  [8], "className": "text-left" },
+            {   "width": "5%", "targets":  [9], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
-            {data: 'nik', name: 'nik'},
-            {data: 'jenisPenggajian', name: 'jenisPenggajian'},
+            {data: 'nip', name: 'nip'},
             {data: 'orgStructure', name: 'orgStructure'},
-            {data: 'jabatan', name: 'jabatan'},
             {data: 'bagian', name: 'bagian'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
+            {data: 'shift', name: 'shift'},
+            {data: 'start', name: 'start'},
+            {data: 'end', name: 'end'},
+            {data: 'jamKerja', name: 'jamKerja'},
+            {data: 'jamLembur', name: 'jamLembur'}
             ]
         });
     }
@@ -92,13 +86,39 @@
                             <li class="breadcrumb-item">
                                 <a class="white-text" href="{{ url('/home') }}">Home</a>
                             </li>
-                            <li class="breadcrumb-item active">Presensi</li>
+                            <li class="breadcrumb-item active">
+                                <a class="white-text" href="{{ ('presenceEmployeeList')}}">Presensi</a>
+                            </li>
+                            <li class="breadcrumb-item active">Arsip Presensi Seluruh Pegawai</li>
                         </ol>
                     </nav>
                 </div>
-                <div class="col-md-3 text-end">
-                    <button onclick="tambahPresensiImport()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Import Presensi Pegawai Harian/Bulanan"><i class="fa fa-upload" style="font-size:20px"></i>
-                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-10 text-end">
+                        <div class="card card-body">
+                            <div class="row form-group">
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span name="spanAm" id="spanAm" class="input-group-text">Start</span>
+                                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 month')))}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span name="spanAm" id="spanAm" class="input-group-text">End</span>
+                                        <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button onclick="myFunction()" class="btn btn-primary">
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
                 </div>
             </div>
             <div class="modal-body">
@@ -108,12 +128,14 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>NIK</th>
-                                <th>Jenis Karyawan</th>
+                                <th>NIP</th>
                                 <th>Posisi</th>
-                                <th>Jabatan</th>
                                 <th>Bagian</th>
-                                <th>Act</th>
+                                <th>Shift</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Jam Kerja</th>
+                                <th>Jam Lembur</th>
                             </tr>
                         </thead>
                         <tbody>

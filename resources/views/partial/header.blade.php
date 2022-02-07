@@ -76,12 +76,39 @@
 					@if (Auth::user()->isHumanResources() or Auth::user()->isAdmin())
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Presence
+							Presensi
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li>
-								<a class="dropdown-item" href="{{ url('presenceEmployeeList')}}">Presence
+								<a class="dropdown-item" href="#">
+									Presensi Harian &raquo;
 								</a>
+								<ul class="dropdown-menu dropdown-submenu">
+									<li>
+										<a class="dropdown-item" href="{{ url('presenceEmployeeList')}}">Presensi
+										</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ url('presenceHistory')}}">
+											Arsip Presensi Harian
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a class="dropdown-item" href="#">
+									Presensi Borongan &raquo;
+								</a>
+								<ul class="dropdown-menu dropdown-submenu">
+									<li>
+										<a class="dropdown-item" href="">Presensi Borongan
+										</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="">Arsip Presensi Borongan
+										</a>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</li>

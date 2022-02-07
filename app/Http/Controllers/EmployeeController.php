@@ -348,9 +348,9 @@ class EmployeeController extends Controller
             'e.startDate as startDate',
             DB::raw('concat(
                 TIMESTAMPDIFF(YEAR, startDate, curdate()), 
-                " tahun + ",
+                " Y + ",
                 (TIMESTAMPDIFF(MONTH, startDate, curdate()) - (TIMESTAMPDIFF(YEAR, startDate, curdate()) * 12)), 
-                " bulan") as lamaKerja'),
+                " M") as lamaKerja'),
             DB::raw('
                 (CASE WHEN e.isActive="0" THEN "Non-Aktif" WHEN e.isActive="1" THEN "Aktif" END) AS statusKepegawaian
                 '),

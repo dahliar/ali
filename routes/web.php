@@ -229,11 +229,20 @@ Route::get('/getOneCompany/{company}', function (Company $company) {
 
 
 Route::GET('presenceEmployeeList',[PresenceController::class, 'index'])->middleware('auth');
-Route::get('getAllEmployeesForPresence/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresence'])->middleware('auth');
+Route::get('getAllEmployeesForPresence',[PresenceController::class, 'getAllEmployeesForPresence'])->middleware('auth');
 Route::GET('presenceAddForm',[PresenceController::class, 'createForm'])->middleware('auth');
 Route::get('getAllEmployeesForPresenceForm/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresenceForm'])->middleware('auth');
 Route::GET('presenceAddImport',[PresenceController::class, 'createImport'])->middleware('auth');
 Route::get('getPresenceList/{presenceDate}', [PresenceController::class, 'excelPresenceFileGenerator']);
+Route::post('presenceFileStore',[PresenceController::class, 'presenceFileStore'])->middleware(['auth']);
+
+
+Route::GET('presenceHistory',[PresenceController::class, 'presenceHistory'])->middleware('auth');
+Route::get('getPresenceHistory/{start}/{end}', [PresenceController::class, 'getPresenceHistory'])->middleware('auth');
+
+
+Route::GET('presenceHistory/{employee}',[PresenceController::class, 'presenceHistoryEmployee'])->middleware('auth');
+Route::get('getPresenceHistory/{employeeId}/{start}/{end}', [PresenceController::class, 'getEmployeePresenceHistory'])->middleware('auth');
 
 
 

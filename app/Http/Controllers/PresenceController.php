@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Presence;
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 use App\Exports\EmployeePresenceExport;
+use App\Imports\EmployeePresenceImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 use DB;
@@ -22,11 +25,97 @@ class PresenceController extends Controller
 
     public function index()
     {
-
         return view('presence.presenceList');
+    }
+    public function presenceHistory()
+    {
+        return view('presence.presenceHistoryList');
+    }
+    public function presenceHistoryEmployee(Employee $employee)
+    {
+        $employeeId = $employee->id;
+        $employeeName = DB::table('users')
+        ->select('name as name')
+        ->where('id','=', $employee->userid)->first()->name;
+
+        return view('presence.presenceHistoryEmployee', compact('employeeId', 'employeeName'));
     }
 
     
+    public function getEmployeePresenceHistory($employeeId, $start, $end){
+        $query = DB::table('employees as e')
+        ->select(
+            'e.id as id', 
+            'u.name as name', 
+            'e.nik as nik',
+            'e.nip as nip',
+            'os.name as orgStructure',
+            'wp.name as bagian',
+            'p.start as start',
+            'p.end as end',
+            'p.jamKerja as jamKerja',
+            'p.jamLembur as jamLembur',
+            DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" END) AS shift')
+        )
+        ->join('presences as p', 'e.id', '=', 'p.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->where('e.employmentStatus', '!=', '3')
+        ->where('e.id', $employeeId)
+        ->whereBetween('p.start', [$start." 00:00:00", $end." 23:59:59"])
+        ->where('mapping.isActive', '1')
+        ->orderBy('p.start');
+        $query->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Presence History" onclick="presenceHistory('."'".$row->id."'".')">
+            <i class="fa fa-save" style="font-size:20px"></i>
+            </button>';
+            return $html;
+        })->addIndexColumn()->toJson();
+    }    
+
+
+    public function getPresenceHistory($start, $end){
+        $query = DB::table('employees as e')
+        ->select(
+            'e.id as id', 
+            'u.name as name', 
+            'e.nik as nik',
+            'e.nip as nip',
+            'os.name as orgStructure',
+            'wp.name as bagian',
+            'p.start as start',
+            'p.end as end',
+            'p.jamKerja as jamKerja',
+            'p.jamLembur as jamLembur',
+            DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" END) AS shift')
+        )
+        ->join('presences as p', 'e.id', '=', 'p.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->where('e.employmentStatus', '!=','3')
+        ->whereBetween('p.start', [$start." 00:00:00", $end." 23:59:59"])
+        ->where('mapping.isActive', '1');
+        $query->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Presence History" onclick="presenceHistory('."'".$row->id."'".')">
+            <i class="fa fa-save" style="font-size:20px"></i>
+            </button>';
+            return $html;
+        })->addIndexColumn()->toJson();
+    }    
 
     public function getAllEmployeesForPresenceForm($presenceDate){
         $query = DB::table('employees as e')
@@ -50,7 +139,7 @@ class PresenceController extends Controller
         ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
-        ->where('e.employmentStatus', '1')
+        ->where('e.employmentStatus', '!=', '3')
         ->where('mapping.isActive', '1');
 
         $query->get();
@@ -65,8 +154,9 @@ class PresenceController extends Controller
         })->addIndexColumn()->toJson();
     }
 
-
-    public function getAllEmployeesForPresence($presenceDate){
+    //Untuk datatable di halaman presensi satuan
+    public function getAllEmployeesForPresence(){
+        $presenceDate = Carbon::now()->toDateString();
         $query = DB::table('employees as e')
         ->select(
             'e.id as id', 
@@ -81,20 +171,16 @@ class PresenceController extends Controller
         ->leftJoin('presences as p', function($join) use ($presenceDate){
             $join->on('e.id', '=', 'p.employeeId')
             ->where(DB::raw("(STR_TO_DATE(p.start,'%Y-%m-%d'))"), '=', $presenceDate);
-
         })
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
         ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
-        ->where('e.employmentStatus', '1')
+        ->where('e.employmentStatus', '!=','3')
         ->where('mapping.isActive', '1');
 
         $query->get();
-        //dd($presenceDate);
-        //dd($query->toSql());
-        //dd($query->get());
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
@@ -131,63 +217,9 @@ class PresenceController extends Controller
     {
         return Excel::download(new EmployeePresenceExport($presenceDate), 'users.xlsx');
     }
-
-
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function presenceFileStore(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Presence  $presence
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Presence $presence)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Presence  $presence
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Presence $presence)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Presence  $presence
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Presence $presence)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Presence  $presence
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Presence $presence)
-    {
-        //
+        Excel::import(new EmployeePresenceImport, $request->presenceFile);
+        return redirect('presenceHistory')->with('success', 'All good!');
     }
 }
