@@ -106,6 +106,30 @@
                 </div>
             </div>
         </div>
+        <div class="modal-body">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <ol>
+                        <li>Hanya untuk digunakan untuk presensi pegawai <b>Non Borongan</b></li>
+                        <li>Pilih tanggal Presensi</li>
+                        <li>Klik tombol "Get Presence List"</li>
+                        <li>Edit file yang telah didownload, hanya diperbolehkan untuk mengedit 3 kolom saja</li>
+                        <ol>
+                            <li>Jam Masuk. Gunakan format Jam dan Menit, dengan dipisahkan simbol ":". Contoh 08:00</li>
+                            <li>Jam Keluar. Gunakan format Jam dan Menit, dengan dipisahkan simbol ":". Contoh 16:45</li>
+                            <li>Status Masuk</li>
+                            <ol>
+                                <li>Nilai 0 : Masuk</li>
+                                <li>Nilai 1 : Tidak Masuk</li>
+                            </ol>
+                            <li>Simpan File tersebut</li>
+                        </ol>
+                        <li>Klik "Choose File", dan pilih file yang telah diedit</li>
+                        <li>Klik Simpan</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
