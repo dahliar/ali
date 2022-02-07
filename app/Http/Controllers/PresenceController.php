@@ -215,7 +215,7 @@ class PresenceController extends Controller
     }
     public function excelPresenceFileGenerator($presenceDate)
     {
-        return Excel::download(new EmployeePresenceExport($presenceDate), 'users.xlsx');
+        return Excel::download(new EmployeePresenceExport($presenceDate), 'Presensi Harian '.date('Y-m-d').'.xlsx');
     }
     public function presenceFileStore(Request $request)
     {
