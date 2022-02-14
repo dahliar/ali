@@ -26,7 +26,7 @@
                     }
                 });
             }else{
-                swal('warning','Choose Company first!','info');
+                swal.fire('warning','Choose Company first!','info');
             }
         });
     });
@@ -34,7 +34,7 @@
 
 @if (session('success'))
 <script type="text/javascript">
-    swal("Success", "Data stock berhasil ditambahkan", "info");
+    swal.fire("Success", "Data stock berhasil ditambahkan", "info");
 </script>
 @endif
 

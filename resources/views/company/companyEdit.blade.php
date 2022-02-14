@@ -21,7 +21,7 @@
 </script>
 @if (session('success'))
 <script type="text/javascript">
-    swal("Success", "Data perusahaan berhasil ditambahkan", "info");
+    swal.fire("Success", "Data perusahaan berhasil ditambahkan", "info");
 </script>
 @endif
 

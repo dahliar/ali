@@ -23,7 +23,7 @@
     }
     function deleteItem(detailTransaction){
         // e.preventDefault(); // <--- prevent form from submitting
-        swal({
+        swal.fire({
             title: "Are you sure?",
             text: "Yakin hendak menghapus item detail transaksi?",
             icon: "warning",
@@ -41,12 +41,12 @@
                 data : {"_token":"{{ csrf_token() }}"},
                 dataType: "text",
                 success:function(data){
-                    swal("Deleted!", "Detail Transaksi berhasil dihapus", "success");
+                    swal.fire("Deleted!", "Detail Transaksi berhasil dihapus", "success");
                     myFunction({{ $transactionId }});
                 }
             });
         } else {
-            swal("Cancelled", "Detail Transaksi batal dihapus", "error");
+            swal.fire("Cancelled", "Detail Transaksi batal dihapus", "error");
         }
     })
     };
@@ -95,7 +95,7 @@
             if (speciesId >= 0){
                 myFunction(speciesId);
             } else{
-                swal("Warning!", "Pilih jenis spesies dulu!", "info");
+                swal.fire("Warning!", "Pilih jenis spesies dulu!", "info");
             }
 
         });

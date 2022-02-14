@@ -21,8 +21,24 @@
 
     function getPresenceList(){
         var presenceDate = document.getElementById("presenceDate").value;
-        window.open('{{ url("getPresenceList")}}'+"/"+presenceDate, '_blank');
-    }
+        Swal.fire({
+          title: 'Generate file presensi tanggal '+presenceDate+'?',
+          text: 'Generate file presensi tanggal '+presenceDate+'?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+          if (result.isConfirmed) {
+            window.open('{{ url("getPresenceList")}}'+"/"+presenceDate, '_blank');
+        }
+    })
+
+  }
+
+
+
 </script>
 @if ($errors->any())
 <div class="alert alert-success">

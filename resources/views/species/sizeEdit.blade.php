@@ -40,7 +40,7 @@
 <div class="container-fluid">
     @if (session('status'))
     <script type="text/javascript">
-        swal("Success",  "{{session('status')}}" , "info");
+        swal.fire("Success",  "{{session('status')}}" , "info");
     </script>
     @endif
 

@@ -88,10 +88,9 @@
                                 <a class="white-text" href="{{ url('/home') }}">Home</a>
                             </li>
                             <li class="breadcrumb-item active">
-                                <a class="white-text" href="{{ ('presenceEmployeeList')}}">Presensi</a>
+                                <a class="white-text" href="{{url('presenceEmployeeList')}}">Presensi</a>
                             </li>
-                            <li class="breadcrumb-item active">Arsip Presensi Pegawai</li>
-                            <li class="breadcrumb-item active">{{$employeeName}}</li>
+                            <li class="breadcrumb-item active">Arsip Presensi Pegawai {{$employeeName}}</li>
                         </ol>
                     </nav>
                 </div>

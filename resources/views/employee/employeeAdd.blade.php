@@ -294,6 +294,9 @@
                                 <option value="-1" @if(old('employmentStatus') == -1) selected @endif>--Choose Jenis Karyawan--</option>
                                 <option value="1" @if(old('employmentStatus') == 1) selected @endif>Bulanan</option>
                                 <option value="2" @if(old('employmentStatus') == 2) selected @endif>Harian</option>
+                                <option value="3" @if(old('employmentStatus') == 3) selected @endif>Borongan</option>
+
+                                
                             </select>
                         </div>
                     </div>

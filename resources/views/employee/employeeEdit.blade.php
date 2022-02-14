@@ -187,6 +187,7 @@
                                     <option value="-1" @if(old('employmentStatus',$employee->employmentStatus) == -1) selected @endif >--Choose First--</option>
                                     <option value="1" @if(old('employmentStatus',$employee->employmentStatus) == 1) selected @endif >Bulanan</option>
                                     <option value="2" @if(old('employmentStatus',$employee->employmentStatus) == 2) selected @endif >Harian</option>
+                                    <option value="3" @if(old('employmentStatus',$employee->employmentStatus) == 3) selected @endif >Borongan</option>
                                 </select>
                                 @else
                                 <input id="employmentStatus" name="employmentStatus" type="hidden" value="{{$employee->employmentStatus}}">

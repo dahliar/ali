@@ -72,7 +72,7 @@
             if (speciesId >= 0){
                 myFunction(speciesId);
             } else{
-                swal("Warning!", "Pilih jenis spesies dulu!", "info");
+                swal.fire("Warning!", "Pilih jenis spesies dulu!", "info");
             }
 
         });

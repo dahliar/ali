@@ -355,7 +355,7 @@ class EmployeeController extends Controller
                 (CASE WHEN e.isActive="0" THEN "Non-Aktif" WHEN e.isActive="1" THEN "Aktif" END) AS statusKepegawaian
                 '),
             DB::raw('
-                (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="1" THEN "Harian" END) AS jenisPenggajian
+                (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian
                 ')
         )
         ->join('users as u', 'u.id', '=', 'e.userid');

@@ -236,6 +236,9 @@ Route::GET('presenceAddImport',[PresenceController::class, 'createImport'])->mid
 Route::get('getPresenceList/{presenceDate}', [PresenceController::class, 'excelPresenceFileGenerator']);
 Route::post('presenceFileStore',[PresenceController::class, 'presenceFileStore'])->middleware(['auth']);
 
+Route::post('storeOnePresence',[PresenceController::class, 'storeOnePresence'])->middleware(['auth']);
+
+
 
 Route::GET('presenceHistory',[PresenceController::class, 'presenceHistory'])->middleware('auth');
 Route::get('getPresenceHistory/{start}/{end}', [PresenceController::class, 'getPresenceHistory'])->middleware('auth');

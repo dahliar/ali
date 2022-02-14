@@ -56,7 +56,7 @@
             if (familyId >= 0){
                 myFunction(familyId);
             } else{
-                swal("Warning!", "Pilih jenis family dulu!", "info");
+                swal.fire("Warning!", "Pilih jenis family dulu!", "info");
             }
 
         });

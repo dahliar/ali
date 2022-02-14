@@ -64,7 +64,7 @@
                     }
                 });
             }else{
-                swal('warning','Choose Rekening first!','info');
+                swal.fire('warning','Choose Rekening first!','info');
             }
         });
         $('#company').on('change', function() {
@@ -83,7 +83,7 @@
                     }
                 });
             }else{
-                swal('warning','Choose Company first!','info');
+                swal.fire('warning','Choose Company first!','info');
             }
         });
         $('#valutaType').on('change', function() {
@@ -95,14 +95,14 @@
                 document.getElementById("spanAm").textContent=valText;
                 document.getElementById("spanAd").textContent=valText;
             }else{
-                swal('warning','Choose Payment Valuta first!','info');
+                swal.fire('warning','Choose Payment Valuta first!','info');
             }
         });
     });
 </script>
 @if (session('success'))
 <script type="text/javascript">
-    swal("Success", "Data stock berhasil ditambahkan", "info");
+    swal.fire("Success", "Data stock berhasil ditambahkan", "info");
 </script>
 @endif
 

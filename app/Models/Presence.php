@@ -18,6 +18,7 @@ class Presence extends Model
 
     function presenceCalculator(Collection $collection){
         //dd($collection);
+        $a=0;
         foreach ($collection as $row) 
         {
             $start = \Carbon\Carbon::parse($row[7].' '.$row[8].'.00');
@@ -48,17 +49,102 @@ class Presence extends Model
                 $shift = 2; 
             } else {
                 $jamLembur = $jamKerja - 8;
-                $jamKerja = $jamKerja-$jamLembur;            
             }
             
-            Presence::create([
+            $empiddate = $row[0].$row[7];
+
+            if ($jamLembur <= 0 ){
+                $jamLembur=0;
+            }
+            if ($jamKerja <= 0 ){
+                $jamKerja=0;
+            }
+
+            $data[$a] = [
+                'empiddate'     => $empiddate,
                 'employeeId'    => $row[0],
                 'start'         => $start,
                 'end'           => $end,
                 'jamKerja'      => $jamKerja,
                 'jamLembur'     => $jamLembur,
                 'shift'         => $shift
-            ]);
+            ];
+            $a++;
         }
+
+        DB::table('presences')
+        ->upsert(
+            $data,
+            ['empiddate'],
+            ['empiddate','employeeId','start','end','jamKerja','jamLembur','shift']
+        );
+    }
+    function presenceTunggalHarian($empid, $start, $end ){
+        $start = \Carbon\Carbon::parse($start);
+        $end = \Carbon\Carbon::parse($end);
+        $retValue="";
+
+        if($end->gte($start)){
+            $menitKerja = $start->diffInMinutes($end); 
+            $jamKerja = $start->diffInHours($end); 
+
+
+        //jika selisih menit kerja lebih dari 30 menit, ditambah jam kerja 1 jam
+            $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
+            if ($selisihMenitSisa >= 30){
+                $jamKerja+=1;
+            }
+
+        //mengurangi jam istirahat
+            $jamKerja-=1;
+
+            $shift = 1;
+            $jamLembur=0;
+
+            if ($start->gte(Carbon::parse($start->toDateString()." 13:00:00"))){
+            //shift 2 mulai dari jam 1300
+                $jamLembur = $jamKerja - 4;
+                $jamKerja = $jamKerja - 4;
+                $shift = 2; 
+            } else {
+                $jamLembur = $jamKerja - 8;
+            }
+
+            if ($jamLembur <= 0 ){
+                $jamLembur=0;
+            }
+            if ($jamKerja <= 0 ){
+                $jamKerja=0;
+            }
+
+            $empiddate = $empid.$start->toDateString();
+            $data = [
+                'empiddate'     => $empiddate,
+                'employeeId'    => $empid,
+                'start'         => $start,
+                'end'           => $end,
+                'jamKerja'      => $jamKerja,
+                'jamLembur'     => $jamLembur,
+                'shift'         => $shift
+            ];
+
+            DB::table('presences')
+            ->upsert(
+                $data,
+                ['empiddate'],
+                ['empiddate','employeeId','start','end','jamKerja','jamLembur','shift']
+            );
+            $retValue = [
+                'message'       => "Data berhasil disimpan",
+                'isError'       => "0"
+            ];
+
+        }else{
+            $retValue = [
+                'message'       => "Tanggal dan jam pulang harus lebih dari tanggal dan jam masuk",
+                'isError'       => "1"
+            ];
+        }
+        return $retValue;        
     }
 }

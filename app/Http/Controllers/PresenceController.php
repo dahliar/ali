@@ -22,6 +22,9 @@ class PresenceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct(){
+        $this->presence = new Presence();
+    }
 
     public function index()
     {
@@ -123,7 +126,7 @@ class PresenceController extends Controller
             'e.id as id', 
             'u.name as name', 
             'e.nik as nik',
-            DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="1" THEN "Harian" END) AS jenisPenggajian'), 
+            DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian'), 
             DB::raw('(STR_TO_DATE(p.start,"%Y-%m-%d")) as presenceToday'),
             'os.name as orgStructure',
             'sp.name as jabatan',
@@ -162,7 +165,7 @@ class PresenceController extends Controller
             'e.id as id', 
             'u.name as name', 
             'e.nik as nik',
-            DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="1" THEN "Harian" END) AS jenisPenggajian'), 
+            DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian'), 
             DB::raw('(STR_TO_DATE(p.start,"%Y-%m-%d")) as presenceToday'),
             'os.name as orgStructure',
             'sp.name as jabatan',
@@ -190,7 +193,7 @@ class PresenceController extends Controller
             </button>';
             if (is_null($row->presenceToday)){
                 $html.='
-                <button type="button" class="btn  btn-xs btn-light" data-bs-toggle="modal" data-toggle="tooltip" data-placement="top" data-container="body" data-bs-target="#exampleModal" title="Tambah Presensi Hari ini" value="'.$row->id.'">
+                <button type="button" class="btn" onclick="presenceForTodayModal('."'".$row->id."'".')" title="Tambah Presensi Hari ini">
                 <i class="fa fa-check" style="font-size:20px"></i>
                 </button>
                 ';
@@ -198,6 +201,14 @@ class PresenceController extends Controller
             return $html;
         })->addIndexColumn()->toJson();
     }
+
+    /*
+                <button type="button" class="btn  btn-xs btn-light" data-bs-toggle="modal" data-toggle="tooltip" data-placement="top" data-container="body" data-bs-target="#exampleModal" onclick="presenceHistory('."'".$row->id."'".')" title="Tambah Presensi Hari ini" value="'.$row->id.'">
+                <i class="fa fa-check" style="font-size:20px"></i>
+                </button>
+
+    */
+
 
     /**
      * Show the form for creating a new resource.
@@ -216,6 +227,14 @@ class PresenceController extends Controller
     public function excelPresenceFileGenerator($presenceDate)
     {
         return Excel::download(new EmployeePresenceExport($presenceDate), 'Presensi Harian '.date('Y-m-d').'.xlsx');
+    }
+
+
+    
+    public function storeOnePresence(Request $request)
+    {
+        $retValue = $this->presence->presenceTunggalHarian($request->empidModal, $request->start, $request->end);
+        return $retValue;
     }
     public function presenceFileStore(Request $request)
     {

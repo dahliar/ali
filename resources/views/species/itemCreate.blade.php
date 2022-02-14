@@ -44,7 +44,7 @@
 </script>
 @if (session('success'))
 <script type="text/javascript">
-    swal("Success", "Data item berhasil ditambahkan", "info");
+    swal.fire("Success", "Data item berhasil ditambahkan", "info");
 </script>
 @endif
 

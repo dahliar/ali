@@ -53,7 +53,7 @@
             if (speciesId>0){
                 selectOptionChange(speciesId, -1);
             }else{
-                swal('warning','Choose Species first!','info');
+                swal.fire('warning','Choose Species first!','info');
             }
         });
     });
