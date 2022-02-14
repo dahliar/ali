@@ -172,7 +172,7 @@
                             <span class="label">Employee Id</span>
                         </div>
                         <div class="col-md-8">
-                            <input type="text" id="empidModal" name="empidModal" class="form-control">
+                            <input type="text" id="empidModal" name="empidModal" class="form-control" readonly>
                         </div>
                     </div>                    
                     <div class="row form-group">
