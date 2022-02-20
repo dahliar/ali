@@ -17,125 +17,25 @@ class Presence extends Model
 
 
     function presenceCalculator(Collection $collection){
-        //dd($collection);
         $a=0;
         foreach ($collection as $row) 
         {
             $start = \Carbon\Carbon::parse($row[7].' '.$row[8].'.00');
             $end = \Carbon\Carbon::parse($row[7].' '.$row[9].'.00');
-
-            $formatted_dt1=Carbon::parse($start);
-            $formatted_dt2=Carbon::parse($end);
-
-            $menitKerja = $formatted_dt1->diffInMinutes($formatted_dt2); 
-            $jamKerja = $formatted_dt1->diffInHours($formatted_dt2); 
-
-            //jika selisih menit kerja lebih dari 30 menit, ditambah jam kerja 1 jam
-            $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
-            if ($selisihMenitSisa >= 30){
-                $jamKerja+=1;
+            if($end->gte($start)){
+                $this->simpanPresenceTunggal($row[0], $start, $end);
             }
-
-            //mengurangi jam istirahat
-            $jamKerja-=1;
-
-            $shift = 1;
-            $jamLembur=0;
-
-            if ($start->gte(Carbon::parse($start->toDateString()." 13:00:00"))){
-            //shift 2 mulai dari jam 1300
-                $jamLembur = $jamKerja - 4;
-                $jamKerja = $jamKerja - 4;
-                $shift = 2; 
-            } else {
-                $jamLembur = $jamKerja - 8;
-            }
-            
-            $empiddate = $row[0].$row[7];
-
-            if ($jamLembur <= 0 ){
-                $jamLembur=0;
-            }
-            if ($jamKerja <= 0 ){
-                $jamKerja=0;
-            }
-
-            $data[$a] = [
-                'empiddate'     => $empiddate,
-                'employeeId'    => $row[0],
-                'start'         => $start,
-                'end'           => $end,
-                'jamKerja'      => $jamKerja,
-                'jamLembur'     => $jamLembur,
-                'shift'         => $shift
-            ];
-            $a++;
         }
-
-        DB::table('presences')
-        ->upsert(
-            $data,
-            ['empiddate'],
-            ['empiddate','employeeId','start','end','jamKerja','jamLembur','shift']
-        );
     }
-    function presenceTunggalHarian($empid, $start, $end ){
+    function storePresenceHarianEmployee($empid, $start, $end ){
         $start = \Carbon\Carbon::parse($start);
         $end = \Carbon\Carbon::parse($end);
         $retValue="";
 
         if($end->gte($start)){
-            $menitKerja = $start->diffInMinutes($end); 
-            $jamKerja = $start->diffInHours($end); 
-
-
-        //jika selisih menit kerja lebih dari 30 menit, ditambah jam kerja 1 jam
-            $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
-            if ($selisihMenitSisa >= 30){
-                $jamKerja+=1;
-            }
-
-        //mengurangi jam istirahat
-            $jamKerja-=1;
-
-            $shift = 1;
-            $jamLembur=0;
-
-            if ($start->gte(Carbon::parse($start->toDateString()." 13:00:00"))){
-            //shift 2 mulai dari jam 1300
-                $jamLembur = $jamKerja - 4;
-                $jamKerja = $jamKerja - 4;
-                $shift = 2; 
-            } else {
-                $jamLembur = $jamKerja - 8;
-            }
-
-            if ($jamLembur <= 0 ){
-                $jamLembur=0;
-            }
-            if ($jamKerja <= 0 ){
-                $jamKerja=0;
-            }
-
-            $empiddate = $empid.$start->toDateString();
-            $data = [
-                'empiddate'     => $empiddate,
-                'employeeId'    => $empid,
-                'start'         => $start,
-                'end'           => $end,
-                'jamKerja'      => $jamKerja,
-                'jamLembur'     => $jamLembur,
-                'shift'         => $shift
-            ];
-
-            DB::table('presences')
-            ->upsert(
-                $data,
-                ['empiddate'],
-                ['empiddate','employeeId','start','end','jamKerja','jamLembur','shift']
-            );
+            $this->simpanPresenceTunggal($empid, $start, $end);
             $retValue = [
-                'message'       => "Data berhasil disimpan",
+                'message'       => "Data berhasil disimpan ",
                 'isError'       => "0"
             ];
 
@@ -146,5 +46,84 @@ class Presence extends Model
             ];
         }
         return $retValue;        
+    }
+
+    function simpanPresenceTunggal($empid, $start, $end){
+        $menitKerja = $start->diffInMinutes($end); 
+        $jamKerja = $start->diffInHours($end); 
+
+        //jika selisih menit kerja lebih dari 30 menit, ditambah jam kerja 1 jam
+        $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
+        if ($selisihMenitSisa >= 30){
+            $jamKerja+=1;
+        }
+
+        $jamKerja-=1;   //mengurangi jam istirahat siang/sore baik untuk shift 1 dan 2
+
+        $shift = 1;
+        $jamLembur=0;
+
+        if ($start->gte(Carbon::parse($start->toDateString()." 13:00:00"))){
+            //shift 2 mulai dari jam 1300
+            $jamLembur = $jamKerja - 4;
+            $jamKerja = $jamKerja - 4;
+            $shift = 2; 
+        } else {
+            $jamLembur = $jamKerja - 8;
+            $jamKerja = $jamKerja - $jamLembur;
+        }
+
+        if (($shift == 1) and ($end->gte(Carbon::parse($start->toDateString()." 18:00:00")))){
+            $jamLembur-=1;   //mengurangi jam sore
+        }
+
+        if ($jamLembur < 0 ){
+            $jamLembur=0;
+        }
+        
+        if ($jamKerja < 0 ){
+            $jamKerja=0;
+        }
+
+        $empiddate = $empid.$start->toDateString();
+        $dataPresensi = [
+            'empiddate'     => $empiddate,
+            'employeeId'    => $empid,
+            'start'         => $start,
+            'end'           => $end,
+            'jamKerja'      => $jamKerja,
+            'jamLembur'     => $jamLembur,
+            'shift'         => $shift
+        ];
+
+        DB::table('presences')
+        ->upsert(
+            $dataPresensi,
+            ['empiddate'],
+            ['empiddate','employeeId','start','end','jamKerja','jamLembur','shift']
+        );
+
+        $honorarium = DB::table('employeeorgstructuremapping')
+        ->select('uangharian as uh', 'uanglembur as ul')
+        ->where('idemp', $empid)
+        ->where('isactive', 1)
+        ->first();
+
+
+        $datasalary = [
+            'empiddate'     => $empiddate,
+            'employeeId'    => $empid,
+            'presenceDate'  => $start->toDateString(),
+            'uangharian'    => ($honorarium->uh * ($jamKerja/8)),
+            'uanglembur'    => ($honorarium->ul * $jamLembur)
+        ];
+
+        DB::table('dailysalaries')
+        ->upsert(
+            $datasalary,
+            ['empiddate'],
+            ['empiddate','employeeId','presenceDate','uangharian','uanglembur']
+        );
+
     }
 }

@@ -28,10 +28,10 @@
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, delete it!'
+          confirmButtonText: 'Yes, generate it!'
       }).then((result) => {
           if (result.isConfirmed) {
-            window.open('{{ url("getPresenceList")}}'+"/"+presenceDate, '_blank');
+            window.open('{{ url("getPresenceHarianImportList")}}'+"/"+presenceDate, '_blank');
         }
     })
 
@@ -66,7 +66,7 @@
                         <a class="white-text" href="{{ url('/home') }}">Home</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <a class="white-text" href="{{ ('presenceEmployeeList')}}">Presensi</a>
+                        <a class="white-text" href="{{ ('presenceHarianList')}}">Presensi</a>
                     </li>
                     <li class="breadcrumb-item active">Import Presensi Pegawai Harian/Bulanan</li>
                 </ol>
@@ -89,7 +89,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-4">
-                                <button type="button" class="btn btn-primary" onclick="getPresenceList()">Get Presence List</button>
+                                <button type="button" class="btn btn-primary" onclick="getPresenceList()">Download daftar presensi</button>
                             </div>
                         </div>
                     </form>
@@ -99,7 +99,7 @@
         <div class="modal-body">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form id="presenceFileStore" action="{{url('presenceFileStore')}}" method="POST" name="presenceFileStore" autocomplete="off" enctype="multipart/form-data">
+                    <form id="presenceFileStore" action="{{url('presenceHarianImportStore')}}" method="POST" name="presenceFileStore" autocomplete="off" enctype="multipart/form-data">
                         @csrf
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
@@ -115,7 +115,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-primary">Upload dan Simpan Presensi</button>
                             </div>
                         </div>
                     </form>
@@ -128,7 +128,7 @@
                     <ol>
                         <li>Hanya untuk digunakan untuk presensi pegawai <b>Non Borongan</b></li>
                         <li>Pilih tanggal Presensi</li>
-                        <li>Klik tombol "Get Presence List"</li>
+                        <li>Klik tombol "Download daftar presensi"</li>
                         <li>Edit file yang telah didownload, hanya diperbolehkan untuk mengedit 3 kolom saja</li>
                         <ol>
                             <li>Jam Masuk. Gunakan format Jam dan Menit, dengan dipisahkan simbol ":". Contoh 08:00</li>
@@ -141,7 +141,7 @@
                             <li>Simpan File tersebut</li>
                         </ol>
                         <li>Klik "Choose File", dan pilih file yang telah diedit</li>
-                        <li>Klik Simpan</li>
+                        <li>Klik "Upload dan simpan presensi"</li>
                     </ol>
                 </div>
             </div>

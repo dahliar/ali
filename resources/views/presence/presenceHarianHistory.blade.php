@@ -24,7 +24,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getPresenceHistory") }}'+"/"+start+"/"+end,
+            ajax:'{{ url("getPresenceHarianHistory") }}'+"/"+start+"/"+end,
             dataType: "JSON",
             serverSide: false,
             processing: true,
@@ -87,7 +87,7 @@
                                 <a class="white-text" href="{{ url('/home') }}">Home</a>
                             </li>
                             <li class="breadcrumb-item active">
-                                <a class="white-text" href="{{ ('presenceEmployeeList')}}">Presensi</a>
+                                <a class="white-text" href="{{ ('presenceHarianList')}}">Presensi</a>
                             </li>
                             <li class="breadcrumb-item active">Arsip Presensi Seluruh Pegawai</li>
                         </ol>

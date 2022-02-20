@@ -76,36 +76,42 @@
 					@if (Auth::user()->isHumanResources() or Auth::user()->isAdmin())
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Presensi
+							Resources
 						</a>
 						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 							<li>
 								<a class="dropdown-item" href="#">
-									Presensi Harian &raquo;
+									Presensi &raquo;
 								</a>
 								<ul class="dropdown-menu dropdown-submenu">
 									<li>
-										<a class="dropdown-item" href="{{ url('presenceEmployeeList')}}">Presensi
+										<a class="dropdown-item" href="{{ url('presenceHarianList')}}">Presensi Harian
 										</a>
 									</li>
 									<li>
-										<a class="dropdown-item" href="{{ url('presenceHistory')}}">
-											Arsip Presensi Harian
+										<a class="dropdown-item" href="{{ url('boronganList')}}">Presensi Borongan
 										</a>
 									</li>
+									<li>
+										<a class="dropdown-item" href="{{ url('presenceHarianHistory')}}">Arsip Presensi Harian
+										</a>
+									</li>
+
+
 								</ul>
 							</li>
 							<li>
 								<a class="dropdown-item" href="#">
-									Presensi Borongan &raquo;
+									Penggajian &raquo;
 								</a>
 								<ul class="dropdown-menu dropdown-submenu">
 									<li>
-										<a class="dropdown-item" href="">Presensi Borongan
+										<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
+											Penggajian Harian
 										</a>
 									</li>
 									<li>
-										<a class="dropdown-item" href="">Arsip Presensi Borongan
+										<a class="dropdown-item" href="{{ url('salaryBoronganList')}}">Penggajian Borongan
 										</a>
 									</li>
 								</ul>
@@ -138,19 +144,6 @@
 									Organisasi &raquo;
 								</a>
 								<ul class="dropdown-menu dropdown-submenu">
-										<!--
-										<li>
-										<a class="dropdown-item" href="#">Submenu item 3 &raquo; </a>
-										<ul class="dropdown-menu dropdown-submenu">
-											<li>
-												<a class="dropdown-item" href="#">Multi level 1</a>
-											</li>
-											<li>
-												<a class="dropdown-item" href="#">Multi level 2</a>
-											</li>
-										</ul>
-										</li>
-									-->
 									<li>
 										<a class="dropdown-item" href="{{ url('organizationStructureList')}}">Struktur Organisasi</a>
 									</li>

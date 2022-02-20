@@ -223,4 +223,35 @@ class InvoiceController extends Controller
         return $pdf->download($filename);
     }
 
+    public function cetakDaftarGajiHarian(Transaction $transaction)
+    {
+        $detailTransactions = $this->invoice->getOneInvoiceDetail($transaction->id);
+        $companyName = Company::select('name')->where('id',$transaction->companyId)->first();
+
+        $rekening = Rekening::where('id',$transaction->rekeningid)->first();
+
+        $containerType = "";
+        switch ($transaction->containerType){
+            case 1 : $containerType = "Dry"; break;
+            case 2 : $containerType = "Reefer"; break;
+        }
+        $valutaType = "";
+        switch($transaction->valutaType){
+            case(1) : $valutaType="Rp";   break;
+            case(2) : $valutaType="USD";  break;
+            case(3) : $valutaType="RMB";  break;
+        }
+
+
+
+        //return  view('invoice.ipl', 
+        //    compact('containerType','companyName','transaction', 'detailTransactions', 'rekening'));
+        $pdf = PDF::loadview('invoice.ipl', compact('valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
+        $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
+        return $pdf->download($filename);
+    }
+
+
+
+
 }

@@ -28,24 +28,31 @@ class PresenceController extends Controller
 
     public function index()
     {
-        return view('presence.presenceList');
+        return view('presence.presenceHarianList');
     }
-    public function presenceHistory()
+    public function createImport()
     {
-        return view('presence.presenceHistoryList');
+        return view('presence.presenceHarianImport');
     }
-    public function presenceHistoryEmployee(Employee $employee)
+
+
+
+    public function presenceHarianHistory()
+    {
+        return view('presence.presenceHarianHistory');
+    }
+    public function employeePresenceHarianHistory(Employee $employee)
     {
         $employeeId = $employee->id;
         $employeeName = DB::table('users')
         ->select('name as name')
         ->where('id','=', $employee->userid)->first()->name;
 
-        return view('presence.presenceHistoryEmployee', compact('employeeId', 'employeeName'));
+        return view('presence.employeePresenceHarianHistory', compact('employeeId', 'employeeName'));
     }
 
     
-    public function getEmployeePresenceHistory($employeeId, $start, $end){
+    public function getEmployeePresenceHarianHistory($employeeId, $start, $end){
         $query = DB::table('employees as e')
         ->select(
             'e.id as id', 
@@ -84,7 +91,7 @@ class PresenceController extends Controller
     }    
 
 
-    public function getPresenceHistory($start, $end){
+    public function getPresenceHarianHistory($start, $end){
         $query = DB::table('employees as e')
         ->select(
             'e.id as id', 
@@ -158,7 +165,7 @@ class PresenceController extends Controller
     }
 
     //Untuk datatable di halaman presensi satuan
-    public function getAllEmployeesForPresence(){
+    public function getPresenceHarianEmployees(){
         $presenceDate = Carbon::now()->toDateString();
         $query = DB::table('employees as e')
         ->select(
@@ -187,28 +194,20 @@ class PresenceController extends Controller
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
-            $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Presence History" onclick="presenceHistory('."'".$row->id."'".')">
-            <i class="fa fa-history" style="font-size:20px"></i>
-            </button>';
+            $html = '';
             if (is_null($row->presenceToday)){
                 $html.='
-                <button type="button" class="btn" onclick="presenceForTodayModal('."'".$row->id."'".')" title="Tambah Presensi Hari ini">
+                <button type="button" class="btn" onclick="presenceForTodayModal('."'".$row->id."'".', '."'".$row->name."'".')" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Presensi '.$row->name.' Hari ini">
                 <i class="fa fa-check" style="font-size:20px"></i>
                 </button>
                 ';
             }
+            $html.='<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="'.$row->name.' Presence History" onclick="employeePresenceHarianHistory('."'".$row->id."'".')">
+            <i class="fa fa-history" style="font-size:20px"></i>
+            </button>';
             return $html;
         })->addIndexColumn()->toJson();
     }
-
-    /*
-                <button type="button" class="btn  btn-xs btn-light" data-bs-toggle="modal" data-toggle="tooltip" data-placement="top" data-container="body" data-bs-target="#exampleModal" onclick="presenceHistory('."'".$row->id."'".')" title="Tambah Presensi Hari ini" value="'.$row->id.'">
-                <i class="fa fa-check" style="font-size:20px"></i>
-                </button>
-
-    */
-
 
     /**
      * Show the form for creating a new resource.
@@ -220,25 +219,21 @@ class PresenceController extends Controller
     {
         return view('presence.presenceAddForm');
     }
-    public function createImport()
+    public function excelPresenceHarianFileGenerator($presenceDate)
     {
-        return view('presence.presenceAddImport');
-    }
-    public function excelPresenceFileGenerator($presenceDate)
-    {
-        return Excel::download(new EmployeePresenceExport($presenceDate), 'Presensi Harian '.date('Y-m-d').'.xlsx');
+        return Excel::download(new EmployeePresenceExport($presenceDate), 'Presensi Harian '.$presenceDate.'.xlsx');
     }
 
 
     
-    public function storeOnePresence(Request $request)
+    public function storePresenceHarianEmployee(Request $request)
     {
-        $retValue = $this->presence->presenceTunggalHarian($request->empidModal, $request->start, $request->end);
+        $retValue = $this->presence->storePresenceHarianEmployee($request->empidModal, $request->start, $request->end);
         return $retValue;
     }
-    public function presenceFileStore(Request $request)
+    public function presenceHarianImportStore(Request $request)
     {
         Excel::import(new EmployeePresenceImport, $request->presenceFile);
-        return redirect('presenceHistory')->with('success', 'All good!');
+        return redirect('presenceHarianHistory')->with('success', 'All good!');
     }
 }

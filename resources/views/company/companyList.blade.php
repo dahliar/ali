@@ -22,9 +22,6 @@
     function editCompany(id){
         window.open(('{{ url("companyEdit") }}'+"/"+id), '_self');
     }
-    function tambahCompany(){
-        window.open('{{ url("companyAdd") }}', '_self');
-    }
 
     function myFunction(){
         $('#datatable').DataTable({
@@ -93,7 +90,7 @@
                         <li class="breadcrumb-item active">Transactions</li>
                     </ol>
                 </nav>
-                <button onclick="tambahCompany()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Company"><i class="fa fa-plus" style="font-size:20px"></i>
+                <button onclick="location.href='{{ url('companyAdd') }}'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Company"><i class="fa fa-plus" style="font-size:20px"></i>
                 </button>
             </div>
             <div class="modal-body">

@@ -323,7 +323,7 @@
                 <tr>
                     <td width="40%" style="text-align: left;vertical-align: top;">Authorized Signature
                         <br><br><br><br><br><br>
-                        {{$transaction->packer}}
+                        {{$payerName}}
                     </td>
                 </tr>       
             </table>

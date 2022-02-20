@@ -16,6 +16,8 @@ use App\Http\Controllers\StructuralPositionController;
 use App\Http\Controllers\WorkPositionController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PresenceController;
+use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\BoronganController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -27,9 +29,6 @@ use App\Models\DetailTransaction;
 use App\Models\User; 
 use App\Models\Presence; 
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,9 +39,6 @@ use App\Models\Presence;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-
 
 Route::get('testUser',[User::class, 'testUser'])->middleware(['auth']);
 
@@ -72,14 +68,6 @@ Route::get('/homeTwo', function () {
 Route::get('unauthenticated', function () {
     return view('partial.footer');
 })->name('unauthenticated');
-
-/*
-Route::get('employeeList',[EmployeeController::class, 'index'])->middleware(['auth']);
-Route::get('employeeAdd',[EmployeeController::class, 'create'])->middleware(['auth']);
-Route::get('employeeView',[EmployeeController::class, 'show'])->middleware(['auth']);
-Route::get('employeeEdit',[EmployeeController::class, 'edit'])->middleware(['auth']);
-*/
-
 
 /*
 *   Route Transaksi Penjualan
@@ -121,43 +109,20 @@ Route::GET('getAllPurchaseItems/{purchase}', [DetailPurchaseController::class, '
 Route::get('/purchase/notaPembelian/{purchase}', [InvoiceController::class, 'cetakNotaPembelian'])->middleware(['auth']);
 
 //ITEM STOCKS
-//ITEM STOCKS
-//ITEM STOCKS
-//ITEM STOCKS
 Route::get('itemStockList',[ItemController::class, 'index'])->middleware(['auth'])->name('itemStockList');
 Route::GET('getAllStockItem/{speciesId}', [ItemController::class, 'getAllStockItem'])->middleware(['auth']);
-
-
 Route::get('itemStockView/{itemId}',[ItemController::class, 'show'])->middleware(['auth']);
 Route::get('itemStockViewUnpacked/{itemId}',[ItemController::class, 'showUnpacked'])->middleware(['auth']);
-
-
-
 Route::GET('getItemHistory/{speciesId}', [ItemController::class, 'getItemHistory'])->middleware(['auth']);
 Route::GET('getUnpackedHistory/{speciesId}', [ItemController::class, 'getUnpackedItemHistory'])->middleware(['auth']);
-
 Route::get('editUnpacked/{itemId}',[StoreController::class, 'editUnpacked'])->middleware(['auth'])->name('editUnpacked');
 Route::get('unpackedUpdate',[StoreController::class, 'unpackedUpdate'])->middleware(['auth'])->name('unpackedUpdate');
-
-
-
-
-
 Route::get('itemStockAdd/{itemId}',[StoreController::class, 'create'])->middleware(['auth'])->name('itemStockAdd');
-
 Route::get('itemStockEdit/{store}',[StoreController::class, 'edit'])->middleware(['auth'])->name('itemStockAdd');
 Route::get('itemStoreDetail/{storeId}',[StoreController::class, 'itemStoreDetail'])->middleware(['auth']);
 Route::get('storeAdd',[StoreController::class, 'store'])->middleware(['auth'])->name('storeAdd');
 Route::get('storeUpdate',[StoreController::class, 'update'])->middleware(['auth'])->name('storeUpdate');
 
-
-
-
-
-
-//SPECIES
-//SPECIES
-//SPECIES
 //SPECIES
 Route::get('speciesList',[SpeciesController::class, 'index'])->middleware(['auth'])->name('speciesList');
 Route::GET('getAllSpecies/{familyId}', [SpeciesController::class, 'getAllSpecies'])->middleware(['auth']);
@@ -190,26 +155,14 @@ Route::get('companyStore',[CompanyController::class, 'store'])->middleware(['aut
 Route::get('companyUpdate',[CompanyController::class, 'update'])->middleware(['auth'])->name('companyUpdate');
 Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middleware(['auth']);
 
-
-
-
-
-
 Route::GET('getAllTransaction', [TransactionController::class, 'getAlltransaction'])->middleware(['auth']);
 Route::GET('getAllDetail/{transactionId}', [DetailTransactionController::class, 'getAllDetail'])->middleware(['auth']);
-
-
-
 Route::get('/transaction/pi/{transaction}', [InvoiceController::class, 'cetak_pi'])->middleware(['auth']);
 Route::get('/transaction/ipl/{transaction}', [InvoiceController::class, 'cetak_ipl'])->middleware(['auth']);
 
-
-
 //to get size for all species
 Route::GET('getItems/{speciesId}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);
-
 Route::GET('getOneStore/{storeId}', [StoreController::class, 'getOneStore'])->middleware(['auth']);
-
 
 //to get one full Rekening record with current rekening id
 Route::get('/getOneRekening/{rekening}', function (Rekening $rekening) { 
@@ -228,26 +181,65 @@ Route::get('/getOneCompany/{company}', function (Company $company) {
 });
 
 
-Route::GET('presenceEmployeeList',[PresenceController::class, 'index'])->middleware('auth');
-Route::get('getAllEmployeesForPresence',[PresenceController::class, 'getAllEmployeesForPresence'])->middleware('auth');
+//Presensi Harian
+Route::GET('presenceHarianList',[PresenceController::class, 'index'])->middleware('auth');
+Route::GET('presenceHarianHistory',[PresenceController::class, 'presenceHarianHistory'])->middleware('auth');
+Route::get('getPresenceHarianHistory/{start}/{end}', [PresenceController::class, 'getPresenceHarianHistory'])->middleware('auth');
+
+//Presensi Harian Import
+Route::GET('presenceHarianImport',[PresenceController::class, 'createImport'])->middleware('auth');
+Route::get('getPresenceHarianImportList/{presenceDate}', [PresenceController::class, 'excelPresenceHarianFileGenerator']);
+Route::post('presenceHarianImportStore',[PresenceController::class, 'presenceHarianImportStore'])->middleware(['auth']);
+
+//Presensi Harian Satuan
+Route::get('getPresenceHarianEmployees',[PresenceController::class, 'getPresenceHarianEmployees'])->middleware('auth');
+Route::post('storePresenceHarianEmployee',[PresenceController::class, 'storePresenceHarianEmployee'])->middleware(['auth']);
+Route::GET('employeePresenceHarianHistory/{employee}',[PresenceController::class, 'employeePresenceHarianHistory'])->middleware('auth');
+Route::get('getEmployeePresenceHarianHistory/{employeeId}/{start}/{end}', [PresenceController::class, 'getEmployeePresenceHarianHistory'])->middleware('auth');
+
+//Presensi borongan
+Route::GET('boronganList',[BoronganController::class, 'index'])->middleware('auth');
+Route::GET('boronganCreate',[BoronganController::class, 'create'])->middleware('auth');
+Route::POST('boronganStore',[BoronganController::class, 'storeBorongan'])->middleware('auth');
+Route::GET('boronganWorkerAdd/{borongan}',[BoronganController::class, 'tambahDetailPekerjaBorongan'])->middleware('auth');
+Route::GET('boronganWorkerList/{borongan}',[BoronganController::class, 'show'])->middleware('auth');
+Route::GET('boronganDeleteRecord/{borongan}',[BoronganController::class, 'destroy'])->middleware('auth');
+Route::get('getBorongans',[BoronganController::class, 'getBorongans'])->middleware('auth');
+
+//Penggajian harian
+Route::GET('salaryHarianList',[SalaryController::class, 'index'])->middleware('auth');
+Route::POST('salaryHarianGenerate',[SalaryController::class, 'salaryHarianGenerate'])->middleware('auth');
+Route::GET('getSalariesHarian',[SalaryController::class, 'getSalariesHarian'])->middleware('auth');
+Route::GET('checkCetakGajiPegawaiHarian/{salary}',[SalaryController::class, 'checkCetakGajiPegawaiHarian'])->middleware('auth');
+Route::GET('printSalaryHarianList/{salary}',[SalaryController::class, 'printSalaryHarianList'])->middleware('auth');
+Route::GET('getSalariesHarianForCheck/{salary}',[SalaryController::class, 'getSalariesHarianForCheck'])->middleware('auth');
+
+
+
+
+
+
+
+//Penggajian Lembur
+Route::GET('checkCetakLemburPegawaiBulanan/{salary}',[SalaryController::class, 'checkCetakLemburPegawaiBulanan'])->middleware('auth');
+
+//Penggajian Borongan
+Route::GET('salaryBoronganList',[SalaryController::class, 'indexBorongan'])->middleware('auth');
+Route::GET('getSalariesBorongan',[SalaryController::class, 'getSalariesBorongan'])->middleware('auth');
+Route::POST('salaryBoronganGenerate',[SalaryController::class, 'salaryBoronganGenerate'])->middleware('auth');
+Route::GET('checkCetakGajiPegawaiBorongan/{salary}',[SalaryController::class, 'checkCetakGajiPegawaiBorongan'])->middleware('auth');
+Route::POST('markSalariesIsPaid/{salary}/{tanggalBayar}',[SalaryController::class, 'markSalariesIsPaid'])->middleware('auth');
+
+/*
+Route::POST('markStatusBorongan',[SalaryController::class, 'markStatusBorongan'])->middleware('auth');
 Route::GET('presenceAddForm',[PresenceController::class, 'createForm'])->middleware('auth');
 Route::get('getAllEmployeesForPresenceForm/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresenceForm'])->middleware('auth');
-Route::GET('presenceAddImport',[PresenceController::class, 'createImport'])->middleware('auth');
-Route::get('getPresenceList/{presenceDate}', [PresenceController::class, 'excelPresenceFileGenerator']);
-Route::post('presenceFileStore',[PresenceController::class, 'presenceFileStore'])->middleware(['auth']);
 
-Route::post('storeOnePresence',[PresenceController::class, 'storeOnePresence'])->middleware(['auth']);
-
-
-
-Route::GET('presenceHistory',[PresenceController::class, 'presenceHistory'])->middleware('auth');
-Route::get('getPresenceHistory/{start}/{end}', [PresenceController::class, 'getPresenceHistory'])->middleware('auth');
-
-
-Route::GET('presenceHistory/{employee}',[PresenceController::class, 'presenceHistoryEmployee'])->middleware('auth');
-Route::get('getPresenceHistory/{employeeId}/{start}/{end}', [PresenceController::class, 'getEmployeePresenceHistory'])->middleware('auth');
-
-
+Route::GET('getBoronganSalariesForPrint/{salary}',[SalaryController::class, 'getBoronganSalariesForPrint'])->middleware('auth');
+Route::GET('getDailySalariesDetail',[SalaryController::class, 'getDailySalariesDetail'])->middleware('auth');
+Route::GET('getLemburPegawaiBulanan/{salary}',[SalaryController::class, 'getLemburPegawaiBulanan'])->middleware('auth');
+Route::POST('storePekerjaBorongan',[BoronganController::class, 'storePekerja'])->name('storePekerjaBorongan')->middleware('auth');
+*/
 
 Route::GET('employeeList',[EmployeeController::class, 'index'])->name('employeeList')->middleware('auth');
 Route::GET('employeeAdd',[EmployeeController::class, 'create'])->middleware('auth');
@@ -255,14 +247,11 @@ Route::GET('employeeEdit/{employee}',[EmployeeController::class, 'edit'])->middl
 Route::GET('profileEdit/{employee}',[EmployeeController::class, 'employeePersonalDataEdit'])->middleware('auth');
 Route::GET('passedit/{employee}',[EmployeeController::class, 'editPassword'])->middleware('auth');
 Route::POST('passUpdate',[EmployeeController::class, 'storePassword'])->name('passUpdate')->middleware('auth');
-
 Route::POST('employeeStore',[EmployeeController::class, 'store'])->name('employeeStore')->middleware('auth');
 Route::POST('employeeUpdate',[EmployeeController::class, 'update'])->name('employeeUpdate')->middleware('auth');
 Route::POST('employeeMappingUpdate',[EmployeeController::class, 'updateMapping'])->name('employeeMappingUpdate')->middleware('auth');
 Route::get('getAllEmployees',[EmployeeController::class, 'getAllEmployees'])->middleware('auth');
-
 Route::GET('employeeMappingEdit/{employee}',[EmployeeController::class, 'editMapping'])->middleware('auth');
-
 
 Route::GET('organizationStructureList',[OrganizationStructureController::class, 'index'])->middleware('auth');
 Route::GET('organizationStructureAdd',[OrganizationStructureController::class, 'create'])->middleware('auth');
@@ -285,14 +274,6 @@ Route::GET('workPositionEdit/{work_position}',[WorkPositionController::class, 'e
 Route::GET('getAllOrgStructure',[OrganizationStructureController::class, 'list'])->middleware('auth');
 Route::GET('getAllStructuralPosition',[StructuralPositionController::class, 'getAllStructuralPosition'])->middleware('auth');
 Route::GET('getAllWorkPosition',[WorkPositionController::class, 'getAllWorkPosition'])->middleware('auth');
-
-
-
-
-
-
-
-
 
 Route::post('orgStructureList', [EmployeeController::class, 'orgStructureList'])->name('orgStructureList');
 
