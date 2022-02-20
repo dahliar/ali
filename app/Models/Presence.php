@@ -23,7 +23,9 @@ class Presence extends Model
             $start = \Carbon\Carbon::parse($row[7].' '.$row[8].'.00');
             $end = \Carbon\Carbon::parse($row[7].' '.$row[9].'.00');
             if($end->gte($start)){
-                $this->simpanPresenceTunggal($row[0], $start, $end);
+                if($row[10]==1){
+                    $this->simpanPresenceTunggal($row[0], $start, $end);
+                }
             }
         }
     }

@@ -68,7 +68,7 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
     public function styles(Worksheet $sheet)
     {
         $sheet->getProtection()->setSheet(true);
-        $sheet->getStyle('H2:J'.$this->rowCount)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle('I2:K'.$this->rowCount)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
         $styleArrayEditable = [
             'font' => [
                 'bold' => true,
