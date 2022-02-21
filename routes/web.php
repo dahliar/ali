@@ -205,6 +205,8 @@ Route::GET('boronganWorkerAdd/{borongan}',[BoronganController::class, 'tambahDet
 Route::GET('boronganWorkerList/{borongan}',[BoronganController::class, 'show'])->middleware('auth');
 Route::GET('boronganDeleteRecord/{borongan}',[BoronganController::class, 'destroy'])->middleware('auth');
 Route::get('getBorongans',[BoronganController::class, 'getBorongans'])->middleware('auth');
+Route::POST('storePekerjaBorongan',[BoronganController::class, 'storePekerja'])->name('storePekerjaBorongan')->middleware('auth');
+
 
 //Penggajian harian
 Route::GET('salaryHarianList',[SalaryController::class, 'index'])->middleware('auth');
@@ -238,7 +240,6 @@ Route::get('getAllEmployeesForPresenceForm/{presenceDate}',[PresenceController::
 Route::GET('getBoronganSalariesForPrint/{salary}',[SalaryController::class, 'getBoronganSalariesForPrint'])->middleware('auth');
 Route::GET('getDailySalariesDetail',[SalaryController::class, 'getDailySalariesDetail'])->middleware('auth');
 Route::GET('getLemburPegawaiBulanan/{salary}',[SalaryController::class, 'getLemburPegawaiBulanan'])->middleware('auth');
-Route::POST('storePekerjaBorongan',[BoronganController::class, 'storePekerja'])->name('storePekerjaBorongan')->middleware('auth');
 */
 
 Route::GET('employeeList',[EmployeeController::class, 'index'])->name('employeeList')->middleware('auth');
