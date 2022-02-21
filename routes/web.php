@@ -223,6 +223,7 @@ Route::GET('getSalariesHarianForCheck/{salary}',[SalaryController::class, 'getSa
 
 
 //Penggajian Lembur
+Route::GET('getLemburPegawaiBulanan/{salary}',[SalaryController::class, 'getLemburPegawaiBulanan'])->middleware('auth');
 Route::GET('checkCetakLemburPegawaiBulanan/{salary}',[SalaryController::class, 'checkCetakLemburPegawaiBulanan'])->middleware('auth');
 
 //Penggajian Borongan
@@ -239,7 +240,6 @@ Route::get('getAllEmployeesForPresenceForm/{presenceDate}',[PresenceController::
 
 Route::GET('getBoronganSalariesForPrint/{salary}',[SalaryController::class, 'getBoronganSalariesForPrint'])->middleware('auth');
 Route::GET('getDailySalariesDetail',[SalaryController::class, 'getDailySalariesDetail'])->middleware('auth');
-Route::GET('getLemburPegawaiBulanan/{salary}',[SalaryController::class, 'getLemburPegawaiBulanan'])->middleware('auth');
 */
 
 Route::GET('employeeList',[EmployeeController::class, 'index'])->name('employeeList')->middleware('auth');
