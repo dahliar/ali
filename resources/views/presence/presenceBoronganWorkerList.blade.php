@@ -98,16 +98,14 @@
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <table class="table cell-border stripe hover row-border data-table">
                             <thead>
                                 <tr>
-                                    <th width="10%">No</th>
+                                    <th width="5%">No</th>
                                     <th width="30%">Nama</th>
-                                    <th width="10%">NIP</th>
-                                    <th width="15%">No Rekening</th>
-                                    <th width="20%">Bank</th>
+                                    <th width="15%">NIP</th>
+                                    <th width="15%">Bagian</th>
                                     <th width="10%">Honor (Rp)</th>
                                 </tr>
                             </thead>
@@ -118,8 +116,7 @@
                                     <td>@php echo $a @endphp</td>
                                     <td>{{$worker->nama}}</td>
                                     <td>{{$worker->nip}}</td>
-                                    <td>{{$worker->noRekening}}</td>
-                                    <td>{{$worker->bankname}}</td>
+                                    <td>{{$worker->osname}}</td>
                                     <td>{{$worker->netPayment}}</td>
                                 </tr>
                                 @php $a++ @endphp

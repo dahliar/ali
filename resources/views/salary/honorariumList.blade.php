@@ -18,6 +18,39 @@
         }
     });
 
+    function hapusRecordHonorarium(id){
+        Swal.fire({
+            title: 'Yakin menghapus?',
+            text: "Data hasil generate akan hilang dan mengembalikan status record honorarium ke belum generate!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("honorariumDeleteRecord") }}'+"/"+id,
+                    type: "GET",
+                    data: {
+                        "_token":"{{ csrf_token() }}",
+                        id : id
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Deleted!',
+                            'Record borongan telah dihapus.',
+                            'success'
+                            );
+                        myFunction();
+                    }
+                });
+            }
+        })
+    }
+
+
     function setIsPaidModal(id){
         document.getElementById("modalIdIsPaid").value = id;
         $('#isPaidModal').modal('show');
@@ -43,36 +76,12 @@
         });
     }
 
-    function generateGajiHarian(){
-        var end = document.getElementById("modalEnd").value;
-
-        $.ajax({
-            url: '{{ url("salaryHarianGenerate") }}',
-            type: "POST",
-            data: {
-                "_token":"{{ csrf_token() }}",
-                end: end
-            },
-            dataType: "json",
-            success:function(data){
-                if(data.isError==="0"){
-                    swal.fire('info',data.message,'info');
-                    myFunction();
-                }
-                else{
-                    swal.fire('warning',data.message,'warning');
-                }
-                $('#generateModal').modal('hide');
-            }
-        });
-    }
-
     function myFunction(){
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getSalariesHarian") }}',
+            ajax:'{{ url("getSalariesHonorarium") }}',
             dataType: "JSON",
             serverSide: false,
             processing: true,
@@ -91,7 +100,7 @@
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'generatorName', name: 'generatorName'},
             {data: 'enddate', name: 'enddate'},
-            {data: 'terbayar', name: 'terbayar'},
+            {data: 'countIsPaid', name: 'countIsPaid'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -120,7 +129,7 @@
                             <li class="breadcrumb-item">
                                 <a class="white-text" href="{{ url('/home') }}">Home</a>
                             </li>
-                            <li class="breadcrumb-item active">Daftar Penggajian Harian</li>
+                            <li class="breadcrumb-item active">Daftar Honorarium</li>
                         </ol>
                     </nav>
                 </div>

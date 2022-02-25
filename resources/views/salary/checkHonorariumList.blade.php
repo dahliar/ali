@@ -17,29 +17,29 @@
         }
     });
 
-    function hapusBorongan(id){
+    function setHonorariumIsPaid($hid){
         Swal.fire({
-            title: 'Yakin menghapus?',
-            text: "Data akan hilang!",
+            title: 'Yakin menandai?',
+            text: "Data ditandai sudah dibayar!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonText: 'Yes, mark it!'
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ url("boronganDeleteRecord") }}'+"/"+id,
+                    url: '{{ url("honorariumMarkedPaid") }}'+"/"+$hid,
                     type: "GET",
                     data: {
                         "_token":"{{ csrf_token() }}",
-                        id : id
+                        hid : $hid
                     },
                     dataType: "json",
                     success:function(data){
                         Swal.fire(
-                            'Deleted!',
-                            'Record borongan telah dihapus.',
+                            'Marked!',
+                            'Record honorarium telah ditandai dibayar.',
                             'success'
                             );
                         myFunction();
@@ -50,11 +50,12 @@
     }
 
     function myFunction(){
+        salary = document.getElementById("salaryId").value;
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getBorongans") }}',
+            ajax:'{{ url("getSalariesHonorariumForCheck") }}'+"/"+salary,
             dataType: "JSON",
             serverSide: false,
             processing: true,
@@ -63,32 +64,29 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
+            {   "width": "15%", "targets":  [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-end" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "5%", "targets":  [5], "className": "text-end" },
-            {   "width": "7%", "targets":  [6], "className": "text-end" },
-            {   "width": "8%", "targets":  [7], "className": "text-end" },
-            {   "width": "15%", "targets":  [8], "className": "text-center" }
+            {   "width": "10%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "15%", "targets":  [5], "className": "text-left" },
+            {   "width": "5%", "targets":  [6], "className": "text-left" },
+            {   "width": "10%", "targets":  [7], "className": "text-end" },
+            {   "width": "5%", "targets":  [8], "className": "text-end" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
-            {data: 'tanggalKerja', name: 'tanggalKerja'},
-            {data: 'hargaSatuan', name: 'hargaSatuan'},
-            {data: 'netweight', name: 'netweight'},
-            {data: 'worker', name: 'worker'},
-            {data: 'countIsPaid', name: 'countIsPaid'},
-            {data: 'statusText', name: 'statusText'},
+            {data: 'nip', name: 'nip'},
+            {data: 'osname', name: 'osname'},
+            {data: 'noRekening', name: 'noRekening'},
+            {data: 'bankName', name: 'bankName'},
+            {data: 'isPaid', name: 'isPaid'},
+            {data: 'jumlah', name: 'jumlah'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     }
-
-    $(document).ready(function() {
-    });
 </script>
 
 @if (session('status'))
@@ -113,15 +111,17 @@
                             <li class="breadcrumb-item">
                                 <a class="white-text" href="{{ url('/home') }}">Home</a>
                             </li>
-                            <li class="breadcrumb-item active">Presensi Borongan</li>
+                            <li class="breadcrumb-item active">Daftar Honorarium</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="col-md-3 text-end">
-                    <button onclick="location.href='{{ url('boronganCreate') }}'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Borongan"><i class="fa fa-plus" style="font-size:20px"></i>
-                    </button>
+                    <a href="{{url('printSalaryHonorariumList')}}/{{$salary->id}}" target="_blank" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak dokumen gaji">Cetak daftar honorarium
+                    </a>
                 </div>
             </div>
+
+            <input type="hidden" value="{{$salary->id}}"id="salaryId" name="salaryId" class="form-control" readonly>
             <div class="modal-body">
                 <div class="row form-inline">
                     <table class="table cell-border stripe hover row-border data-table"  id="datatable">
@@ -129,13 +129,13 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Tanggal</th>
-                                <th>Harga/Kg</th>
-                                <th>Berat</th>
-                                <th>Pekerja</th>
+                                <th>NIP</th>
+                                <th>Posisi</th>
+                                <th>No Rekening</th>
+                                <th>Bank</th>
                                 <th>Bayar</th>
-                                <th>Tahap</th>
-                                <th>Act</th>
+                                <th>Jumlah</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>

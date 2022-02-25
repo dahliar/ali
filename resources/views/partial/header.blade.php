@@ -93,6 +93,10 @@
 										</a>
 									</li>
 									<li>
+										<a class="dropdown-item" href="{{ url('honorariumList')}}">Presensi Honorarium
+										</a>
+									</li>
+									<li>
 										<a class="dropdown-item" href="{{ url('presenceHarianHistory')}}">Arsip Presensi Harian
 										</a>
 									</li>
@@ -106,12 +110,27 @@
 								</a>
 								<ul class="dropdown-menu dropdown-submenu">
 									<li>
+										<a class="dropdown-item" href="{{ url('generateGaji')}}">
+											Generate Gaji Harian/Bulanan/Borongan
+										</a>
+									</li>
+									<li>
 										<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
 											Penggajian Harian
 										</a>
 									</li>
 									<li>
 										<a class="dropdown-item" href="{{ url('salaryBoronganList')}}">Penggajian Borongan
+										</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
+											Lembur Bulanan
+										</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
+											Honorarirum
 										</a>
 									</li>
 								</ul>

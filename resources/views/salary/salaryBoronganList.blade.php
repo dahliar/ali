@@ -18,60 +18,6 @@
         }
     });
 
-    function setStatusModal(id){
-        document.getElementById("modalIdBorongan").value = id;
-        $('#StatusModal').modal('show');
-    }
-    function tandaiSudahDibayar(){
-        var tanggalBayar = document.getElementById("modalTanggalBayar").value;
-        var id = document.getElementById("modalIdBorongan").value;
-        $.ajax({
-            url: '{{ url("markSalariesIsPaid") }}'+"/"+id+"/"+tanggalBayar,
-            type: "POST",
-            data: {
-                "_token":"{{ csrf_token() }}",
-                id:id,
-                tanggalBayar: tanggalBayar
-            },
-            dataType: "json",
-            success:function(data){
-                if(data.isError==="0"){
-                    swal.fire('info',data.message,'info');
-                    myFunction();
-                }
-                else{
-                    swal.fire('warning',data.message,'warning');
-                }
-                $('#StatusModal').modal('hide');
-            }
-        });
-    }
-
-    function generateGajiBorongan(){
-        var end = document.getElementById("modalEnd").value;
-        
-        $.ajax({
-            url: '{{ url("salaryBoronganGenerate") }}',
-            type: "POST",
-            data: {
-                "_token":"{{ csrf_token() }}",
-                end: end
-            },
-            dataType: "json",
-            success:function(data){
-                if(data.isError==="0"){
-                    swal.fire('info',data.message,'info');
-                    myFunction();
-                }
-                else{
-                    swal.fire('warning',data.message,'warning');
-                }
-                $('#generateModal').modal('hide');
-            }
-        });
-        
-    }
-
     function myFunction(){
         $('#datatable').DataTable({
             headers: {
@@ -88,19 +34,17 @@
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
             {   "width": "20%", "targets":  [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "20%", "targets":  [4], "className": "text-left" },
+            {   "width": "20%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
             {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'generatorName', name: 'generatorName'},
-            {data: 'enddate', name: 'enddate'},
-            {data: 'isPaid', name: 'isPaid'},
-            {data: 'payerName', name: 'payerName'},
-            {data: 'tanggalBayar', name: 'tanggalBayar'},
+            {data: 'tanggalKerja', name: 'tanggalKerja'},
+            {data: 'tanggalGenerate', name: 'tanggalGenerate'},
+            {data: 'terbayar', name: 'terbayar'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -133,10 +77,6 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="col-md-3 text-end">
-                    <button onclick="$('#generateModalBorongan').modal('show');" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Generate Gaji Borongan">Generate Gaji Borongan
-                    </button>                   
-                </div>
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
@@ -145,10 +85,9 @@
                             <tr>
                                 <th>No</th>
                                 <th>Generator</th>
-                                <th>Tanggal Batas</th>
-                                <th>Sudah Dibayar</th>
-                                <th>Pembayar</th>
-                                <th>Tanggal Bayar</th>
+                                <th>Tanggal Kerja</th>
+                                <th>Tanggal Generate</th>
+                                <th>Terbayar</th>
                                 <th>Act</th>
                             </tr>
                         </thead>
@@ -160,65 +99,6 @@
         </div>
     </div>
 </body>
-
-<div class="modal fade" id="generateModalBorongan" tabindex="-1" aria-labelledby="generateModalBorongan" aria-hidden="true">
-    <form id="modalGenerateGajiHarian" method="POST" name="modalGenerateGajiHarian">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Generate Gaji Borongan</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row form-group">
-                        <div class="col-md-4 text-end">
-                            <span class="label">Tanggal Akhir</span>
-                        </div>
-                        <div class="col-md-6">
-                            <input type="date" id="modalEnd" name="modalEnd" class="form-control text-end" value="{{date('Y-m-d')}}">
-                        </div>
-                    </div>                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="generateGajiBorongan()">Generate</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-
-<div class="modal fade" id="StatusModal" tabindex="-1" aria-labelledby="StatusModal" aria-hidden="true">
-    <form id="setStatusForm" method="POST" name="setStatusForm">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tandai sudah dibayar</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row form-group">
-                        <input type="hidden" id="modalIdBorongan" name="modalIdBorongan" class="form-control" readonly>
-
-                        <div class="col-md-2 text-end">
-                            <span class="label">End</span>
-                        </div>
-                        <div class="col-md-8">
-                            <input type="date" id="modalTanggalBayar" name="modalTanggalBayar" class="form-control text-end" value="{{date('Y-m-d')}}">
-                        </div>
-                    </div>                    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="tandaiSudahDibayar()">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
 
 @else
 @include('partial.noAccess')

@@ -89,7 +89,7 @@
                         </div>                    
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Berat bersih</span>
+                                <span class="label">Berat timbangan</span>
                             </div>
                             <div class="col-md-4">
                                 <div class="input-group">

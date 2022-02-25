@@ -75,8 +75,9 @@ class EmployeeController extends Controller
             'role'                  => ['required', 'gt:0'],
             'email'                 => ['email'],
             'nik'                   => ['required', 'string', 'max:20', 'unique:employees'],
-            'nip'                   => ['required', 'string', 'max:10', 'unique:employees'],
+            'nip'                   => ['required', 'string', 'max:12', 'unique:employees'],
             'birthdate'             => ['required', 'date', 'before:today'],
+            'gender'                => ['required', 'integer', 'gt:0'],
             'startdate'             => ['required', 'date', 'after:birthdate', 'before:today'],
             'address'               => ['required', 'string'],
             'structural'            => ['required', 'gt:0'],
@@ -116,6 +117,7 @@ class EmployeeController extends Controller
             'nik'                   => $request->nik,
             'nip'                   => $request->nip,
             'birthdate'             => $request->birthdate,
+            'gender'                => $request->gender,
             'startdate'             => $request->startdate,
             'address'               => $request->address,
             'employmentStatus'      => $request->employmentStatus,
@@ -272,6 +274,7 @@ class EmployeeController extends Controller
             'email'                 => ['email'],
             'role'                  => ['required', 'gt:0'],
             'address'               => ['required', 'string'],
+            'gender'                => ['required', 'integer', 'gt:0'],
             'employmentStatus'      => ['required', 'gt:0'],
             'bankid'                => ['required', 'gt:0'],
             'noRekening'            => ['required', 'gt:0'],
@@ -282,7 +285,7 @@ class EmployeeController extends Controller
 
 
         $this->employee->userUpdate($request->role, $request->email, $request->userid);
-        $this->employee->employeeUpdate($request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan);
+        $this->employee->employeeUpdate($request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
 
         return redirect('employeeList')
         ->with('status','Data Karyawan berhasil diubah.');
@@ -343,6 +346,9 @@ class EmployeeController extends Controller
             'e.id as id', 
             'u.name as name', 
             'e.nik as nik', 
+            DB::raw('
+                (CASE WHEN e.gender="1" THEN "L" WHEN e.gender="2" THEN "P" END) AS gender
+                '),
             'e.nip as nip', 
             'u.username as username', 
             'e.startDate as startDate',

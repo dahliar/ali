@@ -189,6 +189,18 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
+                            <span class="label">Jenis Kelamin*</span>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="gender" name="gender" class="form-select" >
+                                <option value="-1" @if(old('gender') == -1) selected @endif>--Pilih Jenis Kelamin--</option>
+                                <option value="1" @if(old('gender') == 1) selected @endif>Laki-laki</option>
+                                <option value="2" @if(old('gender') == 2) selected @endif>Perempuan</option>
+                            </select>
+                        </div>      
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 text-end">
                             <span class="label">Tanggal Lahir*</span>
                         </div>
                         <div class="col-md-4">

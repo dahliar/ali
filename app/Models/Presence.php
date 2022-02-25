@@ -54,37 +54,42 @@ class Presence extends Model
         $menitKerja = $start->diffInMinutes($end); 
         $jamKerja = $start->diffInHours($end); 
 
+        $batasPulangKerja = Carbon::parse($start->toDateString()." 16:00:00");
+
         //jika selisih menit kerja lebih dari 30 menit, ditambah jam kerja 1 jam
         $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
         if ($selisihMenitSisa >= 30){
             $jamKerja+=1;
         }
 
-        $jamKerja-=1;   //mengurangi jam istirahat siang/sore baik untuk shift 1 dan 2
-
         $shift = 1;
         $jamLembur=0;
-
-        if ($start->gte(Carbon::parse($start->toDateString()." 13:00:00"))){
-            //shift 2 mulai dari jam 1300
-            $jamLembur = $jamKerja - 4;
-            $jamKerja = $jamKerja - 4;
-            $shift = 2; 
-        } else {
-            $jamLembur = $jamKerja - 8;
-            $jamKerja = $jamKerja - $jamLembur;
-        }
-
-        if (($shift == 1) and ($end->gte(Carbon::parse($start->toDateString()." 18:00:00")))){
-            $jamLembur-=1;   //mengurangi jam sore
-        }
-
-        if ($jamLembur < 0 ){
-            $jamLembur=0;
-        }
-        
-        if ($jamKerja < 0 ){
+        if ($start->gte(Carbon::parse($start->toDateString()." 16:00:00"))){
+            $shift = 3; 
+            $jamLembur=$jamKerja;
             $jamKerja=0;
+        } else if ($start->gte(Carbon::parse($start->toDateString()." 12:30:00"))){
+            $shift = 2; 
+            $jamLembur = $jamKerja - ($start->diffInHours($batasPulangKerja)+1);
+            if ($jamLembur < 0 ){
+                $jamLembur=0;
+            }
+            $jamKerja = $jamKerja - $jamLembur;
+            if ($jamKerja < 0 ){
+                $jamKerja=0;
+            }
+        } else {
+            $shift=1;
+            $jamKerja-=1;   //mengurangi jam istirahat siang/sore baik untuk shift 1
+
+            $jamLembur = $jamKerja - ($start->diffInHours($batasPulangKerja));
+            if ($jamLembur < 0 ){
+                $jamLembur=0;
+            }
+            $jamKerja = $jamKerja - $jamLembur;
+            if ($jamKerja < 0 ){
+                $jamKerja=0;
+            }
         }
 
         $empiddate = $empid.$start->toDateString();
@@ -112,11 +117,19 @@ class Presence extends Model
         ->first();
 
 
+        //hitung uang harian proporsional terhadap jam
+        $uh = 0;
+        if ($shift == 1){
+            $uh = $honorarium->uh * ($jamKerja/7);
+        } else{
+            $uh = $honorarium->uh * ($jamKerja/3);            
+        }
+
         $datasalary = [
             'empiddate'     => $empiddate,
             'employeeId'    => $empid,
             'presenceDate'  => $start->toDateString(),
-            'uangharian'    => ($honorarium->uh * ($jamKerja/8)),
+            'uangharian'    => $uh,
             'uanglembur'    => ($honorarium->ul * $jamLembur)
         ];
 

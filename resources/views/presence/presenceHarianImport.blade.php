@@ -135,8 +135,8 @@
                             <li>Jam Keluar. Gunakan format Jam dan Menit, dengan dipisahkan simbol ":". Contoh 16:45</li>
                             <li>Status Masuk</li>
                             <ol>
-                                <li>Nilai 0 : Masuk</li>
-                                <li>Nilai 1 : Tidak Masuk</li>
+                                <li>Nilai 1 : Masuk</li>
+                                <li>Nilai 0 : Tidak Masuk</li>
                             </ol>
                             <li>Simpan File tersebut</li>
                         </ol>

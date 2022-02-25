@@ -65,7 +65,7 @@ class PresenceController extends Controller
             'p.end as end',
             'p.jamKerja as jamKerja',
             'p.jamLembur as jamLembur',
-            DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" END) AS shift')
+            DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" WHEN p.shift="3" THEN "Malam" END) AS shift')
         )
         ->join('presences as p', 'e.id', '=', 'p.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
@@ -104,7 +104,7 @@ class PresenceController extends Controller
             'p.end as end',
             'p.jamKerja as jamKerja',
             'p.jamLembur as jamLembur',
-            DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" END) AS shift')
+            DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" WHEN p.shift="3" THEN "Malam" END) AS shift')
         )
         ->join('presences as p', 'e.id', '=', 'p.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
@@ -142,7 +142,6 @@ class PresenceController extends Controller
         ->leftJoin('presences as p', function($join) use ($presenceDate){
             $join->on('e.id', '=', 'p.employeeId')
             ->where(DB::raw("(STR_TO_DATE(p.start,'%Y-%m-%d'))"), '=', $presenceDate);
-
         })
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')

@@ -23,6 +23,7 @@ class BoronganController extends Controller
         $employees = DB::table('employees as e')
         ->select(
             'e.id as empid',
+            'e.nip as nip',
             'u.name as nama'
         )
         ->join('users as u', 'u.id', '=', 'e.userid')
@@ -47,14 +48,20 @@ class BoronganController extends Controller
                 WHEN b.status="2" THEN "Pembayaran" 
                 WHEN b.status="3" THEN "Selesai" 
                 END) AS statusText'),
-            'b.tanggalBayar as tanggalBayar',
             'b.hargaSatuan as hargaSatuan',
             'b.netweight as netweight',
-            'b.netPrice as netPrice',
+            DB::raw('
+                concat(
+                count(db.isPaid), 
+                " dari ", 
+                count(db.id)
+                )
+                AS countIsPaid'),
             DB::raw('(b.hargaSatuan * b.netweight) AS total'),
-            'b.worker as worker'
-        )
-        ->orderBy('b.created_at');
+            'b.worker as worker')
+        ->leftjoin('detail_borongans as db', 'db.boronganId', '=', 'b.id')
+        ->orderBy('b.created_at')
+        ->groupBy('b.id');
         $query->get();
 
         return datatables()->of($query)
@@ -130,22 +137,46 @@ class BoronganController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-        public function storePekerja(Request $request)
+        public function storePekerja(Request $request, Borongan $borongan)
         {
+            //dd($request);
             $limit=$request->worker;
             $request->validate([
                 'boronganWorker' => ['required','array',"min:$limit","max:$limit"]
             ]);
 
             $a=0;
+
+
+            $fullWorker=count($request->boronganWorker);
+            $halfDay=$fullWorker - count($request->boronganType);
+            $satuanHalfday = (($fullWorker-$halfDay)*2)+$halfDay;
+            $netPriceHalf = ($borongan->hargaSatuan * $borongan->netweight) / $satuanHalfday;
+
             foreach($request->boronganWorker as $boronganWorker){
+                $price=$netPriceHalf;
+                $isFullday = 0;
+                if(in_array($boronganWorker, $request->boronganType)){
+                    $price=$netPriceHalf * 2;
+                    $isFullday = 1;
+                }
                 $data[$a] = [
                     'employeeId' => $boronganWorker,
                     'boronganId' => $request->boronganId,
-                    'netPayment' => $request->netPayment
+                    'isFullday' => $isFullday,
+                    'netPayment' => $price
                 ];
                 $a++;
             }
+            /*
+            dump("Jumlah Worker   : ".$fullWorker);
+            dump("Jumlah Halfday  : ".$halfDay);
+            dump("Jumlah Halfday price : ".$satuanHalfday);
+            dump("Netprice : ".$netPriceHalf);
+
+            dd($data);
+            */
+            
             DB::table('detail_borongans')->insert($data);
             DB::table('borongans')
             ->where('id', $request->boronganId)
@@ -153,6 +184,7 @@ class BoronganController extends Controller
 
             return redirect('boronganList')
             ->with('status','Item berhasil ditambahkan.');
+            
 
         }
         public function storeBorongan(Request $request)
@@ -181,7 +213,6 @@ class BoronganController extends Controller
                 'hargaSatuan' => $request->hargaSatuan,
                 'netweight' => $request->netweight,
                 'worker' => $request->worker,
-                'netPrice' => $netPrice,
             ];
             DB::table('borongans')->insert($data);
 
@@ -200,11 +231,19 @@ class BoronganController extends Controller
         {
             $query = DB::table('detail_borongans as db')
             ->select([
-                'db.id as id','e.nip as nip','db.netPayment as netPayment', 'u.name as nama', 'e.noRekening as noRekening', 'bank.name as bankname'
+                'db.id as id',
+                'e.nip as nip',
+                'db.netPayment as netPayment', 
+                'u.name as nama', 
+                'e.noRekening as noRekening', 
+                'bank.name as bankname',
+                'os.name as osname'
             ])
             ->join('employees as e', 'e.id', '=', 'db.employeeId')
             ->join('users as u', 'u.id', '=', 'e.userid')
             ->join('banks as bank', 'bank.id', '=', 'e.bankid')
+            ->join('employeeorgstructuremapping as eos', 'eos.idemp', '=', 'e.id') 
+            ->join('organization_structures as os', 'os.id', '=', 'eos.idorgstructure')           
             ->where('boronganId', '=', $borongan->id)->get();
 
             return view('presence.presenceBoronganWorkerList', compact('borongan', 'query'));

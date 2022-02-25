@@ -29,7 +29,7 @@ class Employee extends Model
         ->where('id', $id)
         ->update(['role' => $role, 'email' => $email]);
     }
-    public function employeeUpdate($address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan){
+    public function employeeUpdate($address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender){
         $affected = DB::table('employees')
         ->where('id', $id)
         ->update([
@@ -37,6 +37,7 @@ class Employee extends Model
             'employmentStatus'  => $employmentStatus, 
             'isActive'          => $isActive,
             'noRekening'        => $noRekening,
+            'gender'            => $gender,
             'isactive'          => $isactive,
             'jenjangPendidikan' => $pendidikan,
             'bidangPendidikan'  => $bidangPendidikan,

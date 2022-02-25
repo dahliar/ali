@@ -18,6 +18,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\BoronganController;
+use App\Http\Controllers\HonorariumController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -205,40 +206,76 @@ Route::GET('boronganWorkerAdd/{borongan}',[BoronganController::class, 'tambahDet
 Route::GET('boronganWorkerList/{borongan}',[BoronganController::class, 'show'])->middleware('auth');
 Route::GET('boronganDeleteRecord/{borongan}',[BoronganController::class, 'destroy'])->middleware('auth');
 Route::get('getBorongans',[BoronganController::class, 'getBorongans'])->middleware('auth');
-Route::POST('storePekerjaBorongan',[BoronganController::class, 'storePekerja'])->name('storePekerjaBorongan')->middleware('auth');
+Route::POST('storePekerjaBorongan/{borongan}',[BoronganController::class, 'storePekerja'])->name('storePekerjaBorongan')->middleware('auth');
+
+//Presensi Honorarium
+Route::GET('honorariumList',[HonorariumController::class, 'index'])->middleware('auth');
+Route::get('getPresenceHonorariumEmployees',[HonorariumController::class, 'getPresenceHonorariumEmployees'])->middleware('auth');
+Route::post('storePresenceHonorariumEmployee',[HonorariumController::class, 'storePresenceHonorariumEmployee'])->middleware(['auth']);
+Route::GET('presenceHonorariumHistory',[HonorariumController::class, 'presenceHonorariumHistory'])->middleware('auth');
+Route::get('getPresenceHonorariumHistory/{start}/{end}', [HonorariumController::class, 'getPresenceHonorariumHistory'])->middleware('auth');
+
+
+
+
+
+
+//Penggajian
+
+Route::GET('generateGaji',[SalaryController::class, 'index'])->name('generateGaji')->middleware('auth');
+Route::POST('generateGajiStore',[SalaryController::class, 'store'])->middleware('auth');
+
+
+/*
+Route::POST('salaryHarianGenerate',[SalaryController::class, 'salaryHarianGenerate'])->middleware('auth');
+Route::POST('salaryBoronganGenerate',[SalaryController::class, 'salaryBoronganGenerate'])->middleware('auth');
+
+*/
 
 
 //Penggajian harian
-Route::GET('salaryHarianList',[SalaryController::class, 'index'])->middleware('auth');
-Route::POST('salaryHarianGenerate',[SalaryController::class, 'salaryHarianGenerate'])->middleware('auth');
+Route::GET('salaryHarianList',[SalaryController::class, 'indexHarian'])->middleware('auth');
 Route::GET('getSalariesHarian',[SalaryController::class, 'getSalariesHarian'])->middleware('auth');
 Route::GET('checkCetakGajiPegawaiHarian/{salary}',[SalaryController::class, 'checkCetakGajiPegawaiHarian'])->middleware('auth');
 Route::GET('printSalaryHarianList/{salary}',[SalaryController::class, 'printSalaryHarianList'])->middleware('auth');
 Route::GET('getSalariesHarianForCheck/{salary}',[SalaryController::class, 'getSalariesHarianForCheck'])->middleware('auth');
-
-
-
-
-
-
+Route::GET('harianMarkedPaid/{hid}',[SalaryController::class, 'harianMarkedPaid'])->middleware('auth');
 
 //Penggajian Lembur
+Route::GET('lemburBulananList',[SalaryController::class, 'indexLemburBulanan'])->middleware('auth');
+Route::GET('getLemburBulanan',[SalaryController::class, 'getLemburBulanan'])->middleware('auth');
 Route::GET('getLemburPegawaiBulanan/{salary}',[SalaryController::class, 'getLemburPegawaiBulanan'])->middleware('auth');
 Route::GET('checkCetakLemburPegawaiBulanan/{salary}',[SalaryController::class, 'checkCetakLemburPegawaiBulanan'])->middleware('auth');
+Route::POST('markLemburIsPaid',[SalaryController::class, 'markLemburIsPaid'])->middleware('auth');
+
+
+
+
+
 
 //Penggajian Borongan
 Route::GET('salaryBoronganList',[SalaryController::class, 'indexBorongan'])->middleware('auth');
 Route::GET('getSalariesBorongan',[SalaryController::class, 'getSalariesBorongan'])->middleware('auth');
-Route::POST('salaryBoronganGenerate',[SalaryController::class, 'salaryBoronganGenerate'])->middleware('auth');
-Route::GET('checkCetakGajiPegawaiBorongan/{salary}',[SalaryController::class, 'checkCetakGajiPegawaiBorongan'])->middleware('auth');
-Route::POST('markSalariesIsPaid/{salary}/{tanggalBayar}',[SalaryController::class, 'markSalariesIsPaid'])->middleware('auth');
+Route::GET('getBoronganSalariesForPrint/{borongan}',[SalaryController::class, 'getBoronganSalariesForPrint'])->middleware('auth');
+Route::GET('checkCetakGajiPegawaiBorongan/{borongan}',[SalaryController::class, 'checkCetakGajiPegawaiBorongan'])->middleware('auth');
+Route::POST('markBoronganIsPaid',[SalaryController::class, 'markBoronganIsPaid'])->middleware('auth');
+Route::GET('printSalaryBoronganList/{borongan}',[SalaryController::class, 'printSalaryBoronganList'])->middleware('auth');
+
+//Penggajian Honorarium
+Route::GET('salaryHonorariumList',[SalaryController::class, 'indexHonorarium'])->middleware('auth');
+Route::GET('getSalariesHonorarium',[SalaryController::class, 'getSalariesHonorarium'])->middleware('auth');
+Route::GET('checkCetakHonorariumPegawai/{salary}',[SalaryController::class, 'checkCetakHonorariumPegawai'])->middleware('auth');
+Route::GET('getSalariesHonorariumForCheck/{salary}',[SalaryController::class, 'getSalariesHonorariumForCheck'])->middleware('auth');
+Route::GET('printSalaryHonorariumList/{salary}',[SalaryController::class, 'printSalaryHonorariumList'])->middleware('auth');
+Route::GET('honorariumMarkedPaid/{hid}',[SalaryController::class, 'honorariumMarkedPaid'])->middleware('auth');
+
+
 
 /*
 Route::POST('markStatusBorongan',[SalaryController::class, 'markStatusBorongan'])->middleware('auth');
 Route::GET('presenceAddForm',[PresenceController::class, 'createForm'])->middleware('auth');
 Route::get('getAllEmployeesForPresenceForm/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresenceForm'])->middleware('auth');
 
-Route::GET('getBoronganSalariesForPrint/{salary}',[SalaryController::class, 'getBoronganSalariesForPrint'])->middleware('auth');
 Route::GET('getDailySalariesDetail',[SalaryController::class, 'getDailySalariesDetail'])->middleware('auth');
 */
 

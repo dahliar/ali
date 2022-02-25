@@ -17,6 +17,39 @@
         }
     });
 
+    
+    function setSalaryIsPaid($dsid){
+        Swal.fire({
+            title: 'Yakin menandai?',
+            text: "Data ditandai sudah dibayar!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, mark it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("harianMarkedPaid") }}'+"/"+$dsid,
+                    type: "GET",
+                    data: {
+                        "_token":"{{ csrf_token() }}",
+                        dsid : $dsid
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Marked!',
+                            'Record gaji harian telah ditandai dibayar.',
+                            'success'
+                            );
+                        myFunction();
+                    }
+                });
+            }
+        })
+    }
+
     function myFunction(){
         salary = document.getElementById("salaryId").value;
         $('#datatable').DataTable({
@@ -32,12 +65,16 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left" },
+            {   "width": "15%", "targets":  [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" }
+            {   "width": "15%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "15%", "targets":  [5], "className": "text-left" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
+            {   "width": "10%", "targets":  [7], "className": "text-end" },
+            {   "width": "10%", "targets":  [8], "className": "text-end" },
+            {   "width": "10%", "targets":  [9], "className": "text-end" },
+            {   "width": "10%", "targets":  [10], "className": "text-end" }
             ], 
 
             columns: [
@@ -45,9 +82,13 @@
             {data: 'name', name: 'name'},
             {data: 'nip', name: 'nip'},
             {data: 'osname', name: 'osname'},
+            {data: 'noRekening', name: 'noRekening'},
+            {data: 'bankName', name: 'bankName'},
             {data: 'uh', name: 'uh'},
             {data: 'ul', name: 'ul'},
-            {data: 'total', name: 'total'}
+            {data: 'total', name: 'total'},
+            {data: 'isPaid', name: 'isPaid'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     }
@@ -93,11 +134,15 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>NIP Karyawan</th>
+                                <th>NIP</th>
                                 <th>Posisi</th>
-                                <th>Gaji Harian</th>
+                                <th>Rekening</th>
+                                <th>Bank</th>
+                                <th>Gaji</th>
                                 <th>Lembur</th>
                                 <th>Total</th>
+                                <th>Bayar</th>
+                                <th>Act</th>
                             </tr>
                         </thead>
                         <tbody>

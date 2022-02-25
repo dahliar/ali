@@ -16,7 +16,38 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    function setSalaryIsPaid($salaryId, $empid){
+        document.getElementById("modalSalaryId").value = $salaryId;
+        document.getElementById("modalEmpid").value = $empid;
+        $('#StatusModal').modal('show');
+    }
+    function tandaiSudahDibayar(){
+        var tanggalBayar = document.getElementById("modalTanggalBayar").value;
+        var empid = document.getElementById("modalEmpid").value;
+        var salaryId = document.getElementById("modalSalaryId").value;
 
+        $.ajax({
+            url: '{{ url("markLemburIsPaid") }}',
+            type: "POST",
+            data: {
+                "_token":"{{ csrf_token() }}",
+                salaryId:salaryId,
+                empid:empid,
+                tanggalBayar: tanggalBayar
+            },
+            dataType: "json",
+            success:function(data){
+                if(data.isError==="0"){
+                    swal.fire('info',data.message,'info');
+                    myFunction();
+                }
+                else{
+                    swal.fire('warning',data.message,'warning');
+                }
+                $('#StatusModal').modal('hide');
+            }
+        });
+    }
     function myFunction(){
         salary = document.getElementById("salaryId").value;
         $('#datatable').DataTable({
@@ -32,18 +63,26 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "30%", "targets":  [1], "className": "text-left" },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "20%", "targets":  [3], "className": "text-left" },
-            {   "width": "20%", "targets":  [4], "className": "text-end" }
+            {   "width": "20%", "targets":  [1], "className": "text-left" },
+            {   "width": "15%", "targets":  [2], "className": "text-left" },
+            {   "width": "15%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "10%", "targets":  [5], "className": "text-left" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
+            {   "width": "10%", "targets":  [7], "className": "text-left" },
+            {   "width": "5%", "targets":  [8], "className": "text-end" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
-            {data: 'empid', name: 'empid'},
+            {data: 'nip', name: 'nip'},
             {data: 'osname', name: 'osname'},
-            {data: 'ul', name: 'ul'}
+            {data: 'noRekening', name: 'noRekening'},
+            {data: 'bank', name: 'bank'},
+            {data: 'ul', name: 'ul'},
+            {data: 'isPaid', name: 'isPaid'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     }
@@ -85,9 +124,13 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>Employee Id</th>
+                                <th>NIP</th>
                                 <th>Posisi</th>
+                                <th>Rekening</th>
+                                <th>Bank</th>
                                 <th>Lembur</th>
+                                <th>Bayar</th>
+                                <th>Act</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -96,6 +139,36 @@
                 </div>
             </div>    
         </div>
+    </div>
+    <div class="modal fade" id="StatusModal" tabindex="-1" aria-labelledby="StatusModal" aria-hidden="true">
+        <form id="setStatusForm" method="POST" name="setStatusForm">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tandai sudah dibayar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row form-group">
+                            <input type="hidden" id="modalSalaryId" name="modalSalaryId" class="form-control" readonly>
+                            <input type="hidden" id="modalEmpid" name="modalEmpid" class="form-control" readonly>
+
+                            <div class="col-md-2 text-end">
+                                <span class="label">Dibayar Tanggal</span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="date" id="modalTanggalBayar" name="modalTanggalBayar" class="form-control text-end" value="{{date('Y-m-d')}}">
+                            </div>
+                        </div>                    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="tandaiSudahDibayar()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </body>
 @else

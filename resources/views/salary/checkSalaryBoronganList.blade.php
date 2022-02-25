@@ -16,14 +16,47 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    function setIsPaidModal($salaryId, $empid){
+        document.getElementById("modalSalaryId").value = $salaryId;
+        document.getElementById("modalEmpid").value = $empid;
+        $('#StatusModal').modal('show');
+    }
+
+    function tandaiSudahDibayar(){
+        var tanggalBayar = document.getElementById("modalTanggalBayar").value;
+        var salaryId = document.getElementById("modalSalaryId").value;
+        var empid = document.getElementById("modalEmpid").value;
+
+        $.ajax({
+            url: '{{ url("markBoronganIsPaid") }}',
+            type: "POST",
+            data: {
+                "_token":"{{ csrf_token() }}",
+                empid:empid,
+                salaryId:salaryId,
+                tanggalBayar: tanggalBayar
+            },
+            dataType: "json",
+            success:function(data){
+                if(data.isError==="0"){
+                    swal.fire('info',data.message,'info');
+                    myFunction();
+                }
+                else{
+                    swal.fire('warning',data.message,'warning');
+                }
+                $('#StatusModal').modal('hide');
+            }
+        });
+    }
 
     function myFunction(){
-        salary = document.getElementById("salaryId").value;
+        boronganId = document.getElementById("boronganId").value;
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getBoronganSalariesForPrint") }}'+"/"+salary,
+            ajax:'{{ url("getBoronganSalariesForPrint") }}'+"/"+boronganId,
             dataType: "JSON",
             serverSide: false,
             processing: true,
@@ -35,15 +68,23 @@
             {   "width": "20%", "targets":  [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
             {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-left" }
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "10%", "targets":  [5], "className": "text-left" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
+            {   "width": "10%", "targets":  [7], "className": "text-left" },
+            {   "width": "5%", "targets":  [8], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
-            {data: 'empid', name: 'empid'},
+            {data: 'nip', name: 'nip'},
             {data: 'osname', name: 'osname'},
-            {data: 'netPayment', name: 'netPayment'}
+            {data: 'noRekening', name: 'noRekening'},
+            {data: 'bankName', name: 'bankName'},
+            {data: 'netPayment', name: 'netPayment'},
+            {data: 'isPaid', name: 'isPaid'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     }
@@ -71,16 +112,16 @@
                             <li class="breadcrumb-item">
                                 <a class="white-text" href="{{ url('/home') }}">Home</a>
                             </li>
-                            <li class="breadcrumb-item active">Daftar Penggajian Bulanan</li>
+                            <li class="breadcrumb-item active">Daftar Penggajian Borongan</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="col-md-3 text-end">
-                    <button onclick="cetakDaftarGaji()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Daftar Gaji"><i class="fas fa-money-check-alt">BELUM</i>
-                    </button>
+                    <a href="{{url('printSalaryBoronganList')}}/{{$borongan->id}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Daftar Gaji" target="_blank"><i class="fas fa-money-check-alt"></i>
+                    </a>
                 </div>
             </div>
-            <input type="hidden" value="{{$salary->id}}"id="salaryId" name="salaryId" class="form-control" readonly>
+            <input type="hidden" value="{{$borongan->id}}" id="boronganId" name="boronganId" class="form-control" readonly>
             <div class="modal-body">
                 <div class="row form-inline">
                     <table class="table cell-border stripe hover row-border data-table"  id="datatable">
@@ -88,9 +129,13 @@
                             <tr>
                                 <th>No</th>
                                 <th>Name</th>
-                                <th>Employee Id</th>
+                                <th>NIP</th>
                                 <th>Posisi</th>
+                                <th>Rekening</th>
+                                <th>Bank</th>
                                 <th>Gaji</th>
+                                <th>Bayar</th>
+                                <th>Act</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -99,6 +144,37 @@
                 </div>
             </div>    
         </div>
+    </div>
+
+    <div class="modal fade" id="StatusModal" tabindex="-1" aria-labelledby="StatusModal" aria-hidden="true">
+        <form id="setStatusForm" method="POST" name="setStatusForm">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tandai sudah dibayar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row form-group">
+                            <input type="hidden" id="modalSalaryId" name="modalSalaryId" class="form-control" readonly>
+                            <input type="hidden" id="modalEmpid" name="modalEmpid" class="form-control" readonly>
+
+                            <div class="col-md-2 text-end">
+                                <span class="label">Dibayar Tanggal</span>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="date" id="modalTanggalBayar" name="modalTanggalBayar" class="form-control text-end" value="{{date('Y-m-d')}}">
+                            </div>
+                        </div>                    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="tandaiSudahDibayar()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 </body>
 @else

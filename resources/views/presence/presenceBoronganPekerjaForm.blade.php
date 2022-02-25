@@ -18,14 +18,26 @@
 <script type="text/javascript">
 
 
-    function workerAddedChange($a){
+    function workerAddedChange($a, $b){
         if ($a){
             document.getElementById("workerAdded").value++;
-            
+            document.getElementById("boronganType["+$b+"]").checked = true;         
         } else{
             document.getElementById("workerAdded").value--;
+            document.getElementById("boronganType["+$b+"]").checked = false;         
         }
     }
+    function boronganTypeChange($b, $index){
+        $a = document.getElementById("boronganWorker["+$index+"]").checked;
+        if ($b){
+            if(!document.getElementById("boronganWorker["+$index+"]").checked){
+                document.getElementById("boronganWorker["+$index+"]").checked = true;
+                document.getElementById("workerAdded").value++;
+            }
+        }
+    }
+
+
 </script>
 
 @if ($errors->any())
@@ -64,7 +76,7 @@
 <div class="container-fluid">
     <div class="row form-group">
         <div class="d-grid gap">
-            <form id="formTambahPekerjaBorongan" action="{{url('storePekerjaBorongan')}}" method="POST" name="formTambahPekerjaBorongan">
+            <form id="formTambahPekerjaBorongan" action="{{url('storePekerjaBorongan')}}/{{$borongan->id}}" method="POST" name="formTambahPekerjaBorongan">
                 @csrf
                 <div class="modal-content">
                     <div class="modal-header">
@@ -72,7 +84,7 @@
                             <h5 class="modal-title" id="exampleModalLabel">Daftar Pekerja Borongan</h5>
                         </div>
                     </div>
-                    <div class="modal-header">
+                    <div class="modal-body">
                         <div class="row form-inline">
                             <input type="hidden" value="{{$borongan->id}}"id="boronganId" name="boronganId" class="form-control" readonly>
                             <div class="row form-group">
@@ -103,25 +115,43 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="modal-content">
                     <div class="modal-body">
                         <div class="row form-group">
-                            @foreach ($employees as $employee)
-                            <div class="col-md-3">
-                                <input id="boronganWorker[]" type="checkbox" class="form-check-input" onclick="workerAddedChange(this.checked)" name="boronganWorker[]" value="{{$employee->empid}}"> {{$employee->nama}}
+                            <div class="col-md-1">Masuk</div>
+                            <div class="col-md-1">Full</div>
+                            <div class="col-md-10">Nama - NIP</div>
+                        </div>                        
+                        @php $no=0; @endphp
+                        @foreach ($employees as $employee)
+                        <div class="row form-group">
+                            <div class="col-md-1">
+                                <input id="boronganWorker[{{$no}}]" type="checkbox" class="form-check-input" onchange="workerAddedChange(this.checked, {{$no}})" name="boronganWorker[{{$no}}]" value="{{$employee->empid}}">
                             </div>
-                            @endforeach
+                            <div class="col-md-1">
+                                <input id="boronganType[{{$no}}]" type="checkbox" class="form-check-input" name="boronganType[{{$no}}]" value="{{$employee->empid}}" onchange="boronganTypeChange(this.checked, {{$no}})" >
+                            </div>
+                            <div class="col-md-10">
+                                {{$employee->nama}} - {{$employee->nip}}
+                            </div>                                
                         </div>
+                        @php $no+=1;    @endphp
+                        @endforeach
                     </div>
-                    <div class="modal-footer">
+                </div>
+                <div class="row form-group text-center">
+                    <div class="col-md-5">
+                    </div>
+                    <div class="col-md-2">
                         <button type="submit" class="btn btn-primary">Save</button>
                         <input type="reset" value="Reset" class="btn btn-secondary">
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
-
 @else
 @include('partial.noAccess')
 @endif
