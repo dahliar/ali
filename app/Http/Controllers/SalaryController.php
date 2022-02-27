@@ -52,8 +52,8 @@ class SalaryController extends Controller
         );
 
         $harian = $this->salaryHarianGenerate($request->start, $request->end);
-        $borongan = $this->salaryBoronganGenerate($request->start, $request->end);
         $bulanan = $this->lemburBulananGenerate($request->start, $request->end);
+        $borongan = $this->salaryBoronganGenerate($request->start, $request->end);
         $honorarium = $this->honorariumGenerate($request->start, $request->end);
         $val = array($harian, $borongan, $bulanan, $honorarium);
         return redirect()->route('generateGaji')->with('val', $val);        
@@ -62,6 +62,8 @@ class SalaryController extends Controller
     public function honorariumGenerate($start, $end)
     {
         $rowCount = DB::table('honorariums as h')
+        ->whereDate('h.tanggalKerja', '>=', $start)
+        ->whereDate('h.tanggalKerja', '<=', $end)
         ->where('h.isGenerated', 0)
         ->count();
 
@@ -69,34 +71,36 @@ class SalaryController extends Controller
         $retValue="";
         if ($rowCount>0){
             $data = [
-                'enddatejenis'      => '4'.$end,
                 'endDate'           => $end,
                 'userIdGenerator'   => auth()->user()->id,
-                'jenis' => 4
+                'jenis'             => 4,
+                'isPaid'            => null
             ];
 
-            DB::table('salaries')
-            ->upsert(
-                $data,
-                ['endatejenis'],
-                ['enddatejenis','endDate','userIdGenerator','jenis']
-            );
-
-
-            $query = DB::table('salaries')
-            ->select('id as id')
-            ->where('endDate', $end)
-            ->where('jenis', 4)
+            $salariesPaidExist=DB::table('salaries')
+            ->select(
+                DB::raw('count(id) as jumlah'),
+                'id as salaryId'
+            )
+            ->where('enddate', '=', $end)
+            ->where('jenis', '=', 4)
+            ->where('isPaid', '=', null)
             ->first();
 
-            $id = $query->id;
+            $salaryId="";
+            if($salariesPaidExist->jumlah > 0){
+                $salaryId = $salariesPaidExist->salaryId;
+            } else{
+                $salaryId = DB::table('salaries')->insertGetId($data);
+            }
 
             $affected = DB::table('honorariums as h')
+            ->whereDate('h.tanggalKerja', '>=', $start)
+            ->whereDate('h.tanggalKerja', '<=', $end)
             ->where('h.isGenerated', 0)
-            ->join('employees as e', 'e.id', '=',  'h.employeeId')
             ->update([
                 'h.isGenerated' => 1, 
-                'h.salaryid' => $id
+                'h.salaryid' => $salaryId
             ]);
             $retValue = $affected." record honorarium telah digenerate";
         } else{
@@ -110,6 +114,8 @@ class SalaryController extends Controller
         $rowCount = DB::table('dailysalaries as ds')
         ->where('ds.isGenerated', 0)
         ->where('e.employmentStatus', 1)
+        ->whereDate('ds.presenceDate', '>=', $start)
+        ->whereDate('ds.presenceDate', '<=', $end)
         ->where('ds.uangLembur', '>', '0')
         ->join('employees as e', 'e.id', '=',  'ds.employeeId')
         ->count();
@@ -118,36 +124,39 @@ class SalaryController extends Controller
         $retValue="";
         if ($rowCount>0){
             $data = [
-                'enddatejenis'      => '1'.$end,
                 'endDate'           => $end,
                 'userIdGenerator'   => auth()->user()->id,
-                'jenis' => 1
+                'jenis'             => 1,
+                'isPaid'            => null
             ];
 
-            DB::table('salaries')
-            ->upsert(
-                $data,
-                ['endatejenis'],
-                ['enddatejenis','endDate','userIdGenerator','jenis']
-            );
-
-
-            $query = DB::table('salaries')
-            ->select('id as id')
-            ->where('endDate', $end)
-            ->where('jenis', 1)
+            $salariesPaidExist=DB::table('salaries')
+            ->select(
+                DB::raw('count(id) as jumlah'),
+                'id as salaryId'
+            )
+            ->where('enddate', '=', $end)
+            ->where('jenis', '=', 1)
+            ->where('isPaid', '=', null)
             ->first();
 
-            $id = $query->id;
+            $salaryId="";
+            if($salariesPaidExist->jumlah > 0){
+                $salaryId = $salariesPaidExist->salaryId;
+            } else{
+                $salaryId = DB::table('salaries')->insertGetId($data);
+            }
 
             $affected = DB::table('dailysalaries as ds')
             ->where('ds.isGenerated', 0)
             ->where('e.employmentStatus', 1)
+            ->whereDate('ds.presenceDate', '>=', $start)
+            ->whereDate('ds.presenceDate', '<=', $end)
             ->where('ds.uangLembur', '>', '0')
             ->join('employees as e', 'e.id', '=',  'ds.employeeId')
             ->update([
                 'ds.isGenerated' => 1, 
-                'ds.salaryid' => $id
+                'ds.salaryid' => $salaryId
             ]);
             $retValue = $affected." record lembur pegawai bulanan telah digenerate";
         } else{
@@ -162,43 +171,47 @@ class SalaryController extends Controller
         $rowCount = DB::table('dailysalaries as ds')
         ->where('ds.isGenerated', 0)
         ->where('e.employmentStatus', 2)
+        ->whereDate('ds.presenceDate', '>=', $start)
+        ->whereDate('ds.presenceDate', '<=', $end)
         ->join('employees as e', 'e.id', '=',  'ds.employeeId')
         ->count();
-
-
 
         $retValue="";
         if ($rowCount>0){
             $data = [
-                'enddatejenis'       => '2'.$end,
-                'endDate'       => $end,
-                'userIdGenerator' => auth()->user()->id,
-                'jenis' => 2
+                'endDate'               => $end,
+                'userIdGenerator'       => auth()->user()->id,
+                'jenis'                 => 2,
+                'isPaid'                => null
             ];
 
-            DB::table('salaries')
-            ->upsert(
-                $data,
-                ['endatejenis'],
-                ['enddatejenis','endDate','userIdGenerator','jenis']
-            );
 
-
-            $query = DB::table('salaries')
-            ->select('id as id')
-            ->where('endDate', $end)
-            ->where('jenis', 2)
+            $salariesPaidExist=DB::table('salaries')
+            ->select(
+                DB::raw('count(id) as jumlah'),
+                'id as salaryId'
+            )
+            ->where('endDate', '=', $end)
+            ->where('jenis', '=', 2)
+            ->where('isPaid', '=', null)
             ->first();
 
-            $id = $query->id;
+            $salaryId="";
+            if($salariesPaidExist->jumlah > 0){
+                $salaryId = $salariesPaidExist->salaryId;
+            } else{
+                $salaryId = DB::table('salaries')->insertGetId($data);
+            }
 
             $affected = DB::table('dailysalaries as ds')
             ->where('ds.isGenerated', 0)
             ->where('e.employmentStatus', 2)
+            ->whereDate('ds.presenceDate', '>=', $start)
+            ->whereDate('ds.presenceDate', '<=', $end)
             ->join('employees as e', 'e.id', '=',  'ds.employeeId')
             ->update([
                 'ds.isGenerated' => 1, 
-                'ds.salaryid' => $id
+                'ds.salaryid' => $salaryId
             ]);
 
             $retValue = $affected." record presensi pegawai harian telah digenerate";
@@ -211,40 +224,46 @@ class SalaryController extends Controller
 
     public function salaryBoronganGenerate($start, $end)
     {
-        $rowCount = DB::table('borongans')
-        ->where('status', 1)
+        $rowCount = DB::table('borongans as b')
+        ->where('b.status', 1)
+        ->where('e.employmentStatus', 3)
+        ->whereDate('b.tanggalKerja', '>=', $start)
+        ->whereDate('b.tanggalKerja', '<=', $end)
+        ->join('detail_borongans as db', 'b.id', '=',  'db.boronganId')
+        ->join('employees as e', 'e.id', '=',  'db.employeeId')
         ->count();
 
         $retValue="";
         if ($rowCount>0){
             $data = [
-                'enddatejenis'  => '3'.$end,
-                'endDate'       => $end,
-                'userIdGenerator' => auth()->user()->id,
-                'jenis' => 3
+                'endDate'           => $end,
+                'userIdGenerator'   => auth()->user()->id,
+                'jenis'             => 3,
+                'isPaid'            => null
             ];
 
-            DB::table('salaries')
-            ->upsert(
-                $data,
-                ['endatejenis'],
-                ['enddatejenis','endDate','userIdGenerator','jenis']
-            );
-
-
-            $query = DB::table('salaries')
-            ->select('id as id')
-            ->where('endDate', $end)
-            ->where('jenis', 3)
+            $salariesPaidExist=DB::table('salaries')
+            ->select(
+                DB::raw('count(id) as jumlah'),
+                'id as salaryId'
+            )
+            ->where('endDate', '=', $end)
+            ->where('jenis', '=', 3)
+            ->where('isPaid', '=', null)
             ->first();
 
-            $id = $query->id;
+            $salaryId="";
+            if($salariesPaidExist->jumlah > 0){
+                $salaryId = $salariesPaidExist->salaryId;
+            } else{
+                $salaryId = DB::table('salaries')->insertGetId($data);
+            }
 
             $affected = DB::table('borongans')
             ->where('status', 1)
             ->update([
                 'status' => 2, 
-                'salariesId' => $id
+                'salariesId' => $salaryId
             ]);
 
             $retValue = $affected." record kerja borongan telah digenerate";
@@ -260,7 +279,7 @@ class SalaryController extends Controller
         ->select(
             'db.id as dbid',
             'b.id as boronganId',
-            's.id as salaryId',
+            's.id as sid',
             'e.id as empid',
             'e.nip as nip',
             'u.name as name',
@@ -288,8 +307,8 @@ class SalaryController extends Controller
         ->addColumn('action', function ($row) {
             $html = '';
             if($row->statusIsPaid != 1){
-                $html.='<button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tandai sudah dibayar" onclick="setIsPaidModal('."'".$row->salaryId."','".$row->empid."'".')">
-                <i class="fa fa-save" style="font-size:20px"></i>
+                $html.='<button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tandai sudah dibayar" onclick="setIsPaidModal('."'".$row->sid."','".$row->empid."'".')">
+                <i class="fa fa-check" style="font-size:20px"></i>
                 </button>
                 ';
             }
@@ -300,23 +319,38 @@ class SalaryController extends Controller
     }
     public function markBoronganIsPaid(Request $request)
     {
+        //dd($request);
         $affected = DB::table('detail_borongans as db')
         ->join('borongans as b', 'b.id', '=', 'db.boronganId')
-        ->join('salaries as s', 's.id', '=', 'b.salariesId')
-        ->where('s.id', $request->salaryId)
+        ->where('b.salariesId', $request->sid)
         ->where('db.employeeId', $request->empid)
         ->update([
             'db.isPaid' => 1, 
-            'db.paidDate'=>$request->tanggalBayar,
+            'db.paidDate'=>Carbon::now()->toDateTimeString(),
             'db.userPaid'=>auth()->user()->id
         ]);
 
+        $jumlahPaid = DB::table('detail_borongans as db')
+        ->select(
+            DB::raw('count(db.isPaid) as terbayar')
+        )
+        ->join('borongans as b', 'b.id', '=', 'db.boronganId')
+        ->where('db.isPaid', '=', null)
+        ->where('b.salariesId', '=', $request->sid)
+        ->first();
 
-        $affected = DB::table('borongans as b')
-        ->join('detail_borongans as db', 'db.boronganId', '=', 'b.id')
-        ->where('db.employeeId', $request->empid)
-        ->where('b.salariesId', $request->salaryId)
-        ->update(['status' => 3]);
+        if($jumlahPaid->terbayar == 0){
+            DB::table('salaries as s')
+            ->where('s.id', $request->sid)
+            ->update([
+                's.isPaid' => 1
+            ]);
+            DB::table('borongans as b')
+            ->where('b.salariesId', $request->sid)
+            ->update([
+                'b.status' => 3
+            ]);
+        }
 
         $retValue = [
             'message'       => "Record telah ditandai",
@@ -328,7 +362,7 @@ class SalaryController extends Controller
     public function getLemburPegawaiBulanan($salaryId){
         $query = DB::table('dailysalaries as ds')
         ->select(
-            'ds.salaryId as salaryId',
+            'ds.salaryId as sid',
             'e.id as empid',
             'e.nip as nip',
             'u.name as name',
@@ -357,7 +391,7 @@ class SalaryController extends Controller
             if ($row->isPaidStatus == null){
                 $html .= '
                 <button class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Set sudah dibayar" 
-                onclick="setSalaryIsPaid('.$row->salaryId.','.$row->empid.')"><i class="fa fa-check"></i>
+                onclick="setSalaryIsPaid('.$row->sid.','.$row->empid.')"><i class="fa fa-check"></i>
                 </button>';
             }
             return $html;
@@ -366,21 +400,31 @@ class SalaryController extends Controller
     }
     public function markLemburIsPaid(Request $request)
     {
-        //dd($request);
-        $affected = DB::table('dailysalaries as ds')
-        ->where('ds.salaryId', $request->salaryId)
-        ->where('ds.employeeId', $request->empid)
+        DB::table('dailysalaries')
+        ->where('salaryId', $request->sid)
+        ->where('employeeId', $request->empid)
         ->update([
-            'ds.isPaid' => 1, 
-            'ds.payDate'=>$request->tanggalBayar,
-            'ds.userPaid'=>auth()->user()->id
+            'isPaid' => 1,
+            'payDate' => Carbon::now()->toDateTimeString(),
+            'userPaid' => auth()->user()->id
         ]);
 
-        $retValue = [
-            'message'       => "Record telah ditandai",
-            'isError'       => "0"
-        ];
-        return $retValue;
+        $jumlahPaid = DB::table('dailysalaries as ds')
+        ->select(
+            DB::raw('count(ds.isPaid) as terbayar')
+        )
+        ->where('ds.isPaid', '=', null)
+        ->where('ds.salaryid', '=', $request->sid)
+        ->first();
+
+        if($jumlahPaid->terbayar == 0){
+            DB::table('salaries as s')
+            ->where('s.id', $request->sid)
+            ->update([
+                's.isPaid' => 1
+            ]);
+        }
+        return true;
     }
     
     public function getSalariesHarian(){
@@ -392,14 +436,17 @@ class SalaryController extends Controller
                 concat(
                 count(distinct(concat(ds.isPaid,ds.employeeId))), 
                 " dari ", 
-                count(distinct(ds.employeeId))
+                count(distinct(ds.employeeId)), " pegawai"
                 )
                 AS terbayar'),            
             'ug.name as generatorName',
         )
         ->join('dailysalaries as ds', 'ds.salaryid', '=', 's.id')
+        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
         ->leftjoin('users as ug', 's.userIdGenerator', '=', 'ug.id')
         ->where('jenis', 2)
+        ->where('e.employmentStatus', '=', 2)
+        ->where('ds.isGenerated', '=', 1)
         ->orderBy('s.enddate', 'desc')
         ->groupBy('ds.salaryid');
         $query->get();
@@ -658,24 +705,59 @@ class SalaryController extends Controller
     public function checkCetakHonorariumPegawai(Salary $salary){
         return view('salary.checkHonorariumList', compact('salary'));
     }
-    public function harianMarkedPaid($dsid){
+    public function harianMarkedPaid(Request $request){
         DB::table('dailysalaries')
-        ->where('id', $dsid)
+        ->where('salaryId', $request->sid)
+        ->where('employeeId', $request->empid)
         ->update([
             'isPaid' => 1,
             'payDate' => Carbon::now()->toDateTimeString(),
             'userPaid' => auth()->user()->id
         ]);
+
+        $jumlahPaid = DB::table('dailysalaries as ds')
+        ->select(
+            DB::raw('count(ds.isPaid) as terbayar')
+        )
+        ->where('ds.isPaid', '=', null)
+        ->where('ds.salaryid', '=', $request->sid)
+        ->first();
+
+        if($jumlahPaid->terbayar == 0){
+            DB::table('salaries as s')
+            ->where('s.id', $request->sid)
+            ->update([
+                's.isPaid' => 1
+            ]);
+        }
         return true;
     }
-    public function honorariumMarkedPaid($hid){
+
+    public function honorariumMarkedPaid(Request $request){
         DB::table('honorariums as h')
-        ->where('h.id', $hid)
+        ->where('h.id', $request->hid)
         ->update([
             'h.isPaid' => 1,
             'h.paidDate' => Carbon::now()->toDateTimeString(),
             'h.userPaid' => auth()->user()->id
         ]);
+
+        $jumlahPaid = DB::table('honorariums as h')
+        ->select(
+            DB::raw('count(h.isPaid) as terbayar')
+        )
+        ->where('h.isPaid', '=', null)
+        ->where('h.salaryid', '=', $request->sid)
+        ->first();
+
+        if($jumlahPaid->terbayar == 0){
+            DB::table('salaries as s')
+            ->where('s.id', $request->sid)
+            ->update([
+                's.isPaid' => 1
+            ]);
+        }
+
         return true;
     }
 
@@ -685,7 +767,7 @@ class SalaryController extends Controller
             'e.id as empid',
             'e.nip as nip',
             'u.name as name',
-            'h.salaryId as salaryId',
+            'h.salaryId as sid',
             'e.noRekening as noRekening',
             'h.isPaid as isPaidStatus',
             'b.name as bankName',
@@ -710,7 +792,7 @@ class SalaryController extends Controller
             if ($row->isPaidStatus == null){
                 $html .= '
                 <button data-rowid="'.$row->empid.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Set sudah dibayar" 
-                onclick="setHonorariumIsPaid('.$row->hid.')"><i class="fa fa-check"></i>
+                onclick="setHonorariumIsPaid('.$row->hid.','.$row->sid.')"><i class="fa fa-check"></i>
                 </button>';
             }
             return $html;
@@ -723,10 +805,11 @@ class SalaryController extends Controller
         $query = DB::table('dailysalaries as ds')
         ->select(
             'e.id as empid',
-            'ds.id as dsid',
+            'ds.salaryId as sid',
             'e.nip as nip',
             'u.name as name',
             'e.noRekening as noRekening',
+            DB::raw('count(ds.id) as hari'),
             'b.name as bankName',
             'b.name as bankName',
             'os.name as osname',
@@ -742,10 +825,11 @@ class SalaryController extends Controller
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
         ->where('ds.salaryid', $salaryId)
-        ->where('eosm.isactive', 1)
         ->where('e.employmentStatus', 2)
         ->groupBy('e.id')
         ->get();
+
+
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
@@ -753,7 +837,7 @@ class SalaryController extends Controller
             if ($row->isPaidStatus == null){
                 $html .= '
                 <button data-rowid="'.$row->empid.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Set sudah dibayar" 
-                onclick="setSalaryIsPaid('.$row->dsid.')"><i class="fa fa-check"></i>
+                onclick="setSalaryIsPaid('.$row->sid.','.$row->empid.')"><i class="fa fa-check"></i>
                 </button>';
             }
             return $html;

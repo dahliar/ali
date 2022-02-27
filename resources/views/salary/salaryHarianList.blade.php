@@ -43,30 +43,6 @@
         });
     }
 
-    function generateGajiHarian(){
-        var end = document.getElementById("modalEnd").value;
-
-        $.ajax({
-            url: '{{ url("salaryHarianGenerate") }}',
-            type: "POST",
-            data: {
-                "_token":"{{ csrf_token() }}",
-                end: end
-            },
-            dataType: "json",
-            success:function(data){
-                if(data.isError==="0"){
-                    swal.fire('info',data.message,'info');
-                    myFunction();
-                }
-                else{
-                    swal.fire('warning',data.message,'warning');
-                }
-                $('#generateModal').modal('hide');
-            }
-        });
-    }
-
     function myFunction(){
         $('#datatable').DataTable({
             headers: {

@@ -89,12 +89,6 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="col-md-3 text-end">
-                    <button onclick="" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Daftar Transfer"><i class="fa fa-print" style="font-size:20px"></i>
-                    </button>
-                    <button onclick="" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tandai telah dibayar"><i class="fa fa-check" style="font-size:20px"></i>
-                    </button>
-                </div>
             </div>
             <div class="modal-body">
                 <div class="row form-inline">

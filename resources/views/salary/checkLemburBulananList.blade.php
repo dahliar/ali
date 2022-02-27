@@ -16,38 +16,39 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    function setSalaryIsPaid($salaryId, $empid){
-        document.getElementById("modalSalaryId").value = $salaryId;
-        document.getElementById("modalEmpid").value = $empid;
-        $('#StatusModal').modal('show');
-    }
-    function tandaiSudahDibayar(){
-        var tanggalBayar = document.getElementById("modalTanggalBayar").value;
-        var empid = document.getElementById("modalEmpid").value;
-        var salaryId = document.getElementById("modalSalaryId").value;
-
-        $.ajax({
-            url: '{{ url("markLemburIsPaid") }}',
-            type: "POST",
-            data: {
-                "_token":"{{ csrf_token() }}",
-                salaryId:salaryId,
-                empid:empid,
-                tanggalBayar: tanggalBayar
-            },
-            dataType: "json",
-            success:function(data){
-                if(data.isError==="0"){
-                    swal.fire('info',data.message,'info');
-                    myFunction();
-                }
-                else{
-                    swal.fire('warning',data.message,'warning');
-                }
-                $('#StatusModal').modal('hide');
+    function setSalaryIsPaid($sid, $empid){
+        Swal.fire({
+            title: 'Yakin menandai?',
+            text: "Data ditandai sudah dibayar!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, mark it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("markLemburIsPaid") }}',
+                    type: "POST",
+                    data: {
+                        "_token":"{{ csrf_token() }}",
+                        sid : $sid,
+                        empid : $empid
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Marked!',
+                            'Record lembur telah ditandai dibayar.',
+                            'success'
+                            );
+                        myFunction();
+                    }
+                });
             }
-        });
+        })
     }
+
     function myFunction(){
         salary = document.getElementById("salaryId").value;
         $('#datatable').DataTable({
@@ -139,36 +140,6 @@
                 </div>
             </div>    
         </div>
-    </div>
-    <div class="modal fade" id="StatusModal" tabindex="-1" aria-labelledby="StatusModal" aria-hidden="true">
-        <form id="setStatusForm" method="POST" name="setStatusForm">
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Tandai sudah dibayar</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row form-group">
-                            <input type="hidden" id="modalSalaryId" name="modalSalaryId" class="form-control" readonly>
-                            <input type="hidden" id="modalEmpid" name="modalEmpid" class="form-control" readonly>
-
-                            <div class="col-md-2 text-end">
-                                <span class="label">Dibayar Tanggal</span>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="date" id="modalTanggalBayar" name="modalTanggalBayar" class="form-control text-end" value="{{date('Y-m-d')}}">
-                            </div>
-                        </div>                    
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="tandaiSudahDibayar()">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </form>
     </div>
 </body>
 @else

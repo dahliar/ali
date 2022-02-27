@@ -18,7 +18,7 @@
     });
 
     
-    function setSalaryIsPaid($dsid){
+    function setSalaryIsPaid($sid, $empid){
         Swal.fire({
             title: 'Yakin menandai?',
             text: "Data ditandai sudah dibayar!",
@@ -30,11 +30,12 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ url("harianMarkedPaid") }}'+"/"+$dsid,
+                    url: '{{ url("harianMarkedPaid") }}',
                     type: "GET",
                     data: {
                         "_token":"{{ csrf_token() }}",
-                        dsid : $dsid
+                        sid : $sid,
+                        empid : $empid
                     },
                     dataType: "json",
                     success:function(data){
@@ -74,7 +75,8 @@
             {   "width": "10%", "targets":  [7], "className": "text-end" },
             {   "width": "10%", "targets":  [8], "className": "text-end" },
             {   "width": "10%", "targets":  [9], "className": "text-end" },
-            {   "width": "10%", "targets":  [10], "className": "text-end" }
+            {   "width": "10%", "targets":  [10], "className": "text-end" },
+            {   "width": "10%", "targets":  [11], "className": "text-end" }
             ], 
 
             columns: [
@@ -84,6 +86,7 @@
             {data: 'osname', name: 'osname'},
             {data: 'noRekening', name: 'noRekening'},
             {data: 'bankName', name: 'bankName'},
+            {data: 'hari', name: 'hari'},
             {data: 'uh', name: 'uh'},
             {data: 'ul', name: 'ul'},
             {data: 'total', name: 'total'},
@@ -138,6 +141,7 @@
                                 <th>Posisi</th>
                                 <th>Rekening</th>
                                 <th>Bank</th>
+                                <th>Hari</th>
                                 <th>Gaji</th>
                                 <th>Lembur</th>
                                 <th>Total</th>

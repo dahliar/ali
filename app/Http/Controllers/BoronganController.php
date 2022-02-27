@@ -139,7 +139,6 @@ class BoronganController extends Controller
      */
         public function storePekerja(Request $request, Borongan $borongan)
         {
-            //dd($request);
             $limit=$request->worker;
             $request->validate([
                 'boronganWorker' => ['required','array',"min:$limit","max:$limit"]
@@ -168,14 +167,6 @@ class BoronganController extends Controller
                 ];
                 $a++;
             }
-            /*
-            dump("Jumlah Worker   : ".$fullWorker);
-            dump("Jumlah Halfday  : ".$halfDay);
-            dump("Jumlah Halfday price : ".$satuanHalfday);
-            dump("Netprice : ".$netPriceHalf);
-
-            dd($data);
-            */
             
             DB::table('detail_borongans')->insert($data);
             DB::table('borongans')

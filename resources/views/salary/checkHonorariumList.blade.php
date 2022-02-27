@@ -17,7 +17,7 @@
         }
     });
 
-    function setHonorariumIsPaid($hid){
+    function setHonorariumIsPaid($hid, $sid){
         Swal.fire({
             title: 'Yakin menandai?',
             text: "Data ditandai sudah dibayar!",
@@ -29,11 +29,12 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ url("honorariumMarkedPaid") }}'+"/"+$hid,
+                    url: '{{ url("honorariumMarkedPaid") }}',
                     type: "GET",
                     data: {
                         "_token":"{{ csrf_token() }}",
-                        hid : $hid
+                        hid : $hid,
+                        sid : $sid
                     },
                     dataType: "json",
                     success:function(data){

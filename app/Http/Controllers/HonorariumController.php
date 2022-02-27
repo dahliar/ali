@@ -68,22 +68,41 @@ class HonorariumController extends Controller
     public function storePresenceHonorariumEmployee(Request $request)
     {
         $retValue="";
-        
+
+        $salariesPaidExist=DB::table('salaries')
+        ->select(
+            DB::raw('count(id) as jumlah'),
+            'id as salaryId'
+        )
+        ->where('enddate', '=', Carbon::now()->toDateString())
+        ->where('jenis', '=', 4)
+        ->where('isPaid', '=', null)
+        ->first();
+
+        $salaryId="";
+        if($salariesPaidExist->jumlah > 0){
+            $salaryId = $salariesPaidExist->salaryId;
+        } else{
+            $data = [
+                'endDate'           => Carbon::now()->toDateString(),
+                'userIdGenerator'   => auth()->user()->id,
+                'jenis'             => 4,
+                'isPaid'            => null
+            ];
+            $salaryId = DB::table('salaries')->insertGetId($data);
+        }
+
         $dataHonorarium = [
-            'empiddate'         => $request->empid.$request->tanggalKerja,
-            'tanggalKerja'      => $request->tanggalKerja,
             'employeeId'        => $request->empid,
             'tanggalKerja'      => $request->tanggalKerja,
             'jumlah'            => $request->jumlah,
-            'keterangan'        => $request->keterangan
+            'keterangan'        => $request->keterangan,
+            'isGenerated'       => 0,
+            'salaryId'          => $salaryId
         ];
 
-        DB::table('honorariums')
-        ->upsert(
-            $dataHonorarium,
-            ['empiddate'],
-            ['empiddate','employeeId','tanggalKerja','jumlah','keterangan']
-        );
+        $affected = DB::table('honorariums')->insert($dataHonorarium);
+
         $retValue = [
             'message'       => "Data berhasil disimpan ",
             'isError'       => "0"

@@ -19,6 +19,7 @@ use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\BoronganController;
 use App\Http\Controllers\HonorariumController;
+use App\Http\Controllers\DashboardController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -54,11 +55,15 @@ Route::get('/show', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
-*/
 
 Route::get('/home', function () {
     return view('home');
 })->middleware(['auth']);
+*/
+
+Route::get('home',[DashboardController::class, 'index'])->middleware(['auth']);
+
+
 
 /*
 Route::get('/homeTwo', function () {
@@ -239,7 +244,7 @@ Route::GET('getSalariesHarian',[SalaryController::class, 'getSalariesHarian'])->
 Route::GET('checkCetakGajiPegawaiHarian/{salary}',[SalaryController::class, 'checkCetakGajiPegawaiHarian'])->middleware('auth');
 Route::GET('printSalaryHarianList/{salary}',[SalaryController::class, 'printSalaryHarianList'])->middleware('auth');
 Route::GET('getSalariesHarianForCheck/{salary}',[SalaryController::class, 'getSalariesHarianForCheck'])->middleware('auth');
-Route::GET('harianMarkedPaid/{hid}',[SalaryController::class, 'harianMarkedPaid'])->middleware('auth');
+Route::GET('harianMarkedPaid',[SalaryController::class, 'harianMarkedPaid'])->middleware('auth');
 
 //Penggajian Lembur
 Route::GET('lemburBulananList',[SalaryController::class, 'indexLemburBulanan'])->middleware('auth');
@@ -267,7 +272,7 @@ Route::GET('getSalariesHonorarium',[SalaryController::class, 'getSalariesHonorar
 Route::GET('checkCetakHonorariumPegawai/{salary}',[SalaryController::class, 'checkCetakHonorariumPegawai'])->middleware('auth');
 Route::GET('getSalariesHonorariumForCheck/{salary}',[SalaryController::class, 'getSalariesHonorariumForCheck'])->middleware('auth');
 Route::GET('printSalaryHonorariumList/{salary}',[SalaryController::class, 'printSalaryHonorariumList'])->middleware('auth');
-Route::GET('honorariumMarkedPaid/{hid}',[SalaryController::class, 'honorariumMarkedPaid'])->middleware('auth');
+Route::GET('honorariumMarkedPaid',[SalaryController::class, 'honorariumMarkedPaid'])->middleware('auth');
 
 
 
