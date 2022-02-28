@@ -30,10 +30,10 @@
 	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				Employees
+				<i class="fas fa-users"></i> Employees
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li><a class="dropdown-item" href="{{ route('employeeList')}}">Employee List</a></li>
+				<li><a class="dropdown-item" href="{{ route('employeeList')}}"><i class="fas fa-address-card"></i> Employee List</a></li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">
@@ -70,31 +70,32 @@
 				@if (Session()->get('levelAccess') <= 2)
 				<li>
 					<a class="dropdown-item" href="#">
-						Penggajian &raquo;
+						<i class="fas fa-file-invoice-dollar"></i> Penggajian &raquo;
 					</a>
 					<ul class="dropdown-menu dropdown-submenu">
 						<li>
 							<a class="dropdown-item" href="{{ url('generateGaji')}}">
-								Generate Gaji Harian/Bulanan/Borongan
+								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Bulanan/Borongan
 							</a>
 						</li>
 						<li>
 							<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
-								Penggajian Harian
+								<i class="fas fa-file-invoice-dollar"></i> Penggajian Harian
 							</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="{{ url('salaryBoronganList')}}">Penggajian Borongan
+							<a class="dropdown-item" href="{{ url('salaryBoronganList')}}">
+								<i class="fas fa-file-invoice-dollar"></i> Penggajian Borongan
 							</a>
 						</li>
 						<li>
 							<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
-								Lembur Bulanan
+								<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
 							</a>
 						</li>
 						<li>
 							<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
-								Honorarirum
+								<i class="fas fa-file-invoice-dollar"></i> Honorarirum
 							</a>
 						</li>
 					</ul>
@@ -109,17 +110,17 @@
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
 					<a class="dropdown-item" href="#">
-						Organisasi &raquo;
+						<i class="fas fa-sitemap"></i> Organisasi &raquo;
 					</a>
 					<ul class="dropdown-menu dropdown-submenu">
 						<li>
-							<a class="dropdown-item" href="{{ url('organizationStructureList')}}">Struktur Organisasi</a>
+							<a class="dropdown-item" href="{{ url('organizationStructureList')}}"><i class="fas fa-sitemap"></i> Struktur Organisasi</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="{{ url('structuralPositionList') }}">Jabatan</a>
+							<a class="dropdown-item" href="{{ url('structuralPositionList') }}"><i class="fas fa-user-tie"></i> Jabatan</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="{{ url('workPositionList')}}">Bagian</a>
+							<a class="dropdown-item" href="{{ url('workPositionList')}}"><i class="fas fa-building"></i> Bagian</a>
 						</li>
 					</ul>
 				</li>

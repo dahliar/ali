@@ -51,20 +51,20 @@
 				@include('partial.headerMarketing')
 				@endif
 
-				<ul class="d-flex navbar-nav mb-2">
+				<ul class="d-flex navbar-nav mb-s">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							{{ Auth::check() ? Auth::user()->name : '' }}
+							<i class="fas fa-user"></i> {{ Auth::check() ? Auth::user()->username : '' }}
 						</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 							<li>
-								<a class="dropdown-item" href="{{ url('profileEdit', session('employeeId'))}}">Edit Profile
+								<a class="dropdown-item" href="{{ url('profileEdit', session('employeeId'))}}"><i class="fas fa-edit"></i> {{ Auth::check() ? Auth::user()->name : '' }}
 								</a>								
 							</li>
 							<li>
 								<form method="POST" action="{{ url('logout') }}">
 									@csrf
-									<a class="dropdown-item" href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log Out') }}
+									<a class="dropdown-item" href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fas fa-sign-out-alt"></i> {{ __('Log Out') }}
 									</a>
 								</form>	
 							</li>

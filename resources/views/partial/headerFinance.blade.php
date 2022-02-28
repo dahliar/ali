@@ -52,10 +52,10 @@
 								@if (Auth::user()->isAdmin() or Auth::user()->isHumanResources())
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										Employees
+										<i class="fas fa-users"></i> Employees
 									</a>
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<li><a class="dropdown-item" href="{{ route('employeeList')}}">Employee List</a></li>
+										<li><a class="dropdown-item" href="{{ route('employeeList')}}"><i class="fas fa-address-card"></i> Employee List</a></li>
 									</ul>
 								</li>
 								@endif
@@ -63,23 +63,23 @@
 								@if (Auth::user()->isMarketing() or Auth::user()->isAdmin() or Auth::user()->isProduction())
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										Transactions
+										<i class="fas fa-file-contract"></i> Transactions
 									</a>
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 										@if (Auth::user()->isMarketing() or Auth::user()->isAdmin())
 										<li>
-											<a class="dropdown-item" href="{{ url('transactionList')}}">Sales Transaction
+											<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-funnel-dollar"></i> Sales Transaction
 											</a>
 										</li>
 										@endif
 										@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
 										<li>
-											<a class="dropdown-item" href="{{ url('purchaseList')}}">Purchase Transaction
+											<a class="dropdown-item" href="{{ url('purchaseList')}}"><i class="fas fa-shopping-cart"></i> Purchase Transaction
 											</a>
 										</li>
 										@endif
 										<li>
-											<a class="dropdown-item" href="{{ url('companyList')}}">Company List
+											<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Company List
 											</a>
 										</li>
 									</ul>
@@ -94,23 +94,27 @@
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<li>
 											<a class="dropdown-item" href="#">
-												Presensi &raquo;
+												<i class="fas fa-tasks"></i> Presensi &raquo;
 											</a>
 											<ul class="dropdown-menu dropdown-submenu">
 												<li>
-													<a class="dropdown-item" href="{{ url('presenceHarianList')}}">Presensi Harian
+													<a class="dropdown-item" href="{{ url('presenceHarianList')}}">
+														<i class="fas fa-tasks"></i> Presensi Harian
 													</a>
 												</li>
 												<li>
-													<a class="dropdown-item" href="{{ url('boronganList')}}">Presensi Borongan
+													<a class="dropdown-item" href="{{ url('boronganList')}}">
+														<i class="fas fa-tasks"></i> Presensi Borongan
 													</a>
 												</li>
 												<li>
-													<a class="dropdown-item" href="{{ url('honorariumList')}}">Presensi Honorarium
+													<a class="dropdown-item" href="{{ url('honorariumList')}}">
+														<i class="fas fa-tasks"></i> Presensi Honorarium
 													</a>
 												</li>
 												<li>
-													<a class="dropdown-item" href="{{ url('presenceHarianHistory')}}">Arsip Presensi Harian
+													<a class="dropdown-item" href="{{ url('presenceHarianHistory')}}">
+														<i class="fas fa-tasks"></i> Arsip Presensi Harian
 													</a>
 												</li>
 
@@ -120,31 +124,32 @@
 										@if (Session()->get('levelAccess') <= 2)
 										<li>
 											<a class="dropdown-item" href="#">
-												Penggajian &raquo;
+												<i class="fas fa-file-invoice-dollar"></i> Penggajian &raquo;
 											</a>
 											<ul class="dropdown-menu dropdown-submenu">
 												<li>
 													<a class="dropdown-item" href="{{ url('generateGaji')}}">
-														Generate Gaji Harian/Bulanan/Borongan
+														<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Bulanan/Borongan
 													</a>
 												</li>
 												<li>
 													<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
-														Penggajian Harian
+														<i class="fas fa-file-invoice-dollar"></i> Penggajian Harian
 													</a>
 												</li>
 												<li>
-													<a class="dropdown-item" href="{{ url('salaryBoronganList')}}">Penggajian Borongan
+													<a class="dropdown-item" href="{{ url('salaryBoronganList')}}">
+														<i class="fas fa-file-invoice-dollar"></i> Penggajian Borongan
 													</a>
 												</li>
 												<li>
 													<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
-														Lembur Bulanan
+														<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
 													</a>
 												</li>
 												<li>
 													<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
-														Honorarirum
+														<i class="fas fa-file-invoice-dollar"></i> Honorarirum
 													</a>
 												</li>
 											</ul>
@@ -157,10 +162,10 @@
 								@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										Items Stock
+										<i class="fas fa-warehouse"></i> Items Stock
 									</a>
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<li><a class="dropdown-item" href="{{ url('itemStockList')}}">Items</a></li>
+										<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-warehouse"></i> Items</a></li>
 									</ul>
 								</li>
 								@endif
@@ -173,23 +178,24 @@
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 										@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
 										<li>
-											<a class="dropdown-item" href="{{ url('speciesList')}}">Species</a>
+											<a class="dropdown-item" href="{{ url('speciesList')}}"><i class="fas fa-fish"></i> Species</a>
 										</li>
 										@endif
 										@if (Auth::user()->isAdmin()  or Auth::user()->isHumanResources())
 										<li>
 											<a class="dropdown-item" href="#">
-												Organisasi &raquo;
+												<i class="fas fa-sitemap"></i> Organisasi &raquo;
 											</a>
 											<ul class="dropdown-menu dropdown-submenu">
 												<li>
-													<a class="dropdown-item" href="{{ url('organizationStructureList')}}">Struktur Organisasi</a>
+													<a class="dropdown-item" href="{{ url('organizationStructureList')}}">
+													<i class="fas fa-sitemap"></i> Struktur Organisasi</a>
 												</li>
 												<li>
-													<a class="dropdown-item" href="{{ url('structuralPositionList') }}">Jabatan</a>
+													<a class="dropdown-item" href="{{ url('structuralPositionList') }}"><i class="fas fa-user-tie"></i> Jabatan</a>
 												</li>
 												<li>
-													<a class="dropdown-item" href="{{ url('workPositionList')}}">Bagian</a>
+													<a class="dropdown-item" href="{{ url('workPositionList')}}"><i class="fas fa-building"></i> Bagian</a>
 												</li>
 											</ul>
 										</li>

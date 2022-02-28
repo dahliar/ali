@@ -30,7 +30,7 @@
 	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				Transactions
+				<i class="fas fa-file-contract"></i> Transactions
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
@@ -45,19 +45,20 @@
 		</li>
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				Items Stock
+				<i class="fas fa-warehouse"></i> Items Stock
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li><a class="dropdown-item" href="{{ url('itemStockList')}}">Items</a></li>
+				<li><a class="dropdown-item" href="{{ url('itemStockList')}}">
+				<i class="fas fa-warehouse"></i> Items</a></li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				Master Data
+				<i class="fas fa-database"></i> Master Data
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
-					<a class="dropdown-item" href="{{ url('speciesList')}}">Species</a>
+					<a class="dropdown-item" href="{{ url('speciesList')}}"><i class="fas fa-fish"></i> Species</a>
 				</li>
 			</ul>
 		</li>

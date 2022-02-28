@@ -30,15 +30,15 @@
 	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				Transactions
+				<i class="fas fa-file-contract"></i> Transactions
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
-					<a class="dropdown-item" href="{{ url('transactionList')}}">Sales Transaction
+					<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-funnel-dollar"></i> Sales Transaction
 					</a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{ url('companyList')}}">Company List
+					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Company List
 					</a>
 				</li>
 			</ul>
