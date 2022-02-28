@@ -18,7 +18,7 @@
         }
     });
 
-    function hapusRecordHonorarium(id){
+    function hapusGenerateHonorarium(sid){
         Swal.fire({
             title: 'Yakin menghapus?',
             text: "Data hasil generate akan hilang dan mengembalikan status record honorarium ke belum generate!",
@@ -30,11 +30,11 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '{{ url("honorariumDeleteRecord") }}'+"/"+id,
-                    type: "GET",
+                    url: '{{ url("hapusGenerateHonorarium") }}',
+                    type: "POST",
                     data: {
                         "_token":"{{ csrf_token() }}",
-                        id : id
+                        sid : sid
                     },
                     dataType: "json",
                     success:function(data){

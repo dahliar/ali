@@ -433,13 +433,16 @@ class SalaryController extends Controller
             's.id as id', 
             's.endDate as enddate',
             DB::raw('
+                count(distinct(concat(ds.isPaid,ds.employeeId)))
+                AS isPaidStatus'), 
+            DB::raw('
                 concat(
                 count(distinct(concat(ds.isPaid,ds.employeeId))), 
                 " dari ", 
                 count(distinct(ds.employeeId)), " pegawai"
                 )
                 AS terbayar'),            
-            'ug.name as generatorName',
+            'ug.name as generatorName'
         )
         ->join('dailysalaries as ds', 'ds.salaryid', '=', 's.id')
         ->join('employees as e', 'e.id', '=', 'ds.employeeId')
@@ -457,12 +460,13 @@ class SalaryController extends Controller
             <a data-rowid="'.$row->id.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak gaji pegawai harian" href="checkCetakGajiPegawaiHarian/'.$row->id.'">
             <i class="fa fa-print"></i>
             </a>';
-
-            $html.='
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" data-container="body" title="INI MASIH BELUM Hapus Generate Gaji">
-            <i class="fa fa-trash">BELUM</i>
-            </button>
-            ';
+            if ($row->isPaidStatus == 0 ){
+                $html.='
+                <button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Generate Gaji" onclick="hapusGenerateGajiHarian('."'".$row->id."'".')">
+                <i class="fa fa-trash"></i>
+                </button>
+                ';
+            }
 
             return $html;
         })->addIndexColumn()->toJson();
@@ -474,6 +478,9 @@ class SalaryController extends Controller
         ->select(
             's.id as id', 
             's.endDate as enddate',
+            DB::raw('
+                count(distinct(concat(h.isPaid, h.employeeId)))
+                AS isPaidStatus'), 
             DB::raw('
                 concat(
                 count(distinct(concat(h.isPaid, h.employeeId))), 
@@ -496,12 +503,13 @@ class SalaryController extends Controller
             <a data-rowid="'.$row->id.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak honorarium pegawai" href="checkCetakHonorariumPegawai/'.$row->id.'">
             <i class="fa fa-list"></i>
             </a>';
-
-            $html.='
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" data-container="body" title="INI MASIH BELUM Hapus Generate Gaji" onclick="hapusRecordHonorarium('."'".$row->id."'".')">
-            <i class="fa fa-trash">BELUM</i>
-            </button>
-            ';
+            if ($row->isPaidStatus == 0 ){
+                $html.='
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus generate honorarium" onclick="hapusGenerateHonorarium('."'".$row->id."'".')">
+                <i class="fa fa-trash"></i>
+                </button>
+                ';
+            }
             return $html;
         })->addIndexColumn()->toJson();
     }  
@@ -511,6 +519,9 @@ class SalaryController extends Controller
         ->select(
             's.id as id', 
             's.endDate as enddate',
+            DB::raw('
+                count(distinct(concat(ds.isPaid, ds.employeeId)))
+                AS isPaidStatus'), 
             DB::raw('
                 concat(
                 count(distinct(concat(ds.isPaid,ds.employeeId))), 
@@ -534,11 +545,14 @@ class SalaryController extends Controller
             $html = '
             <a data-rowid="'.$row->id.'" class="btn btn-xs btn-dark" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak lembur pegawai bulanan" href="checkCetakLemburPegawaiBulanan/'.$row->id.'">
             <i class="fas fa-moon"></i>
-            </a>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" data-container="body" title="INI MASIH BELUM Hapus Generate Gaji">
-            <i class="fa fa-trash">BELUM</i>
-            </button>
-            ';
+            </a>';
+            if ($row->isPaidStatus == 0 ){
+                $html.='
+                <button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Generate Gaji" onclick="hapusGenerateLemburBulanan('."'".$row->id."'".')">
+                <i class="fa fa-trash"></i>
+                </button>
+                ';
+            }
             return $html;
         })->addIndexColumn()->toJson();
     }  
@@ -549,8 +563,12 @@ class SalaryController extends Controller
         $query = DB::table('salaries as s')
         ->select(
             'b.id as id', 
+            's.id as sid',
             's.endDate as tanggalKerja', 
             's.created_at as tanggalGenerate', 
+            DB::raw('
+                count(distinct(concat(db.isPaid, db.employeeId)))
+                AS isPaidStatus'), 
             DB::raw('
                 concat(
                 count(distinct(concat(db.isPaid,db.employeeId))), 
@@ -575,6 +593,13 @@ class SalaryController extends Controller
             <a data-rowid="'.$row->id.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak gaji pegawai borongan" 
             href="checkCetakGajiPegawaiBorongan/'.$row->id.'"><i class="fa fa-print"></i>
             </a>';
+            if($row->isPaidStatus == 0){
+                $html.='
+                <button data-rowid="'.$row->id.'" class="btn btn-xs btn-danger" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Generate Gaji Borongan" onclick="hapusGenerateBorongan('."'".$row->sid."'".')">
+                <i class="fa fa-trash"></i>
+                </button>
+                ';
+            }
             return $html;
         })
         ->addIndexColumn()->toJson();
@@ -874,5 +899,64 @@ class SalaryController extends Controller
             return $html;
         })->addIndexColumn()->toJson();
     }  
+
+
+    public function hapusGenerateGajiHarian(Request $request){
+        //dd($request);
+        $affected = DB::table('dailysalaries')
+        ->where('salaryid', '=', $request->sid)
+        ->update([
+            'salaryid' => null,
+            'isGenerated' => 0
+        ]);
+
+        $jumlahPaid = DB::table('salaries')
+        ->where('id', '=', $request->sid)
+        ->delete();
+        $data[] = $affected." baris catatan penggajian dihapus.";
+        return $data;
+    }
+    public function hapusGenerateLemburBulanan(Request $request){
+        $affected = DB::table('dailysalaries')
+        ->where('salaryid', '=', $request->sid)
+        ->update([
+            'salaryid' => null,
+            'isGenerated' => 0
+        ]);
+
+        $jumlahPaid = DB::table('salaries')
+        ->where('id', '=', $request->sid)
+        ->delete();
+        $data[] = $affected." baris catatan penggajian dihapus.";
+        return $data;
+    }
+    public function hapusGenerateHonorarium(Request $request){
+        $affected = DB::table('honorariums')
+        ->where('salaryId', '=', $request->sid)
+        ->update([
+            'salaryId' => null,
+            'isGenerated' => 0
+        ]);
+
+        $jumlahPaid = DB::table('salaries')
+        ->where('id', '=', $request->sid)
+        ->delete();
+        $data[] = $affected." baris catatan penggajian dihapus.";
+        return $data;
+    }
+    public function hapusGenerateBorongan(Request $request){
+        $affected = DB::table('borongans')
+        ->where('salariesId', '=', $request->sid)
+        ->update([
+            'salariesId' => null,
+            'status' => 1
+        ]);
+
+        $jumlahPaid = DB::table('salaries')
+        ->where('id', '=', $request->sid)
+        ->delete();
+        $data[] = $affected." baris catatan penggajian dihapus.";
+        return $data;
+    }
 
 }

@@ -257,6 +257,17 @@ Route::POST('markLemburIsPaid',[SalaryController::class, 'markLemburIsPaid'])->m
 
 
 
+//hapus generate
+Route::POST('hapusGenerateGajiHarian',[SalaryController::class, 'hapusGenerateGajiHarian'])->middleware('auth');
+Route::POST('hapusGenerateLemburBulanan',[SalaryController::class, 'hapusGenerateLemburBulanan'])->middleware('auth');
+Route::POST('hapusGenerateHonorarium',[SalaryController::class, 'hapusGenerateHonorarium'])->middleware('auth');
+Route::POST('hapusGenerateBorongan',[SalaryController::class, 'hapusGenerateBorongan'])->middleware('auth');
+
+
+
+
+
+
 
 //Penggajian Borongan
 Route::GET('salaryBoronganList',[SalaryController::class, 'indexBorongan'])->middleware('auth');

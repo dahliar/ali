@@ -17,6 +17,37 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    function hapusGenerateGajiHarian($sid){
+        Swal.fire({
+            title: 'Yakin menghapus?',
+            text: "Menghapus record generate gaji harian",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("hapusGenerateGajiHarian") }}',
+                    type: "POST",
+                    data: {
+                        "_token":"{{ csrf_token() }}",
+                        sid : $sid
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Deleted!',
+                            "Data generate gaji harian telah dihapus",
+                            'success'
+                            );
+                        myFunction();
+                    }
+                });
+            }
+        })
+    }
 
     function setIsPaidModal(id){
         document.getElementById("modalIdIsPaid").value = id;

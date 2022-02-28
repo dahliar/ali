@@ -18,6 +18,38 @@
         }
     });
 
+    function hapusGenerateLemburBulanan($sid){
+        Swal.fire({
+            title: 'Yakin menghapus?',
+            text: "Menghapus record generate lembur bulanan",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("hapusGenerateLemburBulanan") }}',
+                    type: "POST",
+                    data: {
+                        "_token":"{{ csrf_token() }}",
+                        sid : $sid
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Deleted!',
+                            "Data generate lembur bulanan telah dihapus",
+                            'success'
+                            );
+                        myFunction();
+                    }
+                });
+            }
+        })
+    }
+
     function setIsPaidModal(id){
         document.getElementById("modalIdIsPaid").value = id;
         $('#isPaidModal').modal('show');

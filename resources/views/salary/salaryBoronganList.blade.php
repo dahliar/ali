@@ -18,6 +18,39 @@
         }
     });
 
+    function hapusGenerateBorongan($sid){
+        Swal.fire({
+            title: 'Yakin menghapus?',
+            text: "Menghapus record generate gaji borongan",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("hapusGenerateBorongan") }}',
+                    type: "POST",
+                    data: {
+                        "_token":"{{ csrf_token() }}",
+                        sid : $sid
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Deleted!',
+                            "Data generate gaji borongan telah dihapus",
+                            'success'
+                            );
+                        myFunction();
+                    }
+                });
+            }
+        })
+    }
+
+
     function myFunction(){
         $('#datatable').DataTable({
             headers: {
@@ -36,7 +69,7 @@
             {   "width": "10%", "targets":  [2], "className": "text-left" },
             {   "width": "20%", "targets":  [3], "className": "text-left" },
             {   "width": "10%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
+            {   "width": "15%", "targets":  [5], "className": "text-left" },
             ], 
 
             columns: [
