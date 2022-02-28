@@ -11,7 +11,8 @@
 
 
 @section('content')
-@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
+@if ((Auth::user()->isProduction() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
+
 $data = json_decode($oneStore);
 
 if ($data[0]->isApproved == 0)

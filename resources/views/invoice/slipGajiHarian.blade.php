@@ -1,4 +1,4 @@
-@if (Auth::user()->isHumanResources() or Auth::user()->isAdmin())
+@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 <!doctype html>
     <html lang="en">
 

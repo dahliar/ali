@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@if (Auth::user()->isAdmin() or Auth::user()->isHumanResources())
+@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @if (Session::has('val'))
 <div class="alert alert-success">

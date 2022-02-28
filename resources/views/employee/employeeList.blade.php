@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@if (Auth::user()->isAdmin())
+@if ((Auth::user()->isAdmin() or Auth::user()->isHumanResources()) and Session::has('employeeId') and (Session()->get('levelAccess') <= 3))
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {

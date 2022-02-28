@@ -70,36 +70,27 @@ class User extends Authenticatable
         }
         return false;
     }
-
-
     public function isAuthenticatedUserSameAsUserIdChoosen($userId){
         if (Auth::check() and (Auth::user()->id == $userId)){
             return true;
         }
         return false;
     }
-    public function testUser(){
-        dump(Auth::user());
+    public function userLevelAccess(){
+        /*
+        $query = DB::table('users as u')
+        ->select('sp.levelAccess as levelAccess')
+        ->join('employees as e', 'u.id', '=', 'e.employeeId')
+        ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
+        ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
+        ->join('structural_positions sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->where('eosm.isactive', '=', 1)
+        ->where('e.isActive', '=', 1)
+        ->first();
+        
 
-        //dd($request->session()->all());
-        //echo "123";
-        //return false;
-    }
-            /*
-        public function roleGranted($arrRolesGranted){
-        dd(Auth::user());
-
-        if(in_array(Auth::user()->role, $arrRolesGranted)){
-            return true;
-        }
-        return false;
-        }
-
-            public function positionGranted($arrLevelsGranted){
-            if(in_array(Auth::user()->role, $arrLevelsGranted)){
-            return true;
-        }
-        return false;
-    }
+        return $query->levelAccess;
         */
+    }
+
 }

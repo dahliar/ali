@@ -12,7 +12,7 @@
 
 @section('content')
 
-@if (Auth::user()->isAuthenticatedUserSameAsUserIdChoosen($choosenUser->id) or Auth::user()->isAdmin())
+@if ((Auth::user()->isAdmin() or Auth::user()->isHumanResources()) and Session::has('employeeId') and (Session()->get('levelAccess') <= 3))
 @if ($errors->any())
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>

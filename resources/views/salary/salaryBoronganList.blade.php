@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@if (Auth::user()->isAdmin())
+@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <script type="text/javascript">
     $.ajaxSetup({

@@ -3,7 +3,8 @@
 @extends('layouts.layout')
 
 @section('content')
-@if (Auth::user()->isAdmin() or Auth::user()->isMarketing())
+@if ((Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
+
 <script type="text/javascript"> 
     $(document).ready(function() {
         var i=1;

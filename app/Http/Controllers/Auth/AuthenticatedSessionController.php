@@ -42,7 +42,19 @@ class AuthenticatedSessionController extends Controller
         */
         $query = DB::table('employees')->select('id as empid')->where('userid', Auth::user()->id)->first();
         
+        $levelAccess = DB::table('users as u')
+        ->select('sp.levelAccess as levelAccess')
+        ->join('employees as e', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
+        ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->where('eosm.isactive', '=', 1)
+        ->where('e.isActive', '=', 1)
+        ->where('u.id', '=', Auth::user()->id)
+        ->first();
+
         $request->session()->put('employeeId', $query->empid);
+        $request->session()->put('levelAccess', $levelAccess->levelAccess);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

@@ -174,7 +174,7 @@ class EmployeeController extends Controller
      */
     public function show(Employee $employee)
     {
-        return view('employee.employeeView');
+        //return view('employee.employeeView');
     }
 
     /**

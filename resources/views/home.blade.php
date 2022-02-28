@@ -10,9 +10,7 @@
 
 
 @section('content')
-
-@if (Auth::check() and Session::has('employeeId'))
-
+@if (Auth::check() and Session::has('employeeId') and (session()->get('levelAccess') <= 3))
 <body>
 	<div class="container-fluid">
 		<div class="container-fluid">

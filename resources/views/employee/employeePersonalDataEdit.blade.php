@@ -11,8 +11,7 @@
 
 
 @section('content')
-@if (Auth::user()->isAuthenticatedUserSameAsUserIdChoosen($choosenUser->id) or Auth::user()->isAdmin())
-
+@if ((Auth::user()->isAuthenticatedUserSameAsUserIdChoosen($choosenUser->id) or Auth::user()->isAdmin() or Auth::user()->isHumanResources()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript"> 
     function getOrgStructureSelectOptionList(workPos, structuralPos, orgstructure){
         $.ajax({

@@ -10,7 +10,7 @@
 
 
 @section('content')
-@if (Auth::user()->isAdmin())
+@if ((Auth::user()->isProduction() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {

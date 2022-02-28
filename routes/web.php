@@ -42,35 +42,11 @@ use App\Models\Presence;
 |
 */
 
-Route::get('testUser',[User::class, 'testUser'])->middleware(['auth']);
-
 Route::get('/', function () {
     return view('welcome');
 });
-/*
-Route::get('/show', function () {
-    return view('show');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
-Route::get('/home', function () {
-    return view('home');
-})->middleware(['auth']);
-*/
 
 Route::get('home',[DashboardController::class, 'index'])->middleware(['auth']);
-
-
-
-/*
-Route::get('/homeTwo', function () {
-    return view('home2');
-})->middleware(['auth']);
-*/
-
 Route::get('unauthenticated', function () {
     return view('partial.footer');
 })->name('unauthenticated');
@@ -285,13 +261,10 @@ Route::GET('getSalariesHonorariumForCheck/{salary}',[SalaryController::class, 'g
 Route::GET('printSalaryHonorariumList/{salary}',[SalaryController::class, 'printSalaryHonorariumList'])->middleware('auth');
 Route::GET('honorariumMarkedPaid',[SalaryController::class, 'honorariumMarkedPaid'])->middleware('auth');
 
-
-
 /*
 Route::POST('markStatusBorongan',[SalaryController::class, 'markStatusBorongan'])->middleware('auth');
 Route::GET('presenceAddForm',[PresenceController::class, 'createForm'])->middleware('auth');
 Route::get('getAllEmployeesForPresenceForm/{presenceDate}',[PresenceController::class, 'getAllEmployeesForPresenceForm'])->middleware('auth');
-
 Route::GET('getDailySalariesDetail',[SalaryController::class, 'getDailySalariesDetail'])->middleware('auth');
 */
 
