@@ -118,8 +118,9 @@ class Presence extends Model
             if ($selisihMenitSisa >= 30){
                 $jamKerja+=1;
             }
-            $jamKerja-=1;   //mengurangi jam istirahat siang/sore baik untuk shift 1
-
+            if ($end->gte(Carbon::parse($start->toDateString()." 13:30:00"))){
+                $jamKerja-=1;   //mengurangi jam istirahat siang/sore baik untuk shift 1
+            }
             if ($end->gte(Carbon::parse($start->toDateString()." 16:30:00"))){
                 //lembur
                 $jamLembur = $jamKerja-($batasMasuk->diffInHours($batasPulangKerja)-1);
