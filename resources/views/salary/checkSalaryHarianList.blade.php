@@ -129,8 +129,37 @@
                 </div>
             </div>
 
-            <input type="hidden" value="{{$salary->id}}"id="salaryId" name="salaryId" class="form-control" readonly>
             <div class="modal-body">
+                <input type="hidden" value="{{$salary->id}}"id="salaryId" name="salaryId" class="form-control" readonly>
+                <div class="row form-inline">
+                    <div class="col-md-2">Jenis
+                    </div>
+                    <div class="col-md-6"> 
+                        <input type="text" value="Gaji Harian" class="form-control" disabled>
+                    </div>
+                </div>
+                <div class="row form-inline">
+                    <div class="col-md-2">Rentang
+                    </div>
+                    <div class="col-md-6"> 
+                        <input type="text" value="{{$salary->startDate}} - {{$salary->endDate}}" class="form-control" disabled>
+                    </div>
+                </div>
+                <div class="row form-inline">
+                    <div class="col-md-2">Generator
+                    </div>
+                    <div class="col-md-6"> 
+                        <input type="text" value="{{$salary->userIdGenerator}}" class="form-control" disabled>
+                    </div>
+                </div>
+                <div class="row form-inline">
+                    <div class="col-md-2">Sudah Dibayar
+                    </div>
+                    <div class="col-md-6"> 
+                        <input type="text" value="{{$salary->isPaid}}" class="form-control" disabled>
+                    </div>
+                </div>
+            </div>            <div class="modal-body">
                 <div class="row form-inline">
                     <table class="table cell-border stripe hover row-border data-table"  id="datatable">
                         <thead>

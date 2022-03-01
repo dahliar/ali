@@ -129,7 +129,7 @@
 											<ul class="dropdown-menu dropdown-submenu">
 												<li>
 													<a class="dropdown-item" href="{{ url('generateGaji')}}">
-														<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Bulanan/Borongan
+														<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Borongan/Honorarium
 													</a>
 												</li>
 												<li>
@@ -142,11 +142,13 @@
 														<i class="fas fa-file-invoice-dollar"></i> Penggajian Borongan
 													</a>
 												</li>
-												<li>
-													<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
-														<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
-													</a>
-												</li>
+												<!--
+													<li>
+														<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
+															<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
+														</a>
+													</li>
+												-->
 												<li>
 													<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
 														<i class="fas fa-file-invoice-dollar"></i> Honorarirum
@@ -189,47 +191,47 @@
 											<ul class="dropdown-menu dropdown-submenu">
 												<li>
 													<a class="dropdown-item" href="{{ url('organizationStructureList')}}">
-													<i class="fas fa-sitemap"></i> Struktur Organisasi</a>
-												</li>
-												<li>
-													<a class="dropdown-item" href="{{ url('structuralPositionList') }}"><i class="fas fa-user-tie"></i> Jabatan</a>
-												</li>
-												<li>
-													<a class="dropdown-item" href="{{ url('workPositionList')}}"><i class="fas fa-building"></i> Bagian</a>
-												</li>
-											</ul>
-										</li>
-										@endif
-									</ul>
-								</li>
-								@endif
-							</ul>
-							<ul class="d-flex navbar-nav mb-2">
-								<li class="nav-item dropdown">
-									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										{{ Auth::check() ? Auth::user()->name : '' }}
-									</a>
-									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-										<li>
-											<a class="dropdown-item" href="{{ url('profileEdit', session('employeeId'))}}">Edit Profile
-											</a>								
-										</li>
-										<li>
-											<form method="POST" action="{{ url('logout') }}">
-												@csrf
-												<a class="dropdown-item" href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log Out') }}
-												</a>
-											</form>	
-										</li>
-									</ul>
-								</li>
-							</ul>
+														<i class="fas fa-sitemap"></i> Struktur Organisasi</a>
+													</li>
+													<li>
+														<a class="dropdown-item" href="{{ url('structuralPositionList') }}"><i class="fas fa-user-tie"></i> Jabatan</a>
+													</li>
+													<li>
+														<a class="dropdown-item" href="{{ url('workPositionList')}}"><i class="fas fa-building"></i> Bagian</a>
+													</li>
+												</ul>
+											</li>
+											@endif
+										</ul>
+									</li>
+									@endif
+								</ul>
+								<ul class="d-flex navbar-nav mb-2">
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+											{{ Auth::check() ? Auth::user()->name : '' }}
+										</a>
+										<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+											<li>
+												<a class="dropdown-item" href="{{ url('profileEdit', session('employeeId'))}}">Edit Profile
+												</a>								
+											</li>
+											<li>
+												<form method="POST" action="{{ url('logout') }}">
+													@csrf
+													<a class="dropdown-item" href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log Out') }}
+													</a>
+												</form>	
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</div>
 						</div>
-					</div>
-				</nav>
-				@endif
+					</nav>
+					@endif
 
+				</div>
 			</div>
-		</div>
-	</nav>
-</body>
+		</nav>
+	</body>

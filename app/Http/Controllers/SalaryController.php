@@ -52,10 +52,11 @@ class SalaryController extends Controller
         );
 
         $harian = $this->salaryHarianGenerate($request->start, $request->end);
-        $bulanan = $this->lemburBulananGenerate($request->start, $request->end);
+        //$bulanan = $this->lemburBulananGenerate($request->start, $request->end);
         $borongan = $this->salaryBoronganGenerate($request->start, $request->end);
         $honorarium = $this->honorariumGenerate($request->start, $request->end);
-        $val = array($harian, $borongan, $bulanan, $honorarium);
+        //$val = array($harian, $borongan, $bulanan, $honorarium);
+        $val = array($harian, $borongan, $honorarium);
         return redirect()->route('generateGaji')->with('val', $val);        
     }
 
@@ -71,6 +72,7 @@ class SalaryController extends Controller
         $retValue="";
         if ($rowCount>0){
             $data = [
+                'startDate'         => $start,
                 'endDate'           => $end,
                 'userIdGenerator'   => auth()->user()->id,
                 'jenis'             => 4,
@@ -124,6 +126,7 @@ class SalaryController extends Controller
         $retValue="";
         if ($rowCount>0){
             $data = [
+                'startDate'         => $start,
                 'endDate'           => $end,
                 'userIdGenerator'   => auth()->user()->id,
                 'jenis'             => 1,
@@ -179,6 +182,7 @@ class SalaryController extends Controller
         $retValue="";
         if ($rowCount>0){
             $data = [
+                'startDate'         => $start,
                 'endDate'               => $end,
                 'userIdGenerator'       => auth()->user()->id,
                 'jenis'                 => 2,
@@ -236,6 +240,7 @@ class SalaryController extends Controller
         $retValue="";
         if ($rowCount>0){
             $data = [
+                'startDate'         => $start,
                 'endDate'           => $end,
                 'userIdGenerator'   => auth()->user()->id,
                 'jenis'             => 3,
@@ -650,6 +655,7 @@ class SalaryController extends Controller
             'e.nip as nip',
             'u.name as name',
             'os.name as osname',
+            'h.keterangan as keterangan',
             DB::raw('sum(h.jumlah) as jumlah')
         )
         ->join('employees as e', 'e.id', '=', 'h.employeeId')
@@ -725,7 +731,8 @@ class SalaryController extends Controller
         return view('salary.checkLemburBulananList', compact('salary'));
     }
     public function checkCetakGajiPegawaiBorongan(Borongan $borongan){
-        return view('salary.checkSalaryBoronganList', compact('borongan'));
+        $salary = DB::table('salaries as s')->where('s.id', '=', $borongan->salariesId)->first();
+        return view('salary.checkSalaryBoronganList', compact('borongan', 'salary'));
     }
     public function checkCetakHonorariumPegawai(Salary $salary){
         return view('salary.checkHonorariumList', compact('salary'));

@@ -93,7 +93,7 @@
 					<ul class="dropdown-menu dropdown-submenu">
 						<li>
 							<a class="dropdown-item" href="{{ url('generateGaji')}}">
-								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Bulanan/Borongan
+								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Borongan/Honorarium
 							</a>
 						</li>
 						<li>
@@ -105,11 +105,13 @@
 							<a class="dropdown-item" href="{{ url('salaryBoronganList')}}"><i class="fas fa-file-invoice-dollar"></i> Penggajian Borongan
 							</a>
 						</li>
-						<li>
+							<!--
+							<li>
 							<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
 							</a>
-						</li>
+							</li>
+						-->
 						<li>
 							<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Honorarirum

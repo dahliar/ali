@@ -15,7 +15,7 @@
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
-            {{ Session::get('val')[0]}}<br>{{ Session::get('val')[1]}}<br>{{ Session::get('val')[2]}}<br>{{ Session::get('val')[3]}}
+            {{ Session::get('val')[0]}}<br>{{ Session::get('val')[1]}}<br>{{ Session::get('val')[2]}}<br>
         </div>
         <div class="col-md-1 text-end">
             <span class="label"><strong >x</strong></span>
@@ -49,7 +49,7 @@
                     <li class="breadcrumb-item">
                         <a class="white-text" href="{{ url('/home') }}">Home</a>
                     </li>
-                    <li class="breadcrumb-item active">Generate Gaji Harian/Bulanan/Borongan</li>
+                    <li class="breadcrumb-item active">Generate Gaji Harian/Borongan/Honorarium</li>
                 </ol>
             </nav>
         </div>
@@ -85,7 +85,7 @@
         <ol>
             <li>Harian</li>
             <li>Borongan</li>
-            <li>Lembur Pegawai Bulanan</li>
+            <!--<li>Lembur Pegawai Bulanan</li>-->
             <li>Honorarium</li>
         </ol>
         <li>Pilih tanggal batas awal dan batas akhir</li>

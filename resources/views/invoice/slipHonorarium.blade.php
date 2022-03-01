@@ -50,7 +50,7 @@
     </style>
     <head>
         <meta charset="UTF-8">
-        <title>Slip Gaji Harian - {{$salary->endDate}}</title>
+        <title>Slip Gaji Honorarium - {{$salary->endDate}}</title>
     </head>
 
     <body>
@@ -107,22 +107,22 @@
             <hr class="solid" style="width: 90%; margin-top: 0; margin-bottom: 0;">
             <div>
                 <h1 align="center" style="margin-top: 0; margin-bottom: 0;">
-                Slip Gaji Borongan </h1>
+                Slip Gaji Honorarium </h1>
                 <h3 align="center"  style="margin-top: 0; margin-bottom: 10px;">
                     Tanggal : {{$salary->endDate}}
                 </h3>
             </div>
             <table width="40%">
                 <tr>
-                    <td><span class="label"><b>Jenis Karyawan : </b></span></td>
+                    <td><span class="label"><b>Jenis Karyawan </b></span></td>
                     <td>: All</td>
                 </tr>
                 <tr>
-                    <td><span class="label"><b>Tanggal Akhir Generate : </b></span></td>
-                    <td>: {{$salary->endDate}}</td>
+                    <td><span class="label"><b>Rentang </b></span></td>
+                    <td>: {{$salary->startDate}} - {{$salary->endDate}}</td>
                 </tr>
                 <tr>
-                    <td><span class="label"><b>Tanggal Bayar : </b></span></td>
+                    <td><span class="label"><b>Tanggal Bayar </b></span></td>
                     <td>: {{$salary->tanggalBayar}}</td>
                 </tr>
             </table>
@@ -135,8 +135,9 @@
                         <th width="5%">No</th>
                         <th width="25%">Nama Pegawai</th>
                         <th width="10%">NIP</th>
-                        <th width="15%">Bagian</th>
+                        <th width="15%">Jabatan</th>
                         <th width="15%">Gaji</th>
+                        <th width="30%">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -146,11 +147,12 @@
                     @endphp
                     @foreach ($honorariums as $daily)
                     <tr >
-                        <td width="5%">{{$no}}</td>
+                        <td width="5%" style="text-align: center;">{{$no}}</td>
                         <td width="25%">{{$daily->name}}</td>
-                        <td width="15%">{{$daily->nip}}</td>
+                        <td width="10%" style="text-align: center;">{{$daily->nip}}</td>
                         <td width="15%">{{$daily->osname}}</td>
-                        <td width="15%" style="text-align: right;">{{$daily->jumlah}}</td>
+                        <td width="15%" style="text-align: right;">Rp. {{$daily->jumlah}}</td>
+                        <td width="30%">{{$daily->keterangan}}</td>
                     </tr>
                     @php
                     $total+=$daily->jumlah;
@@ -161,7 +163,8 @@
                 <tfoot>
                     <tr >
                         <td colspan="4">Total</td>
-                        <td width="15%" style="text-align: right;">{{$total}}</td>
+                        <td width="15%" style="text-align: right;">Rp. {{$total}}</td>
+                        <td></td>
                     </tr>
                 </tfoot>        
             </table>
@@ -184,5 +187,7 @@
             </table>
         </main>
     </body>
+    Dokumen ini dicetak pada tanggal : {{Carbon\Carbon::now()}}
+
     </html>
     @endif

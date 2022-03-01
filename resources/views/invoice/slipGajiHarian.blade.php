@@ -114,15 +114,15 @@
             </div>
             <table width="40%">
                 <tr>
-                    <td><span class="label"><b>Jenis Karyawan : </b></span></td>
+                    <td><span class="label"><b>Jenis Karyawan </b></span></td>
                     <td>: Harian</td>
                 </tr>
                 <tr>
-                    <td><span class="label"><b>Tanggal Akhir Generate : </b></span></td>
-                    <td>: {{$salary->endDate}}</td>
+                    <td><span class="label"><b>Rentang </b></span></td>
+                    <td>: {{$salary->startDate}} - {{$salary->endDate}}</td>
                 </tr>
                 <tr>
-                    <td><span class="label"><b>Tanggal Bayar : </b></span></td>
+                    <td><span class="label"><b>Tanggal Bayar </b></span></td>
                     <td>: {{$salary->tanggalBayar}}</td>
                 </tr>
             </table>
@@ -188,5 +188,7 @@
             </table>
         </main>
     </body>
+    Dokumen ini dicetak pada tanggal : {{Carbon\Carbon::now()}}
+
     </html>
     @endif

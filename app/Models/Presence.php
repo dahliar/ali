@@ -171,7 +171,7 @@ class Presence extends Model
         ->first();
 
         //hitung uang harian proporsional terhadap jam
-        $uh = $honorarium->uh * ($jamKerja/7);
+        $uh = ceil($honorarium->uh * ($jamKerja/7) / 100) * 100;
         $dailySalariesExist=DB::table('dailysalaries')
         ->select(
             DB::raw('count(id) as jumlah'),
