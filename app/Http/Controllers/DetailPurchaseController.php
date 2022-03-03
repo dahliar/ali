@@ -92,7 +92,6 @@ class DetailPurchaseController extends Controller
 
         $purchase =  DB::table('purchases')->find($request->purchaseId);
 
-        //dd($purchase);
         $tax = $addPayment * $purchase->taxPercentage / 100;
 
         $affected = DB::table('purchases')
@@ -102,10 +101,9 @@ class DetailPurchaseController extends Controller
             'tax'           => DB::raw('tax+'.$tax)
         ]);
 
-
         return redirect()->route('purchaseItems',
             ['purchase'=>$request->purchaseId])
-        ->with('status','Item berhasil ditambahkan.');
+        ->with('status','Item pembelian berhasil ditambahkan.');
     }
 
     public function getAllPurchaseItems($purchaseId){
@@ -118,13 +116,21 @@ class DetailPurchaseController extends Controller
             'g.name as gradeName', 
             'p.name as packingName', 
             's.name as sizeName', 
-            'pur.status as status', 
+            'pur.status as status',
+            DB::raw('(CASE   WHEN pur.valutaType="1" THEN "Rp. " 
+                WHEN pur.valutaType="2" THEN "USD. " 
+                WHEN pur.valutaType="3" THEN "Rmb. " 
+                END) as valuta'
+            ), 
             DB::raw(
-                'concat(dp.amount, " ",p.shortname) 
+                'concat(dp.amount, " Kg") 
                 as amount'),
             DB::raw('
-                concat(dp.amount," Kg") as weight'),
-            'dp.price as price',
+                concat((dp.amount * dp.price)) as bayar'
+            ),
+            DB::raw('
+                concat(dp.price, " /Kg") as price'
+            )
         )
         ->join('purchases as pur', 'pur.id', '=', 'dp.purchasesId')
         ->join('items as i', 'i.id', '=', 'dp.itemId')
@@ -139,6 +145,10 @@ class DetailPurchaseController extends Controller
 
 
         return datatables()->of($query)
+        ->addColumn('valutaPrice', function($row){
+            return $row->valuta.' '.$row->price;})
+        ->addColumn('valutaBayar', function($row){
+            return $row->valuta.' '.$row->bayar;})
         ->addColumn('action', function ($row) {
             $html = '
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Detail" onclick="deleteItem('."'".$row->id."'".')">
@@ -192,8 +202,38 @@ class DetailPurchaseController extends Controller
      * @param  \App\Models\DetailPurchase  $detailPurchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DetailPurchase $detailPurchase)
+    public function destroy(Request $request)
     {
-        //
+        //dd($request);
+        /*
+            1. get paymentAmount dan tax nya
+            2. kurangi tabel purchase paymentAmount dan tax nya
+            3. update table purchases
+            4. hapus tabel detail_purchases
+        */
+            //1
+            $dp = DB::table('detail_purchases as dp')->select('purchasesId', 'amount', 'price', 'taxPercentage')
+            ->join('purchases as p', 'p.id', '=', 'dp.purchasesId')
+            ->where('dp.id', '=', $request->dpid)
+            ->first();
+
+            $deductedPayment = ($dp->amount * $dp->price);
+            $tax = $deductedPayment * $dp->taxPercentage / 100;
+
+
+            //2 dan 3
+            $affected = DB::table('purchases')
+            ->where('id', $dp->purchasesId)
+            ->update([
+                'paymentAmount' => DB::raw('paymentAmount-'.$deductedPayment), 
+                'tax'           => DB::raw('tax-'.$tax)
+            ]);
+
+            //4
+            $jumlahPaid = DB::table('detail_purchases')
+            ->where('id', '=', $request->dpid)
+            ->delete();
+
+            return true;
+        }
     }
-}

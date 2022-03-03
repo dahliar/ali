@@ -25,7 +25,7 @@
         window.open(('{{ url("purchaseItems") }}'+"/"+id), '_blank');
     }
     function purchaseEdit(id){
-        window.open(('{{ url("transactionEdit") }}'+"/"+id), '_self');
+        window.open(('{{ url("purchaseEdit") }}'+"/"+id), '_self');
     }
     function purchaseInvoice(id){
         window.open(('{{ url("purchase/notaPembelian") }}'+"/"+id), '_self');
@@ -72,7 +72,7 @@
             {   "width": "10%", "targets":  [5], "className": "text-left" },
             {   "width": "10%", "targets":  [6], "className": "text-left" },
             {   "width": "10%", "targets":  [7], "className": "text-center" },
-            {   "width": "15%", "targets":  [8], "className": "text-center" }
+            {   "width": "15%", "targets":  [8], "className": "text-left" }
             ], 
 
             columns: [
@@ -108,7 +108,7 @@
             {   "width": "10%", "targets":  [5], "className": "text-left" },
             {   "width": "10%", "targets":  [6], "className": "text-left" },
             {   "width": "10%", "targets":  [7], "className": "text-center" },
-            {   "width": "15%", "targets":  [8], "className": "text-center" }
+            {   "width": "15%", "targets":  [8], "className": "text-left" }
             ], 
 
             columns: [
@@ -143,7 +143,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction(0)">
+<body onload="myFunction()">
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">
@@ -253,7 +253,7 @@
                                 <th>Purchase</th>
                                 <th>Payment</th>
                                 <th>Status</th>
-                                <th>Act</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

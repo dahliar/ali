@@ -88,8 +88,6 @@ class EmployeeController extends Controller
             'bidangPendidikan'      => ['required', 'string'],
             'gajiPokok'             => ['required', 'integer', 'gte:0'],
             'gajiHarian'            => ['required', 'integer', 'gte:0'],
-            'uangTransport'         => ['required', 'integer', 'gte:0'],
-            'uangMakan'             => ['required', 'integer', 'gte:0'],
             'uangLembur'            => ['required', 'integer', 'gte:0']
         ],
         [
@@ -137,8 +135,6 @@ class EmployeeController extends Controller
             'isactive'          => 1,
             'gajipokok'         => $request->gajiPokok,
             'uangharian'        => $request->gajiHarian,
-            'uangtransport'     => $request->uangTransport,
-            'uangmakan'         => $request->uangMakan,
             'uanglembur'        => $request->uangLembur
         ];
         $mappingId = $this->employee->orgStructureStore($mapping);
@@ -222,7 +218,7 @@ class EmployeeController extends Controller
         $choosenUser = User::where('id', $employee->userid)->first();
 
         $orgstructure = DB::table('employees as e')
-        ->select('mapping.id as id', 'mapping.idorgstructure as idorgstructure','wp.id as workPosition','sp.id as structuralPosition', 'mapping.gajipokok as gp', 'mapping.uangtransport as ut', 'mapping.uangmakan as um', 'mapping.uangharian as uh', 'mapping.uanglembur as ul')
+        ->select('mapping.id as id', 'mapping.idorgstructure as idorgstructure','wp.id as workPosition','sp.id as structuralPosition', 'mapping.gajipokok as gp', 'mapping.uangharian as uh', 'mapping.uanglembur as ul')
         ->where('e.id', $employee->id)
         ->where('mapping.isactive', 1)
         ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
@@ -301,8 +297,6 @@ class EmployeeController extends Controller
             'OrgStructureOption'    => ['required', 'gt:0'],
             'gajiPokok'             => ['required', 'gte:0'],
             'uangHarian'            => ['required', 'gte:0'],
-            'uangTransport'         => ['required', 'gte:0'],
-            'uangMakan'             => ['required', 'gte:0'],
             'uangLembur'            => ['required', 'gte:0']
         ]);
 
@@ -318,8 +312,6 @@ class EmployeeController extends Controller
             'idorgstructure'        => $request->OrgStructureOption,
             'gajipokok'             => $request->gajiPokok,
             'uangharian'            => $request->uangHarian,
-            'uangtransport'         => $request->uangTransport,
-            'uangmakan'             => $request->uangMakan,
             'isactive'              => 1,
             'uanglembur'            => $request->uangLembur
         ];
@@ -371,18 +363,28 @@ class EmployeeController extends Controller
         ->addColumn('action', function ($row) {
             $html = '
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Pegawai" onclick="editEmployee('."'".$row->id."'".')">
-            <i class="fa fa-edit" style="font-size:20px"></i>
+            <i class="fa fa-edit"></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Penempatan" onclick="editPemetaan('."'".$row->id."'".')">
-            <i class="fa fa-address-card" style="font-size:20px"></i>
+            <i class="fa fa-address-card"></i>
             </button>            
             ';            
 
             if (Auth::user()->isAdmin()){
                 $html .= '
                 <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Password" onclick="editPassword('."'".$row->id."'".')">
-                <i class="fa fa-key" style="font-size:20px"></i>
+                <i class="fa fa-key"></i>
                 </button>            
+                ';                            
+            }
+            if (Auth::user()->isAdmin() or Auth::user()->isHumanResources()){
+                $html .= '
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="History Presensi" onclick="employeePresenceHistory('."'".$row->id."'".')">
+                <i class="fa fa-history"></i>
+                </button>
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Slip Gaji Pegawai" onclick="slipGajiPegawai('."'".$row->id."'".')">
+                <i class="fas fa-file-invoice-dollar"></i>
+                </button>
                 ';                            
             }
 

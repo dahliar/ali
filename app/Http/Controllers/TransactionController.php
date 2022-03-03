@@ -209,10 +209,7 @@ class TransactionController extends Controller
         $rekenings = Rekening::all();
         $countryRegister = Countries::where('isActive',1)->get();
         $forwarders = Forwarder::orderBy('name', 'ASC')->get();
-
-
-        //$pinotes=TransactionNote::select('note')->where('transactionId', $transaction->id)->get();
-
+        
         $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
         return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction'));

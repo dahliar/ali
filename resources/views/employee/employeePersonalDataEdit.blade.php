@@ -104,7 +104,7 @@
                         <li class="breadcrumb-item active">
                             <a class="white-text" href="{{ ('employeeList')}}">Pegawai</a>
                         </li>
-                        <li class="breadcrumb-item active">Edit</li>
+                        <li class="breadcrumb-item active">Edit data pegawai</li>
                     </ol>
                 </nav>
             </div>
@@ -221,15 +221,13 @@
                                 </select>
                             </div>
                         </div>
-
-
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                                 <span class="label">Bagian*</span>
                             </div>
                             <div class="col-md-4">
                                 <select id="workPosition" name="workPosition" class="form-control"  disabled="true">
-                                    <option value="-1" selected>--Choose First--</option>
+                                    <option value="-1" selected>--Pilih dahulu--</option>
                                     @foreach ($workpos as $workpo)
                                     @if ( $workpo->id == $orgstructure->workPosition)
                                     <option value="{{ $workpo->id }}" selected>{{ $workpo->name }}</option>
@@ -256,7 +254,7 @@
                             </div>
                             <div class="col-md-4">
                                 <select id="employmentStatus" name="employmentStatus" class="form-control"  disabled="true">
-                                    <option value="-1" @if($employee->employmentStatus == -1) selected @endif>--Choose Jenis Karyawan--</option>
+                                    <option value="-1" @if($employee->employmentStatus == -1) selected @endif>--Pilih Jenis Karyawan--</option>
                                     <option value="1" @if($employee->employmentStatus == 1) selected @endif>Bulanan</option>
                                     <option value="2" @if($employee->employmentStatus == 2) selected @endif>Harian</option>
                                     <option value="3" @if($employee->employmentStatus == 3) selected @endif>Borongan</option>
@@ -338,7 +336,7 @@
                             </div>
                             <div class="col-md-8">
                                 <select id="bankid" name="bankid" class="form-control" disabled="true">
-                                    <option value="">--Choose First--</option>
+                                    <option value="">--Pilih dahulu--</option>
                                     @foreach ($banks as $bank)
                                     @if ($bank->id == $employee->bankid)
                                     <option value="{{ $bank->id }}" selected>{{ $bank->shortname }} - {{$bank->name}}</option>
@@ -356,7 +354,7 @@
                             </div>
                             <div class="col-md-3">
                                 <select id="status" name="status" class="form-select" disabled="true">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="-1">--Pilih satu--</option>
                                     <option value="1" @if($employee->isActive == 0) selected @endif>Non Aktif</option>
                                     <option value="2" @if($employee->isActive == 1) selected @endif>Aktif</option>
                                 </select>
@@ -366,8 +364,8 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-8">
-                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Ok</button>
-                                <button type="Reset" class="btn btn-danger buttonConf"ß>Reset</button>
+                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Simpan</button>
+                                <button type="Reset" class="btn btn-danger buttonConf">Reset</button>
                             </div>
                         </div>
                     </div>

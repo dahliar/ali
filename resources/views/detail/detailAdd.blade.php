@@ -117,9 +117,9 @@
                     <a class="white-text" href="{{ url('/home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a class="white-text" href="{{ url('/transactionList') }}">Transaction</a>
+                    <a class="white-text" href="{{ url('/transactionList') }}">Transaksi Penjualan</a>
                 </li>
-                <li class="breadcrumb-item active">Tambah Detail Transaction</li>
+                <li class="breadcrumb-item active">Tambah detail transaksi penjualan</li>
             </ol>
         </nav>
     </div>
@@ -131,7 +131,7 @@
             <form id="FormDetilPenjualan" action="{{route('itemDetailTransactionAdd')}}" method="get" name="FormDetilPenjualan">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Sales Detail Add</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah detail transaksi penjualan</h5>
                     </div>
                     <div class="modal-body">
                         <div class="row form-group">
@@ -143,11 +143,11 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Species*</span>
+                                <span class="label">Spesies*</span>
                             </div>
                             <div class="col-md-8">
                                 <select class="form-select w-100" id="species" name="species">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="-1">--Pilih dahulu--</option>
                                     @foreach ($species as $spec)
                                     @if ( $spec->id == old('species') )
                                     <option value="{{ $spec->id }}" selected>{{ $spec->name }}</option>
@@ -163,7 +163,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Items*</span>
+                                <span class="label">Barang*</span>
                             </div>
                             <div class="col-md-8">
                                 <select id="item" name="item" class="form-control" >
@@ -173,29 +173,29 @@
                         </div>             
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Stock Existing</span>
+                                <span class="label">Stok saat ini</span>
                             </div>
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <input id="existingStock" value="{{ old('existingStock') }}" name="existingStock" type="text" class="form-control" readonly>
-                                    <span class="input-group-text">MC or Bag</span>
+                                    <span class="input-group-text">MC / Bag</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Amount*</span>
+                                <span class="label">Jumlah*</span>
                             </div>
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <input id="amount" value="{{ old('amount',0) }}" name="amount" type="number" class="form-control text-end">
-                                    <span class="input-group-text">MC or Bag</span>
+                                    <span class="input-group-text">MC / Bag</span>
                                 </div>
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Price*</span>
+                                <span class="label">Harga*</span>
                             </div>
                             <div class="col-md-3">
                                 <div class="input-group">
@@ -209,7 +209,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-6">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
                                 <input type="reset" value="Reset" class="btn btn-secondary">
                             </div>
                         </div>

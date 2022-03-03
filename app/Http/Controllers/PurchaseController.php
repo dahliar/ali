@@ -37,7 +37,7 @@ class PurchaseController extends Controller
             'p.purchasedate as purchasedate',
             'p.arrivaldate as arrivaldate',
             'p.paymentAmount as paymentAmount',
-            'p.status as status',
+            'p.status as statusCheck',
             DB::raw('(CASE WHEN p.status ="0" THEN "New Submission"
                 WHEN p.status ="1" then "On Progress"
                 WHEN p.status ="2" then "Finished"
@@ -51,11 +51,11 @@ class PurchaseController extends Controller
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
 
-            $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Purchasing Item" onclick="purchaseItems('."'".$row->id."'".')">
-            <i class="fa fa-plus" style="font-size:20px"></i>
+            $html='
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar beli item" onclick="purchaseItems('."'".$row->id."'".')">
+            <i class="fa fa-list" style="font-size:20px"></i>
             </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Purchasing Data" onclick="purchaseEdit('."'".$row->id."'".')">
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit data pembelian " onclick="purchaseEdit('."'".$row->id."'".')">
             <i class="fa fa-edit" style="font-size:20px"></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Print Invoice" onclick="purchaseInvoice('."'".$row->id."'".')">Inv
@@ -66,17 +66,17 @@ class PurchaseController extends Controller
     }
 
 
-    /**
+        /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        $companies = Company::orderBy('name')->get();
-        return view('purchase.purchaseAdd', compact('companies'));
+        public function create()
+        {
+            $companies = Company::orderBy('name')->get();
+            return view('purchase.purchaseAdd', compact('companies'));
 
-    }
+        }
 
     /**
      * Store a newly created resource in storage.
@@ -104,9 +104,6 @@ class PurchaseController extends Controller
         $company=Company::select('name', 'taxIncluded')->where('id', $request->company)
         ->first();
 
-        //dd($company);
-
-
         $data = [
             'userId' => auth()->user()->id,
             'companyId' =>  $request->company,
@@ -119,14 +116,12 @@ class PurchaseController extends Controller
             'taxPercentage' => $request->taxPercentage,
             'status' =>  1
         ];
-        
+
         $lastPurchaseIdStored = $this->purchase->storeOnePurchase($data);
-        
+
         //create Purchase Number
         $this->inv = new InvoiceController();
         $purchaseNum = $this->inv->getPurchaseNumber($lastPurchaseIdStored);
-
-
         $purchase = Purchase::find($lastPurchaseIdStored);
         $purchase->purchasingNum = $purchaseNum;
         $purchase->save();
@@ -137,48 +132,67 @@ class PurchaseController extends Controller
         ->with('status','Transaksi pembelian ke '.$company->name.' berhasil ditambahkan.');
     }
 
-    /**
+        /**
      * Display the specified resource.
      *
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function show(Purchase $purchase)
-    {
-        //
-    }
+        public function show(Purchase $purchase)
+        {
+        }
 
-    /**
+        /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function edit(Purchase $purchase)
-    {
-        //
-    }
+        public function edit(Purchase $purchase)
+        {
+            $companyName = DB::table('companies')->select('name as name')->where('id','=', $purchase->companyId)->first();
 
-    /**
+            return view('purchase.purchaseEdit', compact('purchase', 'companyName'));
+        }
+
+        /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Purchase $purchase)
-    {
-        //
-    }
+        public function update(Request $request)
+        {
+            $request->validate(
+                [
+                    'progressStatus' => 'required|gt:0',
+                    'purchaseDate' => 'required|date|before_or_equal:today',
+                    'arrivalDate' => 'required|date|before:purchaseDate'
+                ],
+                [
+                ]
+            );
 
-    /**
+            $purchase = Purchase::find($request->purchaseId);
+            $purchase->arrivalDate = $request->arrivalDate;
+            $purchase->purchaseDate = $request->purchaseDate;
+            $purchase->status = $request->progressStatus;
+            $purchase->paymentTerms = $request->paymentTerms;
+            $purchase->save();
+
+            return redirect('purchaseList')
+            ->with('status','Transaksi pembelian ke '.$request->companyName.' berhasil diperbaharui.');
+        }
+
+        /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Purchase $purchase)
-    {
+        public function destroy(Purchase $purchase)
+        {
         //
+        }
     }
-}

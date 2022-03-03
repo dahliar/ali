@@ -209,7 +209,7 @@
                     <td>:</td>
                     <td>
                         @php
-                        $tax = $totalPrice * $purchase->taxPercentage /100;
+                        $tax = $totalPrice * $purchase->taxPercentage / 100;
                         echo $valutaType.' '.number_format($tax, 2, ',', '.');
                         @endphp
                     </td>

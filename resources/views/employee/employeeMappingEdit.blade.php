@@ -104,7 +104,7 @@
                         <li class="breadcrumb-item active">
                             <a class="white-text" href="{{ ('employeeList')}}">Pegawai</a>
                         </li>
-                        <li class="breadcrumb-item active">Edit</li>
+                        <li class="breadcrumb-item active">Ubah penempatan pegawai</li>
                     </ol>
                 </nav>
             </div>
@@ -161,8 +161,8 @@
                                 <span class="label">Jabatan*</span>
                             </div>
                             <div class="col-md-4">
-                                <select id="structural" name="structural" class="form-control" >
-                                    <option value="-1" selected>--Choose First--</option>
+                                <select id="structural" name="structural" class="form-select" >
+                                    <option value="-1" selected>--Pilih dahulu--</option>
                                     @foreach ($structpos as $position)
                                     @if ( $position->id == $orgstructure->structuralPosition )
                                     <option value="{{ $position->id }}" selected>{{ $position->name }}</option>
@@ -180,8 +180,8 @@
                                 <span class="label">Bagian*</span>
                             </div>
                             <div class="col-md-4">
-                                <select id="workPosition" name="workPosition" class="form-control" >
-                                    <option value="-1" selected>--Choose First--</option>
+                                <select id="workPosition" name="workPosition" class="form-select" >
+                                    <option value="-1" selected>--Pilih dahulu--</option>
                                     @foreach ($workpos as $workpo)
                                     @if ( $workpo->id == $orgstructure->workPosition)
                                     <option value="{{ $workpo->id }}" selected>{{ $workpo->name }}</option>
@@ -197,7 +197,7 @@
                                 <span class="label">Penempatan*</span>
                             </div>
                             <div class="col-md-4">
-                                <select id="OrgStructureOption" name="OrgStructureOption" class="form-control" >
+                                <select id="OrgStructureOption" name="OrgStructureOption" class="form-select" >
                                     <option value="">--Pilih Jabatan & Bagian dahulu--</option>
                                 </select>
                             </div>
@@ -228,30 +228,6 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Uang transport</span>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp. </span>
-                                    <input id="uangTransport" name="uangTransport" value="{{$orgstructure->ut}}" type="text" class="form-control text-end" required autocomplete="none">
-                                    <span class="input-group-text col-3">per hari</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Uang Makan</span>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp. </span>
-                                    <input id="uangMakan" name="uangMakan" value="{{$orgstructure->um}}" type="text" class="form-control text-end" required autocomplete="none">
-                                    <span class="input-group-text col-3">per hari</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
                                 <span class="label">Uang Lembur*</span>
                             </div>
                             <div class="col-md-4">
@@ -266,8 +242,8 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-8">
-                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Ok</button>
-                                <button type="Reset" class="btn btn-danger buttonConf"ß>Reset</button>
+                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Simpan</button>
+                                <button type="Reset" class="btn btn-danger buttonConf">Reset</button>
                             </div>
                         </div>
                     </div>

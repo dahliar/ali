@@ -14,6 +14,7 @@ use App\Models\Countries;
 use App\Models\TransactionNote;
 use PDF;
 use DB;
+use Auth;
 
 class InvoiceController extends Controller
 {
@@ -32,11 +33,10 @@ class InvoiceController extends Controller
         ->where('year', $year)
         ->where('bagian', $bagian)
         ->where('purchaseId','!=', null)
-        ->orderBy('id', 'desc')
-        ->first();
+        ->max('nomor');
 
-        if ($result){
-            $nomor=($result->nomor)+1;
+        if ($result>0){
+            $nomor=$result+1;
         }
         else{
             $nomor=1;
@@ -53,6 +53,7 @@ class InvoiceController extends Controller
         ];
         $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
         DB::table('document_numbers')->insert($data);
+
         return $tnum;
     }
 
@@ -68,12 +69,11 @@ class InvoiceController extends Controller
         ->where('month', $month)
         ->where('year', $year)
         ->where('bagian', $bagian)
-        //->where('documentType', $documentType)
-        ->orderBy('id', 'desc')
-        ->first();
+        ->where('transactionId','!=', null)
+        ->max('nomor');
 
-        if ($result){
-            $nomor=($result->nomor)+1;
+        if ($result>0){
+            $nomor=$result+1;
         }
         else{
             $nomor=1;
@@ -191,12 +191,9 @@ class InvoiceController extends Controller
             case(2) : $valutaType="USD";  break;
             case(3) : $valutaType="RMB";  break;
         }
+        $payerName = Auth::user()->name;
 
-
-
-        //return  view('invoice.ipl', 
-        //    compact('containerType','companyName','transaction', 'detailTransactions', 'rekening'));
-        $pdf = PDF::loadview('invoice.ipl', compact('valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
+        $pdf = PDF::loadview('invoice.ipl', compact('valutaType','containerType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
         $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
         return $pdf->download($filename);
     }
@@ -207,17 +204,12 @@ class InvoiceController extends Controller
         //dd($purchase);
         $purchaseDetails = $this->invoice->getOnePurchaseDetail($purchase->id);
         $company = Company::where('id',$purchase->companyId)->first();
-
-
         $valutaType = "";
         switch($purchase->valutaType){
             case(1) : $valutaType="Rp";   break;
             case(2) : $valutaType="USD";  break;
             case(3) : $valutaType="RMB";  break;
         }
-
-
-
         $pdf = PDF::loadview('invoice.notaPembelian', compact('valutaType', 'company','purchase', 'purchaseDetails'));
         $filename = 'NotaPembelian '.$purchase->id.' '.$company->name.' '.today().'.pdf';
         return $pdf->download($filename);

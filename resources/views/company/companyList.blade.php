@@ -103,7 +103,7 @@
                                     <th>Nama</th>
                                     <th>Negara</th>
                                     <th>Alamat</th>
-                                    <th>Act</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

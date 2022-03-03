@@ -40,7 +40,7 @@
                         <li class="breadcrumb-item active">
                             <a class="white-text" href="{{ ('employeeList')}}">Pegawai</a>
                         </li>
-                        <li class="breadcrumb-item active">Edit</li>
+                        <li class="breadcrumb-item active">Edit password pegawai</li>
                     </ol>
                 </nav>
             </div>
@@ -50,7 +50,7 @@
                     <div class="d-grid gap-1">
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <label class="form-label">Name*</label>
+                                <label class="form-label">Nama*</label>
                             </div>
                             <div class="col-md-4">
                                 <input id="name" name="name" type="text" class="form-control" required autocomplete="off" value="{{$choosenUser->name}}" disabled="true">
@@ -93,7 +93,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <label class="form-label">Re-Password</label>
+                                <label class="form-label">Ulangi Password</label>
                             </div>
 
                             <div class="col-md-4">
@@ -104,8 +104,8 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-4">
-                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Ok</button>
-                                <button type="Reset" class="btn btn-danger buttonConf"ß>Reset</button>
+                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Simpan</button>
+                                <button type="Reset" class="btn btn-danger buttonConf">Reset</button>
                             </div>
                         </div>
 

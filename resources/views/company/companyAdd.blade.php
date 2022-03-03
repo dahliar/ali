@@ -49,7 +49,7 @@
                     <a class="white-text" href="{{ url('/home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item active">
-                    <a class="white-text" href="{{ url('companyList')}}">Company</a>
+                    <a class="white-text" href="{{ url('companyList')}}">Perusahaan</a>
                 </li>
                 <li class="breadcrumb-item active">Tambah</li>
             </ol>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="col-md-4">
                         <select class="form-select w-100" id="countryId" name="countryId">
-                            <option value="-1">--Choose One--</option>
+                            <option value="-1">--Pilih dahulu--</option>
                             @foreach ($countries as $country)
                             @if ( $country->id == old('countryId') )
                             <option value="{{ $country->id }}" selected>{{ $country->name }}</option>
@@ -105,7 +105,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-md-2 text-end">
-                        <span class="label" id="spanBank">Tax Included</span>
+                        <span class="label" id="spanBank">Pajak terhitung</span>
                     </div>
                     <div class="col-md-4">
                         <select class="form-select w-100" id="taxIncluded" name="taxIncluded">
@@ -117,7 +117,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-md-2 text-end">
-                        <span class="label" id="spanBank">Kontak Person</span>
+                        <span class="label" id="spanBank">Kontak person</span>
                     </div>
                     <div class="col-md-2">
                         <button type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Kontak</button>
@@ -138,7 +138,7 @@
                     <div class="col-md-2 text-end">
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                         <input type="reset" value="Reset" class="btn btn-secondary">
                     </div>
                 </div>

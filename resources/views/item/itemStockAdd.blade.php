@@ -70,7 +70,7 @@
                             <li class="breadcrumb-item active">
                                 <a class="white-text" href="{{ url('itemList')}}">Items</a>
                             </li>
-                            <li class="breadcrumb-item active">Tambah</li>
+                            <li class="breadcrumb-item active">Tambah Item baru</li>
                         </ol>
                     </nav>
                 </div>
@@ -85,7 +85,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
-                                <span class="label">Item Name</span>
+                                <span class="label">Nama Item</span>
                             </div>
                             <div class="col-md-6 row">
                                 <div class="col-md-4">
@@ -95,18 +95,16 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
-                                <span class="label">Barang</span>
+                                <span class="label">Spesies</span>
                             </div>
                             <div class="col-md-6 row">
                                 <div class="col-md-4">
                                     <input id="speciesName" name="speciesName" type="text" class="form-control text-end" value="{{$oneItem->speciesName}}" readonly>
                                 </div>
                                 <div class="col-md-4">
-
                                     <input id="sizeName" name="sizeName" type="text" class="form-control text-end" value="{{$oneItem->sizeName}}" readonly>
                                 </div>
                                 <div class="col-md-4">
-
                                     <input id="gradeName" name="gradeName" type="text" class="form-control text-end" value="{{$oneItem->gradeName}}" readonly>
                                 </div>
                             </div>
@@ -148,7 +146,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
-                                <span class="label">Current</span>
+                                <span class="label">Stock saat ini</span>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
@@ -159,7 +157,7 @@
                         </div> 
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
-                                <span class="label">Add*</span>
+                                <span class="label">Penambahan*</span>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
@@ -196,7 +194,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
-                                <span class="label">Current</span>
+                                <span class="label">Stock saat ini</span>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
@@ -207,7 +205,7 @@
                         </div> 
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
-                                <span class="label">Add*</span>
+                                <span class="label">Penambahan*</span>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">

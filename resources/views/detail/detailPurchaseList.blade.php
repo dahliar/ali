@@ -21,88 +21,77 @@
     function tambahDetail(id){
         window.open(('{{ url("purchaseItemAdd") }}'+"/"+id), '_self');
     }
-    function deleteItem(detailpurchase){
-        /*
-        // e.preventDefault(); // <--- prevent form from submitting
-        swal.fire({
-            title: "Are you sure?",
-            text: "Yakin hendak menghapus item detail transaksi?",
-            icon: "warning",
-            buttons: [
-            'Cancel it!',
-            'Delete it!'
-            ],
-            dangerMode: true,
-        }).then(function(isConfirm) {
-        //window.open(('{{ url("itemDetailpurchaseDelete") }}'+"/"+detailpurchase), '_blank');
-        if (isConfirm) {
-            $.ajax({
-                url: '{{ url("itemDetailpurchaseDelete") }}'+"/"+detailpurchase,
-                type: "GET",
-                data : {"_token":"{{ csrf_token() }}"},
-                dataType: "text",
-                success:function(data){
-                    swal.fire("Deleted!", "Detail Transaksi berhasil dihapus", "success");
-                    myFunction({{ $purchase->id }});
-                }
-            });
-        } else {
-            swal.fire("Cancelled", "Detail Transaksi batal dihapus", "error");
-        }
-    })
-    */
-};
-
-function myFunction($id){
-    $('#datatable').DataTable({
-        ajax:'{{ url("getAllPurchaseItems") }}' + "/"+ $id,
-        serverSide: false,
-        processing: true,
-        deferRender: true,
-        type: 'GET',
-        destroy:true,
-        columnDefs: [
-        {   "width": "3%",  "targets":  [0], "className": "text-center" },
-        {   "width": "15%", "targets":  [1], "className": "text-left"   },
-        {   "width": "10%",  "targets": [2], "className": "text-left" },
-        {   "width": "10%", "targets":  [3], "className": "text-left" },
-        {   "width": "15%", "targets":  [4], "className": "text-left" },
-        {   "width": "12%", "targets":  [5], "className": "text-left" },
-        {   "width": "10%", "targets":  [6], "className": "text-left" },
-        {   "width": "10%", "targets":  [7], "className": "text-end" },
-        {   "width": "10%", "targets":  [8], "className": "text-end" },
-        {   "width": "5%", "targets":  [9], "className": "text-center" }
-        ], 
-
-        columns: [
-        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        {data: 'itemName', name: 'itemName'},
-        {data: 'sizeName', name: 'sizeName'},
-        {data: 'gradeName', name: 'gradeName'},
-        {data: 'packingName', name: 'packingName'},
-        {data: 'freezingName', name: 'freezingName'},
-        {data: 'price', name: 'price'},
-        {data: 'amount', name: 'amount'},
-        {data: 'weight', name: 'weight'},
-        {data: 'action', name: 'action', orderable: false, searchable: false}
-        ]
-    });
-}
-
-$(document).ready(function() {
-        /*
-        $('#selectSpecies').change(function(){ 
-            var e = document.getElementById("selectSpecies");
-            var speciesId = e.options[e.selectedIndex].value;
-            if (speciesId >= 0){
-                myFunction(speciesId);
-            } else{
-                swal.fire("Warning!", "Pilih jenis spesies dulu!", "info");
+    function deleteItem(dpid){
+        Swal.fire({
+            title: "Hapus item pembelian?",
+            text: "Yakin hendak menghapus item pembelian?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus aja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("itemDetailPurchaseDelete") }}',
+                    type: "POST",
+                    data: {
+                        "_token":"{{ csrf_token() }}",
+                        dpid : dpid
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Terhapus!',
+                            'Record item pembelian telah dihapus.',
+                            'success'
+                            );
+                        myFunction({{$purchase->id}});
+                    }
+                });
             }
+        })
 
+
+
+       
+    };
+
+    function myFunction($id){
+        $('#datatable').DataTable({
+            ajax:'{{ url("getAllPurchaseItems") }}' + "/"+ $id,
+            serverSide: false,
+            processing: true,
+            deferRender: true,
+            type: 'GET',
+            destroy:true,
+            columnDefs: [
+            {   "width": "3%",  "targets":  [0], "className": "text-center" },
+            {   "width": "15%", "targets":  [1], "className": "text-left"   },
+            {   "width": "10%",  "targets": [2], "className": "text-left" },
+            {   "width": "10%", "targets":  [3], "className": "text-left" },
+            {   "width": "15%", "targets":  [4], "className": "text-left" },
+            {   "width": "12%", "targets":  [5], "className": "text-left" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
+            {   "width": "10%", "targets":  [7], "className": "text-end" },
+            {   "width": "10%", "targets":  [8], "className": "text-end" },
+            {   "width": "5%", "targets":  [9], "className": "text-center" }
+            ], 
+
+            columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'itemName', name: 'itemName'},
+            {data: 'sizeName', name: 'sizeName'},
+            {data: 'gradeName', name: 'gradeName'},
+            {data: 'packingName', name: 'packingName'},
+            {data: 'freezingName', name: 'freezingName'},
+            {data: 'valutaPrice', name: 'valutaPrice'},
+            {data: 'amount', name: 'amount'},
+            {data: 'valutaBayar', name: 'valutaBayar'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
+            ]
         });
-        */
-    });
+    }
 </script>
 
 @if (session('status'))
@@ -128,10 +117,7 @@ $(document).ready(function() {
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item">
-                            <a class="white-text" href="{{ url('/purchaseList') }}">purchase</a>
-                        </li>
-                        <li class="breadcrumb-item active">Detail purchase</li>
+                        <li class="breadcrumb-item active">Detil transaksi pembelian</li>
                     </ol>
                 </nav>
 
@@ -153,9 +139,9 @@ $(document).ready(function() {
                                     <th>Packing</th>
                                     <th>Freezing</th>
                                     <th>Harga (/kg)</th>
-                                    <th>Jumlah</th>
-                                    <th>Weight</th>
-                                    <th>Act</th>
+                                    <th>Berat</th>
+                                    <th>Bayar</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>

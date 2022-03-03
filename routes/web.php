@@ -77,6 +77,11 @@ Route::get('purchaseList',[PurchaseController::class, 'index'])->middleware(['au
 Route::GET('getPurchaseList', [PurchaseController::class, 'getPurchaseList'])->middleware(['auth']);
 Route::get('purchaseAdd',[PurchaseController::class, 'create'])->middleware(['auth']);
 Route::get('purchaseStore',[PurchaseController::class, 'store'])->middleware(['auth'])->name('purchaseStore');
+Route::get('purchaseEdit/{purchase}',[PurchaseController::class, 'edit'])->middleware(['auth']);
+Route::post('purchaseUpdate',[PurchaseController::class, 'update'])->middleware(['auth']);
+
+
+
 
 Route::GET('getAllPurchases', [PurchaseController::class, 'getAllPurchases'])->middleware(['auth'])->name('getAllPurchases');
 
@@ -84,6 +89,9 @@ Route::GET('getAllPurchases', [PurchaseController::class, 'getAllPurchases'])->m
 Route::get('purchaseItems/{purchase}',[DetailPurchaseController::class, 'index'])->middleware(['auth'])->name('purchaseItems');
 Route::get('purchaseItemAdd/{purchase}',[DetailPurchaseController::class, 'create'])->middleware(['auth']);
 Route::get('purchaseItemStore',[DetailPurchaseController::class, 'store'])->middleware(['auth']);
+Route::POST('itemDetailPurchaseDelete',[DetailPurchaseController::class, 'destroy'])->middleware(['auth']);
+
+
 
 Route::GET('getAllPurchaseItems/{purchase}', [DetailPurchaseController::class, 'getAllPurchaseItems'])->middleware(['auth'])->name('getAllPurchaseItems');
 
@@ -205,6 +213,9 @@ Route::get('getPresenceHonorariumHistory/{start}/{end}', [HonorariumController::
 
 Route::GET('generateGaji',[SalaryController::class, 'index'])->name('generateGaji')->middleware('auth');
 Route::POST('generateGajiStore',[SalaryController::class, 'store'])->middleware('auth');
+Route::POST('slipGajiKaryawan',[SalaryController::class, 'viewSlipGaji'])->middleware('auth');
+
+
 
 
 /*

@@ -16,6 +16,26 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+    function employeePresenceHistory(id){
+        window.open(('{{ url("employeePresenceHarianHistory") }}'+"/"+id), '_blank');
+    }
+    function slipGajiPegawai(id){
+        alert("123");
+        var mapForm = document.createElement("form");
+        mapForm.target = "_blank";    
+        mapForm.method = "POST";
+        mapForm.action = "{{url("slipGajiKaryawan")}}";
+
+        var mapInput = document.createElement("input");
+        mapInput.type = "text";
+        mapInput.name = "empid";
+        mapInput.value = id;
+
+        mapForm.appendChild(mapInput);
+
+        document.body.appendChild(mapForm);
+        mapForm.submit();
+    }
 
     function editEmployee(id){
         window.open(('{{ url("employeeEdit") }}'+"/"+id), '_self');
@@ -30,7 +50,7 @@
     function tambahTransaksi(){
         window.open(('{{ url("employeeAdd") }}'), '_self');
     }
-    
+
     function myFunction(){
         $('#datatable').DataTable({
             ajax:'{{ url("getAllEmployees") }}',
@@ -113,7 +133,7 @@
                                 <th>Jenis Karyawan</th>
                                 <th>Masa Kerja</th>
                                 <th>Status</th>
-                                <th>Act</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -106,7 +106,7 @@
                     <li class="breadcrumb-item active">
                         <a class="white-text" href="{{ ('employeeList')}}">Pegawai</a>
                     </li>
-                    <li class="breadcrumb-item active">Tambah</li>
+                    <li class="breadcrumb-item active">Tambah pegawai</li>
                 </ol>
             </nav>
         </div>
@@ -118,7 +118,7 @@
                 <div class="d-grid gap-1">
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
-                            <label class="form-label">Name*</label>
+                            <label class="form-label">Nama*</label>
                         </div>
                         <div class="col-md-8">
                             <input id="name" name="name" type="text" class="form-control" autocomplete="off" value="{{old('name')}}">
@@ -142,7 +142,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
-                            <label class="form-label">Role</label>
+                            <label class="form-label">Peran</label>
                         </div>
                         <div class="col-md-4">
                             <select id="role" name="role" class="form-select" required>
@@ -164,7 +164,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
-                            <label class="form-label">Re-Password</label>
+                            <label class="form-label">Ulangi Password</label>
                         </div>
 
                         <div class="col-md-8">
@@ -259,7 +259,7 @@
                         </div>
                         <div class="col-md-4">
                             <select id="structural" name="structural" class="form-select" >
-                                <option value="-1" selected>--Choose First--</option>
+                                <option value="-1" selected>--Pilih dahulu--</option>
                                 @foreach ($structpos as $position)
                                 @if ( $position->id == old('structural') )
                                 <option value="{{ $position->id }}" selected>{{ $position->name }}</option>
@@ -276,7 +276,7 @@
                         </div>
                         <div class="col-md-4">
                             <select id="workPosition" name="workPosition" class="form-select" >
-                                <option value="-1" selected>--Choose First--</option>
+                                <option value="-1" selected>--Pilih dahulu--</option>
                                 @foreach ($workpos as $workpo)
                                 @if ( $workpo->id == old('workPosition') )
                                 <option value="{{ $workpo->id }}" selected>{{ $workpo->name }}</option>
@@ -303,7 +303,7 @@
                         </div>
                         <div class="col-md-4">
                             <select id="employmentStatus" name="employmentStatus" class="form-select" >
-                                <option value="-1" @if(old('employmentStatus') == -1) selected @endif>--Choose Jenis Karyawan--</option>
+                                <option value="-1" @if(old('employmentStatus') == -1) selected @endif>--Pilih Jenis Karyawan--</option>
                                 <option value="1" @if(old('employmentStatus') == 1) selected @endif>Bulanan</option>
                                 <option value="2" @if(old('employmentStatus') == 2) selected @endif>Harian</option>
                                 <option value="3" @if(old('employmentStatus') == 3) selected @endif>Borongan</option>
@@ -335,31 +335,7 @@
                                 <span class="input-group-text col-3">per hari</span>
                             </div>
                         </div>        
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-2 text-end">
-                            <span class="label">Uang transport</span>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <span class="input-group-text">Rp. </span>
-                                <input id="uangTransport" name="uangTransport" value="{{old('uangTransport',0)}}" type="text" class="form-control text-end" autocomplete="none">
-                                <span class="input-group-text col-3">per hari</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-2 text-end">
-                            <span class="label">Uang Makan</span>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group">
-                                <span class="input-group-text">Rp. </span>
-                                <input id="uangMakan" name="uangMakan" value="{{old('uangMakan',0)}}" type="text" class="form-control text-end" autocomplete="none">
-                                <span class="input-group-text col-3">per hari</span>
-                            </div>
-                        </div>
-                    </div>
+                    </div>                    
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
                             <span class="label">Uang Lembur*</span>

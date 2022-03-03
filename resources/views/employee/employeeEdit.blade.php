@@ -41,7 +41,7 @@
                         <li class="breadcrumb-item active">
                             <a class="white-text" href="{{ ('employeeList')}}">Pegawai</a>
                         </li>
-                        <li class="breadcrumb-item active">Edit</li>
+                        <li class="breadcrumb-item active">Edit data pegawai</li>
                     </ol>
                 </nav>
             </div>
@@ -51,7 +51,7 @@
                     <div class="d-grid gap-1">
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <label class="form-label">Name*</label>
+                                <label class="form-label">Nama*</label>
                             </div>
                             <div class="col-md-8">
                                 <input id="name" name="name" type="text" class="form-control" required autocomplete="off" value="{{$choosenUser->name}}" disabled="true">
@@ -82,7 +82,7 @@
                             <div class="col-md-4">
                                 @if (Auth::user()->isAdmin())
                                 <select id="role" name="role" class="form-select" required>
-                                    <option value="-1" @if(old('role',$choosenUser->role) == -1) selected @endif >--Choose First--</option>
+                                    <option value="-1" @if(old('role',$choosenUser->role) == -1) selected @endif >--Pilih dahulu--</option>
                                     <option value="1" @if(old('role',$choosenUser->role) == 1) selected @endif >Admin</option>
                                     <option value="2" @if(old('role',$choosenUser->role) == 2) selected @endif >Production</option>
                                     <option value="3" @if(old('role',$choosenUser->role) == 3) selected @endif >Marketing</option>
@@ -145,7 +145,7 @@
                                     <option value="1" @if(old('pendidikan', $employee->jenjangPendidikan) == "1") selected @endif>SD/Sederajat</option>
                                     <option value="2" @if(old('pendidikan', $employee->jenjangPendidikan) == "2") selected @endif>SMP/Sederajat</option>
                                     <option value="3" @if(old('pendidikan', $employee->jenjangPendidikan) == "3") selected @endif>SMA/Sederajat</option>
-                                    <option value="4" @if(old('pendidikan', $employee->jenjangPendidikan) == "4 1") selected @endif>Diploma 1</option>
+                                    <option value="4" @if(old('pendidikan', $employee->jenjangPendidikan) == "4") selected @endif>Diploma 1</option>
                                     <option value="5" @if(old('pendidikan', $employee->jenjangPendidikan) == "5") selected @endif>Diploma 2</option>
                                     <option value="6" @if(old('pendidikan', $employee->jenjangPendidikan) == "6") selected @endif>Diploma 3</option>
                                     <option value="7" @if(old('pendidikan', $employee->jenjangPendidikan) == "7") selected @endif>Diploma 4/Sarjana</option>
@@ -241,7 +241,7 @@
 
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Status</span>
+                                <span class="label">Status bekerja</span>
                             </div>
                             <div class="col-md-3">
 
@@ -267,8 +267,8 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-8">
-                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Ok</button>
-                                <button type="Reset" class="btn btn-danger buttonConf"ß>Reset</button>
+                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Simpan</button>
+                                <button type="Reset" class="btn btn-danger buttonConf">Reset</button>
                             </div>
                         </div>
                     </div>

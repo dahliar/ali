@@ -38,6 +38,11 @@ class SalaryController extends Controller
     {
         return view('salary.honorariumList');
     }
+    public function viewSlipGaji(Request $request)
+    {
+        dd($request);
+        return view('salary.slipGajiPegawai');
+    }
     public function store(Request $request)
     {
         $request->validate(

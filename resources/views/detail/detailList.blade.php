@@ -24,12 +24,12 @@
     function deleteItem(detailTransaction){
         // e.preventDefault(); // <--- prevent form from submitting
         swal.fire({
-            title: "Are you sure?",
+            title: "Yakin hendak menghapus?",
             text: "Yakin hendak menghapus item detail transaksi?",
             icon: "warning",
             buttons: [
-            'Cancel it!',
-            'Delete it!'
+            'Batalin aja!',
+            'Hapus aja!'
             ],
             dangerMode: true,
         }).then(function(isConfirm) {
@@ -127,9 +127,9 @@
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a class="white-text" href="{{ url('/transactionList') }}">Transaction</a>
+                            <a class="white-text" href="{{ url('/transactionList') }}">Transaksi Penjualan</a>
                         </li>
-                        <li class="breadcrumb-item active">Detail Transaction</li>
+                        <li class="breadcrumb-item active">Detil Transaksi Penjualan</li>
                     </ol>
                 </nav>
 
@@ -152,8 +152,8 @@
                                     <th>Freezing</th>
                                     <th>Harga (/kg)</th>
                                     <th>Jumlah</th>
-                                    <th>Weight</th>
-                                    <th>Act</th>
+                                    <th>Berat</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
