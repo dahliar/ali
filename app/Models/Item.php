@@ -130,12 +130,12 @@ class Item extends Model
             return $jumlah;
         })
         ->addColumn('action', function ($row) {
-            $html = '<button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Stock Add">
+            $html = '<button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang">
             <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i>
             </button>';
             if (Auth::user()->isAdmin() or Auth::user()->isProduction()){
                 $html .= '
-                <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update Unpacked Stock">
+                <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update jumlah unpacked">
                 <i class="fa fa-box-open"></i>
                 </button>
                 ';
