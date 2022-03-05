@@ -43,17 +43,18 @@ class Item extends Model
 
         ->where('i.isActive','=', 1);
         */
-
+        /*
         $onprogressdata = DB::table('detail_transactions as dti')
         ->select('i.id as id', DB::raw('sum(dti.amount) as am'))
         ->join('transactions as ti', 'dti.transactionId', '=', 'ti.id')
         ->join('items as i', 'i.id', '=', 'dti.itemId')
         ->where('ti.status', '=', '1')
         ->groupby('i.id')->toSql();
+        */
         //dd($onprogressdata);
 
 
-
+        /*
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
@@ -68,7 +69,6 @@ class Item extends Model
             'baseprice',
             'weightbase'
         )
-        ->groupBy('i.id')
         ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
         ->join('transactions as t', 't.id', '=', 'dt.transactionId')
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
@@ -76,20 +76,62 @@ class Item extends Model
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-
+        ->groupBy('i.id')
         ->where('t.status','=', 1)
         ->where('i.isActive','=', 1);
-        //dd($query->toSql());
 
         if ($speciesId>0){
             $query->where('sp.id','=', $speciesId);
         }
         $query->get();    
 
+        */
+
+        $query = DB::table('items as i')
+        ->select(
+            'i.id as id', 
+            'i.name as itemName', 
+            'sp.name as speciesName', 
+            'i.amount as jumlahPacked',
+            'amountUnpacked as jumlahUnpacked',
+            DB::raw('ifnull(sum(dt.amount),0) as jumlahOnProgress'),
+            DB::raw('concat(s.name, " ",f.name, " ", g.name) as sizeblockgrade'),
+            DB::raw('concat(i.amount, " ",p.shortname) as amountPacked'),
+            DB::raw('concat(amountUnpacked, " Kg") as amountUnpacked'),
+            DB::raw('concat(ifnull(sum(dt.amount),0), " ",p.shortname) as onProgress'),
+            DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
+            'baseprice',
+            'weightbase'
+        )
+        ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
+        ->leftjoin('transactions as t', 't.id', '=', 'dt.transactionId')
+
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        ->where('i.isActive','=', 1)
+        ->groupBy('i.id');
+
+
+        if ($speciesId>0){
+            $query->where('sp.id','=', $speciesId);
+        }
+        $query->get();  
+
+
+
+
         return datatables()->of($query)
+        ->addColumn('total', function ($row) {
+            $jumlah = ((($row->jumlahPacked + $row->jumlahUnpacked) * $row->weightbase) + $row->jumlahOnProgress).' Kg';
+
+            return $jumlah;
+        })
         ->addColumn('action', function ($row) {
             $html = '<button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Stock Add">
-            <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-box"></i>
+            <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i>
             </button>';
             if (Auth::user()->isAdmin() or Auth::user()->isProduction()){
                 $html .= '

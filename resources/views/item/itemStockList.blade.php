@@ -96,11 +96,6 @@
 </div>
 @endif
 
-
-
-
-
-
 <body onload="myFunction(0)">
     {{ csrf_field() }}
     <div class="container-fluid">
@@ -165,7 +160,8 @@
     </div>
 </body>
 <ol>
-    <li>On Progress : Jumlah barang yang sudah tercatat dalam transaksi, namun transaksi belum finished. Jika transaksi di-cancel, barang akan kembali ke dalam daftar packed</li>
+    <li>On Progress : Jumlah barang yang saat ini tercatat dalam proses transaksi, namun transaksi belum terselesaikan. Jika transaksi di-cancel, barang akan kembali ke dalam daftar packed</li>
+    <li>Total adalah jumlah total jumlah stock dalam satuan Kilogram, hasil penjumlahan dari Packed + On Progress + Unpacked</li>
 </ol>
 @else
 @include('partial.noAccess')
