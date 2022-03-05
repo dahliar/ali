@@ -164,7 +164,7 @@
 								@if (Auth::user()->isProduction() or Auth::user()->isAdmin())
 								<li class="nav-item dropdown">
 									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-										<i class="fas fa-warehouse"></i> Stok Barang
+										<i class="fas fa-warehouse"></i> Stok
 									</a>
 									<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 										<li><a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-warehouse"></i>Stock per-Spesies</a></li>
