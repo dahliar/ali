@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <table class="table cell-border stripe hover row-border data-table"  id="datatable">
+                            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                                 <thead>
                                     <tr>
                                         <th>No</th>

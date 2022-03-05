@@ -32,7 +32,7 @@
 							<h3>Penggajian</h3>
 						</div>
 						<div class="col-md-9">
-							<table class="table cell-border stripe hover row-border data-table"  id="datatable">
+							<table class="table table-striped table-hover table-bordered data-table"  id="datatable">
 								<thead>
 									<tr>
 										<th>No</th>
@@ -69,7 +69,7 @@
 							<h3>Stock</h3>
 						</div>
 						<div class="col-md-9">
-							<table class="table cell-border stripe hover row-border data-table"  id="datatable">
+							<table class="table table-striped table-hover table-bordered data-table"  id="datatable">
 								<thead>
 									<tr>
 										

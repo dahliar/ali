@@ -93,7 +93,7 @@
             <div class="modal-body">
                 <div class="row form-inline">
                     <div class="col-md-12">
-                        <table class="table cell-border stripe hover row-border data-table">
+                        <table class="table table-striped table-hover table-bordered data-table">
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>

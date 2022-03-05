@@ -129,7 +129,7 @@
                     <div class="col-md-2 text-end"></div>
                     <div class="col-md-10">
                         <div class="table-responsive">  
-                            <table class="table" id="dynamic_field">
+                            <table class="table table-striped table-hover table-bordered" id="dynamic_field">
                             </table> 
                         </div>  
                     </div>
