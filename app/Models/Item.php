@@ -152,6 +152,42 @@ class Item extends Model
             return $html;
         })->addIndexColumn()->toJson();
     }
+
+    public function getSpeciesStock(){
+        $query = DB::table('items as i')
+        ->select(
+            'i.id as id', 
+            'sp.name as name', 
+            DB::raw('sum(i.amount * i.weightbase) as packed'),
+            DB::raw('sum(i.amountUnpacked) as unpacked'),
+            DB::raw('ifnull(sum(dt.amount * i.weightbase),0) as onProgress'),
+        )
+        ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
+        ->leftjoin('transactions as t', 't.id', '=', 'dt.transactionId')
+
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        ->where('i.isActive','=', 1)
+        ->groupBy('sp.id')
+        ->get();  
+
+        return datatables()->of($query)
+        ->addColumn('total', function ($row) {
+            $jumlah = $row->packed + $row->onProgress + $row->unpacked;
+
+            return $jumlah;
+        })
+        ->addColumn('action', function ($row) {
+            $html="";
+
+            return $html;
+        })->addIndexColumn()->toJson();
+    }
+
+
     public function getItemHistory($itemId){
         $query = DB::table('stores as str')
         ->select('str.id', 

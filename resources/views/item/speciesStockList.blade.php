@@ -10,7 +10,7 @@
 
 
 @section('content')
-@if ((Auth::user()->isProduction() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
+@if ((Auth::user()->isProduction() or Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -18,16 +18,22 @@
         }
     });
 
-    function listItem(speciesId){
-        window.open(('{{ url("itemList") }}' + "/"+ speciesId), '_self');
+    function tambahStockItem(id){
+        window.open(('{{ url("itemStockAdd") }}' + "/"+ id), '_self');
     }
-    function sizeItem(speciesId){
-        window.open(('{{ url("sizeList") }}' + "/"+ speciesId), '_self');
+    function UpdateStockUnpacked(id){
+        window.open(('{{ url("editUnpacked") }}' + "/"+ id), '_self');
+    }
+    function historyStockItem(id){
+        window.open(('{{ url("itemStockView") }}' + "/"+ id), '_blank');
+    }
+    function unpackedHistory(id){
+        window.open(('{{ url("itemStockViewUnpacked") }}' + "/"+ id), '_blank');
     }
 
-    function myFunction(familyId){
+    function myFunction(){
         $('#datatable').DataTable({
-            ajax:'{{ url("getAllSpecies") }}' + "/"+ familyId,
+            ajax:'{{ url("getAllSpeciesStock") }}',
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -35,28 +41,34 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "60%", "targets":  [1], "className": "text-left"   },
-            {   "width": "25%",  "targets": [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-center" }
+            {   "width": "15%", "targets":  [1], "className": "text-left"   },
+            {   "width": "15%", "targets":  [2], "className": "text-end" },
+            {   "width": "10%", "targets":  [3], "className": "text-end" },
+            {   "width": "10%", "targets":  [4], "className": "text-end" },
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
-            {data: 'familyName', name: 'familyName'},
+            {data: 'packed', name: 'jumlahPacked'},
+            {data: 'onProgress', name: 'onProgress'},
+            {data: 'unpacked', name: 'jumlahUnpacked'},
+            {data: 'total', name: 'total'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     }
 
     $(document).ready(function() {
-        $('#selectFamily').change(function(){ 
-            var e = document.getElementById("selectFamily");
-            var familyId = e.options[e.selectedIndex].value;
-            if (familyId >= 0){
-                myFunction(familyId);
+        $('#selectSpecies').change(function(){ 
+            var e = document.getElementById("selectSpecies");
+            var speciesId = e.options[e.selectedIndex].value;
+            if (speciesId >= 0){
+                myFunction(speciesId);
             } else{
-                swal.fire("Warning!", "Pilih jenis family dulu!", "info");
+                swal.fire("Warning!", "Pilih jenis spesies dulu!", "info");
             }
 
         });
@@ -80,11 +92,6 @@
 </div>
 @endif
 
-
-
-
-
-
 <body onload="myFunction(0)">
     {{ csrf_field() }}
     <div class="container-fluid">
@@ -95,42 +102,24 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Master data spesies dan barang</li>
+                        <li class="breadcrumb-item active">Stock Species</li>
                     </ol>
                 </nav>
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row form-group">
-                                    <div class="col-2 my-auto text-md-right">
-                                        <span class="label" id="statTran">Jenis Family</span>
-                                    </div>
-                                    <div class="col-6">
-                                        <select class="form-control w-100" id="selectFamily">
-                                            <option value="-1">--Choose One--</option>
-                                            <option value="0" selected>All</option>
-                                            @foreach ($families as $family)
-                                            <option value="{{ $family->id }}">{{ $family->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-2 my-auto">
-                                        <span class="label" id="errSpan"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="card-body">
                             <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Family</th>
-                                        <th>Act</th>
+                                        <th>Packed (Kg)</th>
+                                        <th>On Progress (Kg)</th>
+                                        <th>Unpacked (Kg)</th>
+                                        <th>Total (Kg)</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -143,6 +132,10 @@
         </div>
     </div>
 </body>
+<ol>
+    <li>On Progress : Jumlah barang yang saat ini tercatat dalam proses transaksi, namun transaksi belum terselesaikan. Jika transaksi di-cancel, barang akan kembali ke dalam daftar packed</li>
+    <li>Total adalah jumlah total jumlah stock dalam satuan Kilogram, hasil penjumlahan dari Packed + On Progress + Unpacked</li>
+</ol>
 @else
 @include('partial.noAccess')
 @endif

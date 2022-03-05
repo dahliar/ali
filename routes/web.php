@@ -113,6 +113,15 @@ Route::get('itemStoreDetail/{storeId}',[StoreController::class, 'itemStoreDetail
 Route::get('storeAdd',[StoreController::class, 'store'])->middleware(['auth'])->name('storeAdd');
 Route::get('storeUpdate',[StoreController::class, 'update'])->middleware(['auth'])->name('storeUpdate');
 
+//ITEM STOCKS
+Route::get('speciesStockList',[ItemController::class, 'indexStockSpecies'])->middleware(['auth']);
+Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->middleware(['auth']);
+
+
+
+
+
+
 //SPECIES
 Route::get('speciesList',[SpeciesController::class, 'index'])->middleware(['auth'])->name('speciesList');
 Route::GET('getAllSpecies/{familyId}', [SpeciesController::class, 'getAllSpecies'])->middleware(['auth']);

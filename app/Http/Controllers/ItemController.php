@@ -42,6 +42,15 @@ class ItemController extends Controller
         $speciesList = Species::orderBy('name')->get();
         return view('item.itemStockList', compact('speciesList'));
     }
+    public function indexStockSpecies(Request $request)
+    {
+        return view('item.speciesStockList');
+    }
+    public function getSpeciesStock(){
+        return $this->item->getSpeciesStock();
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

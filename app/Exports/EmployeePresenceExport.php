@@ -57,8 +57,8 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
         ->where('mapping.isActive', '1')
         ->where('e.employmentStatus', '!=', '3')
         ->wherenull('p.start')
-        ->orderBy('sp.name')
         ->orderBy('wp.name')
+        ->orderBy('sp.name')
         ->orderBy('u.name');
 
         $this->rowCount = $query->count() + 1;
@@ -100,11 +100,6 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
 
         $sheet->getStyle('I2:K'.$this->rowCount)->applyFromArray($styleArrayEditable);
         $sheet->getStyle('A1:H'.$this->rowCount)->applyFromArray($styleArrayNonEditable);
-
-        //$sheet->setCellValue('M2', 'Jenis Presensi');
-        //$sheet->setCellValue('M3', '0 : Tidak Masuk');
-        //$sheet->setCellValue('M4', '1 : Masuk');
-        //$sheet->getStyle('M2:M4')->applyFromArray($styleArrayNonEditable);
 
         return [
             1    => [
