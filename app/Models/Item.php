@@ -130,24 +130,24 @@ class Item extends Model
             return $jumlah;
         })
         ->addColumn('action', function ($row) {
-            $html = '<button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang">
-            <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i>
-            </button>';
+            $html="";
             if (Auth::user()->isAdmin() or Auth::user()->isProduction()){
+                $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang">
+                <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i>
+                </button>';
                 $html .= '
                 <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update jumlah unpacked">
                 <i class="fa fa-box-open"></i>
                 </button>
                 ';
+                $html .= '
+                <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Stock History">
+                <i class="far fa-list-alt"></i>
+                </button>';
+                $html .= '
+                <button onclick="unpackedHistory('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Unpacked Stock History"><i class="fas fa-list-alt"></i>
+                </button>';
             }
-            $html .= '
-            <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Stock History">
-            <i class="far fa-list-alt"></i>
-            </button>';
-            $html .= '
-            <button onclick="unpackedHistory('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Unpacked Stock History"><i class="fas fa-list-alt"></i>
-            </button>';
-
 
             return $html;
         })->addIndexColumn()->toJson();
