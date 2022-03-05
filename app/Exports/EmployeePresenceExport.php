@@ -138,6 +138,8 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
     public function columnFormats(): array
     {
         return [
+            'C' => NumberFormat::FORMAT_TEXT,
+            'D' => NumberFormat::FORMAT_TEXT,
             'H' => 'yyyy-mm-dd',
             'I' => NumberFormat::FORMAT_TEXT,
             'J' => NumberFormat::FORMAT_TEXT,
