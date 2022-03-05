@@ -125,7 +125,7 @@ class Item extends Model
 
         return datatables()->of($query)
         ->addColumn('total', function ($row) {
-            $jumlah = ((($row->jumlahPacked + $row->jumlahUnpacked) * $row->weightbase) + $row->jumlahOnProgress).' Kg';
+            $jumlah = ((($row->jumlahPacked + $row->jumlahOnProgress) * $row->weightbase) + $row->jumlahUnpacked).' Kg';
 
             return $jumlah;
         })
