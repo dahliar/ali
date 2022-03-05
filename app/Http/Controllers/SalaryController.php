@@ -235,7 +235,7 @@ class SalaryController extends Controller
     {
         $rowCount = DB::table('borongans as b')
         ->where('b.status', 1)
-        ->where('e.employmentStatus', 3)
+        ->whereIn('e.employmentStatus', [2,3])
         ->whereDate('b.tanggalKerja', '>=', $start)
         ->whereDate('b.tanggalKerja', '<=', $end)
         ->join('detail_borongans as db', 'b.id', '=',  'db.boronganId')
@@ -309,7 +309,7 @@ class SalaryController extends Controller
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
         ->where('s.id', $borongan->salariesId)
         ->where('eosm.isactive', 1)
-        ->where('e.employmentStatus', 3)
+        ->whereIn('e.employmentStatus', [2,3])
         ->groupBy('e.id')
         ->get();
         return datatables()
@@ -708,7 +708,7 @@ class SalaryController extends Controller
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
         ->where('s.id', $borongan->salariesId)
         ->where('eosm.isactive', 1)
-        ->where('e.employmentStatus', 3)
+        ->whereIn('e.employmentStatus', [2,3])
         ->groupBy('e.id')
         ->get();
 

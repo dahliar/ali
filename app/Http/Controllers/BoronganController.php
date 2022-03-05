@@ -24,10 +24,15 @@ class BoronganController extends Controller
         ->select(
             'e.id as empid',
             'e.nip as nip',
-            'u.name as nama'
+            'u.name as nama',
+            DB::raw('(CASE 
+                WHEN e.employmentStatus="1" THEN "Bulanan" 
+                WHEN e.employmentStatus="2" THEN "Harian" 
+                WHEN e.employmentStatus="3" THEN "Borongan" 
+                END) AS employmentStatus'),
         )
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->where('employmentStatus', '=', 3)
+        ->whereIn('employmentStatus', [2,3])
         ->where('isActive', '=', 1)
         ->orderBy('u.name')
         ->get();
