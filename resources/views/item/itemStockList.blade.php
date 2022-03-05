@@ -106,7 +106,7 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Items</li>
+                        <li class="breadcrumb-item active">Stock per-Barang</li>
                     </ol>
                 </nav>
             </div>

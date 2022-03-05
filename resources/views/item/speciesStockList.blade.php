@@ -12,25 +12,6 @@
 @section('content')
 @if ((Auth::user()->isProduction() or Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript">
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-
-    function tambahStockItem(id){
-        window.open(('{{ url("itemStockAdd") }}' + "/"+ id), '_self');
-    }
-    function UpdateStockUnpacked(id){
-        window.open(('{{ url("editUnpacked") }}' + "/"+ id), '_self');
-    }
-    function historyStockItem(id){
-        window.open(('{{ url("itemStockView") }}' + "/"+ id), '_blank');
-    }
-    function unpackedHistory(id){
-        window.open(('{{ url("itemStockViewUnpacked") }}' + "/"+ id), '_blank');
-    }
-
     function myFunction(){
         $('#datatable').DataTable({
             ajax:'{{ url("getAllSpeciesStock") }}',
@@ -60,24 +41,7 @@
             ]
         });
     }
-
-    $(document).ready(function() {
-        $('#selectSpecies').change(function(){ 
-            var e = document.getElementById("selectSpecies");
-            var speciesId = e.options[e.selectedIndex].value;
-            if (speciesId >= 0){
-                myFunction(speciesId);
-            } else{
-                swal.fire("Warning!", "Pilih jenis spesies dulu!", "info");
-            }
-
-        });
-    });
 </script>
-
-
-
-
 
 @if (session('status'))
 <div class="alert alert-success">
@@ -92,7 +56,7 @@
 </div>
 @endif
 
-<body onload="myFunction(0)">
+<body onload="myFunction()">
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">
@@ -102,7 +66,7 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Stock Species</li>
+                        <li class="breadcrumb-item active">Stock per-Species</li>
                     </ol>
                 </nav>
             </div>
