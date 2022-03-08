@@ -229,7 +229,8 @@ class BoronganController extends Controller
             ->select([
                 'db.id as id',
                 'e.nip as nip',
-                'db.netPayment as netPayment', 
+                DB::raw('sum(db.netPayment) as netPayment'),
+                //'db.netPayment as netPayment', 
                 'u.name as nama', 
                 'e.noRekening as noRekening', 
                 'bank.name as bankname',
@@ -240,8 +241,10 @@ class BoronganController extends Controller
             ->join('banks as bank', 'bank.id', '=', 'e.bankid')
             ->join('employeeorgstructuremapping as eos', 'eos.idemp', '=', 'e.id') 
             ->join('organization_structures as os', 'os.id', '=', 'eos.idorgstructure')           
-            ->where('boronganId', '=', $borongan->id)->get();
-
+            ->where('boronganId', '=', $borongan->id)
+            ->groupBy('e.id')
+            ->get();
+            
             return view('presence.presenceBoronganWorkerList', compact('borongan', 'query'));
         }
 

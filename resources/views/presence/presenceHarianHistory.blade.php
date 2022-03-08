@@ -63,7 +63,7 @@
 @if (Session::has('status'))
 @if (!Session::get('status') == null)
 <div class="alert alert-success">
-    <div class="row form-inline">
+    <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
             Data presensi karyawan berikut bermasalah : {{Session::get('status')}}
         </div>
