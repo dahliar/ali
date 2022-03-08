@@ -225,7 +225,7 @@ class BoronganController extends Controller
      */
         public function show(Borongan $borongan)
         {
-            $query = DB::table('detail_borongans as db')
+            $query = DB::table('borongans as b')
             ->select([
                 'db.id as id',
                 'e.nip as nip',
@@ -236,11 +236,13 @@ class BoronganController extends Controller
                 'bank.name as bankname',
                 'os.name as osname'
             ])
+            ->join('detail_borongans as db', 'b.id', '=', 'db.boronganId')
             ->join('employees as e', 'e.id', '=', 'db.employeeId')
             ->join('users as u', 'u.id', '=', 'e.userid')
             ->join('banks as bank', 'bank.id', '=', 'e.bankid')
             ->join('employeeorgstructuremapping as eos', 'eos.idemp', '=', 'e.id') 
-            ->join('organization_structures as os', 'os.id', '=', 'eos.idorgstructure')           
+            ->join('organization_structures as os', 'os.id', '=', 'eos.idorgstructure')
+            ->where('eos.isactive', '=', 1)
             ->where('boronganId', '=', $borongan->id)
             ->groupBy('e.id')
             ->get();

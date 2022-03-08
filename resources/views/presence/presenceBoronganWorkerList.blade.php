@@ -111,7 +111,7 @@
                                     <td>{{$worker->nama}}</td>
                                     <td>{{$worker->nip}}</td>
                                     <td>{{$worker->osname}}</td>
-                                    <td>{{$worker->netPayment}}</td>
+                                    <td style="text-align: right;">{{$worker->netPayment}}</td>
                                 </tr>
                                 @php $a++ @endphp
                                 @endforeach
