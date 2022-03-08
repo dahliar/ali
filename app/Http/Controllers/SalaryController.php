@@ -576,16 +576,8 @@ class SalaryController extends Controller
             's.id as sid',
             's.endDate as tanggalKerja', 
             's.created_at as tanggalGenerate', 
-            DB::raw('
-                count(distinct(concat(db.isPaid, db.employeeId)))
-                AS isPaidStatus'), 
-            DB::raw('
-                concat(
-                count(distinct(concat(db.isPaid,db.employeeId))), 
-                " dari ", 
-                count(distinct(db.employeeId))
-                )
-                AS terbayar'), 
+            DB::raw('sum(db.isPaid) AS isPaidStatus'), 
+            DB::raw('count(distinct(db.employeeId)) AS jumlahEmployee'), 
             'u.name as generatorName'
         )
         ->join('borongans as b', 'b.salariesId', '=', 's.id')
@@ -593,11 +585,15 @@ class SalaryController extends Controller
         ->join('employees as e', 'e.id', '=', 'db.employeeId')
         ->join('users as u', 's.userIdGenerator', '=', 'u.id')
         ->where('jenis', 3)
-        ->groupBy('s.id')
+        ->groupBy('db.boronganId')
         ->orderBy('s.enddate');
         $query->get();
 
         return datatables()->of($query)
+        ->addColumn('terbayar', function ($row) {
+            $html = $row->isPaidStatus." dari ".$row->jumlahEmployee;
+            return $html;
+        })
         ->addColumn('action', function ($row) {
             $html = '
             <a data-rowid="'.$row->id.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak gaji pegawai borongan" 

@@ -356,7 +356,8 @@ class EmployeeController extends Controller
                 (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian
                 ')
         )
-        ->join('users as u', 'u.id', '=', 'e.userid');
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name');
         $query->get();
 
         return datatables()->of($query)

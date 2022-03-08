@@ -187,7 +187,8 @@ class PresenceController extends Controller
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->where('e.employmentStatus', '!=','3')
-        ->where('mapping.isActive', '1');
+        ->where('mapping.isActive', '1')
+        ->orderBy('u.name');
 
         $query->get();
 
