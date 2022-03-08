@@ -328,7 +328,6 @@ class SalaryController extends Controller
     }
     public function markBoronganIsPaid(Request $request)
     {
-        //dd($request);
         $affected = DB::table('detail_borongans as db')
         ->join('borongans as b', 'b.id', '=', 'db.boronganId')
         ->where('b.salariesId', $request->sid)
@@ -341,14 +340,15 @@ class SalaryController extends Controller
 
         $jumlahPaid = DB::table('detail_borongans as db')
         ->select(
-            DB::raw('count(db.isPaid) as terbayar')
+            DB::raw('sum(db.isPaid) as terbayar'),
+            'b.worker as worker'
         )
         ->join('borongans as b', 'b.id', '=', 'db.boronganId')
-        ->where('db.isPaid', '=', null)
         ->where('b.salariesId', '=', $request->sid)
         ->first();
 
-        if($jumlahPaid->terbayar == 0){
+        //dd($jumlahPaid->terbayar." - - - ".$jumlahPaid->worker);
+        if($jumlahPaid->terbayar == $jumlahPaid->worker){
             DB::table('salaries as s')
             ->where('s.id', $request->sid)
             ->update([
@@ -732,7 +732,13 @@ class SalaryController extends Controller
     }
     public function checkCetakGajiPegawaiBorongan(Borongan $borongan){
         $salary = DB::table('salaries as s')->where('s.id', '=', $borongan->salariesId)->first();
-        $generatorName = DB::table('users as u')->select('name')->where('u.id', '=', $salary->userIdGenerator)->first()->name;
+
+        $user = DB::table('users as u')
+        ->select('u.name as name')
+        ->join('salaries as s', 's.userIdGenerator', '=', 'u.id')
+        ->where('s.id', '=', $borongan->salariesId)
+        ->first();
+        $generatorName=$user->name;
 
         return view('salary.checkSalaryBoronganList', compact('generatorName','borongan', 'salary'));
     }

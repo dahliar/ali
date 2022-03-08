@@ -55,13 +55,7 @@ class BoronganController extends Controller
                 END) AS statusText'),
             'b.hargaSatuan as hargaSatuan',
             'b.netweight as netweight',
-            DB::raw('
-                concat(
-                count(db.isPaid), 
-                " dari ", 
-                count(db.id)
-                )
-                AS countIsPaid'),
+            DB::raw('sum(db.isPaid) as jumlahPaid'),
             DB::raw('(b.hargaSatuan * b.netweight) AS total'),
             'b.worker as worker')
         ->leftjoin('detail_borongans as db', 'db.boronganId', '=', 'b.id')
@@ -70,6 +64,14 @@ class BoronganController extends Controller
         $query->get();
 
         return datatables()->of($query)
+        ->addColumn('countIsPaid', function ($row) {
+            $jumlah=$row->jumlahPaid;
+            if ($row->jumlahPaid == null){
+                $jumlah=0;
+            }
+            $html = $jumlah." dari ".$row->worker;
+            return $html;
+        })
         ->addColumn('action', function ($row) {
             $html='';
             if ($row->status == 0){
