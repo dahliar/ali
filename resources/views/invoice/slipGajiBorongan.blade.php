@@ -144,10 +144,10 @@
                     @foreach ($detail_borongans as $daily)
                     <tr >
                         <td width="5%" style="text-align: center;">{{$no}}</td>
-                        <td width="25%">{{$daily->name}}</td>
-                        <td width="15%" style="text-align: center;">{{$daily->nip}}</td>
-                        <td width="15%" style="text-align: center;">{{$daily->osname}}</td>
-                        <td width="15%" style="text-align: center;">{{$daily->isPaid}}</td>
+                        <td width="20%">{{$daily->name}}</td>
+                        <td width="10%" style="text-align: center;">{{$daily->nip}}</td>
+                        <td width="20%" style="text-align: left;">{{$daily->osname}}</td>
+                        <td width="15%" style="text-align: left;">{{$daily->isPaid}}</td>
                         <td width="15%" style="text-align: right;">{{$daily->netPayment}}</td>
                     </tr>
                     @php
