@@ -86,7 +86,7 @@
             {data: 'osname', name: 'osname'},
             {data: 'noRekening', name: 'noRekening'},
             {data: 'bankName', name: 'bankName'},
-            {data: 'hari', name: 'hari'},
+            {data: 'jumlahId', name: 'jumlahId'},
             {data: 'uh', name: 'uh'},
             {data: 'ul', name: 'ul'},
             {data: 'total', name: 'total'},
@@ -149,14 +149,14 @@
                     <div class="col-md-2">Generator
                     </div>
                     <div class="col-md-6"> 
-                        <input type="text" value="{{$salary->userIdGenerator}}" class="form-control" disabled>
+                        <input type="text" value="{{$generatorName}}" class="form-control" disabled>
                     </div>
                 </div>
                 <div class="row form-inline">
                     <div class="col-md-2">Sudah Dibayar
                     </div>
                     <div class="col-md-6"> 
-                        <input type="text" value="{{$salary->isPaid}}" class="form-control" disabled>
+                        <input type="text" value="@if ($salary->isPaid == null)BELUM @else SUDAH @endif " class="form-control" disabled>
                     </div>
                 </div>
             </div>            <div class="modal-body">

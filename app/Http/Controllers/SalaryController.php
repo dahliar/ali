@@ -616,7 +616,8 @@ class SalaryController extends Controller
     }  
 
     public function checkCetakGajiPegawaiHarian(Salary $salary){
-        return view('salary.checkSalaryHarianList', compact('salary'));
+        $generatorName = DB::table('users as u')->select('name')->where('u.id', '=', $salary->userIdGenerator)->first()->name;
+        return view('salary.checkSalaryHarianList', compact('salary', 'generatorName'));
     }
     public function printSalaryHarianList(Salary $salary){
         $dailysalaries = DB::table('dailysalaries as ds')
@@ -635,7 +636,7 @@ class SalaryController extends Controller
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
         ->where('ds.salaryid', $salary->id)
         ->where('eosm.isactive', 1)
-        ->whereIn('e.employmentStatus', [2,3])
+        ->where('e.employmentStatus', 2)
         ->groupBy('e.id')
         ->get();
 
@@ -838,43 +839,55 @@ class SalaryController extends Controller
 
 
     public function getSalariesHarianForCheck($salaryId){
-        $query = DB::table('dailysalaries as ds')
+        $query = DB::table('salaries as s')
         ->select(
+            'u.name as name',
+            'e.nip as nip',
+            'os.name as osname',
+            'e.noRekening as noRekening',
+            'b.name as bankName',
             'e.id as empid',
             'ds.salaryId as sid',
-            'e.nip as nip',
-            'u.name as name',
-            'e.noRekening as noRekening',
-            DB::raw('count(ds.id) as hari'),
-            'b.name as bankName',
-            'b.name as bankName',
-            'os.name as osname',
-            'ds.isPaid as isPaidStatus',
-            DB::raw('(CASE WHEN ds.isPaid is null THEN "Belum" WHEN ds.isPaid="1" THEN "Sudah" END) AS isPaid'),
+            DB::raw('count(ds.id) as jumlahId'),
             DB::raw('sum(ds.uangharian) as uh'),
             DB::raw('sum(ds.uanglembur) as ul'),
-            DB::raw('(sum(ds.uangharian) + sum(ds.uanglembur)) AS total'),
+            DB::raw('sum(ds.isPaid) as jumlahIsPaid'),
         )
+        ->join('dailysalaries as ds', 'ds.salaryid', '=', 's.id')
         ->join('employees as e', 'e.id', '=', 'ds.employeeId')
         ->join('banks as b', 'b.id', '=', 'e.bankid')
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
+        
         ->where('ds.salaryid', $salaryId)
         ->where('e.employmentStatus', 2)
+        ->where('eosm.isactive', 1)
+        ->groupBy('ds.salaryId')
         ->groupBy('ds.employeeId')
+        ->having('ds.salaryId', '=',$salaryId)
         ->get();
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
             $html='';
-            if ($row->isPaidStatus == null){
+            if ($row->jumlahIsPaid < $row->jumlahId){
                 $html .= '
                 <button data-rowid="'.$row->empid.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Set sudah dibayar" 
                 onclick="setSalaryIsPaid('.$row->sid.','.$row->empid.')"><i class="fa fa-check"></i>
                 </button>';
             }
             return $html;
+        })
+        ->addColumn('isPaid', function ($row) {
+            $html='SUDAH';
+            if ($row->jumlahIsPaid < $row->jumlahId){
+                $html = 'BELUM';
+            }
+            return $html;
+        })
+        ->addColumn('total', function ($row) {
+            return $row->uh + $row->ul;
         })
         ->addIndexColumn()->toJson();
     }
