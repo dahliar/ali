@@ -58,16 +58,13 @@
             ]
         });
     }
-
-    $(document).ready(function() {
-    });
 </script>
 
-@if (session('status'))
+@if (Session::has('status'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
-            {{ session('status') }}
+            Data presensi karyawan berikut bermasalah : {{Session::get('status')}}
         </div>
         <div class="col-md-1 text-center">
             <span class="label"><strong >x</strong></span>

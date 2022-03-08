@@ -13,6 +13,7 @@ class EmployeePresenceImport implements ToCollection, WithStartRow
     /**
     * @param Collection $collection
     */
+    private $text = "";
     function __construct() {   
         $this->presence = new Presence();     
     }
@@ -23,6 +24,11 @@ class EmployeePresenceImport implements ToCollection, WithStartRow
     }
     public function collection(Collection $collection)
     {
-        $this->presence->presenceCalculator($collection);
+        $this->text = $this->presence->presenceCalculator($collection);
+
+    }
+    public function getImportResult(): string
+    {
+        return $this->text;
     }
 }

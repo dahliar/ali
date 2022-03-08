@@ -232,7 +232,10 @@ class PresenceController extends Controller
     }
     public function presenceHarianImportStore(Request $request)
     {
-        Excel::import(new EmployeePresenceImport, $request->presenceFile);
-        return redirect('presenceHarianHistory')->with('success', 'All good!');
+        $import = new EmployeePresenceImport;
+        Excel::import($import, $request->presenceFile);
+
+        $message = $import->getImportResult();
+        return redirect('presenceHarianHistory')->with('status', $message);
     }
 }

@@ -40,15 +40,15 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-end" },
-            {   "width": "15%", "targets":  [1], "className": "text-left"   },
+            {   "width": "5%",  "targets":  [0], "className": "text-center" },
+            {   "width": "20%", "targets":  [1], "className": "text-left"   },
             {   "width": "15%", "targets":  [2], "className": "text-left" },
             {   "width": "10%", "targets":  [3], "className": "text-end" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" },
-            {   "width": "10%", "targets":  [8], "className": "text-left" }
+            {   "width": "9%", "targets":  [4], "className": "text-end" },
+            {   "width": "9%", "targets":  [5], "className": "text-end" },
+            {   "width": "9%", "targets":  [6], "className": "text-end" },
+            {   "width": "9%", "targets":  [7], "className": "text-end" },
+            {   "width": "14%", "targets":  [8], "className": "text-center" }
             ], 
 
             columns: [

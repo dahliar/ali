@@ -127,8 +127,8 @@
 				<i class="fas fa-warehouse"></i> Stok
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li><a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-warehouse"></i>Stock per-Spesies</a></li>
-				<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-warehouse"></i>Stock per-Barang</a></li>
+				<li><a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-fish"></i>Stock per-Spesies</a></li>
+				<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-fish"></i>Stock per-Barang</a></li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">

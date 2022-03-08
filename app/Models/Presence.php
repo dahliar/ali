@@ -18,16 +18,23 @@ class Presence extends Model
 
     function presenceCalculator(Collection $collection){
         $a=0;
+        $text = "";
         foreach ($collection as $row) 
         {
-            $start = \Carbon\Carbon::parse($row[7].' '.$row[8].'.00');
-            $end = \Carbon\Carbon::parse($row[7].' '.$row[9].'.00');
-            if($end->gte($start)){
-                if($row[10]==1){
-                    $this->simpanPresenceTunggal($row[0], $start, $end);
+            if($row[10]==1){
+                try{ 
+                    $start = \Carbon\Carbon::parse($row[7].' '.$row[8].'.00');
+                    $end = \Carbon\Carbon::parse($row[7].' '.$row[9].'.00');
+                    if($end->gte($start)){
+                        $this->simpanPresenceTunggal($row[0], $start, $end);
+                    }
+                }
+                catch(\Exception $e){
+                    $text.=$row[1].", ";
                 }
             }
         }
+        return $text;
     }
     function storePresenceHarianEmployee($empid, $start, $end ){
         $start = \Carbon\Carbon::parse($start);
@@ -159,7 +166,9 @@ class Presence extends Model
             'shift'         => $shift
         ];
         if($presenceExist->jumlah > 0){
-            DB::table('presences')->update($dataPresensi)->where('id', '=', $presenceExist->presenceId);
+            DB::table('presences')
+            ->where('id', '=', $presenceExist->presenceId)
+            ->update($dataPresensi);
         } else{
             DB::table('presences')->insert($dataPresensi);
         }
@@ -188,7 +197,9 @@ class Presence extends Model
             'uanglembur'    => ($honorarium->ul * $jamLembur)
         ];
         if($dailySalariesExist->jumlah > 0){
-            DB::table('dailysalaries')->update($datasalary)->where('id', '=', $dailySalariesExist->dsid);
+            DB::table('dailysalaries')
+            ->where('id', '=', $dailySalariesExist->dsid)
+            ->update($datasalary);
         } else {
             DB::table('dailysalaries')->insert($datasalary);
         }
