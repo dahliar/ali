@@ -619,7 +619,6 @@ class SalaryController extends Controller
         return view('salary.checkSalaryHarianList', compact('salary'));
     }
     public function printSalaryHarianList(Salary $salary){
-
         $dailysalaries = DB::table('dailysalaries as ds')
         ->select(
             'e.id as empid',
@@ -631,13 +630,13 @@ class SalaryController extends Controller
             DB::raw('(sum(ds.uangharian) + sum(ds.uanglembur)) AS total'),
         )
         ->join('employees as e', 'e.id', '=', 'ds.employeeId')
-        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->leftjoin('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
         ->where('ds.salaryid', $salary->id)
         ->where('eosm.isactive', 1)
         ->where('e.employmentStatus', 2)
-        ->groupBy('e.id')
+        ->groupBy('ds.salaryId')
         ->get();
 
         $generatorName = DB::table('users as u')
