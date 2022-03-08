@@ -232,14 +232,11 @@ class BoronganController extends Controller
                 DB::raw('sum(db.netPayment) as netPayment'),
                 //'db.netPayment as netPayment', 
                 'u.name as nama', 
-                'e.noRekening as noRekening', 
-                'bank.name as bankname',
                 'os.name as osname'
             ])
             ->join('detail_borongans as db', 'b.id', '=', 'db.boronganId')
             ->join('employees as e', 'e.id', '=', 'db.employeeId')
             ->join('users as u', 'u.id', '=', 'e.userid')
-            ->join('banks as bank', 'bank.id', '=', 'e.bankid')
             ->join('employeeorgstructuremapping as eos', 'eos.idemp', '=', 'e.id') 
             ->join('organization_structures as os', 'os.id', '=', 'eos.idorgstructure')
             ->where('eos.isactive', '=', 1)

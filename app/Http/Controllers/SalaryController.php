@@ -312,8 +312,7 @@ class SalaryController extends Controller
         ->whereIn('e.employmentStatus', [2,3])
         ->groupBy('e.id')
         ->get();
-        return datatables()
-        ->of($query)        
+        return datatables()->of($query)        
         ->addColumn('action', function ($row) {
             $html = '';
             if($row->statusIsPaid != 1){
@@ -585,7 +584,7 @@ class SalaryController extends Controller
         ->join('employees as e', 'e.id', '=', 'db.employeeId')
         ->join('users as u', 's.userIdGenerator', '=', 'u.id')
         ->where('jenis', 3)
-        ->groupBy('db.boronganId')
+        ->groupBy('s.id')
         ->orderBy('s.enddate');
         $query->get();
 
@@ -733,10 +732,13 @@ class SalaryController extends Controller
     }
     public function checkCetakGajiPegawaiBorongan(Borongan $borongan){
         $salary = DB::table('salaries as s')->where('s.id', '=', $borongan->salariesId)->first();
-        return view('salary.checkSalaryBoronganList', compact('borongan', 'salary'));
+        $generatorName = DB::table('users as u')->select('name')->where('u.id', '=', $salary->userIdGenerator)->first()->name;
+
+        return view('salary.checkSalaryBoronganList', compact('generatorName','borongan', 'salary'));
     }
     public function checkCetakHonorariumPegawai(Salary $salary){
-        return view('salary.checkHonorariumList', compact('salary'));
+        $generatorName = DB::table('users as u')->select('name')->where('u.id', '=', $salary->userIdGenerator)->first()->name;
+        return view('salary.checkHonorariumList', compact('generatorName','salary'));
     }
     public function harianMarkedPaid(Request $request){
         DB::table('dailysalaries')
