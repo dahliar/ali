@@ -41,7 +41,7 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
             'wp.name as bagian',
             DB::raw("STR_TO_DATE('".$x."','%Y-%m-%d') as presenceDate"),
             DB::raw("'08:00' as jamMasuk"),
-            DB::raw("'17:00' as jamKeluar"),
+            DB::raw("'16:00' as jamKeluar"),
             DB::raw("'1' as statusMasuk"),
         )
         ->leftJoin('presences as p', function($join) use ($x){
