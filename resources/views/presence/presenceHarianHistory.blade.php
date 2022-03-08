@@ -61,6 +61,7 @@
 </script>
 
 @if (Session::has('status'))
+@if (!Session::get('status') == null)
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
@@ -71,6 +72,7 @@
         </div>
     </div>
 </div>
+@endif
 @endif
 
 <body>
