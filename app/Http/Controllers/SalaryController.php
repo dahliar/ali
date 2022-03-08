@@ -630,13 +630,13 @@ class SalaryController extends Controller
             DB::raw('(sum(ds.uangharian) + sum(ds.uanglembur)) AS total'),
         )
         ->join('employees as e', 'e.id', '=', 'ds.employeeId')
-        ->leftjoin('users as u', 'u.id', '=', 'e.userid')
+        ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
         ->where('ds.salaryid', $salary->id)
         ->where('eosm.isactive', 1)
-        ->where('e.employmentStatus', 2)
-        ->groupBy('ds.salaryId')
+        ->whereIn('e.employmentStatus', [2,3])
+        ->groupBy('e.id')
         ->get();
 
         $generatorName = DB::table('users as u')
