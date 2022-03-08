@@ -92,7 +92,7 @@
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <table class="table table-striped table-hover table-bordered data-table">
                             <thead>
                                 <tr>

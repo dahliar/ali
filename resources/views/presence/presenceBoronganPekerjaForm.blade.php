@@ -118,80 +118,73 @@
                 </div>
                 <div class="modal-content">
                     <div class="modal-body">
-                        <table style="width: 40%" class="table table-striped table-hover table-bordered">
+                        <table style="width: 100%" class="table table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
+                                    <th>No</th>
                                     <th style="width: 5%; text-align:center">Masuk Kerja</th>
                                     <th style="width: 5%; text-align:center">Full day</th>
                                     <th style="width: 10%;">NIP</th>
                                     <th style="width: 20%;">Nama</th>
                                     <th style="width: 10%;">Jenis</th>
+                                    <th class="table-dark"></th>
+                                    <th>No</th>
+                                    <th style="width: 5%; text-align:center">Masuk Kerja</th>
+                                    <th style="width: 5%; text-align:center">Full day</th>
+                                    <th style="width: 10%;">NIP</th>
+                                    <th style="width: 20%;">Nama</th>
+                                    <th style="width: 10%;">Jenis</th>
+                                    <th class="table-dark"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @php $no=0; @endphp
-                                @foreach ($employees as $employee)
+                                @php 
+                                $no=0; 
+                                $noLeft=1;
+                                $noRight=2;
+
+                                @endphp
+                                @foreach($employees->split($employees->count()/2) as $row)
                                 <tr>
+                                    @foreach($row as $employee)
+                                    <td>
+                                        @if(($no % 2)==0)
+                                        {{$noLeft}}
+                                        @php $noLeft+=2;    @endphp
+                                        @else
+                                        {{$noRight}}
+                                        @php $noRight+=2;    @endphp
+                                        @endif
+                                    </td>
                                     <td style="width: 5%; text-align:center">
                                         <input id="boronganWorker[{{$no}}]" type="checkbox" class="form-check-input" onchange="workerAddedChange(this.checked, {{$no}})" name="boronganWorker[{{$no}}]" value="{{$employee->empid}}">
                                     </td>
                                     <td style="width: 5%; text-align:center">
                                         <input id="boronganType[{{$no}}]" type="checkbox" class="form-check-input" name="boronganType[{{$no}}]" value="{{$employee->empid}}" onchange="boronganTypeChange(this.checked, {{$no}})" >
                                     </td>
-                                    <td style="width: 10%;">
-                                        {{$employee->nip}}
-                                    </td>                                
-                                    <td style="width: 20%;">
-                                        {{$employee->nama}}
-                                    </td>                                
-                                    <td>
-                                        {{$employee->employmentStatus}}
-                                    </td style="width: 10%;">                                
+                                    <td style="width: 10%;">{{$employee->nip}}</td>
+                                    <td style="width: 20%;">{{$employee->nama}}</td>
+                                    <td style="width: 10%;">{{$employee->employmentStatus}}</td> 
+                                    <td class="table-dark"></td>
+                                    @php $no+=1;    @endphp
+                                    @endforeach
                                 </tr>
-                                @php $no+=1;    @endphp
                                 @endforeach
                             </tbody>
                         </table>
-
-                        <!--
-                        <div class="row form-group">
-                            <div class="col-md-1">Masuk</div>
-                            <div class="col-md-1">Sehari penuh?</div>
-                            <div class="col-md-3">Nama - NIP</div>
-                            <div class="col-md-1">Jenis Pegawai</div>
-                        </div>                        
-                        @php $no=0; @endphp
-                        @foreach ($employees as $employee)
-                        <div class="row form-group">
-                            <div class="col-md-1">
-                                <input id="boronganWorker[{{$no}}]" type="checkbox" class="form-check-input" onchange="workerAddedChange(this.checked, {{$no}})" name="boronganWorker[{{$no}}]" value="{{$employee->empid}}">
-                            </div>
-                            <div class="col-md-1">
-                                <input id="boronganType[{{$no}}]" type="checkbox" class="form-check-input" name="boronganType[{{$no}}]" value="{{$employee->empid}}" onchange="boronganTypeChange(this.checked, {{$no}})" >
-                            </div>
-                            <div class="col-md-3">
-                                {{$employee->nama}} - {{$employee->nip}}
-                            </div>                                
-                            <div class="col-md-1">
-                                {{$employee->employmentStatus}}
-                            </div>                                
-                        </div>
-                        @php $no+=1;    @endphp
-                        @endforeach
-                    -->
+                    </div>
                 </div>
-            </div>
-            <div class="row form-group text-center">
-                <div class="col-md-5">
+                <div class="row form-group text-center">
+                    <div class="col-md-5">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <input type="reset" value="Reset" class="btn btn-secondary">
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <input type="reset" value="Reset" class="btn btn-secondary">
-                </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-</div>
 </div>
 @else
 @include('partial.noAccess')
