@@ -862,10 +862,8 @@ class SalaryController extends Controller
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
         ->where('ds.salaryid', $salaryId)
         ->where('e.employmentStatus', 2)
-        ->groupBy('e.id')
+        ->groupBy('ds.employeeId')
         ->get();
-
-
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
