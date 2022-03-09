@@ -168,7 +168,7 @@ class PurchaseController extends Controller
                 [
                     'progressStatus' => 'required|gt:0',
                     'purchaseDate' => 'required|date|before_or_equal:today',
-                    'arrivalDate' => 'required|date|before:purchaseDate'
+                    'arrivalDate' => 'required|date|before_or_equal:purchaseDate'
                 ],
                 [
                 ]
