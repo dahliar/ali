@@ -53,10 +53,10 @@ class PurchaseController extends Controller
 
             $html='
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar beli item" onclick="purchaseItems('."'".$row->id."'".')">
-            <i class="fa fa-list" style="font-size:20px"></i>
+            <i class="fa fa-list"></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit data pembelian " onclick="purchaseEdit('."'".$row->id."'".')">
-            <i class="fa fa-edit" style="font-size:20px"></i>
+            <i class="fa fa-edit"></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Print Invoice" onclick="purchaseInvoice('."'".$row->id."'".')">Inv
             </button>

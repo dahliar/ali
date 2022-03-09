@@ -31,6 +31,7 @@
         window.open(('{{ url("purchase/notaPembelian") }}'+"/"+id), '_self');
     }
 
+    /*
     function refreshTableTransactionList(){
         var e = document.getElementById("negara");
         var negara = e.options[e.selectedIndex].value;       
@@ -87,6 +88,7 @@
             ]
         });
     }
+    */
 
     function myFunction(){
         $('#datatable').DataTable({
@@ -102,13 +104,13 @@
             columnDefs: [
             {   "width": "4%",  "targets":  [0], "className": "text-center" },
             {   "width": "21%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%",  "targets": [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [2], "className": "text-left" },
+            {   "width": "20%", "targets":  [3], "className": "text-left" },
             {   "width": "10%", "targets":  [4], "className": "text-left" },
             {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
             {   "width": "10%", "targets":  [7], "className": "text-center" },
-            {   "width": "15%", "targets":  [8], "className": "text-left" }
+            {   "width": "10%", "targets":  [8], "className": "text-left" }
             ], 
 
             columns: [
@@ -153,7 +155,7 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Purchase</li>
+                        <li class="breadcrumb-item active">Transaksi Pembelian</li>
                     </ol>
                 </nav>
                 
@@ -162,14 +164,16 @@
             <div class="modal-body">
                 <div class="row">
                     <p>
-                        <button onclick="purchaseAdd()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Add purchase">
-                            <i class="fa fa-plus" style="font-size:20px"></i> Purchase
+                        <button onclick="purchaseAdd()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Pembelian">
+                            <i class="fa fa-plus" style="font-size:20px"></i> Pembelian
                         </button>
-                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapsePart" role="button" aria-expanded="false" aria-controls="collapsePart">
+                            <!--
+                            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapsePart" role="button" aria-expanded="false" aria-controls="collapsePart">
                             <i class="fas fa-filter" style="font-size:20px"></i> Purchase List
-                        </a>
+                            </a>
+                        -->
                     </p>
-
+                    <!--
                     <div class="collapse" id="collapsePart">
                         <div class="card card-body">
                             <div class="row form-group">
@@ -236,33 +240,34 @@
                             </div>
                         </div> 
                     </div>
-                </div>
+                -->
             </div>
+        </div>
 
 
-            <div class="row form-inline">
-                <div class="card-body">
-                    <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Perusahaan</th>
-                                <th>Negara</th>
-                                <th>No Surat</th>
-                                <th>Arrival</th>
-                                <th>Purchase</th>
-                                <th>Payment</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>                
-                </div>
+        <div class="row form-inline">
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Perusahaan</th>
+                            <th>Negara</th>
+                            <th>No Surat</th>
+                            <th>Datang</th>
+                            <th>Transaksi</th>
+                            <th>Bayar</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>                
             </div>
-        </div>    
-    </div>
+        </div>
+    </div>    
+</div>
 </div>
 </div>
 </body>

@@ -66,9 +66,9 @@
                     <a class="white-text" href="{{ url('/home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item active">
-                    <a class="white-text" href="{{ url('purchaseTransactionList')}}">Purchase</a>
+                    <a class="white-text" href="{{ url('purchaseTransactionList')}}">Transaksi Pembelian</a>
                 </li>
-                <li class="breadcrumb-item active">Tambah</li>
+                <li class="breadcrumb-item active">Edit</li>
             </ol>
         </nav>
     </div>
@@ -119,7 +119,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-md-3 text-md-right">
-                        <span class="label" id="spanPayment">Payment Valuta*</span>
+                        <span class="label" id="spanPayment">Mata Uang Transaksi*</span>
                     </div>
                     <div class="col-md-3">
                         <select id="valutaType" name="valutaType" class="form-select" disabled >
@@ -186,7 +186,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-md-3 text-md-right">
-                        <span class="label">Payment Terms</span>
+                        <span class="label">Catatan Transaksi</span>
                     </div>
                     <div class="col-md-8">
                         <textarea id="paymentTerms" name="paymentTerms" rows="4"  class="form-control" style="min-width: 100%" placeholder="Informasi umum tentang pembelian"  @if($purchase->status != 1) readonly @endif>{{ old('paymentTerms', $purchase->paymentTerms) }}</textarea>
@@ -198,7 +198,7 @@
             <div class="row form-group">
                 <div class="col-md-3 text-md-right"></div>
                 <div class="text-center col-md-8">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">Ubah</button>
                     <input type="reset" value="Reset" class="btn btn-secondary">
                 </div>
             </div>
