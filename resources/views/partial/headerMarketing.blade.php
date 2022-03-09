@@ -39,15 +39,15 @@
 		</li>
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-file-contract"></i> Transactions
+				<i class="fas fa-file-contract"></i> Transaksi
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
-					<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-funnel-dollar"></i> Sales Transaction
+					<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-funnel-dollar"></i> Transaksi Penjualan
 					</a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Company List
+					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Perusahaan Supplier/Buyer 
 					</a>
 				</li>
 			</ul>

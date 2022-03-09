@@ -30,27 +30,27 @@
 	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-users"></i> Employees
+				<i class="fas fa-users"></i> Karyawan
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li><a class="dropdown-item" href="{{ route('employeeList')}}"><i class="fas fa-address-card"></i> Employee List</a></li>
+				<li><a class="dropdown-item" href="{{ route('employeeList')}}"><i class="fas fa-address-card"></i> Daftar Karyawan</a></li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-file-contract"></i> Transactions
+				<i class="fas fa-file-contract"></i> Transaksi
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
-					<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-funnel-dollar"></i> Sales Transaction
+					<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-funnel-dollar"></i> Transaksi Penjualan
 					</a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{ url('purchaseList')}}"><i class="fas fa-shopping-cart"></i> Purchase Transaction
+					<a class="dropdown-item" href="{{ url('purchaseList')}}"><i class="fas fa-shopping-cart"></i> Transaksi Pembelian
 					</a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Company List
+					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Perusahaan Supplier/Buyer
 					</a>
 				</li>
 			</ul>
@@ -58,7 +58,7 @@
 
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-layer-group"></i> Resources
+				<i class="fas fa-layer-group"></i> Sumber Daya
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
