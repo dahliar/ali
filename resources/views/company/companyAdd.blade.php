@@ -9,7 +9,7 @@
         var i=1;
         $('#add').click(function(){
             i++;  
-            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control"></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon"></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email"></div><div class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>'); 
+            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control" required></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon" required></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email" required></div><div class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>'); 
         });
         $(document).on('click', '.btn_remove', function(){  
             var button_id = $(this).attr("id");   
@@ -154,7 +154,7 @@
     var $p = @json(old('phone'));
     var $e = @json(old('email'));
     for ($i=0; $i<$cn.length; $i++){
-        $('#dynamic_field').append('<tr id="row'+$i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control" value="'+$cn[$i]+'"></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon" value="'+$p[$i]+'"></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email" value="'+$e[$i]+'"></div><div class="col-md-1"><button type="button" name="remove" id="'+$i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>');  
+        $('#dynamic_field').append('<tr id="row'+$i+'" class="dynamic-added"><td class="col-md-12"><div class="row form-group"><div class="col-md-4"><input id="contactName[]" placeholder="Nama Kontak" name="contactName[]" class="form-control" value="'+$cn[$i]+'" required></div><div class="col-md-3"><input id="phone[]" name="phone[]" class="form-control" placeholder="No Telepon" value="'+$p[$i]+'" required></div><div class="col-md-4"><input id="email[]" name="email[]" class="form-control" placeholder="Email" type="email" value="'+$e[$i]+'" required></div><div class="col-md-1"><button type="button" name="remove" id="'+$i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></div></div></td></tr>');  
     }
 </script>
 @endif
