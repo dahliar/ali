@@ -66,7 +66,7 @@ class CompanyController extends Controller
             'nation'    => $request->countryId,
             'address'   =>  $request->address,
             'taxIncluded' =>  $request->taxIncluded,
-            'npwp'      => $request->npwp
+            'npwp'      => $request->npwpnum
         ];
 
         $companyId = DB::table('companies')->insertGetId($company);
@@ -88,8 +88,6 @@ class CompanyController extends Controller
                     'companyId' =>  $companyId
                 ];
             }
-
-            //dd($contact);
 
             DB::table('contacts')->insert($contact);
         }
