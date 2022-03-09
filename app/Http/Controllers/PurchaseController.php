@@ -91,7 +91,7 @@ class PurchaseController extends Controller
                 'company' => 'required|gt:0',
                 'valutaType' => 'required|gt:0',
                 'purchaseDate' => 'required|date|before_or_equal:today',
-                'arrivalDate' => 'required|date|before:purchaseDate',
+                'arrivalDate' => 'required|date|before_or_equal:purchaseDate',
                 'taxPercentage' => 'required|gt:0'
             ],
             [
