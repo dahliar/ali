@@ -63,7 +63,7 @@
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
 					<a class="dropdown-item" href="#">
-						<i class="fas fa-tasks"></i> Presensi &raquo;
+						<i class="fas fa-tasks" onclick=""></i> Presensi &raquo;
 					</a>
 					<ul class="dropdown-menu dropdown-submenu">
 						<li>
@@ -90,7 +90,7 @@
 					<a class="dropdown-item" href="#">
 						<i class="fas fa-file-invoice-dollar"></i> Penggajian &raquo;
 					</a>
-					<ul class="dropdown-menu dropdown-submenu">
+					<ul class="dropdown-menu dropdown-submenu" onclick="">
 						<li>
 							<a class="dropdown-item" href="{{ url('generateGaji')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Borongan/Honorarium
