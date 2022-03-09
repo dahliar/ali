@@ -72,11 +72,6 @@
 </div>
 @endif
 
-
-
-
-
-
 <body onload="myFunction(0)">
     {{ csrf_field() }}
     <div class="container-fluid">
@@ -87,7 +82,7 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Transactions</li>
+                        <li class="breadcrumb-item active">Daftar Perusahaan Supplier dan Buyer</li>
                     </ol>
                 </nav>
                 <button onclick="location.href='{{ url('companyAdd') }}'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Company"><i class="fa fa-plus" style="font-size:20px"></i>
