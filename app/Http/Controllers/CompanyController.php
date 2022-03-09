@@ -20,7 +20,15 @@ class CompanyController extends Controller
     }
 
     public function getAllCompany(){
-        $query = DB::table('companies')->get();  
+        $query = DB::table('companies as com')
+        ->select(
+            'com.id as id', 
+            'com.name as name',
+            'com.address as address',
+            'cn.name as nation'
+        )
+        ->join('countries as cn', 'cn.id', '=', 'com.nation')
+        ->get();  
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
             $html = '
