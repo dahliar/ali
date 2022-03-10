@@ -108,7 +108,6 @@ class PurchaseController extends Controller
             'userId' => auth()->user()->id,
             'companyId' =>  $request->company,
             'valutaType' => $request->valutaType,
-            'created_at' =>  date('Y-m-d'),
             'paymentTerms' => $request->paymentTerms,
             'purchaseDate' => $request->purchaseDate,
             'arrivalDate' => $request->arrivalDate,
