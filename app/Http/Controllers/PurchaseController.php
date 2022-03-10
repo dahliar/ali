@@ -44,7 +44,10 @@ class PurchaseController extends Controller
                 ELSE "Cancelled" END) AS status')
         )
         ->join('companies as c', 'c.id', '=', 'p.companyid')
-        ->join('countries as n', 'n.id', '=', 'c.nation');
+        ->join('countries as n', 'n.id', '=', 'c.nation')
+        ->orderBy('p.status', 'asc')
+        ->orderBy('p.created_at', 'asc')
+        ->orderBy('p.id', 'asc');
         $query->get();  
 
 
