@@ -11,6 +11,7 @@
 
 @section('content')
 @if ((Auth::user()->isProduction() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -31,13 +32,9 @@
         window.open(('{{ url("purchase/notaPembelian") }}'+"/"+id), '_self');
     }
 
-    /*
-    function refreshTableTransactionList(){
+    function myFunction(){
         var e = document.getElementById("negara");
         var negara = e.options[e.selectedIndex].value;       
-        //var companyName = e.options[e.selectedIndex].text;
-        var e = document.getElementById("jenis");
-        var jenis = e.options[e.selectedIndex].value;       
 
         var e = document.getElementById("statusTransaksi");
         var statusTransaksi = e.options[e.selectedIndex].value;       
@@ -45,57 +42,20 @@
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
 
-
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ route("getAllPurchases") }}',
+            ajax:{
+                url: '{{ url("getPurchaseList") }}',
+                data: function (d){
+                    d.negara = negara;
+                    d.statusTransaksi = statusTransaksi;
+                    d.start = start;
+                    d.end = end;
+                }
+            },
             dataType: 'json',
-            data: {
-                negara : negara,
-                jenis: jenis,
-                statusTransaksi : statusTransaksi,
-                start : start,
-                end : end
-            },
-            serverSide: false,
-            processing: true,
-            deferRender: true,
-            type: 'GET',
-            destroy:true,
-            columnDefs: [
-            {   "width": "4%",  "targets":  [0], "className": "text-center" },
-            {   "width": "21%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%",  "targets": [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-center" },
-            {   "width": "15%", "targets":  [8], "className": "text-left" }
-            ], 
-
-            columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nation', name: 'nation'},
-            {data: 'nosurat', name: 'nosurat'},
-            {data: 'tanggalInput', name: 'tanggalInput'},
-            {data: 'tanggaltransaksi', name: 'tanggaltransaksi'},
-            {data: 'status', name: 'status'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
-        });
-    }
-    */
-
-    function myFunction(){
-        $('#datatable').DataTable({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            ajax:'{{ url("getPurchaseList") }}',
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -114,7 +74,7 @@
             ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'id', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
             {data: 'nation', name: 'nation'},
             {data: 'nosurat', name: 'nosurat'},
@@ -126,9 +86,6 @@
             ]
         });
     }
-
-    $(document).ready(function() {
-    });
 </script>
 
 
@@ -145,7 +102,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction()">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">
@@ -158,93 +115,48 @@
                         <li class="breadcrumb-item active">Transaksi Pembelian</li>
                     </ol>
                 </nav>
-                
+                <button onclick="purchaseAdd()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Pembelian">
+                    <i class="fa fa-plus" style="font-size:20px"></i> Pembelian
+                </button>
             </div>
 
             <div class="modal-body">
                 <div class="row">
-                    <p>
-                        <button onclick="purchaseAdd()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Pembelian">
-                            <i class="fa fa-plus" style="font-size:20px"></i> Pembelian
-                        </button>
-                            <!--
-                            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapsePart" role="button" aria-expanded="false" aria-controls="collapsePart">
-                            <i class="fas fa-filter" style="font-size:20px"></i> Purchase List
-                            </a>
-                        -->
-                    </p>
-                    <!--
-                    <div class="collapse" id="collapsePart">
-                        <div class="card card-body">
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <span class="label">Negara</span>
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-select" id="negara" name="negara">
-                                        <option value="-1">--Pilih Negara--</option>
-                                        @foreach ($nations as $nation)
-                                        @if ( $nation->id == old('negara') )
-                                        <option value="{{ $nation->id }}" selected>{{ $nation->name }} - {{ $nation->registration }}</option>
-                                        @else
-                                        <option value="{{ $nation->id }}">{{ $nation->name }} - {{ $nation->registration }}</option>
-                                        @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>                             
-                            <div class="row form-group">
-                                <div class="col-md-3">
-                                    <span class="label">Status Transaksi</span>
-                                </div>
-                                <div class="col-md-4">
-                                    <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
-                                        <option value="-1" selected>--Pilih Status--</option>
-                                        <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
-                                        <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Finished</option>
-                                        <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Canceled</option>
-                                    </select>
-                                </div>
-                            </div> 
-                            <div class="row form-group">
-                                <div class="col-md-3 ">
-                                    <span class="label">Rentang Waktu</span>
-                                </div>
-                                <div class="col-md-8 row form-group">
-                                    <div class="col-md-5">
-                                        <div class="input-group">
-                                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 year')))}}" > 
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1" style="display: flex;
-                                    justify-content: center;
-                                    align-items: center;">
-                                    <span>
-                                        <i class="fas fa-arrows-alt-h"></i>
-                                    </span>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="input-group">
-                                        <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="row form-group">
-                            <div class="col-md-3">
-                                <span class="label"></span>
-                            </div>
-                            <div class="col-md-4">
-                                <button onclick="refreshTableTransactionList()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-search-plus">Search</i>
-                                </button>
-                            </div>
-                        </div> 
+                    <div class="row form-group">
+                        <div class="col-md-4">
+                            <select class="form-select" id="negara" name="negara">
+                                <option value="-1">--Semua Negara--</option>
+                                @foreach ($nations as $nation)
+                                @if ( $nation->id == old('negara') )
+                                <option value="{{ $nation->id }}" selected>{{ $nation->name }} - {{ $nation->registration }}</option>
+                                @else
+                                <option value="{{ $nation->id }}">{{ $nation->name }} - {{ $nation->registration }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
+                                <option value="-1" selected>--Semua Status Transaksi--</option>
+                                <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
+                                <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Finished</option>
+                                <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Canceled</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 week')))}}" > 
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
+                        </div>
+                        <div class="col-md-1">
+                            <button onclick="myFunction()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter">Cari
+                            </button>
+                        </div>
                     </div>
-                -->
+                </div>
             </div>
         </div>
-
-
         <div class="row form-inline">
             <div class="card-body">
                 <table class="table table-striped table-hover table-bordered data-table"  id="datatable">

@@ -26,7 +26,7 @@ class PurchaseController extends Controller
         return view('purchase.purchaseList', compact('nations'));
     }
 
-    public function getPurchaseList()
+    public function getPurchaseList(Request $request)
     {
         $query = DB::table('purchases as p')
         ->select(
@@ -45,15 +45,24 @@ class PurchaseController extends Controller
         )
         ->join('companies as c', 'c.id', '=', 'p.companyid')
         ->join('countries as n', 'n.id', '=', 'c.nation')
+        ->whereBetween('purchaseDate', [$request->start, $request->end])
         ->orderBy('p.status', 'asc')
         ->orderBy('p.created_at', 'asc')
         ->orderBy('p.id', 'asc');
+
+        if($request->negara != -1){
+            $query->where('n.id', '=', $request->negara);
+        }
+        if($request->statusTransaksi != -1){
+            $query->where('p.status', '=', $request->statusTransaksi);
+        }
+
         $query->get();  
 
 
         return datatables()->of($query)
+        ->addIndexColumn()
         ->addColumn('action', function ($row) {
-
             $html='
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar beli item" onclick="purchaseItems('."'".$row->id."'".')">
             <i class="fa fa-list"></i>
@@ -65,7 +74,8 @@ class PurchaseController extends Controller
             </button>
             ';
             return $html;
-        })->addIndexColumn()->toJson();
+        })
+        ->toJson();
     }
 
 

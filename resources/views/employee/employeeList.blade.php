@@ -20,7 +20,7 @@
         window.open(('{{ url("employeePresenceHarianHistory") }}'+"/"+id), '_blank');
     }
     function slipGajiPegawai(id){
-        alert("123");
+        alert("belum");
         var mapForm = document.createElement("form");
         mapForm.target = "_blank";    
         mapForm.method = "POST";

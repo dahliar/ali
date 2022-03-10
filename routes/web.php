@@ -82,8 +82,9 @@ Route::post('purchaseUpdate',[PurchaseController::class, 'update'])->middleware(
 
 
 
-
+/*
 Route::GET('getAllPurchases', [PurchaseController::class, 'getAllPurchases'])->middleware(['auth'])->name('getAllPurchases');
+*/
 
 
 Route::get('purchaseItems/{purchase}',[DetailPurchaseController::class, 'index'])->middleware(['auth'])->name('purchaseItems');
