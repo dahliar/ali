@@ -57,6 +57,9 @@ class Invoice extends Model
         ->join('sizes as s', 'i.sizeid', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->where('pur.id','=', $purchaseId)
+        ->orderBy('sp.name')
+        ->orderBy('s.name')
+        ->orderBy('g.name')
         ->get();  
 
 
