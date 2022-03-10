@@ -75,7 +75,6 @@ class EmployeeController extends Controller
             'role'                  => ['required', 'gt:0'],
             'email'                 => ['email'],
             'nik'                   => ['required', 'string', 'max:20', 'unique:employees'],
-            'nip'                   => ['required', 'string', 'max:12', 'unique:employees'],
             'birthdate'             => ['required', 'date', 'before:today'],
             'gender'                => ['required', 'integer', 'gt:0'],
             'startdate'             => ['required', 'date', 'after:birthdate', 'before:today'],
@@ -88,7 +87,9 @@ class EmployeeController extends Controller
             'bidangPendidikan'      => ['required', 'string'],
             'gajiPokok'             => ['required', 'integer', 'gte:0'],
             'gajiHarian'            => ['required', 'integer', 'gte:0'],
-            'uangLembur'            => ['required', 'integer', 'gte:0']
+            'uangLembur'            => ['required', 'integer', 'gte:0'],
+            'noRekening'            => ['required'],
+            'bankid'                => ['required', 'gt:0']
         ],
         [
             'startdate.after'  => 'Tanggal mulai harus sebelum tanggal lahir',
@@ -110,10 +111,12 @@ class EmployeeController extends Controller
         $userid = DB::getPdo()->lastInsertId();
 
         //insert ke table employees
+        $nip=$this->employee->generateNIP($request->birthdate, $request->startdate);
+
         $employee = [
             'userid'                => $userid,
             'nik'                   => $request->nik,
-            'nip'                   => $request->nip,
+            'nip'                   => $nip,
             'birthdate'             => $request->birthdate,
             'gender'                => $request->gender,
             'startdate'             => $request->startdate,
@@ -394,4 +397,5 @@ class EmployeeController extends Controller
             return $html;
         })->addIndexColumn()->toJson();
     }
+
 }

@@ -102,6 +102,9 @@
                     <div class="col-md-4">
                         <input id="npwpnum" name="npwpnum" class="form-control" value="{{ old('npwpnum') }}" placeholder="NPWP Number">
                     </div>
+                    <div class="col-md-6">
+                        Biarkan kosong jika tidak memiliki NPWP
+                    </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-md-2 text-end">

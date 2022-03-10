@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Carbon\Carbon;
+
 
 class Employee extends Model
 {
@@ -56,5 +58,19 @@ class Employee extends Model
 
         $id = DB::table('employeeorgstructuremapping')->insertGetId($newMappingData);
         return $id;
+    }
+
+    public function generateNIP($birthdate, $startdate){
+        $birthdate = new Carbon($birthdate);
+        $startdate = new Carbon($startdate);
+
+        $birthyear=$birthdate->year;
+        $startyear=$startdate->year;
+        $count = DB::table('employees')
+        ->whereYear('birthdate', $birthyear)
+        ->whereYear('startdate', $startyear)
+        ->count();
+        $nip=$startyear.$birthyear.sprintf("%04d", $count+1);
+        return $nip;
     }
 }

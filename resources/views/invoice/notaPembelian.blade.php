@@ -11,7 +11,6 @@
 
         #invoice td, #invoice th {
             border: 1px solid #ddd;
-            padding: 8px;
             vertical-align: top;
         }
 
@@ -20,8 +19,8 @@
         #invoice tr:hover {background-color: #ddd;}
 
         #invoice th {
-            padding-top: 12px;
-            padding-bottom: 12px;
+            padding-top: 1px;
+            padding-bottom: 1px;
             text-align: center;
             background-color: #040aaa;
             color: white;
@@ -32,19 +31,12 @@
             margin-right: 1cm;
         }
         @page {
-            margin: 225px 25px;
+            margin: 225px 15px;
         }
 
         header {
             position: fixed;
-            top: -200px;
-            text-align: center;
-        }
-
-        footer {
-            position: fixed;
-            bottom: -200px;
-            height: 50px;
+            top: -160px;
             text-align: center;
         }
     </style>
@@ -60,10 +52,10 @@
                         <img src="{{ asset('/images/ali-logo.png') }}" alt="Logo" width="120" class="logo"/>
                     </td>
                     <td width="70%" style="text-align: center; vertical-align: top;">
-                        <h3 align="center">
+                        <h4 align="center">
                             PT. ANUGRAH LAUT INDONESIA
-                        </h3>
-                        <h5 align="left">
+                        </h4>
+                        <h6 align="left">
                             <div style="text-align: justify;">
                                 Office : Jl. Kahuripan Terrace III no. 30, Kahuripan Nirwana, Desa Sumput, Kecamatan Sidoarjo, Kabupaten Sidoarjo, Provinsi Jawa Timur, Indonesia
                             </div>
@@ -73,7 +65,7 @@
                             <div>
                                 www.aliseafood.co.id
                             </div>
-                        </h5>
+                        </h7>
                     </td>
                 </tr>
             </table>
@@ -81,11 +73,11 @@
         </header>
         <main>
             <div>
-                <h2 align="center" style="margin-top: 0; margin-bottom: 0;">
-                PURCHASING INVOICE</h2>
-                <h3 align="center"  style="margin-top: 0; margin-bottom: 10px;">
+                <h3 align="center" style="margin-top: 0; margin-bottom: 0;">
+                PURCHASING INVOICE</h3>
+                <h4 align="center"  style="margin-top: 0; margin-bottom: 10px;">
                     No : {{$purchase->purchasingNum}}
-                </h3>
+                </h4>
             </div>
             <table width="100%" id="invoice">
                 <tr>
@@ -122,62 +114,62 @@
             $totalPrice=0;
 
             @endphp
-            <table width="100%" id="invoice">
-                <thead style="text-align: center;">
-                    <tr >
-                        <th width="40%">Goods Description</th>
-                        <th width="15%">Quantity (Kg)</th>
-                        <th width="15%">Unit Price ({{$valutaType}})</th>
-                        <th width="15%">Amount ({{$valutaType}})</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($purchaseDetails as $detail)
-                    @php
-                    $totalAmount    +=$detail->amount;
-                    $totalPrice     +=($detail->amount*$detail->price);
-                    @endphp            
-                    <tr >
-                        <td width="40%">{{$detail->goods}}</td>
-                        <td width="15%" style="text-align: right;">
-                            @php
-                            echo number_format($detail->amount, 2, ',', '.');
-                            @endphp
-                        </td>
-                        <td width="15%" style="text-align: right;">
-                            @php
-                            echo number_format($detail->price, 2, ',', '.');
-                            @endphp
-                        </td>
-                        <td width="15%" style="text-align: right;">
-                            @php
-                            echo number_format(($detail->amount*$detail->price), 2, ',', '.');
-                            @endphp
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-                <tfoot>
-                    <tr >
-                        <td width="40%"><b>TOTAL</b></td>
-                        <td width="15%" style="text-align: right;">
-                            @php
-                            echo number_format($totalAmount, 2, ',', '.');
-                            @endphp
-                            
-                        </td>
-                        <td width="15%" style="text-align: right;">
-                        </td>
-                        <td width="15%" style="text-align: right;">
-                            @php
-                            echo number_format($totalPrice, 2, ',', '.');
-                            @endphp
-                        </td>
-                    </tr>
-                </tfoot>        
-            </table>
+            <h4>
+                <table width="100%" id="invoice">
+                    <thead style="text-align: center;">
+                        <tr>
+                            <th width="50%">Goods Description</th>
+                            <th width="15%">Quantity (Kg)</th>
+                            <th width="15%">Unit Price ({{$valutaType}})</th>
+                            <th width="20%">Amount ({{$valutaType}})</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($purchaseDetails as $detail)
+                        @php
+                        $totalAmount    +=$detail->amount;
+                        $totalPrice     +=($detail->amount*$detail->price);
+                        @endphp            
+                        <tr >
+                            <td width="40%">{{$detail->goods}}</td>
+                            <td width="15%" style="text-align: right;">
+                                @php
+                                echo number_format($detail->amount, 2, ',', '.');
+                                @endphp
+                            </td>
+                            <td width="15%" style="text-align: right;">
+                                @php
+                                echo number_format($detail->price, 2, ',', '.');
+                                @endphp
+                            </td>
+                            <td width="15%" style="text-align: right;">
+                                @php
+                                echo number_format(($detail->amount*$detail->price), 2, ',', '.');
+                                @endphp
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr >
+                            <td width="40%"><b>TOTAL</b></td>
+                            <td width="15%" style="text-align: right;">
+                                @php
+                                echo number_format($totalAmount, 2, ',', '.');
+                                @endphp
 
-            <br>
+                            </td>
+                            <td width="15%" style="text-align: right;">
+                            </td>
+                            <td width="15%" style="text-align: right;">
+                                @php
+                                echo number_format($totalPrice, 2, ',', '.');
+                                @endphp
+                            </td>
+                        </tr>
+                    </tfoot>        
+                </table>
+            </h4>
             <br>
             <table width="100%" id="invoice">
                 <tr>
@@ -248,8 +240,6 @@
                     </td>
                 </tr>                
             </table>
-            <br>
-            <br>
             <table width="100%">
                 <tr>
                     <td width="40%">
@@ -263,13 +253,13 @@
                 <tr>
                     <td width="40%" style="text-align: left;vertical-align: top;">
                         Authorized Signature
-                        <br><br><br><br><br><br>
+                        <br><br><br><br>
                         PT. Anugrah Laut Indonesia
                     </td>
                     <td width="20%"></td>
                     <td width="40%" style="text-align: left;vertical-align: top;">
                         Supplier
-                        <br><br><br><br><br><br>
+                        <br><br><br><br>
                         {{$company->name}}
                     </td>
                 </tr>       
