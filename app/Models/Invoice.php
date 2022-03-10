@@ -43,7 +43,7 @@ class Invoice extends Model
     public function getOnePurchaseDetail($purchaseId){
         $query = DB::table('detail_purchases as dp')
         ->select(
-            DB::raw('concat(sp.name,    " ",s.name,         " ",i.name) as goods'),
+            DB::raw('concat(sp.name,    " ", g.name,    " ", s.name) as goods'),
             DB::raw('concat(dp.amount,  " ",p.shortname)                as quantity'),
             'dp.amount as amount',
             'dp.price as price',
@@ -58,8 +58,8 @@ class Invoice extends Model
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->where('pur.id','=', $purchaseId)
         ->orderBy('sp.name')
-        ->orderBy('s.name')
         ->orderBy('g.name')
+        ->orderByRaw('s.name+0 asc')
         ->get();  
 
 
