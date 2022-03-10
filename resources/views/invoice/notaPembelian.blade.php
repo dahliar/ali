@@ -31,7 +31,7 @@
             margin-right: 1cm;
         }
         @page {
-            margin: 225px 15px;
+            margin: 150px 10px;
         }
 
         header {
@@ -74,7 +74,7 @@
         <main>
             <div>
                 <h3 align="center" style="margin-top: 0; margin-bottom: 0;">
-                PURCHASING INVOICE</h3>
+                NOTA PEMBELIAN</h3>
                 <h4 align="center"  style="margin-top: 0; margin-bottom: 10px;">
                     No : {{$purchase->purchasingNum}}
                 </h4>
@@ -84,25 +84,16 @@
                     <td width="30%">
                         <span class="label" id="spanLabel"><b>Nama Perusahaan</b></span>
                     </td>
-                    <td width="3%">:</td>
+                    <td width="3%" style="text-align: center;">:</td>
                     <td width="67%">
-                        {{$company->name}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span class="label" id="spanLabel"><b>Alamat</b></span>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        {{$company->address}}
+                        {{$company->name}} - {{$company->address}}
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <span class="label" id="spanLabel"><b>Tanggal Kedatangan</b></span>
                     </td>
-                    <td>:</td>
+                    <td style="text-align: center;">:</td>
                     <td>
                         {{$purchase->arrivaldate}}
                     </td>
@@ -112,37 +103,40 @@
             @php
             $totalAmount=0;
             $totalPrice=0;
-
+            $rowCount=0;
             @endphp
             <h4>
                 <table width="100%" id="invoice">
                     <thead style="text-align: center;">
                         <tr>
-                            <th width="50%">Goods Description</th>
-                            <th width="15%">Quantity (Kg)</th>
-                            <th width="15%">Unit Price ({{$valutaType}})</th>
-                            <th width="20%">Amount ({{$valutaType}})</th>
+                            <th width="5%">No</th>
+                            <th width="52%">Barang</th>
+                            <th width="10%">Jumlah (Kg)</th>
+                            <th width="18%">Harga/Kg ({{$valutaType}})</th>
+                            <th width="18%">Total ({{$valutaType}})</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($purchaseDetails as $detail)
                         @php
+                        $rowCount       +=1;
                         $totalAmount    +=$detail->amount;
                         $totalPrice     +=($detail->amount*$detail->price);
                         @endphp            
                         <tr >
-                            <td width="40%">{{$detail->goods}}</td>
-                            <td width="15%" style="text-align: right;">
+                            <td width="5%" style="text-align: right;font-size:14px">{{$rowCount}}</td>
+                            <td width="52%" style="font-size:14px">{{$detail->goods}}</td>
+                            <td width="10%" style="text-align: right;font-size:14px">
                                 @php
                                 echo number_format($detail->amount, 2, ',', '.');
                                 @endphp
                             </td>
-                            <td width="15%" style="text-align: right;">
+                            <td width="18%" style="text-align: right;font-size:14px">
                                 @php
                                 echo number_format($detail->price, 2, ',', '.');
                                 @endphp
                             </td>
-                            <td width="15%" style="text-align: right;">
+                            <td width="18%" style="text-align: right;font-size:14px">
                                 @php
                                 echo number_format(($detail->amount*$detail->price), 2, ',', '.');
                                 @endphp
@@ -152,7 +146,7 @@
                     </tbody>
                     <tfoot>
                         <tr >
-                            <td width="40%"><b>TOTAL</b></td>
+                            <td colspan="2" width="40%"><b>TOTAL</b></td>
                             <td width="15%" style="text-align: right;">
                                 @php
                                 echo number_format($totalAmount, 2, ',', '.');
@@ -174,9 +168,9 @@
             <table width="100%" id="invoice">
                 <tr>
                     <td width="30%">
-                        <span class="label" id="spanLabel"><b>Total Amount</b></span>
+                        <span class="label" id="spanLabel"><b>Jumlah</b></span>
                     </td>
-                    <td width="3%">:</td>
+                    <td width="3%" style="text-align: center;">:</td>
                     <td width="67%">
                         @php
                         echo $valutaType.' '.number_format($totalPrice, 2, ',', '.');
@@ -185,54 +179,45 @@
                 </tr>
                 <tr>
                     <td>
-                        <span class="label" id="spanLabel"><b>Tax Percentage</b></span>
+                        <span class="label" id="spanLabel"><b>Persen Pajak</b></span>
                     </td>
-                    <td>:</td>
+                    <td width="3%" style="text-align: center;">:</td>
                     <td>
                         @php
                         echo number_format($purchase->taxPercentage, 2, ',', '.').' %';
-                        @endphp
-                    </td>
-                </tr>                
-                <tr>
-                    <td>
-                        <span class="label" id="spanLabel"><b>Tax</b></span>
-                    </td>
-                    <td>:</td>
-                    <td>
-                        @php
-                        $tax = $totalPrice * $purchase->taxPercentage / 100;
-                        echo $valutaType.' '.number_format($tax, 2, ',', '.');
                         @endphp
                     </td>
                 </tr>
                 @php
                 $finalAmount = 0;
                 $taxIncluded = "";
+                $tax = $totalPrice * $purchase->taxPercentage / 100;
 
                 if ($company->taxIncluded == 0){
                     $finalAmount = $totalPrice;
-                    $taxIncluded = "NO";
+                    $taxIncluded = "Pajak tidak termasuk";
                 }
                 else{
                     $finalAmount = $totalPrice - $tax;                
-                    $taxIncluded = "YES";
+                    $taxIncluded = "Pajak termasuk";
                 }
-                @endphp             
+                @endphp                
                 <tr>
                     <td>
-                        <span class="label" id="spanLabel"><b>Tax Included?</b></span>
+                        <span class="label" id="spanLabel"><b>@php echo $taxIncluded;@endphp</b></span>
                     </td>
-                    <td>:</td>
+                    <td width="3%" style="text-align: center;">:</td>
                     <td>
-                        @php echo $taxIncluded;@endphp
+                        @php
+                        echo $valutaType.' '.number_format($tax, 2, ',', '.');
+                        @endphp
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="label" id="spanLabel"><b>Grand Amount</b></span>
+                        <span class="label" id="spanLabel"><b>Total Jumlah</b></span>
                     </td>
-                    <td>:</td>
+                    <td width="3%" style="text-align: center;">:</td>
                     <td>
                         @php
                         echo $valutaType.' '.number_format($finalAmount, 2, ',', '.');
