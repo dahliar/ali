@@ -58,6 +58,7 @@
 							<a class="dropdown-item" href="{{ url('honorariumList')}}">Presensi Honorarium
 							</a>
 						</li>
+						<li><hr class="dropdown-divider"></li>
 						<li>
 							<a class="dropdown-item" href="{{ url('presenceHarianHistory')}}">Arsip Presensi Harian
 							</a>
@@ -78,6 +79,7 @@
 								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Borongan/Honorarium
 							</a>
 						</li>
+						<li><hr class="dropdown-divider"></li>
 						<li>
 							<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Penggajian Harian
@@ -100,6 +102,7 @@
 								<i class="fas fa-file-invoice-dollar"></i> Honorarirum
 							</a>
 						</li>
+						<li><hr class="dropdown-divider"></li>
 						<li>
 							<a class="dropdown-item" href="{{ url('payrollList')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Daftar Gaji
