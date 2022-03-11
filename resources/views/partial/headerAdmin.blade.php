@@ -82,8 +82,6 @@
 							<a class="dropdown-item" href="{{ url('presenceHarianHistory')}}"><i class="fas fa-tasks"></i> Arsip Presensi Harian
 							</a>
 						</li>
-
-
 					</ul>
 				</li>
 				<li>
@@ -115,6 +113,11 @@
 						<li>
 							<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Honorarirum
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('payrollList')}}">
+								<i class="fas fa-file-invoice-dollar"></i> Daftar Gaji
 							</a>
 						</li>
 					</ul>

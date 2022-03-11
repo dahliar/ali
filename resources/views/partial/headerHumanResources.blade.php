@@ -100,6 +100,11 @@
 								<i class="fas fa-file-invoice-dollar"></i> Honorarirum
 							</a>
 						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('payrollList')}}">
+								<i class="fas fa-file-invoice-dollar"></i> Daftar Gaji
+							</a>
+						</li>
 					</ul>
 				</li>
 				@endif

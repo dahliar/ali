@@ -221,9 +221,23 @@ Route::get('getPresenceHonorariumHistory/{start}/{end}', [HonorariumController::
 
 //Penggajian
 
-Route::GET('generateGaji',[SalaryController::class, 'index'])->name('generateGaji')->middleware('auth');
+Route::GET('generateGaji',[SalaryController::class, 'indexGenerate'])->name('generateGaji')->middleware('auth');
+Route::GET('payrollList',[SalaryController::class, 'indexPayroll'])->middleware('auth');
+Route::GET('salariesList/{salaryId}',[SalaryController::class, 'index'])->middleware('auth');
+Route::GET('getSalariesList/{salaryId}',[SalaryController::class, 'getSalariesList'])->middleware('auth');
+Route::GET('getPayrollList/{start}/{end}',[SalaryController::class, 'getPayrollList'])->middleware('auth');
+Route::GET('printPayrollList/{payrollId}',[SalaryController::class, 'printPayrollList'])->middleware('auth');
+Route::GET('getEmployeeDetailSalaries/{payrollId}',[SalaryController::class, 'getEmployeeDetailSalaries'])->middleware('auth');
+
+
+
+
 Route::POST('generateGajiStore',[SalaryController::class, 'store'])->middleware('auth');
 Route::POST('slipGajiKaryawan',[SalaryController::class, 'viewSlipGaji'])->middleware('auth');
+
+
+
+
 
 
 
