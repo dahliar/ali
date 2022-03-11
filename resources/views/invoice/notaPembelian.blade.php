@@ -125,7 +125,7 @@
                         @endphp            
                         <tr >
                             <td width="5%" style="text-align: right;font-size:14px">{{$rowCount}}</td>
-                            <td width="52%" style="font-size:14px">{{$detail->goods}}</td>
+                            <td width="52%" style="font-size:14px">{{$detail->goodsBahasa}}</td>
                             <td width="10%" style="text-align: right;font-size:14px">
                                 @php
                                 echo number_format($detail->amount, 2, ',', '.');

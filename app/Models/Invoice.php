@@ -44,6 +44,7 @@ class Invoice extends Model
         $query = DB::table('detail_purchases as dp')
         ->select(
             DB::raw('concat(sp.name,    " ", g.name,    " ", s.name) as goods'),
+            DB::raw('concat(sp.nameBahasa,    " ", g.name,    " ", s.name) as goodsBahasa'),
             DB::raw('concat(dp.amount,  " ",p.shortname)                as quantity'),
             'dp.amount as amount',
             'dp.price as price',

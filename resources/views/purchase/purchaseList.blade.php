@@ -139,8 +139,8 @@
                             <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
                                 <option value="-1" selected>--Semua Status Transaksi--</option>
                                 <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
-                                <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Finished</option>
-                                <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Canceled</option>
+                                <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Selesai</option>
+                                <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Batal</option>
                             </select>
                         </div>
                         <div class="col-md-2">
