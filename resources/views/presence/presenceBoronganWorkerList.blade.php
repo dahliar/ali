@@ -92,32 +92,30 @@
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
-                    <div class="col-md-6">
-                        <table style="width:100%" class="table table-striped table-hover table-bordered data-table">
-                            <thead>
-                                <tr>
-                                    <th width="5%">No</th>
-                                    <th width="30%">Nama</th>
-                                    <th width="15%">NIP</th>
-                                    <th width="15%">Bagian</th>
-                                    <th width="10%">Honor (Rp)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php $a=1 @endphp
-                                @foreach($query as $worker)
-                                <tr>
-                                    <td>@php echo $a @endphp</td>
-                                    <td>{{$worker->nama}}</td>
-                                    <td>{{$worker->nip}}</td>
-                                    <td>{{$worker->osname}}</td>
-                                    <td style="text-align: right;">{{$worker->netPayment}}</td>
-                                </tr>
-                                @php $a++ @endphp
-                                @endforeach
-                            </tbody>
-                        </table>                
-                    </div>
+                    <table style="width:100%" class="table table-responsive-xl table-striped table-hover table-bordered data-table">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th width="30%">Nama</th>
+                                <th width="15%">NIP</th>
+                                <th width="15%">Bagian</th>
+                                <th width="10%">Honor (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php $a=1 @endphp
+                            @foreach($query as $worker)
+                            <tr>
+                                <td>@php echo $a @endphp</td>
+                                <td>{{$worker->nama}}</td>
+                                <td>{{$worker->nip}}</td>
+                                <td>{{$worker->osname}}</td>
+                                <td style="text-align: right;">{{$worker->netPayment}}</td>
+                            </tr>
+                            @php $a++ @endphp
+                            @endforeach
+                        </tbody>
+                    </table>                
                 </div>
             </div>       
         </div>
