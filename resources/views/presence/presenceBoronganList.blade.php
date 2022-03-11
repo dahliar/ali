@@ -50,11 +50,23 @@
     }
 
     function myFunction(){
+        var e = document.getElementById("status");
+        var status = e.options[e.selectedIndex].value;       
+
+        var start = document.getElementById("start").value;
+        var end = document.getElementById("end").value;
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getBorongans") }}',
+            ajax:{
+                url: '{{ url("getBorongans") }}',
+                data: function (d){
+                    d.status = status;
+                    d.start = start;
+                    d.end = end;
+                }
+            },
             dataType: "JSON",
             serverSide: false,
             processing: true,
@@ -86,9 +98,6 @@
             ]
         });
     }
-
-    $(document).ready(function() {
-    });
 </script>
 
 @if (session('status'))
@@ -103,7 +112,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">
@@ -120,6 +129,31 @@
                 <div class="col-md-3 text-end">
                     <button onclick="location.href='{{ url('boronganCreate') }}'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Borongan"><i class="fa fa-plus" style="font-size:20px"></i>
                     </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="row form-group">                        
+                        <div class="col-md-3">
+                            <select class="form-select" id="status" name="status" >
+                                <option value="-1" selected>--Semua Status Transaksi--</option>
+                                <option value="0" @if(old('statusTransaksi') == 1) selected @endif>Tambah Pekerja</option>
+                                <option value="1" @if(old('statusTransaksi') == 1) selected @endif>Generate Data</option>
+                                <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Pembayaran</option>
+                                <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Selesai</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 week')))}}" > 
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
+                        </div>
+                        <div class="col-md-2">
+                            <button onclick="myFunction()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter">Cari
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-body">

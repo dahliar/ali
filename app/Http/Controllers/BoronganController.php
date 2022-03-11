@@ -39,7 +39,7 @@ class BoronganController extends Controller
         return view('presence.presenceBoronganPekerjaForm', compact('borongan', 'employees'));
     }
 
-    public function getBorongans()
+    public function getBorongans(Request $request)
     {
         $query = DB::table('borongans as b')
         ->select(
@@ -59,8 +59,13 @@ class BoronganController extends Controller
             DB::raw('(b.hargaSatuan * b.netweight) AS total'),
             'b.worker as worker')
         ->leftjoin('detail_borongans as db', 'db.boronganId', '=', 'b.id')
+        ->whereBetween('tanggalKerja', [$request->start, $request->end])
         ->orderBy('b.created_at')
         ->groupBy('b.id');
+
+        if($request->status != -1){
+            $query->where('b.status', '=', $request->status);
+        }
         $query->get();
 
         return datatables()->of($query)
