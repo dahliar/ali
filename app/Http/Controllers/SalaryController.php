@@ -1149,10 +1149,13 @@ class SalaryController extends Controller
         return datatables()->of($query)
         ->addIndexColumn()
         ->addColumn('action', function ($row) {
-            $html = '
+            /*
             <a data-rowid="'.$row->id.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar detil salary" target="_blank" href="salariesList/'.$row->id.'">
             <i class="fa fa-list"></i>
             </a>
+            */
+
+            $html = '
             <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak daftar gaji pegawai" onclick="printPayrollList('.$row->id.')">
             <i class="fa fa-print" style="font-size:20px"></i>
             </button>
