@@ -206,8 +206,6 @@
             @endphp
             @else
             <br>
-            <br>
-
             <table width="100%" id="invoice">
                 <thead style="text-align: center;">
                     <tr >
