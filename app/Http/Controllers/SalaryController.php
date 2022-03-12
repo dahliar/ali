@@ -142,7 +142,7 @@ class SalaryController extends Controller
                 ->upsert([
                     ['idPayroll'        => $payrollId, 
                     'employeeId'        => $row->empid, 
-                    'idPayrollEmpid'    => ($payrollId.$row->empid), 
+                    'idPayrollEmpid'    => ($payrollId.'-'.$row->empid), 
                     'honorarium'        => $row->jumlah]],
                     ['idPayrollEmpid'], 
                     ['honorarium']
@@ -275,18 +275,20 @@ class SalaryController extends Controller
             ->where('ds.salaryId', '=', $salaryId)
             ->groupBy('ds.employeeId')
             ->get();
-
             foreach($moveGeneratedData as $row){
+                dump(($payrollId.'-'.$row->empid));
                 DB::table('detail_payrolls')
                 ->upsert([
                     ['idPayroll'     => $payrollId, 
                     'employeeId'    => $row->empid, 
-                    'idPayrollEmpid'=> ($payrollId.$row->empid), 
+                    'idPayrollEmpid'=> ($payrollId.'-'.$row->empid),
                     'harian'        => ($row->uh + $row->ul)]],
                     ['idPayrollEmpid'], 
                     ['harian']
                 );
             }
+            dd($moveGeneratedData);
+
             $retValue = $affected." record presensi pegawai harian telah digenerate";
         } else{
             $retValue = "Tidak terdapat record presensi pegawai harian yang belum digenerate";
@@ -356,7 +358,7 @@ class SalaryController extends Controller
                 ->upsert([
                     ['idPayroll'        => $payrollId, 
                     'employeeId'        => $row->empid, 
-                    'idPayrollEmpid'    => ($payrollId.$row->empid), 
+                    'idPayrollEmpid'    => ($payrollId.'-'.$row->empid), 
                     'borongan'        => $row->jumlah]],
                     ['idPayrollEmpid'], 
                     ['borongan']
