@@ -276,7 +276,6 @@ class SalaryController extends Controller
             ->groupBy('ds.employeeId')
             ->get();
             foreach($moveGeneratedData as $row){
-                dump(($payrollId.'-'.$row->empid));
                 DB::table('detail_payrolls')
                 ->upsert([
                     ['idPayroll'     => $payrollId, 
@@ -287,7 +286,6 @@ class SalaryController extends Controller
                     ['harian']
                 );
             }
-            dd($moveGeneratedData);
 
             $retValue = $affected." record presensi pegawai harian telah digenerate";
         } else{
