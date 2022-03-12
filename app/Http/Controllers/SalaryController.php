@@ -138,13 +138,14 @@ class SalaryController extends Controller
             ->get();
 
             foreach($moveGeneratedData as $row){
-
+                /*
                 DB::statement('insert into detail_payrolls (employeeId, honorarium, idPayroll, idPayrollEmpid) values (
                     '.$row->empid.', 
                     honorarium+'.($row->jumlah).', 
                     '.$payrollId.', 
                     concat('.$payrollId.',"x",'.$row->empid.')
-                ) on duplicate key update honorarium = honorarium+'.($row->jumlah));                /*
+                ) on duplicate key update honorarium = honorarium+'.($row->jumlah));
+                */
                 DB::table('detail_payrolls')
                 ->upsert([
                     ['idPayroll'        => $payrollId, 
@@ -154,7 +155,7 @@ class SalaryController extends Controller
                     ['idPayrollEmpid'], 
                     ['honorarium']
                 );
-                */
+                
             }
 
 
@@ -284,13 +285,14 @@ class SalaryController extends Controller
             ->groupBy('ds.employeeId')
             ->get();
             foreach($moveGeneratedData as $row){
+                /*
                 DB::statement('insert into detail_payrolls (employeeId, harian, idPayroll, idPayrollEmpid) values (
                     '.$row->empid.', 
                     harian+'.($row->uh + $row->ul).', 
                     '.$payrollId.', 
                     concat('.$payrollId.',"x",'.$row->empid.')
                 ) on duplicate key update harian = harian+'.($row->uh + $row->ul));
-                /*
+                */
                 $query = DB::table('detail_payrolls')
                 ->upsert([
                     ['idPayroll'     => $payrollId, 
@@ -300,7 +302,7 @@ class SalaryController extends Controller
                     ['idPayrollEmpid'], 
                     ['harian']
                 );
-                */
+                
             }
             $retValue = $affected." record presensi pegawai harian telah digenerate";
         } else{
@@ -367,14 +369,14 @@ class SalaryController extends Controller
             ->get();
 
             foreach($moveGeneratedData as $row){
+                /*
                 DB::statement('insert into detail_payrolls (employeeId, borongan, idPayroll, idPayrollEmpid) values (
                     '.$row->empid.', 
                     borongan+'.($row->jumlah).', 
                     '.$payrollId.', 
                     concat('.$payrollId.',"x",'.$row->empid.')
                 ) on duplicate key update borongan = borongan+'.($row->jumlah));
-
-                /*
+                */
                 DB::table('detail_payrolls')
                 ->upsert([
                     ['idPayroll'        => $payrollId, 
@@ -384,7 +386,6 @@ class SalaryController extends Controller
                     ['idPayrollEmpid'], 
                     ['borongan']
                 );
-                */
             }
 
 
@@ -1192,6 +1193,14 @@ class SalaryController extends Controller
 
         return datatables()->of($query)
         ->addIndexColumn()
+        ->addColumn('detil', function ($row) {
+            $html = "Hari: h, Lembur: j, Fillet: Kg";
+            return $html;
+        })
+        ->addColumn('bank', function ($row) {
+            $html = $row->bankName.'-'.$row->noRekening;
+            return $html;
+        })
         ->addColumn('total', function ($row) {
             $html = $row->bulanan+$row->borongan+$row->honorarium+$row->harian;
             return $html;

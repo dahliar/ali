@@ -38,15 +38,15 @@
             {   "width": "10%", "targets":  [6], "className": "text-end" },
             {   "width": "10%", "targets":  [7], "className": "text-end" },
             {   "width": "10%", "targets":  [8], "className": "text-end" },
-            {   "width": "10%", "targets":  [9], "className": "text-end" }
+            {   "width": "10%", "targets":  [8], "className": "text-end" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
             {data: 'nip', name: 'nip'},
-            {data: 'noRekening', name: 'noRekening'},
-            {data: 'bankName', name: 'bankName'},
+            {data: 'bank', name: 'bank'},
+            {data: 'detil', name: 'detil'},
             {data: 'bulanan', name: 'bulanan'},
             {data: 'harian', name: 'harian'},
             {data: 'borongan', name: 'borongan'},
@@ -92,8 +92,8 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>NIP</th>
-                                <th>No Rekening</th>
-                                <th>Bank</th>
+                                <th>Rekening</th>
+                                <th>Detil</th>
                                 <th>Bulanan</th>
                                 <th>Harian</th>
                                 <th>Borongan</th>
