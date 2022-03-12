@@ -146,7 +146,7 @@ class PresenceController extends Controller
         ->addColumn('action', function ($row) {
             $html='';
             if (Auth::user()->isAdmin()){
-                $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Presensi" onclick="editPresence('."'".$row->pid."'".')">
+                $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Ubah Presensi" onclick="editPresence('."'".$row->pid."'".')">
                 <i class="fa fa-edit" style="font-size:20px"></i>
                 </button>';
             }
