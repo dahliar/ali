@@ -194,6 +194,7 @@ class Presence extends Model
             'employeeId'    => $empid,
             'presenceDate'  => $start->toDateString(),
             'uangharian'    => $uh,
+            'jamLembur'     => $jamLembur,
             'uanglembur'    => ($honorarium->ul * $jamLembur)
         ];
         if($dailySalariesExist->jumlah > 0){

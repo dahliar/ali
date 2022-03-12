@@ -34,11 +34,12 @@
             {   "width": "20%", "targets":  [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
             {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "5%",  "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [4], "className": "text-end" },
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
             {   "width": "10%", "targets":  [7], "className": "text-end" },
             {   "width": "10%", "targets":  [8], "className": "text-end" },
-            {   "width": "10%", "targets":  [8], "className": "text-end" }
+            {   "width": "10%", "targets":  [9], "className": "text-end" }
             ], 
 
             columns: [
@@ -46,8 +47,8 @@
             {data: 'name', name: 'name'},
             {data: 'nip', name: 'nip'},
             {data: 'bank', name: 'bank'},
-            {data: 'detil', name: 'detil'},
-            {data: 'bulanan', name: 'bulanan'},
+            {data: 'detilHarian', name: 'detilHarian'},
+            {data: 'detilBorongan', name: 'detilBorongan'},
             {data: 'harian', name: 'harian'},
             {data: 'borongan', name: 'borongan'},
             {data: 'honorarium', name: 'honorarium'},
@@ -87,21 +88,21 @@
             <div class="modal-body">
                 <div class="row form-inline">
                     <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                        <thead>
+                        <thead style="font-size:12px">
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>NIP</th>
                                 <th>Rekening</th>
-                                <th>Detil</th>
-                                <th>Bulanan</th>
+                                <th>Detil Harian</th>
+                                <th>Detil Borongan</th>
                                 <th>Harian</th>
                                 <th>Borongan</th>
                                 <th>Honorarium</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="font-size:12px">
                         </tbody>
                     </table>                
                 </div>

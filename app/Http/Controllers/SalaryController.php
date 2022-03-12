@@ -279,7 +279,9 @@ class SalaryController extends Controller
             ->select(
                 'ds.employeeId as empid',
                 DB::raw('sum(uangHarian) as uh'),
-                DB::raw('sum(uangLembur) as ul')
+                DB::raw('sum(uangLembur) as ul'),
+                DB::raw('sum(jamLembur) as jl'),
+                DB::raw('count(id) as hari'),
             )
             ->where('ds.salaryId', '=', $salaryId)
             ->groupBy('ds.employeeId')
@@ -295,9 +297,11 @@ class SalaryController extends Controller
                 */
                 $query = DB::table('detail_payrolls')
                 ->upsert([
-                    ['idPayroll'     => $payrollId, 
+                    ['idPayroll'    => $payrollId, 
                     'employeeId'    => $row->empid, 
                     'idPayrollEmpid'=> ($payrollId.'-'.$row->empid),
+                    'jamLembur'     => $row->jl,
+                    'hariKerja'     => $row->hari,
                     'harian'        => DB::raw('harian+'.($row->uh + $row->ul))]],
                     ['idPayrollEmpid'], 
                     ['harian']
@@ -1175,6 +1179,8 @@ class SalaryController extends Controller
             'e.nip as nip',
             'e.noRekening as noRekening',
             'b.shortname as bankName',
+            'dp.hariKerja as hariKerja',
+            'dp.jamLembur as jamLembur',
             'dp.bulanan as bulanan',
             'dp.harian as harian',
             'dp.borongan as borongan',
@@ -1193,8 +1199,12 @@ class SalaryController extends Controller
 
         return datatables()->of($query)
         ->addIndexColumn()
-        ->addColumn('detil', function ($row) {
-            $html = "Hari: h, Lembur: j, Fillet: Kg";
+        ->addColumn('detilHarian', function ($row) {
+            $html = $row->hariKerja." hari, ".$row->jamLembur." jam lembur";
+            return $html;
+        })
+        ->addColumn('detilBorongan', function ($row) {
+            $html = "Fillet: Kg";
             return $html;
         })
         ->addColumn('bank', function ($row) {

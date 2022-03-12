@@ -41,6 +41,67 @@ class PresenceController extends Controller
     {
         return view('presence.presenceHarianHistory');
     }
+    public function presenceHarianEdit(Presence $presence)
+    {
+        $employee = DB::table('users as u')
+        ->select(
+            'u.name as nama', 
+            'e.nip as nip',
+            'os.name as orgStructure',
+            'wp.name as bagian',
+            DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenis') 
+
+        )
+        ->join('employees as e', 'e.userid', '=', 'u.id')
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->where('e.id','=', $presence->employeeId)
+        ->where('mapping.isActive', '1')
+        ->first();
+
+
+        $dailysalaries = DB::table('dailysalaries')
+        ->where('employeeId', $presence->employeeId)
+        ->where('presenceDate', Carbon::parse($presence->start)->toDateString())
+        ->first();
+
+        return view('presence.presenceHarianEdit', compact('dailysalaries','presence', 'employee'));
+    }
+    public function presenceHarianUpdate(Request $request)
+    {
+        //dd($request);
+        $request->validate(
+            [
+                'progressStatus'    => 'required|gt:0',
+                'start'             => 'required|date|before_or_equal:tomorrow',
+                'end'               => 'required|date|after_or_equal:start'
+            ],[
+                'progressStatus.*'  => 'Pilih salah satu jenis perubahan',
+                'start.*'           => 'Jam masuk wajib diisi dan tidak boleh lebih dari hari ini',
+                'end.*'           => 'Jam keluar wajib diisi, tidak boleh lebih dari hari ini, dan tidak boleh kurang dari jam masuk',
+            ]
+        );
+        $deleted = DB::table('presences')
+        ->where('id', '=', $request->presenceId)
+        ->delete();
+        $deleted = DB::table('dailysalaries')
+        ->where('id', '=', $request->dailysalariesid)
+        ->delete();
+
+
+        $message="Data berhasil dihapus";
+        if($request->progressStatus == 1){
+            $this->presence->storePresenceHarianEmployee($request->empid, $request->start, $request->end);
+            $message="Data berhasil diubah";
+
+        }
+        
+        return redirect('employeePresenceHarianHistory/'.$request->empid)->with('status', $message);
+    }
+
+
     public function employeePresenceHarianHistory(Employee $employee)
     {
         $employeeId = $employee->id;
@@ -51,11 +112,12 @@ class PresenceController extends Controller
         return view('presence.employeePresenceHarianHistory', compact('employeeId', 'employeeName'));
     }
 
-    
+
     public function getEmployeePresenceHarianHistory($employeeId, $start, $end){
         $query = DB::table('employees as e')
         ->select(
             'e.id as id', 
+            'p.id as pid',
             'u.name as name', 
             'e.nik as nik',
             'e.nip as nip',
@@ -82,10 +144,12 @@ class PresenceController extends Controller
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
-            $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Presence History" onclick="presenceHistory('."'".$row->id."'".')">
-            <i class="fa fa-save" style="font-size:20px"></i>
-            </button>';
+            $html='';
+            if (Auth::user()->isAdmin()){
+                $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Presensi" onclick="editPresence('."'".$row->pid."'".')">
+                <i class="fa fa-edit" style="font-size:20px"></i>
+                </button>';
+            }
             return $html;
         })->addIndexColumn()->toJson();
     }    
@@ -228,6 +292,7 @@ class PresenceController extends Controller
     
     public function storePresenceHarianEmployee(Request $request)
     {
+
         $retValue = $this->presence->storePresenceHarianEmployee($request->empidModal, $request->start, $request->end);
         return $retValue;
     }

@@ -16,6 +16,10 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function editPresence($presence){
+        window.open(('{{ url("presenceHarianEdit") }}/'+$presence), '_blank');
+    }
     
     function myFunction(){
         var employeeId = document.getElementById("employeeId").value;
@@ -42,6 +46,7 @@
             {   "width": "10%", "targets":  [6], "className": "text-left" },
             {   "width": "10%", "targets":  [7], "className": "text-left" },
             {   "width": "10%", "targets":  [8], "className": "text-left" },
+            {   "width": "10%", "targets":  [9], "className": "text-left" },
             {   "width": "10%", "targets":  [9], "className": "text-left" }
             ], 
 
@@ -55,13 +60,12 @@
             {data: 'start', name: 'start'},
             {data: 'end', name: 'end'},
             {data: 'jamKerja', name: 'jamKerja'},
-            {data: 'jamLembur', name: 'jamLembur'}
+            {data: 'jamLembur', name: 'jamLembur'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
+
             ]
         });
     }
-
-    $(document).ready(function() {
-    });
 </script>
 
 @if (session('status'))
@@ -135,6 +139,7 @@
                                 <th>End</th>
                                 <th>Jam Kerja</th>
                                 <th>Jam Lembur</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -145,27 +150,6 @@
         </div>
     </div>
 </body>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-
-                </button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 @else
 @include('partial.noAccess')
 @endif

@@ -18,7 +18,7 @@
     });
 
     function tambahPresensiBatchInput(){
-        window.open(('{{ url("presenceAddForm") }}'), '_self');
+        window.open(('{{ url("presenceHarianEdit") }}'), '_blank');
     }
 
     function presenceForTodayModal(id, name){
@@ -31,27 +31,32 @@
         var start = document.getElementById("modalStart").value;
         var end = document.getElementById("modalEnd").value;
 
-        $.ajax({
-            url: '{{ url("storePresenceHarianEmployee") }}',
-            type: "POST",
-            data: {
-                "_token":"{{ csrf_token() }}",
-                empidModal : empidModal,
-                start: start,
-                end: end
-            },
-            dataType: "json",
-            success:function(data){
-                if(data.isError==="0"){
-                    swal.fire('info',data.message,'info');
-                    myFunction();
+        if(end>=start){
+            $.ajax({
+                url: '{{ url("storePresenceHarianEmployee") }}',
+                type: "POST",
+                data: {
+                    "_token":"{{ csrf_token() }}",
+                    empidModal : empidModal,
+                    start: start,
+                    end: end
+                },
+                dataType: "json",
+                success:function(data){
+                    if(data.isError==="0"){
+                        swal.fire('info',data.message,'info');
+                        myFunction();
+                    }
+                    else{
+                        swal.fire('warning',data.message,'warning');
+                    }
+                    $('#employeePresenceHarianModal').modal('hide');
                 }
-                else{
-                    swal.fire('warning',data.message,'warning');
-                }
-                $('#employeePresenceHarianModal').modal('hide');
-            }
-        });
+            });
+        }
+        else{
+            swal.fire('warning',"Jam keluar harus lebih besar dari jam masuk",'warning');
+        }
     }
 
     function employeePresenceHarianHistory(id){
@@ -98,8 +103,8 @@
     $(document).ready(function() {
     });
 </script>
-
-@if (session('status'))
+{{ session('status') }}
+@if (Session::has('status'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
