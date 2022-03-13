@@ -20,8 +20,8 @@
         #invoice tr:hover {background-color: #ddd;}
 
         #invoice th {
-            padding-top: 12px;
-            padding-bottom: 12px;
+            padding-top: 1px;
+            padding-bottom: 1px;
             text-align: center;
             background-color: #040aaa;
             color: white;
@@ -32,7 +32,7 @@
             margin-right: 1cm;
         }
         @page {
-            margin: 225px 25px;
+            margin: 160px 10px;
         }
 
         header {
@@ -43,7 +43,7 @@
 
         footer {
             position: fixed;
-            bottom: -200px;
+            bottom: -160px;
             height: 50px;
             text-align: center;
         }
@@ -205,12 +205,12 @@
             <tr >
                 <th width="40%">Goods Description</th>
                 <th width="15%">Quantity</th>
-                <th width="15%">Net Weight</th>
+                <th width="15%">Net Weight (Kg)</th>
                 <th width="15%">Unit Price ({{$valutaType}})</th>
                 <th width="15%">Total Amount ({{$valutaType}})</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="font-size:12px">
             @foreach ($detailTransactions as $detail)
             @php
             $totalAmount            +=$detail->amount;
@@ -221,9 +221,21 @@
             <tr >
                 <td width="40%">{{$detail->goods}}</td>
                 <td width="15%" style="text-align: right;">{{$detail->quantity}}</td>
-                <td width="15%" style="text-align: right;">{{$detail->netweight}} Kg</td>
-                <td width="15%" style="text-align: right;">{{$detail->price}}</td>
-                <td width="15%" style="text-align: right;">{{$detail->totalPrice}}</td>
+                <td width="15%" style="text-align: right;">
+                    @php
+                    echo number_format($detail->netweight, 2, ',', '.')
+                    @endphp
+                </td>
+                <td width="15%" style="text-align: right;">
+                    @php
+                    echo number_format($detail->price, 2, ',', '.')
+                    @endphp
+                </td>
+                <td width="15%" style="text-align: right;">
+                    @php
+                    echo number_format($detail->totalPrice, 2, ',', '.')
+                    @endphp
+                </td>
             </tr>
             @endforeach
         </tbody>
@@ -233,30 +245,20 @@
                 <td width="15%"></td>
                 <td width="15%" style="text-align: right;">
                     @php
-                    echo $totalNetWeight.' Kg'
+                    echo number_format($totalNetWeight, 2, ',', '.')
                     @endphp
                 </td>
                 <td width="15%" style="text-align: right;">
                 </td>
                 <td width="15%" style="text-align: right;">
                     @php
-                    echo $totalTransactionPrice
+                    echo number_format($totalTransactionPrice, 2, ',', '.')
                     @endphp
                 </td>
             </tr>
         </tfoot>        
     </table>
     <br>
-    <br>
-    <!-- 
-        Amounts Payments
-        Amounts Payments
-        Amounts Payments
-        Amounts Payments
-        Amounts Payments
-    -->
-
-
     @endif
 
     <table width="100%" id="invoice">
@@ -268,7 +270,7 @@
             <td width="3%">:</td>
             <td width="67%">
                 @php
-                echo $totalGrossWeight . ' Kg'
+                echo number_format($totalGrossWeight, 2, ',', '.').' Kg'
                 @endphp
             </td>
         </tr>
@@ -280,7 +282,7 @@
             <td width="3%">:</td>
             <td width="67%">
                 @php
-                echo $valutaType.' '.$totalTransactionPrice
+                echo $valutaType.' '.number_format($totalTransactionPrice, 2, ',', '.')
                 @endphp
             </td>
         </tr>
@@ -291,7 +293,7 @@
             <td>:</td>
             <td>
                 @php
-                echo $valutaType.' '.$transaction->advance
+                echo $valutaType.' '.number_format($transaction->advance, 2, ',', '.')
                 @endphp
             </td>
         </tr>
@@ -302,12 +304,11 @@
             <td>:</td>
             <td>
                 @php
-                echo $valutaType.' '.($totalTransactionPrice - $transaction->advance)
+                echo $valutaType.' '.number_format(($totalTransactionPrice - $transaction->advance), 2, ',', '.')
                 @endphp
             </td>
         </tr>
     </table>
-    <br>
     <br>
 
     <!-- 
