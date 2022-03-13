@@ -90,15 +90,12 @@ class Item extends Model
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
-            'i.name as itemName', 
             'sp.name as speciesName', 
             'i.amount as jumlahPacked',
             'amountUnpacked as jumlahUnpacked',
+            'p.shortname as packingShortname',
             DB::raw('ifnull(sum(dt.amount),0) as jumlahOnProgress'),
-            DB::raw('concat(s.name, " ",f.name, " ", g.name) as sizeblockgrade'),
-            DB::raw('concat(i.amount, " ",p.shortname) as amountPacked'),
-            DB::raw('concat(amountUnpacked, " Kg") as amountUnpacked'),
-            DB::raw('concat(ifnull(sum(dt.amount),0), " ",p.shortname) as onProgress'),
+            DB::raw('concat(i.name, " : ",s.name, " ",f.name, " ", g.name) as itemName'),
             DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
             'baseprice',
             'weightbase'
@@ -126,8 +123,16 @@ class Item extends Model
         return datatables()->of($query)
         ->addColumn('total', function ($row) {
             $jumlah = ((($row->jumlahPacked + $row->jumlahOnProgress) * $row->weightbase) + $row->jumlahUnpacked).' Kg';
-
             return $jumlah;
+        })
+        ->addColumn('amountPacked', function ($row) {
+            return $row->jumlahPacked.' '.$row->packingShortname;
+        })
+        ->addColumn('amountUnpacked', function ($row) {
+            return number_format($row->jumlahUnpacked, 2).' Kg';
+        })
+        ->addColumn('onProgress', function ($row) {
+            return number_format($row->jumlahOnProgress, 2).' '.$row->packingShortname;
         })
         ->addColumn('action', function ($row) {
             $html="";
@@ -178,7 +183,16 @@ class Item extends Model
         ->addColumn('total', function ($row) {
             $jumlah = $row->packed + $row->onProgress + $row->unpacked;
 
-            return $jumlah;
+            return number_format($jumlah, 2);
+        })
+        ->editColumn('packed', function ($row) {
+            return number_format($row->packed, 2);
+        })
+        ->editColumn('unpacked', function ($row) {
+            return number_format($row->unpacked, 2);
+        })
+        ->editColumn('onProgress', function ($row) {
+            return number_format($row->onProgress, 2);
         })
         ->addColumn('action', function ($row) {
             $html="";

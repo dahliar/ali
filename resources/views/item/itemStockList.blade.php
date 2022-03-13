@@ -42,19 +42,17 @@
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
             {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "15%", "targets":  [2], "className": "text-left" },
+            {   "width": "10%", "targets":  [2], "className": "text-end" },
             {   "width": "10%", "targets":  [3], "className": "text-end" },
-            {   "width": "9%", "targets":  [4], "className": "text-end" },
-            {   "width": "9%", "targets":  [5], "className": "text-end" },
-            {   "width": "9%", "targets":  [6], "className": "text-end" },
-            {   "width": "9%", "targets":  [7], "className": "text-end" },
-            {   "width": "14%", "targets":  [8], "className": "text-center" }
+            {   "width": "10%", "targets":  [4], "className": "text-end" },
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
+            {   "width": "20%", "targets":  [7], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'itemName', name: 'itemName'},
-            {data: 'sizeblockgrade', name: 'sizeblockgrade'},
             {data: 'wb', name: 'wb'},
             {data: 'amountPacked', name: 'amountPacked'},
             {data: 'onProgress', name: 'onProgress'},
@@ -140,7 +138,6 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Size Block Grade</th>
                                         <th>Packaging</th>
                                         <th>Packed</th>
                                         <th>On Progress</th>
