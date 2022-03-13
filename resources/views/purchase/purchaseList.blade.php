@@ -65,12 +65,11 @@
             {   "width": "4%",  "targets":  [0], "className": "text-center" },
             {   "width": "16%", "targets":  [1], "className": "text-left"   },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "15%", "targets":  [3], "className": "text-center" },
-            {   "width": "10%", "targets":  [4], "className": "text-center" },
-            {   "width": "10%", "targets":  [5], "className": "text-center" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-center" },
-            {   "width": "15%", "targets":  [8], "className": "text-left" }
+            {   "width": "15%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [6], "className": "text-left" },
+            {   "width": "15%", "targets":  [7], "className": "text-left" }
             ], 
 
             columns: [
@@ -79,7 +78,6 @@
             {data: 'nation', name: 'nation'},
             {data: 'nosurat', name: 'nosurat'},
             {data: 'arrivaldate', name: 'arrivaldate'},
-            {data: 'purchasedate', name: 'purchasedate'},
             {data: 'paymentAmount', name: 'paymentAmount'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
@@ -167,7 +165,6 @@
                             <th>Negara</th>
                             <th>No Surat</th>
                             <th>Datang</th>
-                            <th>Transaksi</th>
                             <th>Bayar</th>
                             <th>Status</th>
                             <th>Aksi</th>

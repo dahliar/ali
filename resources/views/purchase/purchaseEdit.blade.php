@@ -147,7 +147,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="input-group">
-                            <input id="paymentAmount" name="paymentAmount" type="text" class="form-control text-end" value="{{$purchase->paymentAmount }}" disabled>
+                            <input id="paymentAmount" name="paymentAmount" type="text" class="form-control text-end" value="@php echo number_format($purchase->paymentAmount, 2, ',', '.') @endphp" disabled>
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="input-group">
-                            <input id="tax" name="tax" type="text" class="form-control text-end" value="{{$purchase->tax}}" disabled>
+                            <input id="tax" name="tax" type="text" class="form-control text-end" value="@php echo number_format($purchase->tax, 2, ',', '.') @endphp" disabled>
                         </div>
                     </div>
                 </div>

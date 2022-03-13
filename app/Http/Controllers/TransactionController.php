@@ -29,8 +29,8 @@ class TransactionController extends Controller
 
         return view('transaction.transactionList', compact('nations'));
     }
-    public function getAllTransaction(){
-        return $this->transaction->getAllItemData();
+    public function getAllTransaction(Request $request){
+        return $this->transaction->getAllItemData($request);
     }
 
 

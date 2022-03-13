@@ -43,13 +43,8 @@ class PurchaseController extends Controller
                 WHEN p.status ="2" then "Finished"
                 ELSE "Cancelled" END) AS status')
         )
-
-
         ->join('companies as c', 'c.id', '=', 'p.companyid')
         ->join('countries as n', 'n.id', '=', 'c.nation')
-
-
-        
         ->whereBetween('purchaseDate', [$request->start, $request->end])
         ->orderBy('p.status', 'asc')
         ->orderBy('p.created_at', 'asc')
@@ -67,6 +62,9 @@ class PurchaseController extends Controller
 
         return datatables()->of($query)
         ->addIndexColumn()
+        ->editColumn('paymentAmount', function ($row) {
+            return number_format($row->paymentAmount, 2);
+        })
         ->addColumn('action', function ($row) {
             $html='
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar beli item" onclick="purchaseItems('."'".$row->id."'".')">
