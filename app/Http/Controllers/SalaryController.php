@@ -365,7 +365,7 @@ class SalaryController extends Controller
             $moveGeneratedData = DB::table('detail_borongans as db')
             ->select(
                 'db.employeeId as empid',
-                DB::raw('sum((b.netWeight/worker)) as berat'),
+                DB::raw('sum(b.netWeight) as berat'),
                 DB::raw('sum(netPayment) as jumlah')
             )
             ->join('borongans as b', 'db.boronganId', '=', 'b.id')
