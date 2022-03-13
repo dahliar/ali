@@ -32,7 +32,6 @@ class Transaction extends Model
             't.departureDate as etd',
             't.arrivalDate as eta',
             't.transactiondate as tanggaltransaksi',
-            't.status as status',
             DB::raw('(CASE WHEN t.isundername ="1" THEN "Internal"
                 WHEN t.isundername ="2" then "Undername" END) AS undername'),
             DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
