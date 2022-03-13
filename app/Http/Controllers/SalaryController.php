@@ -1145,10 +1145,11 @@ class SalaryController extends Controller
             'p.id as id',
             'p.payDate as payDate',
             'u.name as generator',
-            'p.id as total',
+            DB::raw('concat(count(dp.id)," pegawai") as total'),
             'p.id as action'
 
         )
+        ->join('detail_payrolls as dp', 'dp.idPayroll', '=', 'p.id')
         ->join('users as u', 'u.id', '=', 'p.creator')
         ->whereBetween('p.payDate', [$start." 00:00:00", $end." 23:59:59"])
         ->get();

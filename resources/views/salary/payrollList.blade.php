@@ -140,7 +140,7 @@
                             <th>No</th>
                             <th>Tanggal Payroll</th>
                             <th>Generator</th>
-                            <th>Total Payroll (Rp)</th>
+                            <th>Jumlah Pegawai</th>
                             <th>Act</th>
                         </tr>
                     </thead>
