@@ -197,12 +197,14 @@ class BoronganController extends Controller
                     'name' => ['required'],
                     'tanggalKerja' => ['required','date','before_or_equal:today'],
                     'hargaSatuan' => ['required','numeric','gte:1'],
+                    'jenis' => ['required','gt:0'],
                     'netweight' => ['required','numeric','gte:1'],
                     'worker' => ['required','numeric','gte:1']
                 ],
                 [
                     'name.*' => "Nama harus diisi",
                     'tanggalKerja.*' => "Tanggal harus diisi dan maksimal adalah tanggal hari ini",
+                    'jenis.*' => "Pilih salah satu jenis",
                     'hargaSatuan.*' => "Harga satuan harus diisi dan minimal adalah 1",
                     'netweight.*' => "Berat bersih harus diisi dan minimal adalah 1",
                     'worker.*' => "Jumlah Pekerja harus diisi dan minimal adalah 1",
@@ -213,6 +215,7 @@ class BoronganController extends Controller
                 'name' => $request->name,
                 'tanggalKerja' => $request->tanggalKerja,
                 'status' => 0,
+                'jenis' => $request->jenis,
                 'hargaSatuan' => $request->hargaSatuan,
                 'netweight' => $request->netweight,
                 'worker' => $request->worker,

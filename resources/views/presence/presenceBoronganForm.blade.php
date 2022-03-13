@@ -97,7 +97,20 @@
                                     <span class="input-group-text text-end"> Kg</span>
                                 </div>
                             </div>   
-                        </div>                 
+                        </div>         
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="spanPayment">Jenis</span>
+                            </div>
+                            <div class="col-md-4">
+                                <select id="jenis" name="jenis" class="form-select" >
+                                    <option value="-1" selected>--Pilih salah satu--</option>
+                                    <option value="1" @if(old('jenis') == 1) selected @endif>Umum</option>
+                                    <option value="2" @if(old('jenis') == 2) selected @endif>Fillet</option>
+                                    <option value="3" @if(old('jenis') == 3) selected @endif>Packing</option>
+                                </select>
+                            </div>                    
+                        </div>        
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                                 <span class="label">Jumlah Pekerja</span>
