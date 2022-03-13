@@ -365,6 +365,7 @@ class SalaryController extends Controller
             $moveGeneratedData = DB::table('detail_borongans as db')
             ->select(
                 'db.employeeId as empid',
+                DB::raw('sum((b.netWeight/worker)) as berat'),
                 DB::raw('sum(netPayment) as jumlah')
             )
             ->join('borongans as b', 'db.boronganId', '=', 'b.id')
@@ -386,7 +387,8 @@ class SalaryController extends Controller
                     ['idPayroll'        => $payrollId, 
                     'employeeId'        => $row->empid, 
                     'idPayrollEmpid'    => ($payrollId.'-'.$row->empid), 
-                    'borongan'        => $row->jumlah]],
+                    'berat'             => $row->berat,
+                    'borongan'          => $row->jumlah]],
                     ['idPayrollEmpid'], 
                     ['borongan']
                 );
@@ -1181,6 +1183,7 @@ class SalaryController extends Controller
             'b.shortname as bankName',
             'dp.hariKerja as hariKerja',
             'dp.jamLembur as jamLembur',
+            'dp.berat as berat',
             'dp.bulanan as bulanan',
             'dp.harian as harian',
             'dp.borongan as borongan',
@@ -1204,7 +1207,7 @@ class SalaryController extends Controller
             return $html;
         })
         ->addColumn('detilBorongan', function ($row) {
-            $html = "Fillet: Kg";
+            $html = $row->berat." Kg";
             return $html;
         })
         ->addColumn('bank', function ($row) {
