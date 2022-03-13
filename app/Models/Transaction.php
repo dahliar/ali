@@ -47,7 +47,8 @@ class Transaction extends Model
             ->orWhereBetween('transactionDate', [$start, $end])
             ->orWhereBetween('departureDate', [$start, $end])
             ->orWhereBetween('arrivalDate', [$start, $end]);
-        });
+        })
+        ->orderBy('t.id');
 
         if($request->negara != -1){
             $query->where('n.id', '=', $request->negara);
