@@ -705,7 +705,7 @@ class SalaryController extends Controller
         ->join('detail_borongans as db', 'db.boronganId', '=', 'b.id')
         ->join('employees as e', 'e.id', '=', 'db.employeeId')
         ->join('users as u', 's.userIdGenerator', '=', 'u.id')
-        ->where('jenis', 3)
+        ->where('s.jenis', 3)
         ->groupBy('s.id')
         ->orderBy('s.enddate');
         $query->get();
