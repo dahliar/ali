@@ -26,16 +26,16 @@
                     for(i=0; i<data.length; i++){
                         if (data[i].itemId != itemId){
                             html += '<option value='+data[i].itemId+'>'+
-                            data[i].itemName+
-                            ", Grade "+data[i].gradeName+
-                            ", Size "+data[i].sizeName+
+                            data[i].speciesName+
+                            " "+data[i].gradeName+
+                            ""+data[i].sizeName+
                             '</option>';
                         }
                         else{
                             html += '<option selected value='+data[i].itemId+'>'+
                             data[i].speciesName+
-                            ", Grade "+data[i].gradeName+
-                            ", Size "+data[i].sizeName+
+                            " "+data[i].gradeName+
+                            " "+data[i].sizeName+
                             '</option>';
                         }
                     }
