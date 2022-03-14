@@ -1152,7 +1152,7 @@ class SalaryController extends Controller
             'p.id as id',
             'p.payDate as payDate',
             'u.name as generator',
-            DB::raw('concat(count(dp.id)," pegawai") as total'),
+            DB::raw('count(dp.id) as total'),
             'p.id as action'
 
         )
@@ -1163,6 +1163,9 @@ class SalaryController extends Controller
 
         return datatables()->of($query)
         ->addIndexColumn()
+        ->editColumn('total', function ($row) {
+            return $row->total.' Pegawai';
+        })
         ->addColumn('action', function ($row) {
             /*
             <a data-rowid="'.$row->id.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar detil salary" target="_blank" href="salariesList/'.$row->id.'">
