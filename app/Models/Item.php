@@ -303,6 +303,8 @@ class Item extends Model
         ->where('f.isActive','=', 1)
         ->where('p.isActive','=', 1)
         ->where('i.isActive','=', 1)
+        ->orderByRaw('s.name+0 asc')
+        ->orderByRaw('g.name+0 asc')
         ->orderByRaw('i.name+0 asc')
         ->get();    
         return $query;
