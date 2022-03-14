@@ -28,7 +28,7 @@
                             html += '<option value='+data[i].itemId+'>'+
                             data[i].speciesName+
                             " "+data[i].gradeName+
-                            ""+data[i].sizeName+
+                            " "+data[i].sizeName+
                             '</option>';
                         }
                         else{
@@ -121,9 +121,9 @@
                                     <option value="-1">--Pilih dahulu--</option>
                                     @foreach ($species as $spec)
                                     @if ( $spec->id == old('species') )
-                                    <option value="{{ $spec->id }}" selected>{{ $spec->name }}</option>
+                                    <option value="{{ $spec->id }}" selected>{{ $spec->nameBahasa }}</option>
                                     @else
-                                    <option value="{{ $spec->id }}">{{ $spec->name }}</option>                    
+                                    <option value="{{ $spec->id }}">{{ $spec->nameBahasa }}</option>                    
                                     @endif
                                     @endforeach
                                 </select>
