@@ -31,24 +31,20 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "15%", "targets":  [1], "className": "text-left" },
+            {   "width": "20%", "targets":  [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
+            {   "width": "20%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-end" },
+            {   "width": "15%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" },
-            {   "width": "10%", "targets":  [8], "className": "text-end" },
-            {   "width": "10%", "targets":  [9], "className": "text-end" }
+            {   "width": "10%", "targets":  [7], "className": "text-end" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
-            {data: 'nip', name: 'nip'},
             {data: 'bank', name: 'bank'},
             {data: 'detilHarian', name: 'detilHarian'},
-            {data: 'detilBorongan', name: 'detilBorongan'},
             {data: 'harian', name: 'harian'},
             {data: 'borongan', name: 'borongan'},
             {data: 'honorarium', name: 'honorarium'},
@@ -92,10 +88,8 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>NIP</th>
                                 <th>Rekening</th>
                                 <th>Detil Harian</th>
-                                <th>Detil Borongan</th>
                                 <th>Harian (Rp)</th>
                                 <th>Borongan (Rp)</th>
                                 <th>Honorarium (Rp)</th>

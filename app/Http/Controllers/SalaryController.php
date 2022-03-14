@@ -1214,8 +1214,46 @@ class SalaryController extends Controller
 
         return datatables()->of($query)
         ->addIndexColumn()
+        ->editColumn('name', function ($row) {
+            $html = '
+            <div style="text-align:left" class="row form-group">
+            <span class="col-6">'.$row->name.'</span>
+            </div>
+            <div style="text-align:left" class="row form-group">
+            <span class="col-6">'.$row->nip.'</span>
+            </div>
+            ';
+            return $html;
+
+            $row->hk." hari, ".$row->jk." jam, ".$row->jl." lembur";
+            return $html;
+        })
         ->addColumn('detilHarian', function ($row) {
-            $html = $row->hk." hari, ".$row->jk." jam, ".$row->jl." lembur";
+            $html = '
+            <div style="text-align:left" class="row form-group">
+            <span class="col-4">Hari Kerja</span>
+            <span class="col-1">:</span>
+            <span style="text-align:right" class="col-6">'.$row->hk.' hari</span>
+            </div>
+            <div style="text-align:left" class="row form-group">
+            <span class="col-4">Jam Kerja</span>
+            <span class="col-1">:</span>
+            <span style="text-align:right" class="col-6">'.$row->jk.' jam</span>
+            </div>
+            <div style="text-align:left" class="row form-group">
+            <span class="col-4">Jam Lembur</span>
+            <span class="col-1">:</span>
+            <span style="text-align:right" class="col-6">'.$row->jl.' jam</span>
+            </div>
+            <div style="text-align:left" class="row form-group">
+            <span class="col-4">Borongan</span>
+            <span class="col-1">:</span>
+            <span style="text-align:right" class="col-6">'.number_format($row->berat, 2, ',', '.')." Kg".'</span>
+            </div>
+            ';
+            return $html;
+
+            $row->hk." hari, ".$row->jk." jam, ".$row->jl." lembur";
             return $html;
         })
         ->addColumn('detilBorongan', function ($row) {
@@ -1239,9 +1277,10 @@ class SalaryController extends Controller
             return $html;
         })
         ->addColumn('total', function ($row) {
-            $html = $row->bulanan+$row->borongan+$row->honorarium+$row->harian;
-            return $html;
+            $total = $row->bulanan+$row->borongan+$row->honorarium+$row->harian;
+            return number_format($total, 2, ',', '.');;
         })
+        ->rawColumns(['action', 'detilHarian', 'name'])
         ->toJson();
     }  
 
