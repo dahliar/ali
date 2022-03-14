@@ -194,6 +194,7 @@ class Presence extends Model
             'employeeId'    => $empid,
             'presenceDate'  => $start->toDateString(),
             'uangharian'    => $uh,
+            'jamKerja'      => $jamKerja,
             'jamLembur'     => $jamLembur,
             'uanglembur'    => ($honorarium->ul * $jamLembur)
         ];

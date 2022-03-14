@@ -31,10 +31,10 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left" },
+            {   "width": "15%", "targets":  [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
             {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
+            {   "width": "15%", "targets":  [4], "className": "text-end" },
             {   "width": "10%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
             {   "width": "10%", "targets":  [7], "className": "text-end" },
@@ -96,9 +96,9 @@
                                 <th>Rekening</th>
                                 <th>Detil Harian</th>
                                 <th>Detil Borongan</th>
-                                <th>Harian</th>
-                                <th>Borongan</th>
-                                <th>Honorarium</th>
+                                <th>Harian (Rp)</th>
+                                <th>Borongan (Rp)</th>
+                                <th>Honorarium (Rp)</th>
                                 <th>Total</th>
                             </tr>
                         </thead>

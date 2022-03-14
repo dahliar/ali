@@ -280,6 +280,7 @@ class SalaryController extends Controller
                 'ds.employeeId as empid',
                 DB::raw('sum(uangHarian) as uh'),
                 DB::raw('sum(uangLembur) as ul'),
+                DB::raw('sum(jamKerja) as jk'),
                 DB::raw('sum(jamLembur) as jl'),
                 DB::raw('count(id) as hari'),
             )
@@ -300,6 +301,7 @@ class SalaryController extends Controller
                     ['idPayroll'    => $payrollId, 
                     'employeeId'    => $row->empid, 
                     'idPayrollEmpid'=> ($payrollId.'-'.$row->empid),
+                    'jamKerja'      => $row->jk,
                     'jamLembur'     => $row->jl,
                     'hariKerja'     => $row->hari,
                     'harian'        => DB::raw('harian+'.($row->uh + $row->ul))]],
@@ -1187,8 +1189,9 @@ class SalaryController extends Controller
             'e.nip as nip',
             'e.noRekening as noRekening',
             'b.shortname as bankName',
-            'dp.hariKerja as hariKerja',
-            'dp.jamLembur as jamLembur',
+            'dp.hariKerja as hk',
+            'dp.jamKerja as jk',
+            'dp.jamLembur as jl',
             'dp.berat as berat',
             'dp.bulanan as bulanan',
             'dp.harian as harian',
@@ -1209,13 +1212,25 @@ class SalaryController extends Controller
         return datatables()->of($query)
         ->addIndexColumn()
         ->addColumn('detilHarian', function ($row) {
-            $html = $row->hariKerja." hari, ".$row->jamLembur." jam lembur";
+            $html = $row->hk." hari, ".$row->jk." jam, ".$row->jl." lembur";
             return $html;
         })
         ->addColumn('detilBorongan', function ($row) {
-            $html = $row->berat." Kg";
+            $html = number_format($row->berat, 2, ',', '.')." Kg";
             return $html;
         })
+        ->editColumn('harian', function ($row) {
+            $html = number_format($row->harian, 2, ',', '.');
+            return $html;
+        })
+        ->editColumn('borongan', function ($row) {
+            $html = number_format($row->borongan, 2, ',', '.');
+            return $html;
+        })
+        ->editColumn('honorarium', function ($row) {
+            $html = number_format($row->honorarium, 2, ',', '.');
+            return $html;
+        })        
         ->addColumn('bank', function ($row) {
             $html = $row->bankName.'-'.$row->noRekening;
             return $html;
