@@ -733,7 +733,10 @@ class SalaryController extends Controller
     }  
 
     public function checkCetakGajiPegawaiHarian(Salary $salary){
-        $generatorName = DB::table('users as u')->select('name')->where('u.id', '=', $salary->userIdGenerator)->first()->name;
+        $generatorName = DB::table('users as u')
+        ->select('name')
+        ->where('u.id', '=', $salary->userIdGenerator)
+        ->first()->name;
         return view('salary.checkSalaryHarianList', compact('salary', 'generatorName'));
     }
     public function printSalaryHarianList(Salary $salary){
@@ -964,7 +967,8 @@ class SalaryController extends Controller
     }
 
 
-    public function getSalariesHarianForCheck($salaryId){
+    public function getSalariesHarianForCheck(Salary $salary){
+        //DB::enableQueryLog(); // Enable query log
         $query = DB::table('salaries as s')
         ->select(
             'u.name as name',
@@ -986,14 +990,15 @@ class SalaryController extends Controller
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
         
-        ->where('ds.salaryid', $salaryId)
+        ->where('ds.salaryid', $salary->id)
         ->where('e.employmentStatus', 2)
         ->where('eosm.isactive', 1)
+        ->whereBetween('ds.presenceDate', [$salary->startDate, $salary->endDate])
         ->groupBy('ds.salaryId')
         ->groupBy('ds.employeeId')
-        ->having('ds.salaryId', '=',$salaryId)
+        ->having('ds.salaryId', '=',$salary->id)
         ->get();
-
+        //dd(DB::getQueryLog());
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
             $html='';
