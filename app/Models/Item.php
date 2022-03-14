@@ -284,7 +284,7 @@ class Item extends Model
         ->select(
             'i.id as itemId', 
             'i.name as itemName', 
-            'sp.name as speciesName', 
+            'sp.nameBahasa as speciesName', 
             's.name as sizeName',
             'g.name as gradeName',
             'p.name as packingName',
