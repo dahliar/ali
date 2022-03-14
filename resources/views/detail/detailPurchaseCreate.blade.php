@@ -88,7 +88,7 @@
                     <a class="white-text" href="{{ url('/home') }}">Home</a>
                 </li>
                 <li class="breadcrumb-item">
-                    <a class="white-text" href="{{ url('/transactionList') }}">Transaksi pembelian</a>
+                    <a class="white-text" href="{{ url('/purchaseList') }}">Transaksi pembelian</a>
                 </li>
                 <li class="breadcrumb-item active">Tambah detil transaksi pembelian</li>
             </ol>
