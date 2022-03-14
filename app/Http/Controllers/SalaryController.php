@@ -1188,6 +1188,7 @@ class SalaryController extends Controller
     public function getEmployeeDetailSalaries($payrollId){
         $query = DB::table('detail_payrolls as dp')
         ->select(
+            'dp.id as dpid',
             'u.name as name',
             'e.nip as nip',
             'e.noRekening as noRekening',
@@ -1214,13 +1215,21 @@ class SalaryController extends Controller
 
         return datatables()->of($query)
         ->addIndexColumn()
+        ->addColumn('action', function ($row) {
+            $html ='
+            <button  data-rowid="'.$row->dpid.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak slip gaji" onclick="cetakSlipGajiPayroll('."'".$row->dpid."'".')">
+            <i class="fa fa-print"></i>
+            </button> 
+            ';
+            return $html;
+        })
         ->editColumn('name', function ($row) {
             $html = '
             <div style="text-align:left" class="row form-group">
-            <span class="col-6">'.$row->name.'</span>
+            <span class="col-12">'.$row->name.'</span>
             </div>
             <div style="text-align:left" class="row form-group">
-            <span class="col-6">'.$row->nip.'</span>
+            <span class="col-12">'.$row->nip.'</span>
             </div>
             ';
             return $html;
@@ -1233,22 +1242,22 @@ class SalaryController extends Controller
             <div style="text-align:left" class="row form-group">
             <span class="col-4">Hari Kerja</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-6">'.$row->hk.' hari</span>
+            <span style="text-align:right" class="col-7">'.$row->hk.' hari</span>
             </div>
             <div style="text-align:left" class="row form-group">
             <span class="col-4">Jam Kerja</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-6">'.$row->jk.' jam</span>
+            <span style="text-align:right" class="col-7">'.$row->jk.' jam</span>
             </div>
             <div style="text-align:left" class="row form-group">
             <span class="col-4">Jam Lembur</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-6">'.$row->jl.' jam</span>
+            <span style="text-align:right" class="col-7">'.$row->jl.' jam</span>
             </div>
             <div style="text-align:left" class="row form-group">
             <span class="col-4">Borongan</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-6">'.number_format($row->berat, 2, ',', '.')." Kg".'</span>
+            <span style="text-align:right" class="col-7">'.number_format($row->berat, 2, ',', '.')." Kg".'</span>
             </div>
             ';
             return $html;

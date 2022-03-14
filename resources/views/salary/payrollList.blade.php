@@ -53,7 +53,6 @@
     function printPayrollList($payrollId){
         window.open(('{{ url("printPayrollList") }}' + "/"+ $payrollId), '_blank');
     }
-
     function showPayrolList(){
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;

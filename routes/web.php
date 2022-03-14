@@ -240,6 +240,7 @@ Route::GET('getEmployeeDetailSalaries/{payrollId}',[SalaryController::class, 'ge
 Route::POST('generateGajiStore',[SalaryController::class, 'store'])->middleware('auth');
 Route::POST('slipGajiKaryawan',[SalaryController::class, 'viewSlipGaji'])->middleware('auth');
 
+Route::get('/slipGaji/slipGajiPerPayroll/{dpid}', [InvoiceController::class, 'slipGajiPerPayroll'])->middleware(['auth']);
 
 
 

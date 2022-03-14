@@ -243,7 +243,76 @@ class InvoiceController extends Controller
         return $pdf->download($filename);
     }
 
+    public function slipGajiPerPayroll($dpid)
+    {   
+        $detail_payroll = DB::table('detail_payrolls as dp')->where('dp.id', '=', $dpid)->first();
+        $employee =  DB::table('employees as e')
+        ->select(
+            'e.nip as nip',
+            'e.nik as nik',
+            'u.name as name',
+            'os.name as osname',
+            'e.noRekening as noRekening',
+            'ba.shortname as bankName'
+        )
+        ->join('banks as ba', 'ba.id', '=', 'e.bankid')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
+        ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
+        ->where('eosm.isactive', 1)
+        ->where('e.id', '=', $detail_payroll->employeeId)->first();
+        $payroll=DB::table('payrolls as p')->where('p.id', '=', $detail_payroll->idPayroll)->first();
+        $salaries=DB::table('salaries as s')->where('s.idPayroll', '=', $payroll->id)->get();
 
+        $presence="";
+        $borongan="";
+        $harian="";
+        $honorarirum="";
+
+        foreach($salaries as $sal){
+            switch($sal->jenis){
+                case('2') :
+                $harian = DB::table('dailysalaries as ds')
+                ->select('p.start', 'p.end', 'p.employeeId', 'p.jamKerja', 'p.jamLembur', 'p.shift', 'ds.uangHarian', 'ds.uangLembur')
+                ->join('presences as p', 
+                    DB::raw('concat(date(p.start),p.employeeId)'), 
+                    '=', 
+                    DB::raw('concat(date(ds.presenceDate),ds.employeeId)'))
+                ->where('ds.salaryId', '=', $sal->id)
+                ->where('ds.employeeId', '=', $detail_payroll->employeeId)
+                //->whereBetween('ds.presenceDate', [$sal->startDate, $sal->endDate])
+                ->get();
+                break;
+                case('3') : 
+                $borongan = DB::table('borongans as b')
+                ->select(
+                    'b.name', 'b.tanggalkerja', 'b.hargaSatuan', 'b.netweight','b.worker',
+                    'db.netPayment'
+                )
+                ->join('detail_borongans as db', 'db.boronganId', '=', 'b.id')
+                ->where('b.salariesId', '=', $sal->id)
+                ->where('db.employeeId', '=', $detail_payroll->employeeId)
+                //->whereBetween('b.tanggalKerja', [$sal->startDate, $sal->endDate])
+                ->get();
+                break;
+                case('4') : 
+                $honorarium = DB::table('honorariums as h')
+                ->select(
+                    'h.tanggalKerja', 'h.jumlah', 'h.keterangan'
+                )
+                ->where('h.salaryId', '=', $sal->id)
+                ->where('h.employeeId', '=', $detail_payroll->employeeId)
+                ->get();
+
+                break;
+            }
+
+        }
+        $pdf = PDF::loadview('invoice.slipGajiPegawai', compact('employee', 'payroll', 'detail_payroll', 'presence', 'harian', 'borongan', 'honorarium'));
+        $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.today().'.pdf';
+        return $pdf->download($filename);
+
+    }
 
 
 }

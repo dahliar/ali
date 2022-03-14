@@ -17,40 +17,6 @@
         }
     });
 
-    
-    function setSalaryIsPaid($sid, $empid){
-        Swal.fire({
-            title: 'Yakin menandai?',
-            text: "Data ditandai sudah dibayar!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, mark it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '{{ url("harianMarkedPaid") }}',
-                    type: "GET",
-                    data: {
-                        "_token":"{{ csrf_token() }}",
-                        sid : $sid,
-                        empid : $empid
-                    },
-                    dataType: "json",
-                    success:function(data){
-                        Swal.fire(
-                            'Marked!',
-                            'Record gaji harian telah ditandai dibayar.',
-                            'success'
-                            );
-                        myFunction();
-                    }
-                });
-            }
-        })
-    }
-
     function myFunction(){
         salary = document.getElementById("salaryId").value;
         $('#datatable').DataTable({

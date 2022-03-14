@@ -16,7 +16,9 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
+    function cetakSlipGajiPayroll(dpid){
+        window.open(('{{ url("slipGaji/slipGajiPerPayroll") }}'+"/"+dpid), '_blank');
+    };
     function myFunction($payrollId){
         $('#datatable').DataTable({
             headers: {
@@ -35,9 +37,10 @@
             {   "width": "10%", "targets":  [2], "className": "text-left" },
             {   "width": "20%", "targets":  [3], "className": "text-left" },
             {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "15%", "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" }
+            {   "width": "10%", "targets":  [7], "className": "text-end" },
+            {   "width": "5%", "targets":  [8], "className": "text-end" }
             ], 
 
             columns: [
@@ -48,7 +51,8 @@
             {data: 'harian', name: 'harian'},
             {data: 'borongan', name: 'borongan'},
             {data: 'honorarium', name: 'honorarium'},
-            {data: 'total', name: 'total'}
+            {data: 'total', name: 'total'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     }
@@ -94,6 +98,7 @@
                                 <th>Borongan (Rp)</th>
                                 <th>Honorarium (Rp)</th>
                                 <th>Total</th>
+                                <th>Act</th>
                             </tr>
                         </thead>
                         <tbody style="font-size:12px">
