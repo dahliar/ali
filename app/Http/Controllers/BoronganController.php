@@ -66,7 +66,7 @@ class BoronganController extends Controller
             'b.worker as worker')
         ->leftjoin('detail_borongans as db', 'db.boronganId', '=', 'b.id')
         ->whereBetween('tanggalKerja', [$request->start, $request->end])
-        ->orderBy('b.created_at')
+        ->orderBy('b.created_at', 'desc')
         ->groupBy('b.id');
 
         if($request->status != -1){
@@ -199,7 +199,7 @@ class BoronganController extends Controller
             ];
             $a++;
         }
-        
+
         DB::table('detail_borongans')->insert($data);
         DB::table('borongans')
         ->where('id', $request->boronganId)
