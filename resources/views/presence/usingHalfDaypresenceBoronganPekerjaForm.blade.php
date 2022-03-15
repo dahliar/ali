@@ -16,15 +16,28 @@
 
 
 <script type="text/javascript">
+
+
     function workerAddedChange($a, $b){
         if ($a){
             document.getElementById("workerAdded").value++;
-            document.getElementById("boronganGender["+$b+"]").checked = true; 
+            document.getElementById("boronganType["+$b+"]").checked = true;         
         } else{
             document.getElementById("workerAdded").value--;
-            document.getElementById("boronganGender["+$b+"]").checked = false; 
+            document.getElementById("boronganType["+$b+"]").checked = false;         
         }
     }
+    function boronganTypeChange($b, $index){
+        $a = document.getElementById("boronganWorker["+$index+"]").checked;
+        if ($b){
+            if(!document.getElementById("boronganWorker["+$index+"]").checked){
+                document.getElementById("boronganWorker["+$index+"]").checked = true;
+                document.getElementById("workerAdded").value++;
+            }
+        }
+    }
+
+
 </script>
 
 @if ($errors->any())
@@ -105,35 +118,56 @@
                 </div>
                 <div class="modal-content">
                     <div class="modal-body">
-                        <table style="width: 40%;  margin-left: auto; margin-right: auto;" class="center table table-striped table-hover table-bordered">
+                        <table style="width: 100%" class="table table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
-                                    <th style="width: 5%;">No</th>
-                                    <th style="width: 10%;text-align: center;">Masuk</th>
-                                    <th style="width: 20%;">NIP</th>
-                                    <th style="width: 45%;">Nama</th>
-                                    <th style="width: 10%;">Gender</th>
+                                    <th>No</th>
+                                    <th style="width: 5%; text-align:center">Masuk Kerja</th>
+                                    <th style="width: 5%; text-align:center">Full day</th>
+                                    <th style="width: 10%;">NIP</th>
+                                    <th style="width: 20%;">Nama</th>
                                     <th style="width: 10%;">Jenis</th>
+                                    <th class="table-dark"></th>
+                                    <th>No</th>
+                                    <th style="width: 5%; text-align:center">Masuk Kerja</th>
+                                    <th style="width: 5%; text-align:center">Full day</th>
+                                    <th style="width: 10%;">NIP</th>
+                                    <th style="width: 20%;">Nama</th>
+                                    <th style="width: 10%;">Jenis</th>
+                                    <th class="table-dark"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php 
-                                $no=1;
+                                $no=0; 
+                                $noLeft=1;
+                                $noRight=2;
+
                                 @endphp
-                                @foreach($employees as $employee)
+                                @foreach($employees->split($employees->count()/2) as $row)
                                 <tr>
-                                    <td style="width: 5%;">
-                                        @php echo $no @endphp 
+                                    @foreach($row as $employee)
+                                    <td>
+                                        @if(($no % 2)==0)
+                                        {{$noLeft}}
+                                        @php $noLeft+=2;    @endphp
+                                        @else
+                                        {{$noRight}}
+                                        @php $noRight+=2;    @endphp
+                                        @endif
                                     </td>
-                                    <td style="width: 10%;text-align: center;">
-                                        <input id="boronganWorker[{{$employee->empid}}]" type="checkbox" class="form-check-input" onchange="workerAddedChange(this.checked, {{$employee->empid}})" name="boronganWorker[{{$employee->empid}}]" value="{{$employee->empid}}">
-                                        <input id="boronganGender[{{$employee->empid}}]" style="display:none" type="checkbox" class="form-check-input" type="hidden" name="boronganGender[{{$employee->empid}}]" value="{{$employee->genderValue}}">
+                                    <td style="width: 5%; text-align:center">
+                                        <input id="boronganWorker[{{$no}}]" type="checkbox" class="form-check-input" onchange="workerAddedChange(this.checked, {{$no}})" name="boronganWorker[{{$no}}]" value="{{$employee->empid}}">
                                     </td>
-                                    <td style="width: 20%;">{{$employee->nip}}</td>
-                                    <td style="width: 45%;">{{$employee->nama}}</td>
-                                    <td style="width: 10%;">{{$employee->gender}}</td>
+                                    <td style="width: 5%; text-align:center">
+                                        <input id="boronganType[{{$no}}]" type="checkbox" class="form-check-input" name="boronganType[{{$no}}]" value="{{$employee->empid}}" onchange="boronganTypeChange(this.checked, {{$no}})" >
+                                    </td>
+                                    <td style="width: 10%;">{{$employee->nip}}</td>
+                                    <td style="width: 20%;">{{$employee->nama}}</td>
                                     <td style="width: 10%;">{{$employee->employmentStatus}}</td> 
-                                    @php $no+=1;    @endphp                                    
+                                    <td class="table-dark"></td>
+                                    @php $no+=1;    @endphp
+                                    @endforeach
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -12,8 +12,29 @@
 @section('content')
 @if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript"> 
+    $(document).ready(function() {
+        $('#jenis').on('change', function() {
+            var jenis = $(this).val();
+            if (jenis<2){
+                document.getElementById("cbval").value = "0";
+                document.getElementById("loading").disabled = true;
+                document.getElementById("loading").checked = false;
+            }else{
+                document.getElementById("loading").disabled = false;
+            }
+        });
+        $('#loading').on('change', function() {
+            var loading = document.getElementById("loading").checked;
+            
+            if (loading){
+                document.getElementById("cbval").value = "1";
+            }else{
+                document.getElementById("cbval").value = "0";
+            }
+            
+        });
+    });
 </script>
-
 @if ($errors->any())
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -103,14 +124,22 @@
                                 <span class="label" id="spanPayment">Jenis</span>
                             </div>
                             <div class="col-md-4">
-                                <select id="jenis" name="jenis" class="form-select" >
+                                <select id="jenis" name="jenis" class="form-select">
                                     <option value="-1" selected>--Pilih salah satu--</option>
-                                    <option value="1" @if(old('jenis') == 1) selected @endif>Umum</option>
-                                    <option value="2" @if(old('jenis') == 2) selected @endif>Fillet</option>
-                                    <option value="3" @if(old('jenis') == 3) selected @endif>Packing</option>
+                                    <option value="1" @if(old('jenis') == 1) selected @endif>Fillet</option>
+                                    <option value="2" @if(old('jenis') == 2) selected @endif>Packing</option>
                                 </select>
                             </div>                    
-                        </div>        
+                        </div>         
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="spanPayment">Loading</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="loading" type="checkbox" class="form-check-input loading" name="loading" disabled>
+                                <input type="hidden" id="cbval" name="cbval" value="0">
+                            </div>                    
+                        </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                                 <span class="label">Jumlah Pekerja</span>

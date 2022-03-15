@@ -25,6 +25,12 @@ class BoronganController extends Controller
             'e.id as empid',
             'e.nip as nip',
             'u.name as nama',
+            'e.gender as genderValue',
+            DB::raw('(CASE 
+                WHEN e.gender="1" THEN "Laki" 
+                WHEN e.gender="2" THEN "Perempuan" 
+                END) AS gender'),
+
             DB::raw('(CASE 
                 WHEN e.employmentStatus="1" THEN "Bulanan" 
                 WHEN e.employmentStatus="2" THEN "Harian" 
@@ -32,7 +38,7 @@ class BoronganController extends Controller
                 END) AS employmentStatus'),
         )
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->whereIn('employmentStatus', [2,3])
+        ->where('employmentStatus', 3)
         ->where('isActive', '=', 1)
         ->orderBy('u.name')
         ->get();
@@ -143,156 +149,198 @@ class BoronganController extends Controller
             return view('presence.presenceBoronganForm');
         }
 
-        /**
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-        public function storePekerja(Request $request, Borongan $borongan)
-        {
-            $limit=$request->worker;
-            $request->validate([
-                'boronganWorker' => ['required','array',"min:$limit","max:$limit"]
-            ]);
+    public function storePekerja(Request $request, Borongan $borongan)
+    {
+        $limit=$request->worker;
+        $request->validate([
+            'boronganWorker' => ['required','array',"min:$limit","max:$limit"]
+        ]);
 
-            $a=0;
+        $a=0;
+        $jmlCowok=0;
+        $jmlCewek=0;
 
-
-            $fullWorker=count($request->boronganWorker);
-            $halfDay=$fullWorker - count($request->boronganType);
-            $satuanHalfday = (($fullWorker-$halfDay)*2)+$halfDay;
-            $netPriceHalf = ($borongan->hargaSatuan * $borongan->netweight) / $satuanHalfday;
-
-            foreach($request->boronganWorker as $boronganWorker){
-                $price=$netPriceHalf;
-                $isFullday = 0;
-                if(in_array($boronganWorker, $request->boronganType)){
-                    $price=$netPriceHalf * 2;
-                    $isFullday = 1;
-                }
-                $data[$a] = [
-                    'employeeId' => $boronganWorker,
-                    'boronganId' => $request->boronganId,
-                    'isFullday' => $isFullday,
-                    'netPayment' => $price
-                ];
-                $a++;
+        foreach($request->boronganGender as $gender){
+            if ($gender==1){
+                $jmlCowok++;
+            } else{
+                $jmlCewek++;
             }
-            
-            DB::table('detail_borongans')->insert($data);
-            DB::table('borongans')
-            ->where('id', $request->boronganId)
-            ->update(['status' => 1]);
-
-            return redirect('boronganList')
-            ->with('status','Item berhasil ditambahkan.');
-            
-
         }
-        public function storeBorongan(Request $request)
-        {
-            $request->validate(
-                [
-                    'name' => ['required'],
-                    'tanggalKerja' => ['required','date','before_or_equal:today'],
-                    'hargaSatuan' => ['required','numeric','gte:1'],
-                    'jenis' => ['required','gt:0'],
-                    'netweight' => ['required','numeric','gte:1'],
-                    'worker' => ['required','numeric','gte:1']
-                ],
-                [
-                    'name.*' => "Nama harus diisi",
-                    'tanggalKerja.*' => "Tanggal harus diisi dan maksimal adalah tanggal hari ini",
-                    'jenis.*' => "Pilih salah satu jenis",
-                    'hargaSatuan.*' => "Harga satuan harus diisi dan minimal adalah 1",
-                    'netweight.*' => "Berat bersih harus diisi dan minimal adalah 1",
-                    'worker.*' => "Jumlah Pekerja harus diisi dan minimal adalah 1",
-                ]);
-            $netPrice = (($request->hargaSatuan * $request->netweight) / $request->worker);
-
-            $data = [
-                'name' => $request->name,
-                'tanggalKerja' => $request->tanggalKerja,
-                'status' => 0,
-                'jenis' => $request->jenis,
-                'hargaSatuan' => $request->hargaSatuan,
-                'netweight' => $request->netweight,
-                'worker' => $request->worker,
+        $percentage=0.2;
+        $dataSalary[]="";
+        if ($borongan->jenis==2){
+            if($borongan->loading==0){
+                $percentage=0.15;
+            }
+            $dataSalary=$this->hitungBoronganPacking($borongan->netweight, $borongan->hargaSatuan, $jmlCowok, $jmlCewek, $percentage);
+        } else{
+            $price = ($borongan->hargaSatuan * $borongan->netweight) / $borongan->worker;
+            $dataSalary=[
+                '1'=>$price, 
+                '2'=>$price
             ];
-            DB::table('borongans')->insert($data);
-
-            return redirect('boronganList')
-            ->with('status','Item berhasil ditambahkan.');
-
         }
 
-        /**
+        $data[]="";
+        foreach($request->boronganWorker as $bw){
+            $price = $dataSalary[$request->boronganGender[$bw]];
+            $data[$a] = [
+                'employeeId' => $bw,
+                'boronganId' => $request->boronganId,
+                'isFullday' => 1,
+                'netPayment' => $price
+            ];
+            $a++;
+        }
+        
+        DB::table('detail_borongans')->insert($data);
+        DB::table('borongans')
+        ->where('id', $request->boronganId)
+        ->update(['status' => 1]);
+
+        return redirect('boronganList')
+        ->with('status','Item berhasil ditambahkan.');
+
+
+        /*
+        //pas masih ada halfday
+        $limit=$request->worker;
+        $request->validate([
+            'boronganWorker' => ['required','array',"min:$limit","max:$limit"]
+        ]);
+
+        $a=0;
+
+        $fullWorker=count($request->boronganWorker);
+        $halfDay=$fullWorker - count($request->boronganType);
+        $satuanHalfday = (($fullWorker-$halfDay)*2)+$halfDay;
+        $netPriceHalf = ($borongan->hargaSatuan * $borongan->netweight) / $satuanHalfday;
+
+        foreach($request->boronganWorker as $boronganWorker){
+            $price=$netPriceHalf;
+            $isFullday = 0;
+            if(in_array($boronganWorker, $request->boronganType)){
+                $price=$netPriceHalf * 2;
+                $isFullday = 1;
+            }
+            $data[$a] = [
+                'employeeId' => $boronganWorker,
+                'boronganId' => $request->boronganId,
+                'isFullday' => $isFullday,
+                'netPayment' => $price
+            ];
+            $a++;
+        }
+
+        DB::table('detail_borongans')->insert($data);
+        DB::table('borongans')
+        ->where('id', $request->boronganId)
+        ->update(['status' => 1]);
+
+        return redirect('boronganList')
+        ->with('status','Item berhasil ditambahkan.');
+        */
+    }
+
+    function hitungBoronganPacking($berat, $hargaperkg, $jmlCowok, $jmlCewek, $percentage){
+        $x=$berat*$hargaperkg;
+        $y=$jmlCowok+$jmlCewek;
+        $z=($percentage*((($x)/($y))*$jmlCewek));
+
+        $honorCowok=( ($x) / ($y) )-( $z / $jmlCewek);
+        $honorCewek=( ($x) / ($y) )+( $z / $jmlCowok);
+        $harga=[
+            '1'=>$honorCowok, 
+            '2'=>$honorCewek
+        ];
+
+        return $harga;
+
+    }
+
+
+    public function storeBorongan(Request $request)
+    {
+        $request->validate(
+            [
+                'name' => ['required'],
+                'tanggalKerja' => ['required','date','before_or_equal:today'],
+                'hargaSatuan' => ['required','numeric','gte:1'],
+                'jenis' => ['required','gt:0'],
+                'netweight' => ['required','numeric','gte:1'],
+                'worker' => ['required','numeric','gte:1']
+            ],
+            [
+                'name.*' => "Nama harus diisi",
+                'tanggalKerja.*' => "Tanggal harus diisi dan maksimal adalah tanggal hari ini",
+                'jenis.*' => "Pilih salah satu jenis",
+                'hargaSatuan.*' => "Harga satuan harus diisi dan minimal adalah 1",
+                'netweight.*' => "Berat bersih harus diisi dan minimal adalah 1",
+                'worker.*' => "Jumlah Pekerja harus diisi dan minimal adalah 1",
+            ]);
+        $netPrice = (($request->hargaSatuan * $request->netweight) / $request->worker);
+
+        $data = [
+            'name' => $request->name,
+            'tanggalKerja' => $request->tanggalKerja,
+            'status' => 0,
+            'jenis' => $request->jenis,
+            'loading' => $request->cbval,
+            'hargaSatuan' => $request->hargaSatuan,
+            'netweight' => $request->netweight,
+            'worker' => $request->worker,
+        ];
+        DB::table('borongans')->insert($data);
+
+        return redirect('boronganList')
+        ->with('status','Item berhasil ditambahkan.');
+
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Borongan  $borongan
      * @return \Illuminate\Http\Response
      */
-        public function show(Borongan $borongan)
-        {
-            $query = DB::table('borongans as b')
-            ->select([
-                'db.id as id',
-                'e.nip as nip',
-                DB::raw('sum(db.netPayment) as netPayment'),
+    public function show(Borongan $borongan)
+    {
+        $query = DB::table('borongans as b')
+        ->select([
+            'db.id as id',
+            'e.nip as nip',
+            DB::raw('sum(db.netPayment) as netPayment'),
                 //'db.netPayment as netPayment', 
-                'u.name as nama', 
-                'os.name as osname'
-            ])
-            ->join('detail_borongans as db', 'b.id', '=', 'db.boronganId')
-            ->join('employees as e', 'e.id', '=', 'db.employeeId')
-            ->join('users as u', 'u.id', '=', 'e.userid')
-            ->join('employeeorgstructuremapping as eos', 'eos.idemp', '=', 'e.id') 
-            ->join('organization_structures as os', 'os.id', '=', 'eos.idorgstructure')
-            ->where('eos.isactive', '=', 1)
-            ->where('boronganId', '=', $borongan->id)
-            ->groupBy('e.id')
-            ->get();
-            
-            return view('presence.presenceBoronganWorkerList', compact('borongan', 'query'));
-        }
+            'u.name as nama', 
+            'os.name as osname'
+        ])
+        ->join('detail_borongans as db', 'b.id', '=', 'db.boronganId')
+        ->join('employees as e', 'e.id', '=', 'db.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as eos', 'eos.idemp', '=', 'e.id') 
+        ->join('organization_structures as os', 'os.id', '=', 'eos.idorgstructure')
+        ->where('eos.isactive', '=', 1)
+        ->where('boronganId', '=', $borongan->id)
+        ->groupBy('e.id')
+        ->get();
 
-        /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Borongan  $borongan
-     * @return \Illuminate\Http\Response
-     */
-        public function edit(Borongan $borongan)
-        {
-        //
-        }
-
-        /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Borongan  $borongan
-     * @return \Illuminate\Http\Response
-     */
-        public function update(Request $request, Borongan $borongan)
-        {
-        //
-        }
-
-        /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Borongan  $borongan
-     * @return \Illuminate\Http\Response
-     */
-        public function destroy(Borongan $borongan)
-        {
-            $deleted = DB::table('detail_borongans')->where('boronganId', '=', $borongan->id)->delete();
-            $deleted = DB::table('borongans')->where('id', '=', $borongan->id)->delete();
-            return $retValue = [
-                'message'       => "ecord telah dihapus",
-                'isError'       => "0"
-            ];
-        }
+        return view('presence.presenceBoronganWorkerList', compact('borongan', 'query'));
     }
+
+    public function destroy(Borongan $borongan)
+    {
+        $deleted = DB::table('detail_borongans')->where('boronganId', '=', $borongan->id)->delete();
+        $deleted = DB::table('borongans')->where('id', '=', $borongan->id)->delete();
+        return $retValue = [
+            'message'       => "Record telah dihapus",
+            'isError'       => "0"
+        ];
+    }
+}
