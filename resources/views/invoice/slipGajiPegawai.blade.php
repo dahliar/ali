@@ -277,7 +277,7 @@
                         
                     </tr>
                     @php
-                    $total+=$b->netPayment;
+                    $total+=$h->jumlah;
                     $no+=1;
                     @endphp
                     @endforeach

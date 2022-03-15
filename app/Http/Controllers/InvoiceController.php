@@ -291,6 +291,7 @@ class InvoiceController extends Controller
                 //->whereBetween('ds.presenceDate', [$sal->startDate, $sal->endDate])
                 ->get();
                 break;
+                
                 case('3') : 
                 $borongan = DB::table('borongans as b')
                 ->select(
