@@ -1,7 +1,6 @@
 @if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 <!doctype html>
     <html lang="en">
-
     <style type="text/css">
         #invoice {
             font-family: Arial, Helvetica, sans-serif;
@@ -317,7 +316,9 @@
                 </tr>       
             </table>
             <br>
-            Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}
+            <span style="font-size: 10px;">
+                Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}
+            </span>
         </main>
     </body>
 

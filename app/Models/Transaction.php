@@ -125,8 +125,8 @@ class Transaction extends Model
 
     public function getAllTransactionData($jenis, $negara, $statusTransaksi, $start, $end){
 
-     $query = DB::table('transactions as t')
-     ->select(
+       $query = DB::table('transactions as t')
+       ->select(
         't.id as id', 
         't.transactionnum as nosurat', 
         'c.name as name', 
@@ -142,11 +142,11 @@ class Transaction extends Model
             WHEN t.status ="2" then "Finished"
             ELSE "Cancelled" END) AS status')
     )
-     ->whereBetween('transactionDate', [$end, $start])
-     ->join('companies as c', 'c.id', '=', 't.companyid')
-     ->join('countries as n', 'n.id', '=', 'c.nation');
+       ->whereBetween('transactionDate', [$end, $start])
+       ->join('companies as c', 'c.id', '=', 't.companyid')
+       ->join('countries as n', 'n.id', '=', 'c.nation');
 
-     if ($jenis!=-1){
+       if ($jenis!=-1){
         $query->where('t.isundername', $jenis);
     }
     if ($negara!=-1){
@@ -214,12 +214,27 @@ public function whenUndernameIsTrue($transactionId){
         update ke canceled, dan kembalikan seluruh stock yang sudah dimasukkan         
         */
 
-        if ($data['status'] == 3){
+        if ($data['status'] == 2){
+            /*
+                ketika berubah jadi finished maka, 
+                1. hitung stok di detail_transactions
+                2. update jumlah stock di items, decrement sejumlah amount di dt
+                3. update data status dt dengan tid = itemDetail->tranId, jadi 2
+
+            */
+                DB::table('detail_transactions')
+                ->where('transactionId', $itemDetail->tranId)
+                ->update(['status' => 2]);
+
+            }
+            else if ($data['status'] == 3){
             /*
             1. get all data from detailTransaction where transactionId=$transactionId
             2. Update Item foreach item result from poin1, increment the amount sebesar amount dari poin1
             3. update detailTransaction->status menjadi 0 semua (Tidak aktif)
             */
+            
+
             $result1 = DB::table('detail_transactions as dt')
             ->select(
                 'dt.id as id', 
@@ -238,7 +253,7 @@ public function whenUndernameIsTrue($transactionId){
             DB::table('detail_transactions')
             ->where('transactionId', $itemDetail->tranId)
             ->update(['status' => 0]);
-
-        }
+            
+        } 
     }
 }

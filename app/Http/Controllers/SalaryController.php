@@ -155,15 +155,10 @@ class SalaryController extends Controller
                     ['idPayrollEmpid'], 
                     ['honorarium']
                 );
-                
             }
-
-
-
             $retValue = $affected." record honorarium telah digenerate";
         } else{
             $retValue = "Tidak terdapat record honorarium yang belum digenerate";
-
         }
         return $retValue;
     }
@@ -177,7 +172,6 @@ class SalaryController extends Controller
         ->where('ds.uangLembur', '>', '0')
         ->join('employees as e', 'e.id', '=',  'ds.employeeId')
         ->count();
-
 
         $retValue="";
         if ($rowCount>0){
@@ -221,7 +215,6 @@ class SalaryController extends Controller
             $retValue = $affected." record lembur pegawai bulanan telah digenerate";
         } else{
             $retValue = "Tidak terdapat record lembur pegawai bulanan yang belum digenerate";
-
         }
         return $retValue;
     }

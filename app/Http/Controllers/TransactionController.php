@@ -165,8 +165,6 @@ class TransactionController extends Controller
             $tnum = $this->transaction->whenUndernameIsTrue($lastTransactionIdStored);
         }
 
-
-
         if (!empty($request->pinotes)){
             $a=0;
 
@@ -181,8 +179,6 @@ class TransactionController extends Controller
         }
         return redirect('transactionList')
         ->with('status','Transaksi pengiriman ke '.$companyName.' berhasil ditambahkan.');
-        
-
     }
 
     /**
@@ -322,7 +318,6 @@ class TransactionController extends Controller
         //the plan is, delete all notes existed in the table, and insert the new edited list
         if (!empty($request->pinotes)){
             $a=0;
-
             foreach ($request->pinotes as $notes){            
                 $notesData[$a] = [
                     'transactionId' =>  $request->transactionId,

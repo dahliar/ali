@@ -14,79 +14,6 @@ class Item extends Model
     protected $primaryKey = 'id';
 
     public function getAllItemData($speciesId){
-
-        //ini masih belum ngitung yang lagi onProgress
-        /*
-        $query = DB::table('items as i')
-        ->select(
-            'i.id as id', 
-            'i.name as itemName', 
-            DB::raw('concat(s.name, " ",f.name, " ", g.name) as sizeblockgrade'),
-            'sp.name as speciesName', 
-            DB::raw('concat(i.amount, " ",p.shortname) as amountPacked'),
-            DB::raw('concat(ifnull(am,0), " ",p.shortname) as onProgress'),
-            DB::raw('concat(amountUnpacked, " Kg") as amountUnpacked'),
-            DB::raw('concat(ifnull((((i.amount+sum(dt.amount)) * weightbase) + amountUnpacked),0)," Kg") as total'),
-            DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
-            'baseprice',
-            'weightbase'
-        )
-        ->groupBy('i.id')
-        ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
-        ->join(DB::raw("select ii.id, sum(dti.amount) as am from detail_transactions dti join transactions ti on dti.transactionId=ti.id join items ii on ii.id=dti.itemId where ti.status=1 group by ii.id").' as op', 'i.id', '=', 'iiid')
-        ->join('transactions as t', 't.id', '=', 'dt.transactionId')
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-
-        ->where('i.isActive','=', 1);
-        */
-        /*
-        $onprogressdata = DB::table('detail_transactions as dti')
-        ->select('i.id as id', DB::raw('sum(dti.amount) as am'))
-        ->join('transactions as ti', 'dti.transactionId', '=', 'ti.id')
-        ->join('items as i', 'i.id', '=', 'dti.itemId')
-        ->where('ti.status', '=', '1')
-        ->groupby('i.id')->toSql();
-        */
-        //dd($onprogressdata);
-
-
-        /*
-        $query = DB::table('items as i')
-        ->select(
-            'i.id as id', 
-            'i.name as itemName', 
-            DB::raw('concat(s.name, " ",f.name, " ", g.name) as sizeblockgrade'),
-            'sp.name as speciesName', 
-            DB::raw('concat(i.amount, " ",p.shortname) as amountPacked'),
-            DB::raw('concat(ifnull(sum(dt.amount),0), " ",p.shortname) as onProgress'),
-            DB::raw('concat(amountUnpacked, " Kg") as amountUnpacked'),
-            DB::raw('concat(ifnull((((i.amount+sum(dt.amount)) * weightbase) + amountUnpacked),0)," Kg") as total'),
-            DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
-            'baseprice',
-            'weightbase'
-        )
-        ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
-        ->join('transactions as t', 't.id', '=', 'dt.transactionId')
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        ->groupBy('i.id')
-        ->where('t.status','=', 1)
-        ->where('i.isActive','=', 1);
-
-        if ($speciesId>0){
-            $query->where('sp.id','=', $speciesId);
-        }
-        $query->get();    
-
-        */
-
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
@@ -94,22 +21,27 @@ class Item extends Model
             'i.amount as jumlahPacked',
             'amountUnpacked as jumlahUnpacked',
             'p.shortname as packingShortname',
-            DB::raw('ifnull(sum(dt.amount),0) as jumlahOnProgress'),
-            DB::raw('concat(i.name, " : ",s.name, " ",f.name, " ", g.name) as itemName'),
-            DB::raw('concat(i.weightbase, " Kg/", p.shortname) as wb'),
+            DB::raw('(select sum(dt.amount) from detail_transactions as dt where dt.status=1 and dt.itemId=i.id) as jumlahOnProgress'),
+            'i.name as iname',
+            's.name as sname',
+            'f.name as fname',
+            'g.name as gname',
             'baseprice',
             'weightbase'
         )
-        ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
-        ->leftjoin('transactions as t', 't.id', '=', 'dt.transactionId')
-
+        //->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
+        //->leftjoin('transactions as t', 't.id', '=', 'dt.transactionId')
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        //->where('dt.status','=', 1)
         ->where('i.isActive','=', 1)
-        ->groupBy('i.id');
+        ->groupBy('i.name')
+        ->orderBy('sp.name', 'desc')
+        ->orderBy('g.name', 'asc')
+        ->orderByRaw('s.name+0', 'asc');
 
 
         if ($speciesId>0){
@@ -117,13 +49,17 @@ class Item extends Model
         }
         $query->get();  
 
-
-
-
         return datatables()->of($query)
+        ->addColumn('wb', function ($row) {
+            return $row->weightbase. " Kg/". $row->packingShortname;
+        })
         ->addColumn('total', function ($row) {
             $jumlah = ((($row->jumlahPacked + $row->jumlahOnProgress) * $row->weightbase) + $row->jumlahUnpacked).' Kg';
             return $jumlah;
+        })
+        ->addColumn('itemName', function ($row) {
+            $name = $row->speciesName." ".$row->gname. " ".$row->sname. " ".$row->fname." ".$row->iname;
+            return $name;
         })
         ->addColumn('amountPacked', function ($row) {
             return $row->jumlahPacked.' '.$row->packingShortname;

@@ -61,19 +61,6 @@ class Presence extends Model
         $batasMasuk         = $start;
         $batasPulangKerja   = Carbon::parse($start->toDateString()." 16:00:00");
 
-        /*
-        if ($start->lte(Carbon::parse($start->toDateString()." 08:00:00"))) {
-            $batasMasuk = Carbon::parse($start->toDateString()." 08:00:00");
-            $menitKerja = $batasMasuk->diffInMinutes($end); 
-            $jamKerja = $batasMasuk->diffInHours($end); 
-        }
-        //jika selisih menit kerja lebih dari 30 menit, ditambah jam kerja 1 jam
-        $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
-        if ($selisihMenitSisa >= 30){
-            $jamKerja+=1;
-        }
-        */
-
         $shift = 1;
         $jamLembur=0;
         if ($start->gte(Carbon::parse($start->toDateString()." 16:00:00"))){
