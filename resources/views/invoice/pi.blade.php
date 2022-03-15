@@ -374,5 +374,6 @@
     </table>
     <br>
 </body>
+Document generated at : {{Carbon\Carbon::now()}}
 </html>
 @endif

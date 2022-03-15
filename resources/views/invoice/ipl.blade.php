@@ -337,5 +337,6 @@
             </table>
         </main>
     </body>
+    Document generated at : {{Carbon\Carbon::now()}}
     </html>
     @endif

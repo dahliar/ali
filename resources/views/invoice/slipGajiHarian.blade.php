@@ -188,7 +188,7 @@
             </table>
         </main>
     </body>
-    Dokumen ini dicetak pada tanggal : {{Carbon\Carbon::now()}}
+    Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}
 
     </html>
     @endif

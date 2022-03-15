@@ -251,5 +251,6 @@
             </table>
         </main>
     </body>
+    Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}
     </html>
     @endif

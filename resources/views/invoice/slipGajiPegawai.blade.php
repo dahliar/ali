@@ -316,7 +316,10 @@
                     </td>
                 </tr>       
             </table>
+            <br>
+            Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}
         </main>
     </body>
+
     </html>
     @endif
