@@ -1242,22 +1242,22 @@ class SalaryController extends Controller
             <div style="text-align:left" class="row form-group">
             <span class="col-4">Hari Kerja</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-7">'.$row->hk.' hari</span>
+            <span style="text-align:right" class="col-6">'.$row->hk.' hari</span>
             </div>
             <div style="text-align:left" class="row form-group">
             <span class="col-4">Jam Kerja</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-7">'.$row->jk.' jam</span>
+            <span style="text-align:right" class="col-6">'.$row->jk.' jam</span>
             </div>
             <div style="text-align:left" class="row form-group">
             <span class="col-4">Jam Lembur</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-7">'.$row->jl.' jam</span>
+            <span style="text-align:right" class="col-6">'.$row->jl.' jam</span>
             </div>
             <div style="text-align:left" class="row form-group">
             <span class="col-4">Borongan</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-7">'.number_format($row->berat, 2, ',', '.')." Kg".'</span>
+            <span style="text-align:right" class="col-6">'.number_format($row->berat, 2, ',', '.')." Kg".'</span>
             </div>
             ';
             return $html;

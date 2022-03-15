@@ -268,12 +268,20 @@ class InvoiceController extends Controller
         $borongan="";
         $harian="";
         $honorarirum="";
-
+        $startDate=$salaries[0]->startDate;
+        $endDate=$salaries[0]->endDate;
         foreach($salaries as $sal){
             switch($sal->jenis){
                 case('2') :
                 $harian = DB::table('dailysalaries as ds')
-                ->select('p.start', 'p.end', 'p.employeeId', 'p.jamKerja', 'p.jamLembur', 'p.shift', 'ds.uangHarian', 'ds.uangLembur')
+                ->select(
+                    'p.start as start', 
+                    'p.end as end', 
+                    'p.employeeId as empid', 
+                    'p.jamKerja as jk', 
+                    'p.jamLembur as jl', 
+                    'ds.uangHarian as uh', 
+                    'ds.uangLembur as ul')
                 ->join('presences as p', 
                     DB::raw('concat(date(p.start),p.employeeId)'), 
                     '=', 
@@ -308,8 +316,8 @@ class InvoiceController extends Controller
             }
 
         }
-        $pdf = PDF::loadview('invoice.slipGajiPegawai', compact('employee', 'payroll', 'detail_payroll', 'presence', 'harian', 'borongan', 'honorarium'));
-        $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.today().'.pdf';
+        $pdf = PDF::loadview('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'harian', 'borongan', 'honorarium'));
+        $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.now().'.pdf';
         return $pdf->download($filename);
 
     }

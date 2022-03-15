@@ -335,24 +335,6 @@
                     </td>
                 </tr>       
             </table>
-                <!--
-                <br>
-                <br>
-                <br>
-                <br>
-                <b>Information</b>
-                <ol>
-                    <li>Date format : YYYY-MM-DD
-                        <ol>
-                            <li>Y = year</li>
-                            <li>M = month</li>
-                            <li>D = day</li>
-
-                        </ol>
-                    </li>
-                    <li>ETA : Estimated Time Arrival</li>
-                </ol>
-            -->
         </main>
     </body>
     </html>

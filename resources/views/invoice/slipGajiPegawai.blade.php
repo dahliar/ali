@@ -100,13 +100,221 @@
                 </tr>
                 <tr>
                     <td>
-                        <span class="label" id="spanLabel"><b>NIK</b></span>
+                        <span class="label" id="spanLabel"><b>Bank - Rekening</b></span>
                     </td>
                     <td style="text-align: center;">:</td>
                     <td>
-                        {{$employee->nik}}
+                        {{$employee->bankName}} - {{$employee->noRekening}}
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <span class="label" id="spanLabel"><b>Tanggal Pencatatan</b></span>
+                    </td>
+                    <td style="text-align: center;">:</td>
+                    <td>
+                        {{$startDate}} - {{$endDate}}
+                    </td>
+                </tr>
+            </table>
+            <span class="label" id="spanLabel"><b><h3>Presensi Harian</h3></b></span>
+            <table width="100%" id="invoice">
+                <thead style="text-align: center;">
+                    <tr >
+                        <th width="5%">No</th>
+                        <th width="30%">Waktu</th>
+                        <th width="30%">Jam / Honor</th>
+                        <th width="15%">Total</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 12px;">
+                    @php
+                    $thp = 0;
+                    $total=0;
+                    $no=1;
+                    @endphp         
+                    @foreach ($harian as $h)
+                    <tr>
+                        <td width="5%">{{$no}}
+                        </td>
+                        <td width="40%">
+                            <div class="row form-group">
+                                <span class="col-3">Masuk</span>
+                                <span class="col-1">:</span>
+                                <span class="col-7">{{$h->start}}</span>
+                            </div>
+                            <div class="row">
+                                <span class="col-3">Pulang</span>
+                                <span class="col-1">:</span>
+                                <span class="col-7">{{$h->end}}</span>
+                            </div>
+                        </td>
+                        <td width="35%">
+                            <div class="row form-group">
+                                <span class="col-md-3">Kerja</span>
+                                <span class="col-md-1">:</span>
+                                <span class="col-md-7">
+                                    @php
+                                    echo $h->jk.' / '.number_format($h->uh, 0, ',', '.');
+                                    @endphp
+                                </span>
+                            </div>
+                            <div class="row form-group">
+                                <span class="col-md-3">Lembur</span>
+                                <span class="col-md-1">:</span>
+                                <span class="col-md-7">
+                                    @php
+                                    echo $h->jl.' / '.number_format($h->ul, 0, ',', '.');
+                                    @endphp
+                                </span>
+                            </div>                            
+                        </td>                        
+                        <td width="20%" style="text-align: right;">
+                            @php
+                            echo 'Rp. '.number_format(($h->uh+$h->ul), 0, ',', '.');
+                            @endphp
+                        </td>
+                    </tr>
+                    @php
+                    $total+=$h->uh + $h->ul;
+                    $no+=1;
+                    @endphp
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr >
+                        <td colspan="3">Total</td>
+                        <td width="20%" style="text-align: right;">
+                            @php
+                            echo 'Rp. '.number_format($total, 0, ',', '.');
+                            $thp+=$total;
+                            @endphp
+                        </td>
+                    </tr>
+                </tfoot>        
+            </table>
+            <span class="label" id="spanLabel"><b><h3>Borongan</h3></b></span>
+            <table width="100%" id="invoice">
+                <thead style="text-align: center;">
+                    <tr >
+                        <th width="5%">No</th>
+                        <th width="25%">Nama</th>
+                        <th width="10%">Tanggal</th>
+                        <th width="10%">Harga/Kg</th>
+                        <th width="15%">Berat</th>
+                        <th width="10%">Pekerja</th>
+                        <th width="15%">Honor</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 12px;">
+                    @php
+                    $total=0;
+                    $no=1;
+                    @endphp         
+                    @foreach ($borongan as $b)
+                    <tr>
+                        <td width="5%" style="text-align:left">{{$no}}</td>
+                        <td width="25%" style="text-align:left">{{$b->name}}</td>
+                        <td width="10%" style="text-align:center">{{$b->tanggalkerja}}</td>
+                        <td width="10%" style="text-align:right">@php
+                            echo 'Rp. '.number_format($b->hargaSatuan, 0, ',', '.');
+                            @endphp
+                        </td>
+                        <td width="15%" style="text-align:right">
+                            @php
+                            echo number_format($b->netweight, 2, ',', '.').' Kg';
+                            @endphp
+                        </td>
+                        <td width="10%" style="text-align:right">{{$b->worker}} orang</td>
+                        <td width="15%" style="text-align:right">
+                            @php
+                            echo 'Rp. '.number_format($b->netPayment, 2, ',', '.');
+                            @endphp
+                        </td>
+                    </tr>
+                    @php
+                    $total+=$b->netPayment;
+                    $no+=1;
+                    @endphp
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr >
+                        <td colspan="6">Total</td>
+                        <td width="20%" style="text-align: right;">
+                            @php
+                            echo 'Rp. '.number_format($total, 0, ',', '.');
+                            $thp+=$total;
+                            @endphp
+                        </td>
+                    </tr>
+                </tfoot>        
+            </table>
+            <span class="label" id="spanLabel"><b><h3>Honorarium</h3></b></span>
+            <table width="100%" id="invoice">
+                <thead style="text-align: center;">
+                    <tr >
+                        <th width="5%">No</th>
+                        <th width="15%">Tanggal</th>
+                        <th width="65%">Keterangan</th>
+                        <th width="15%">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 12px;">
+                    @php
+                    $total=0;
+                    $no=1;
+                    @endphp         
+                    @foreach ($honorarium as $h)
+                    <tr>
+                        <td width="5%" style="text-align:left">{{$no}}</td>
+                        <td width="15%" style="text-align:center">{{$h->tanggalKerja}}</td>
+                        <td width="65%" style="text-align:left">{{$h->keterangan}}</td>
+                        <td width="15%" style="text-align:right">@php
+                            echo 'Rp. '.number_format($h->jumlah, 0, ',', '.');
+                            @endphp
+                        </td>
+                        
+                    </tr>
+                    @php
+                    $total+=$b->netPayment;
+                    $no+=1;
+                    @endphp
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr >
+                        <td colspan="3">Total</td>
+                        <td width="20%" style="text-align: right;">
+                            @php
+                            echo 'Rp. '.number_format($total, 0, ',', '.');
+                            $thp+=$total;
+                            @endphp
+                        </td>
+                    </tr>
+                </tfoot>        
+            </table>
+            <table width="100%">
+                <thead>
+                    <tr >
+                        <th width="70%" style="text-align: left;">Jumlah Total Gaji </th>
+                        <th width="30%" style="text-align: right;"><h2>
+                            @php
+                            echo 'Rp. '.number_format($thp, 2, ',', '.');
+                            @endphp
+                        </h2></th>
+                    </tr>
+                </thead>
+            </table>
+            <table width="100%">
+                <tr>
+                    <td width="40%" style="vertical-align: top;">
+                        PT. Anugrah Laut Indonesia
+                        <br>Direktur Utama
+                        <br><br><span style="text-align: center;">ttd</span><br><br>
+                        Aktaria Hidapratiwi
+                    </td>
+                </tr>       
             </table>
         </main>
     </body>
