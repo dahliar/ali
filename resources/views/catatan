@@ -1,0 +1,10 @@
+1
+UPDATE `dailysalaries` set isGenerated=0, salaryId=null;
+UPDATE `borongans` SET salariesId=null, status=1;
+UPDATE `honorariums` SET isGenerated=0, salaryId=0;
+truncate table salaries;
+
+
+"select `i`.`id` as `id`, `sp`.`name` as `speciesName`, `i`.`amount` as `jumlahPacked`, `amountUnpacked` as `jumlahUnpacked`, `p`.`shortname` as `packingShortname`, (select sum(amount) from detail_transactions as dt where dt.status=1 and dt.id=i.id) as jumlahOnProgress, `i`.`name` as `iname`, `s`.`name` as `sname`, `f`.`name` as `fname`, `g`.`name` as `gname`, `baseprice`, `weightbase` from `items` as `i` inner join `sizes` as `s` on `i`.`sizeId` = `s`.`id` inner join `species` as `sp` on `s`.`speciesId` = `sp`.`id` inner join `grades` as `g` on `i`.`gradeId` = `g`.`id` inner join `packings` as `p` on `i`.`packingId` = `p`.`id` inner join `freezings` as `f` on `i`.`freezingId` = `f`.`id` where `i`.`isActive` = ? group by `i`.`id` order by `sp`.`name` desc, `g`.`name` asc, s.name+0"
+
+

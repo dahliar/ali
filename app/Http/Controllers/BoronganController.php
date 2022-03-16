@@ -176,11 +176,19 @@ class BoronganController extends Controller
         $percentage=0.2;
         $dataSalary[]="";
         if ($borongan->jenis==2){
-            if($borongan->loading==0){
-                $percentage=0.15;
-            }
-            $dataSalary=$this->hitungBoronganPacking($borongan->netweight, $borongan->hargaSatuan, $jmlCowok, $jmlCewek, $percentage);
-        } else{
+            if (($jmlCowok==0) or ($jmlCewek==0)){
+                $price = ($borongan->hargaSatuan * $borongan->netweight) / $borongan->worker;
+                $dataSalary=[
+                    '1'=>$price, 
+                    '2'=>$price
+                ];
+            }else{
+                if($borongan->loading==0){
+                    $percentage=0.15;
+                }
+                $dataSalary=$this->hitungBoronganPacking($borongan->netweight, $borongan->hargaSatuan, $jmlCowok, $jmlCewek, $percentage);
+            }            
+        } else {
             $price = ($borongan->hargaSatuan * $borongan->netweight) / $borongan->worker;
             $dataSalary=[
                 '1'=>$price, 
@@ -252,10 +260,10 @@ class BoronganController extends Controller
     function hitungBoronganPacking($berat, $hargaperkg, $jmlCowok, $jmlCewek, $percentage){
         $x=$berat*$hargaperkg;
         $y=$jmlCowok+$jmlCewek;
-        $z=($percentage*((($x)/($y))*$jmlCewek));
+        $z=($percentage*( ( ($x) / ($y) ) * $jmlCewek));
 
-        $honorCowok=( ($x) / ($y) )-( $z / $jmlCewek);
-        $honorCewek=( ($x) / ($y) )+( $z / $jmlCowok);
+        $honorCowok=( ($x) / ($y) ) - ( $z / $jmlCewek);
+        $honorCewek=( ($x) / ($y) ) + ( $z / $jmlCowok);
         $harga=[
             '1'=>$honorCowok, 
             '2'=>$honorCewek
