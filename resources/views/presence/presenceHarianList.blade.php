@@ -30,29 +30,47 @@
         var empidModal = document.getElementById("empidModal").value;
         var start = document.getElementById("modalStart").value;
         var end = document.getElementById("modalEnd").value;
+        var isLembur = document.getElementById("isLembur").checked;
+        lembur=0;
+        if(isLembur){
+            lembur=1;
+        }
+        mulai = new Date(start);
+        akhir = new Date(end);
+        const batas = new Date();
+        batas.setFullYear(mulai.getFullYear(), mulai.getMonth(), mulai.getDate());
+        batas.setHours('08');
+        batas.setMinutes('00');
+        batas.setSeconds('00');
 
-        if(end>=start){
-            $.ajax({
-                url: '{{ url("storePresenceHarianEmployee") }}',
-                type: "POST",
-                data: {
-                    "_token":"{{ csrf_token() }}",
-                    empidModal : empidModal,
-                    start: start,
-                    end: end
-                },
-                dataType: "json",
-                success:function(data){
-                    if(data.isError==="0"){
-                        swal.fire('info',data.message,'info');
-                        myFunction();
+        if (end>start){
+            if (akhir>batas){
+                $.ajax({
+                    url: '{{ url("storePresenceHarianEmployee") }}',
+                    type: "POST",
+                    data: {
+                        "_token":"{{ csrf_token() }}",
+                        empidModal : empidModal,
+                        start: start,
+                        end: end,
+                        lembur:lembur
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        if(data.isError==="0"){
+                            swal.fire('info',data.message,'info');
+                            myFunction();
+                        }
+                        else{
+                            swal.fire('warning',data.message,'warning');
+                        }
+                        $('#employeePresenceHarianModal').modal('hide');
                     }
-                    else{
-                        swal.fire('warning',data.message,'warning');
-                    }
-                    $('#employeePresenceHarianModal').modal('hide');
-                }
-            });
+                });
+            }
+            else{
+                swal.fire('warning',"Jam pulang harus lebih dari jam 08.00 hari ini",'warning');
+            }
         }
         else{
             swal.fire('warning',"Jam keluar harus lebih besar dari jam masuk",'warning');
@@ -182,20 +200,30 @@
                     </div>                    
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
-                            <span class="label">Start</span>
+                            <span class="label">Masuk</span>
                         </div>
                         <div class="col-md-8">
                             <input type="datetime-local" id="modalStart" name="modalStart" class="form-control text-end" value="{{date('Y-m-d\Th:m:s')}}">
                         </div>
-                    </div>                    
+                    </div>   
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
-                            <span class="label">End</span>
+                            <span class="label">Keluar</span>
                         </div>
                         <div class="col-md-8">
                             <input type="datetime-local" id="modalEnd" name="modalEnd" class="form-control text-end" value="{{date('Y-m-d\Th:m:s')}}">
                         </div>
-                    </div>                    
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Lembur</span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-check form-switch">
+                                <input id="isLembur" type="checkbox" class="form-check-input" name="isLembur" checked>
+                            </div>
+                        </div>
+                    </div>                 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

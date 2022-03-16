@@ -287,18 +287,19 @@ class PresenceController extends Controller
     {
         return Excel::download(new EmployeePresenceExport($presenceDate), 'Presensi Harian '.$presenceDate.'.xlsx');
     }
-
-
     
     public function storePresenceHarianEmployee(Request $request)
     {
-
-        $retValue = $this->presence->storePresenceHarianEmployee($request->empidModal, $request->start, $request->end);
+        $retValue = $this->presence->storePresenceHarianEmployee($request->empidModal, $request->start, $request->end, $request->lembur);
         return $retValue;
     }
     public function presenceHarianImportStore(Request $request)
     {
-        $import = new EmployeePresenceImport;
+        $lembur=0;
+        if ($request->has('isLembur')) {
+            $lembur=1;
+        }
+        $import = new EmployeePresenceImport($lembur);
         Excel::import($import, $request->presenceFile);
 
         $message = $import->getImportResult();

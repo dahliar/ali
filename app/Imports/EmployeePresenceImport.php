@@ -14,8 +14,10 @@ class EmployeePresenceImport implements ToCollection, WithStartRow
     * @param Collection $collection
     */
     private $text = "";
-    function __construct() {   
-        $this->presence = new Presence();     
+    private $isLembur = 0;
+    function __construct($isLembur) {   
+        $this->presence = new Presence();
+        $this->isLembur = $isLembur;     
     }
 
     public function startRow(): int
@@ -24,7 +26,7 @@ class EmployeePresenceImport implements ToCollection, WithStartRow
     }
     public function collection(Collection $collection)
     {
-        $this->text = $this->presence->presenceCalculator($collection);
+        $this->text = $this->presence->presenceCalculator($collection, $this->isLembur);
 
     }
     public function getImportResult(): string

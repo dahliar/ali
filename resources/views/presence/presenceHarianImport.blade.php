@@ -113,6 +113,16 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
+                                <span class="label">Lembur</span>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-check form-switch">
+                                    <input id="isLembur" type="checkbox" class="form-check-input" name="isLembur" checked>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-4">
                                 <button type="submit" class="btn btn-primary">Upload dan Simpan Presensi</button>
