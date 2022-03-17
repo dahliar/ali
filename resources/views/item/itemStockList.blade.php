@@ -55,9 +55,9 @@
             {data: 'itemName', name: 'itemName'},
             {data: 'wb', name: 'wb'},
             {data: 'amountPacked', name: 'amountPacked'},
-            {data: 'onProgress', name: 'onProgress'},
             {data: 'amountUnpacked', name: 'amountUnpacked'},
-            {data: 'total', name: 'total'},
+            {data: 'stockOnHand', name: 'stockOnHand'},
+            {data: 'loading', name: 'loading'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -140,9 +140,9 @@
                                         <th>Name</th>
                                         <th>Packaging</th>
                                         <th>Packed</th>
-                                        <th>On Progress</th>
                                         <th>Unpacked</th>
-                                        <th>Total</th>
+                                        <th>Stock gudang</th>
+                                        <th>Sailing</th>
                                         <th>Act</th>
                                     </tr>
                                 </thead>
@@ -157,8 +157,8 @@
     </div>
 </body>
 <ol>
-    <li>On Progress : Jumlah barang yang saat ini tercatat dalam proses transaksi, namun transaksi belum terselesaikan. Jika transaksi di-cancel, barang akan kembali ke dalam daftar packed</li>
-    <li>Total adalah jumlah total jumlah stock dalam satuan Kilogram, hasil penjumlahan dari Packed + On Progress + Unpacked</li>
+    <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
+    <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
 </ol>
 @else
 @include('partial.noAccess')

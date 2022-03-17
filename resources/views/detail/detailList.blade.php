@@ -22,33 +22,28 @@
         window.open(('{{ url("detailtransactionAdd") }}'+"/"+id), '_self');
     }
     function deleteItem(detailTransaction){
-        // e.preventDefault(); // <--- prevent form from submitting
-        swal.fire({
-            title: "Yakin hendak menghapus?",
-            text: "Yakin hendak menghapus item detail transaksi?",
-            icon: "warning",
-            buttons: [
-            'Batalin aja!',
-            'Hapus aja!'
-            ],
-            dangerMode: true,
-        }).then(function(isConfirm) {
-        //window.open(('{{ url("itemDetailTransactionDelete") }}'+"/"+detailTransaction), '_blank');
-        if (isConfirm) {
-            $.ajax({
-                url: '{{ url("itemDetailTransactionDelete") }}'+"/"+detailTransaction,
-                type: "GET",
-                data : {"_token":"{{ csrf_token() }}"},
-                dataType: "text",
-                success:function(data){
-                    swal.fire("Deleted!", "Detail Transaksi berhasil dihapus", "success");
-                    myFunction({{ $transactionId }});
-                }
-            });
-        } else {
-            swal.fire("Cancelled", "Detail Transaksi batal dihapus", "error");
-        }
-    })
+        Swal.fire({
+            title: "Hapus item penjualan?",
+            text: "Yakin hendak menghapus item penjualan?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus aja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("itemDetailTransactionDelete") }}'+"/"+detailTransaction,
+                    type: "GET",
+                    data : {"_token":"{{ csrf_token() }}"},
+                    dataType: "text",
+                    success:function(data){
+                        swal.fire("Deleted!", "Detail Transaksi berhasil dihapus", "success");
+                        myFunction({{ $transactionId }});
+                    }
+                });
+            }
+        })
     };
 
     function myFunction($id){

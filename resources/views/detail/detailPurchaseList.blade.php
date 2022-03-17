@@ -51,10 +51,6 @@
                 });
             }
         })
-
-
-
-       
     };
 
     function myFunction($id){

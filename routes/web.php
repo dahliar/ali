@@ -60,7 +60,7 @@ Route::get('transactionAdd',[TransactionController::class, 'create'])->middlewar
 Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth']);
 Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'])->middleware(['auth']);
 Route::get('transactionStore',[TransactionController::class, 'store'])->middleware(['auth'])->name('transactionStore');
-Route::get('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth'])->name('transactionUpdate');
+Route::POST('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth'])->name('transactionUpdate');
 
 
 Route::get('detailtransactionList/{transaction}',[DetailTransactionController::class, 'index'])->middleware(['auth'])->name('detailtransactionList');
@@ -161,7 +161,8 @@ Route::get('/transaction/pi/{transaction}', [InvoiceController::class, 'cetak_pi
 Route::get('/transaction/ipl/{transaction}', [InvoiceController::class, 'cetak_ipl'])->middleware(['auth']);
 
 //to get size for all species
-Route::GET('getItems/{speciesId}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);
+Route::GET('getItemsTransactionForSelectOption/{speciesId}/{tid}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);
+Route::GET('getItemsPurchaseForSelectOption/{speciesId}/{tid}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);
 Route::GET('getOneStore/{storeId}', [StoreController::class, 'getOneStore'])->middleware(['auth']);
 
 //to get one full Rekening record with current rekening id
@@ -227,12 +228,18 @@ Route::get('getPresenceHonorariumHistory/{start}/{end}', [HonorariumController::
 //Penggajian
 
 Route::GET('generateGaji',[SalaryController::class, 'indexGenerate'])->name('generateGaji')->middleware('auth');
+Route::GET('generateGajiBulanan',[SalaryController::class, 'generateGajiBulanan'])->middleware('auth');
+
 Route::GET('payrollList',[SalaryController::class, 'indexPayroll'])->middleware('auth');
 Route::GET('salariesList/{salaryId}',[SalaryController::class, 'index'])->middleware('auth');
 Route::GET('getSalariesList/{salaryId}',[SalaryController::class, 'getSalariesList'])->middleware('auth');
 Route::GET('getPayrollList/{start}/{end}',[SalaryController::class, 'getPayrollList'])->middleware('auth');
 Route::GET('printPayrollList/{payrollId}',[SalaryController::class, 'printPayrollList'])->middleware('auth');
 Route::GET('getEmployeeDetailSalaries/{payrollId}',[SalaryController::class, 'getEmployeeDetailSalaries'])->middleware('auth');
+Route::GET('getEmployeesBulanan',[EmployeeController::class, 'getEmployeesBulanan'])->middleware('auth');
+
+
+
 
 
 

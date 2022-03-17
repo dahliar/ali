@@ -14,6 +14,7 @@ class Item extends Model
     protected $primaryKey = 'id';
 
     public function getAllItemData($speciesId){
+        /*
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
@@ -48,13 +49,47 @@ class Item extends Model
             $query->where('sp.id','=', $speciesId);
         }
         $query->get();  
+        */
+
+        $query = DB::table('items as i')
+        ->select(
+            'i.id as id', 
+            'sp.name as speciesName', 
+            'i.amount as jumlahPacked',
+            'amountUnpacked as jumlahUnpacked',
+            'p.shortname as packingShortname',
+            DB::raw('(select sum(dt.amount) from detail_transactions as dt join transactions t on dt.transactionId=t.id where t.status=4 and dt.itemId=i.id) as jumlahOnLoading'),
+            'i.name as iname',
+            's.name as sname',
+            'f.name as fname',
+            'g.name as gname',
+            'baseprice',
+            'weightbase'
+        )
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        //->where('dt.status','=', 1)
+        ->where('i.isActive','=', 1)
+        ->groupBy('i.name')
+        ->orderBy('sp.name', 'desc')
+        ->orderBy('g.name', 'asc')
+        ->orderByRaw('s.name+0', 'asc');
+
+
+        if ($speciesId>0){
+            $query->where('sp.id','=', $speciesId);
+        }
+        $query->get();  
 
         return datatables()->of($query)
         ->addColumn('wb', function ($row) {
             return $row->weightbase. " Kg/". $row->packingShortname;
         })
-        ->addColumn('total', function ($row) {
-            $jumlah = ((($row->jumlahPacked + $row->jumlahOnProgress) * $row->weightbase) + $row->jumlahUnpacked).' Kg';
+        ->addColumn('stockOnHand', function ($row) {
+            $jumlah = ((($row->jumlahPacked) * $row->weightbase) + $row->jumlahUnpacked).' Kg';
             return $jumlah;
         })
         ->addColumn('itemName', function ($row) {
@@ -67,8 +102,8 @@ class Item extends Model
         ->addColumn('amountUnpacked', function ($row) {
             return number_format($row->jumlahUnpacked, 2).' Kg';
         })
-        ->addColumn('onProgress', function ($row) {
-            return number_format($row->jumlahOnProgress, 2).' '.$row->packingShortname;
+        ->addColumn('loading', function ($row) {
+            return number_format($row->jumlahOnLoading, 2).' '.$row->packingShortname;
         })
         ->addColumn('action', function ($row) {
             $html="";
@@ -99,36 +134,31 @@ class Item extends Model
         ->select(
             'i.id as id', 
             'sp.name as name', 
-            DB::raw('sum(i.amount * i.weightbase) as packed'),
-            DB::raw('sum(i.amountUnpacked) as unpacked'),
-            DB::raw('ifnull(sum(dt.amount * i.weightbase),0) as onProgress'),
+            DB::raw('sum(i.amount * i.weightbase) as jumlahPacked'),
+            'amountUnpacked as jumlahUnpacked',
+            DB::raw('(select (sum(dt.amount) * i.weightbase) from detail_transactions as dt join transactions t on dt.transactionId=t.id where t.status=4 and dt.itemId=i.id) as jumlahOnLoading'),
         )
-        ->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
-        ->leftjoin('transactions as t', 't.id', '=', 'dt.transactionId')
-
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->where('i.isActive','=', 1)
+        ->where('s.isActive','=', 1)
         ->groupBy('sp.id')
+        ->orderBy('sp.name')
         ->get();  
 
         return datatables()->of($query)
         ->addColumn('total', function ($row) {
-            $jumlah = $row->packed + $row->onProgress + $row->unpacked;
-
+            $jumlah = $row->jumlahPacked + $row->jumlahUnpacked;
             return number_format($jumlah, 2);
         })
         ->editColumn('packed', function ($row) {
-            return number_format($row->packed, 2);
+            return number_format($row->jumlahPacked, 2);
         })
         ->editColumn('unpacked', function ($row) {
-            return number_format($row->unpacked, 2);
+            return number_format($row->jumlahUnpacked, 2);
         })
-        ->editColumn('onProgress', function ($row) {
-            return number_format($row->onProgress, 2);
+        ->editColumn('jumlahOnLoading', function ($row) {
+            return number_format($row->jumlahOnLoading, 2);
         })
         ->addColumn('action', function ($row) {
             $html="";
@@ -215,13 +245,15 @@ class Item extends Model
         ->addIndexColumn()->toJson();    
     }
 
-    public function getItemForSelectOption($speciesId){
+    public function getItemForSelectOption($speciesId, $transactionId){
         $query = DB::table('items as i')
         ->select(
             'i.id as itemId', 
             'i.name as itemName', 
             'sp.nameBahasa as speciesName', 
+            'sp.name as speciesNameEng', 
             's.name as sizeName',
+            'p.shortname as pshortname',
             'g.name as gradeName',
             'p.name as packingName',
             'f.name as freezingName',
@@ -240,9 +272,20 @@ class Item extends Model
         ->where('p.isActive','=', 1)
         ->where('i.isActive','=', 1)
         ->orderBy('g.name')
-        ->orderByRaw('s.name+0 asc')
-        ->get();    
-        return $query;
+        ->orderByRaw('s.name+0 asc');
+
+
+        $list = DB::table("detail_transactions")
+        ->select('itemId')
+        ->where('transactionId', '=', $transactionId)
+        ->get()
+        ->pluck('itemId');
+
+        if($transactionId>0){
+            $query->whereNotIn('i.id', $list);
+        }
+
+        return $query->get();  
     }
 
     public function getOneItem($itemId){

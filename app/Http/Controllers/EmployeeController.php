@@ -398,4 +398,44 @@ class EmployeeController extends Controller
         })->addIndexColumn()->toJson();
     }
 
+    public function getEmployeesBulanan(){
+        $query = DB::table('employees as e')
+        ->select(
+            'e.id as id', 
+            'u.name as name', 
+            'e.nip as nip', 
+            'os.name as osname',
+            'wp.name as wsname',
+            DB::raw('
+                (CASE WHEN e.gender="1" THEN "L" WHEN e.gender="2" THEN "P" END) AS gender
+                '),
+            'e.startDate as startDate',
+            DB::raw('concat(
+                TIMESTAMPDIFF(YEAR, startDate, curdate()), 
+                " Y + ",
+                (TIMESTAMPDIFF(MONTH, startDate, curdate()) - (TIMESTAMPDIFF(YEAR, startDate, curdate()) * 12)), 
+                " M") as lamaKerja')
+        )
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
+        ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->where('eosm.isactive', 1)
+        ->where('e.employmentStatus', '=', 1)
+        ->where('e.isActive', '=', 1)
+        ->orderBy('u.name');
+        $query->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Set gaji bulanan Pegawai">
+            <i class="fa fa-check"></i>
+            </button>
+            ';            
+            return $html;
+        })
+        ->addIndexColumn()->toJson();
+    }
+
 }

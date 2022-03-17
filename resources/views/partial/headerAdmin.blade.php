@@ -91,6 +91,11 @@
 					</a>
 					<ul class="dropdown-menu dropdown-submenu" onclick="">
 						<li>
+							<a class="dropdown-item" href="{{ url('generateGajiBulanan')}}">
+								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Bulanan
+							</a>
+						</li>
+						<li>
 							<a class="dropdown-item" href="{{ url('generateGaji')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Borongan/Honorarium
 							</a>

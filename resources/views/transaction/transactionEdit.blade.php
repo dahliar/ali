@@ -16,7 +16,7 @@
     var i=1;
 
     function disableForm() {        
-        @if($transaction->status > 1)
+        @if(($transaction->status == 2) or ($transaction->status == 3))
         var inputs = document.getElementsByTagName("input");
         for (var i = 0; i < inputs.length; i++) {
             inputs[i].disabled = true;
@@ -145,7 +145,8 @@
         <div class="row">
             <div class="col-1"></div>
             <div class="col-10">
-                <form id="TransactionForm" action="{{route('transactionUpdate')}}"  method="get" name="TransactionForm">
+                <form id="TransactionForm" action="{{route('transactionUpdate')}}"  method="POST" name="TransactionForm">
+                    @csrf
                     <div class="d-grid gap-1">
                         <div class="row form-group">
                             <div class="col-md-3 text-md-right">
@@ -456,7 +457,7 @@
                                 </select>
                             </div>                    
                         </div> 
-                        @if($transaction->status == 1)
+                        @if ($transaction->status == 1)
                         <div class="row form-group">
                             <div class="col-md-3 text-md-right">
                                 <span class="label">Status</span>
@@ -464,13 +465,43 @@
                             <div class="col-md-3">
                                 <select id="status" name="status" class="form-select" >
                                     <option value="-1">--Choose One--</option>
-                                    <option value="1" @if($transaction->status == 1) selected @endif>On Progress</option>
-                                    <option value="2" @if($transaction->status == 2) selected @endif>Finished</option>
-                                    <option value="3" @if($transaction->status == 3) selected @endif>Cancelled</option>
+                                    <option value="1" @if($transaction->status == 1) selected @endif>Penawaran</option>
+                                    <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
+                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
+                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
                                 </select>
                             </div>
                         </div> 
                         @endif
+                        @if (($transaction->status == 2) or ($transaction->status == 3))
+                        <div class="row form-group">
+                            <div class="col-md-3 text-md-right">
+                                <span class="label">Status</span>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="status" name="status" class="form-select" disabled>
+                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
+                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                                </select>
+                            </div>
+                        </div> 
+                        @endif
+                        @if($transaction->status == 4)
+                        <div class="row form-group">
+                            <div class="col-md-3 text-md-right">
+                                <span class="label">Status</span>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="status" name="status" class="form-select">
+                                    <option value="-1">--Choose One--</option>
+                                    <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
+                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
+                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                                </select>
+                            </div>
+                        </div> 
+                        @endif
+
                         <table width="100%">
                             <tr>
                                 <td><hr /></td>
@@ -510,8 +541,7 @@
                               </div>
                           </div>
                       </div>                        
-                      @if($transaction->status == 1)
-
+                      @if(($transaction->status == 1) or ($transaction->status == 4))
                       <div class="row form-group">
                         <div class="col-md-3 text-end">
                         </div>

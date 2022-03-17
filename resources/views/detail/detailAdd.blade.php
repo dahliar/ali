@@ -12,9 +12,10 @@
 @section('content')
 @if ((Auth::user()->isAdmin() or Auth::user()->isMarketing()) and Session::has('employeeId') and (Session()->get('levelAccess') <= 3))
 <script type="text/javascript"> 
+
     function selectOptionChange(speciesId, itemId){
         $.ajax({
-            url: '{{ url("getItems") }}'+"/"+speciesId,
+            url: '{{ url("getItemsTransactionForSelectOption") }}'+"/"+speciesId+"/"+'{{ $transactionId }}',
             type: "GET",
             data : {"_token":"{{ csrf_token() }}"},
             dataType: "json",
@@ -26,37 +27,27 @@
                     for(i=0; i<data.length; i++){
                         if (data[i].itemId != itemId){
                             html += '<option value='+data[i].itemId+'>'+
-                            data[i].itemName+
-                            ", Packing "+data[i].packingName+
-                            ", Grade "+data[i].gradeName+
-                            ", Packing "+data[i].packingName+
-                            ", Freezing "+data[i].freezingName+
-                            ", Size "+data[i].sizeName+
-                                                        /*
-                            data[i].speciesName+
-                            ", Grade "+data[i].gradeName+
-                            ", Packing "+data[i].packingName+
-                            ", Freezing "+data[i].freezingName+
-                            ", Size "+data[i].sizeName+*/
+                            data[i].speciesNameEng+
+                            " "+data[i].gradeName+
+                            " "+data[i].sizeName+
+                            " "+data[i].pshortname+
+                            " "+data[i].freezingName+
                             '</option>';
-                        }
-                        else{
+                        } else {
                             html += '<option selected value='+data[i].itemId+'>'+
-                            data[i].speciesName+
-                            ", Grade "+data[i].gradeName+
-                            ", Packing "+data[i].packingName+
-                            ", Freezing "+data[i].freezingName+
-                            ", Size "+data[i].sizeName+
+                            data[i].speciesNameEng+
+                            " "+data[i].gradeName+
+                            " "+data[i].sizeName+
+                            " "+data[i].pshortname+
+                            " "+data[i].freezingName+
                             '</option>';
                         }
+                        $('#item').html(html);
                     }
-                    $('#item').html(html);
-                }else{
                 }
             }
         });
     }
-
 
     $(document).ready(function() {
         $('#species').on('change', function() {
@@ -84,9 +75,9 @@
                 swal.fire('warning','Choose Item first!','info');
             }
         });
-
     });
 </script>
+
 
 @if ($errors->any())
 <div class="alert alert-success">
@@ -103,7 +94,6 @@
         </div>
     </div>
 </div>
-
 <script type="text/javascript"> 
     selectOptionChange({{ old('species') }}, {{ old('item') }});
 </script>
@@ -177,7 +167,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <input id="existingStock" value="{{ old('existingStock') }}" name="existingStock" type="text" class="form-control" readonly>
+                                    <input id="existingStock" value="{{ old('existingStock') }}" name="existingStock" type="text" class="form-control text-end" readonly>
                                     <span class="input-group-text">MC / Bag</span>
                                 </div>
                             </div>
@@ -188,7 +178,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <input id="amount" value="{{ old('amount',0) }}" name="amount" type="number" class="form-control text-end">
+                                    <input id="amount" value="{{ old('amount',0) }}" name="amount" type="number" class="form-control text-end" step="0.01">
                                     <span class="input-group-text">MC / Bag</span>
                                 </div>
                             </div>

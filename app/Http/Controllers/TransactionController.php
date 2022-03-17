@@ -33,7 +33,6 @@ class TransactionController extends Controller
         return $this->transaction->getAllItemData($request);
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -155,6 +154,8 @@ class TransactionController extends Controller
         $lastTransactionIdStored = $this->transaction->storeOneTransaction($data);
         $companyName=Company::select('name')->where('id', $request->company)->value('name');
 
+
+
         //create PI Number
         $this->inv = new InvoiceController();
         $pinum = $this->inv->createpinum($lastTransactionIdStored);
@@ -271,8 +272,10 @@ class TransactionController extends Controller
         ->first();
 
         $curStatus=$result->status;
-        $tnum="";
-        if (($curStatus==1) and ($request->status == 2)){
+        $tnum=$request->transactionNum;
+
+        //generate nomor invoice dilakukan pada saat perubahan dari penawaran ke loading atau selesai
+        if (($curStatus==1) and (($request->status == 2) or ($request->status == 4))){
             $this->inv = new InvoiceController();
             $tnum = $this->inv->createtransactionnum($request->transactionId);
         }
@@ -300,8 +303,6 @@ class TransactionController extends Controller
             'advance' =>  $request->advance,
             'forwarderid' => $request->forwarder,
             'isundername' => $request->undername,
-
-
             'valutaType' =>  $request->valutaType,
             'transactionDate' => $request->transactionDate,
             'departureDate' =>  $request->departureDate,
@@ -312,8 +313,7 @@ class TransactionController extends Controller
             'status' =>  $request->status
         ];
 
-        $transactionId = $request->transactionId;            
-        $oneStore = $this->transaction->updateOneTransaction($data, $transactionId);
+        $oneStore = $this->transaction->updateOneTransaction($data, $request->transactionId, $curStatus);
 
         //the plan is, delete all notes existed in the table, and insert the new edited list
         if (!empty($request->pinotes)){

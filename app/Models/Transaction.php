@@ -17,7 +17,6 @@ class Transaction extends Model
     protected $primaryKey = 'id';
 
     public function getAllItemData(Request $request){
-        //dd($request);
         $start=$request->start;
         $end=$request->end;
         $query = DB::table('transactions as t')
@@ -37,7 +36,9 @@ class Transaction extends Model
             DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
                 WHEN t.status ="1" then "On Progress"
                 WHEN t.status ="2" then "Finished"
-                ELSE "Cancelled" END) AS status')
+                WHEN t.status ="3" then "Canceled"
+                WHEN t.status ="4" then "Sailing"
+                END) AS status')
         )
         ->join('companies as c', 'c.id', '=', 't.companyid')
         ->join('countries as n', 'n.id', '=', 'c.nation')
@@ -205,36 +206,46 @@ public function whenUndernameIsTrue($transactionId){
         DB::table('transaction_notes')->insert($data);
     }
 
-    public function updateOneTransaction($data, $transactionId){
+    public function updateOneTransaction($data, $transactionId, $curStatus){
         //update into table transactions berdasar $transactionId
         $action = Transaction::where('id', $transactionId)
         ->update($data);
 
-        /*
-        update ke canceled, dan kembalikan seluruh stock yang sudah dimasukkan         
-        */
+        //Update data barang jika dilakukan pembatalan
+        //dari finished atau loading ke cancel
+        if ((($curStatus==2) or ($data['status'] == 4)) and ($data['status'] == 3)) {
+            $this->transactionCanceled($transactionId);
+        }
 
-        if ($data['status'] == 2){
-            /*
-                ketika berubah jadi finished maka, 
-                1. hitung stok di detail_transactions
-                2. update jumlah stock di items, decrement sejumlah amount di dt
-                3. update data status dt dengan tid = itemDetail->tranId, jadi 2
+        //dari penawaran ke finished atau loading
+        if (($curStatus==1) and (($curStatus == 2) or ($data['status'] == 4))) {
+            $this->transactionLoadedOrFinished($transactionId);
+        }
+    }
 
-            */
-                DB::table('detail_transactions')
-                ->where('transactionId', $itemDetail->tranId)
-                ->update(['status' => 2]);
+    public function transactionLoadedOrFinished($transactionId){
+        $result = DB::table('detail_transactions as dt')
+        ->select(
+            'dt.itemId as itemId', 
+            'dt.amount as amount'
+        )
+        ->where('transactionId', $transactionId)
+        ->get();
 
-            }
-            else if ($data['status'] == 3){
+        foreach ($result as $itemDetail){
+            DB::table('items')
+            ->where('id', $itemDetail->itemId)
+            ->decrement('amount', $itemDetail->amount);
+        }
+    }
+
+    public function transactionCanceled($transactionId){
             /*
             1. get all data from detailTransaction where transactionId=$transactionId
             2. Update Item foreach item result from poin1, increment the amount sebesar amount dari poin1
             3. update detailTransaction->status menjadi 0 semua (Tidak aktif)
             */
             
-
             $result1 = DB::table('detail_transactions as dt')
             ->select(
                 'dt.id as id', 
@@ -250,10 +261,8 @@ public function whenUndernameIsTrue($transactionId){
                 ->where('id', $itemDetail->itemId)
                 ->increment('amount', $itemDetail->amount);
             }
-            DB::table('detail_transactions')
-            ->where('transactionId', $itemDetail->tranId)
-            ->update(['status' => 0]);
-            
-        } 
+
+        }
+
+
     }
-}

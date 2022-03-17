@@ -20,8 +20,9 @@ class ItemController extends Controller
         $this->item = new Item();
     }
 
-    public function getItemForSelectOption($speciesId){
-        return $this->item->getItemForSelectOption($speciesId);
+    public function getItemForSelectOption($speciesId, $tid){
+        $something=$this->item->getItemForSelectOption($speciesId, $tid);
+        return $something;
     }
 
 

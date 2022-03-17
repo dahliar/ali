@@ -21,6 +21,10 @@ class SalaryController extends Controller
     {
         return view('salary.generate');
     }
+    public function generateGajiBulanan()
+    {
+        return view('salary.generateGajiBulanan');
+    }
     public function indexPayroll()
     {
         return view('salary.payrollList');

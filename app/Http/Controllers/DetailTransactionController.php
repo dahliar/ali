@@ -94,12 +94,10 @@ class DetailTransactionController extends Controller
             'itemId' => $request->item,
             'amount' =>  $request->amount,
             'price' =>  $request->harga,
-            'info' =>  '',
-            'status' =>  1
+            'info' =>  ''
         ];
-        $oneItemStore = $this->detailTransaction->storeOneItemDetail($data);
 
-
+        DB::table('detail_transactions')->insert($data);
         //3. update payment di table transactions
         $weightbase = DB::table('items')
         ->select('weightbase')
@@ -110,8 +108,6 @@ class DetailTransactionController extends Controller
         $affected = DB::table('transactions')
         ->where('id', $request->transactionId)
         ->increment('payment', $addPayment);
-
-
 
         $transaction = $request->transactionId;
         return redirect()->route('detailtransactionList',
@@ -183,8 +179,6 @@ class DetailTransactionController extends Controller
         $affected = DB::table('transactions')
         ->where('id', $detailTransaction->transactionId)
         ->decrement('payment', $reducePayment);
-
-
         return "sukses";
     }
 

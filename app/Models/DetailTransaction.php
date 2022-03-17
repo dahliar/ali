@@ -11,30 +11,8 @@ class DetailTransaction extends Model
 {
     use HasFactory;
     protected $primaryKey = 'id';
-
-    public function storeOneItemDetail($data){
-        //insert into table transactions, untuk setiap penambahan
-        DB::table('detail_transactions')->insert($data);
-
-
-        //update table item, untuk mengurangi jumlah stock
-        $affected = DB::table('items')
-        ->where('id', $data['itemId'])
-        ->decrement('amount', $data['amount']);
-    }
-
-
-
-
     
     public function deleteOneItemDetail($detailTransaction){
-
-
-        //update table item, untuk mengurangi jumlah stock
-        $affected = DB::table('items')
-        ->where('id', $detailTransaction->itemId)
-        ->increment('amount', $detailTransaction->amount);
-
         //delete record di tabel detailTransaction dengan id $detailTransaction->id
         DB::table('detail_transactions')->delete($detailTransaction->id);
         return true;

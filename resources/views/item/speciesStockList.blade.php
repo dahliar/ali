@@ -34,9 +34,9 @@
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
             {data: 'packed', name: 'jumlahPacked'},
-            {data: 'onProgress', name: 'onProgress'},
             {data: 'unpacked', name: 'jumlahUnpacked'},
             {data: 'total', name: 'total'},
+            {data: 'jumlahOnLoading', name: 'jumlahOnLoading'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -80,9 +80,9 @@
                                         <th>No</th>
                                         <th>Name</th>
                                         <th>Packed (Kg)</th>
-                                        <th>On Progress (Kg)</th>
                                         <th>Unpacked (Kg)</th>
-                                        <th>Total (Kg)</th>
+                                        <th>Stock gudang (Kg)</th>
+                                        <th>On Progress (Kg)</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>

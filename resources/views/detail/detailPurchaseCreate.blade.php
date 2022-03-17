@@ -14,7 +14,7 @@
 <script type="text/javascript"> 
     function selectOptionChange(speciesId, itemId){
         $.ajax({
-            url: '{{ url("getItems") }}'+"/"+speciesId,
+            url: '{{ url("getItemsPurchaseForSelectOption") }}'+"/"+speciesId+"/"+'{{ $purchase->id }}',
             type: "GET",
             data : {"_token":"{{ csrf_token() }}"},
             dataType: "json",
