@@ -120,13 +120,25 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-2 text-md-right">
+                            <div class="col-md-2 text-end">
                                 <span class="label" id="spanPayment">Status Generate</span>
                             </div>
                             <div class="col-md-8">
-                                <input type="text" id="statusGenerate" name="statusGenerate" class="form-control text-end" value="@if ($dailysalaries->isGenerated==1) Sudah Generate @else Belum Generate @endif" disabled2>
+                                <input type="text" id="statusGenerate" name="statusGenerate" class="form-control text-end" value="@if ($dailysalaries->isGenerated==1) Sudah Generate @else Belum Generate @endif" disabled>
                             </div>                    
                         </div> 
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Lembur</span>
+                            </div>
+                            <div class="col-md-8">
+                                <select id="lembur" name="lembur" class="form-select"  @if($presence->isGenerated==1) disabled @endif>
+                                    <option value="1" @if($presence->isLembur==1) selected @endif>Lembur</option>
+                                    <option value="0" @if($presence->isLembur==0) selected @endif>Tidak Lembur</option>
+                                </select>
+
+                            </div>
+                        </div>
                         @if ($dailysalaries->isGenerated!=1)
                         <div class="row form-group">
                             <div class="col-md-2 text-md-right">

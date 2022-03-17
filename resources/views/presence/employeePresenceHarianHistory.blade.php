@@ -46,14 +46,11 @@
             {   "width": "10%", "targets":  [6], "className": "text-left" },
             {   "width": "10%", "targets":  [7], "className": "text-left" },
             {   "width": "10%", "targets":  [8], "className": "text-left" },
-            {   "width": "10%", "targets":  [9], "className": "text-left" },
             {   "width": "10%", "targets":  [9], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nip', name: 'nip'},
             {data: 'orgStructure', name: 'orgStructure'},
             {data: 'bagian', name: 'bagian'},
             {data: 'shift', name: 'shift'},
@@ -61,6 +58,7 @@
             {data: 'end', name: 'end'},
             {data: 'jamKerja', name: 'jamKerja'},
             {data: 'jamLembur', name: 'jamLembur'},
+            {data: 'lembur', name: 'lembur'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
 
             ]
@@ -130,8 +128,6 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama</th>
-                                <th>NIP</th>
                                 <th>Posisi</th>
                                 <th>Bagian</th>
                                 <th>Shift</th>
@@ -139,6 +135,7 @@
                                 <th>End</th>
                                 <th>Jam Kerja</th>
                                 <th>Jam Lembur</th>
+                                <th>Lembur</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

@@ -93,7 +93,7 @@ class PresenceController extends Controller
 
         $message="Data berhasil dihapus";
         if($request->progressStatus == 1){
-            $this->presence->storePresenceHarianEmployee($request->empid, $request->start, $request->end);
+            $this->presence->storePresenceHarianEmployee($request->empid, $request->start, $request->end, $request->lembur);
             $message="Data berhasil diubah";
 
         }
@@ -127,6 +127,7 @@ class PresenceController extends Controller
             'p.end as end',
             'p.jamKerja as jamKerja',
             'p.jamLembur as jamLembur',
+            DB::raw('(CASE WHEN p.isLembur="1" THEN "Lembur" WHEN p.isLembur="0" THEN "Tidak" END) AS lembur'),
             DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" WHEN p.shift="3" THEN "Malam" END) AS shift')
         )
         ->join('presences as p', 'e.id', '=', 'p.employeeId')
@@ -151,7 +152,8 @@ class PresenceController extends Controller
                 </button>';
             }
             return $html;
-        })->addIndexColumn()->toJson();
+        })
+        ->addIndexColumn()->toJson();
     }    
 
 
