@@ -265,8 +265,8 @@ class BoronganController extends Controller
         $honorCowok=( ($x) / ($y) ) - ( $z / $jmlCewek);
         $honorCewek=( ($x) / ($y) ) + ( $z / $jmlCowok);
         $harga=[
-            '1'=>$honorCowok, 
-            '2'=>$honorCewek
+            '1'=>$honorCewek, 
+            '2'=>$honorCowok
         ];
 
         return $harga;
