@@ -90,7 +90,7 @@ class TransactionController extends Controller
                 'containerVessel' => 'required',
                 'valutaType' => 'required|gt:0',
                 'payment' => 'required|gt:0',
-                'advance' => 'required|gt:0',
+                'advance' => 'required|gte:0',
                 'forwarder' => 'required|gt:0',
                 'undername' => 'required|gt:0',
                 'transactionDate' => 'required|date|before_or_equal:today',
