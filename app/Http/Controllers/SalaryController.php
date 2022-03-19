@@ -89,8 +89,7 @@ class SalaryController extends Controller
     public function honorariumGenerate($start, $end, $payrollId)
     {
         $rowCount = DB::table('honorariums as h')
-        ->whereDate('h.tanggalKerja', '>=', $start)
-        ->whereDate('h.tanggalKerja', '<=', $end)
+        ->whereBetween('h.tanggalKerja', [$start, $end])
         ->where('h.isGenerated', 0)
         ->count();
 
@@ -124,8 +123,7 @@ class SalaryController extends Controller
             }
 
             $affected = DB::table('honorariums as h')
-            ->whereDate('h.tanggalKerja', '>=', $start)
-            ->whereDate('h.tanggalKerja', '<=', $end)
+            ->whereBetween('h.tanggalKerja', [$start, $end])
             ->where('h.isGenerated', 0)
             ->update([
                 'h.isGenerated' => 1, 
@@ -171,8 +169,7 @@ class SalaryController extends Controller
         $rowCount = DB::table('dailysalaries as ds')
         ->where('ds.isGenerated', 0)
         ->where('e.employmentStatus', 1)
-        ->whereDate('ds.presenceDate', '>=', $start)
-        ->whereDate('ds.presenceDate', '<=', $end)
+        ->whereBetween('ds.presenceDate', [$start, $end])
         ->where('ds.uangLembur', '>', '0')
         ->join('employees as e', 'e.id', '=',  'ds.employeeId')
         ->count();
@@ -208,8 +205,7 @@ class SalaryController extends Controller
             $affected = DB::table('dailysalaries as ds')
             ->where('ds.isGenerated', 0)
             ->where('e.employmentStatus', 1)
-            ->whereDate('ds.presenceDate', '>=', $start)
-            ->whereDate('ds.presenceDate', '<=', $end)
+            ->whereBetween('ds.presenceDate', [$start, $end])
             ->where('ds.uangLembur', '>', '0')
             ->join('employees as e', 'e.id', '=',  'ds.employeeId')
             ->update([
@@ -228,8 +224,7 @@ class SalaryController extends Controller
         $rowCount = DB::table('dailysalaries as ds')
         ->where('ds.isGenerated', 0)
         ->where('e.employmentStatus', 2)
-        ->whereDate('ds.presenceDate', '>=', $start)
-        ->whereDate('ds.presenceDate', '<=', $end)
+        ->whereBetween('ds.presenceDate', [$start, $end])
         ->join('employees as e', 'e.id', '=',  'ds.employeeId')
         ->count();
 
@@ -264,8 +259,7 @@ class SalaryController extends Controller
             $affected = DB::table('dailysalaries as ds')
             ->where('ds.isGenerated', 0)
             ->where('e.employmentStatus', 2)
-            ->whereDate('ds.presenceDate', '>=', $start)
-            ->whereDate('ds.presenceDate', '<=', $end)
+            ->whereBetween('ds.presenceDate', [$start, $end])
             ->join('employees as e', 'e.id', '=',  'ds.employeeId')
             ->update([
                 'ds.isGenerated' => 1, 
@@ -285,14 +279,6 @@ class SalaryController extends Controller
             ->groupBy('ds.employeeId')
             ->get();
             foreach($moveGeneratedData as $row){
-                /*
-                DB::statement('insert into detail_payrolls (employeeId, harian, idPayroll, idPayrollEmpid) values (
-                    '.$row->empid.', 
-                    harian+'.($row->uh + $row->ul).', 
-                    '.$payrollId.', 
-                    concat('.$payrollId.',"x",'.$row->empid.')
-                ) on duplicate key update harian = harian+'.($row->uh + $row->ul));
-                */
                 $query = DB::table('detail_payrolls')
                 ->upsert([
                     ['idPayroll'    => $payrollId, 
@@ -320,8 +306,7 @@ class SalaryController extends Controller
         $rowCount = DB::table('borongans as b')
         ->where('b.status', 1)
         ->whereIn('e.employmentStatus', [2,3])
-        ->whereDate('b.tanggalKerja', '>=', $start)
-        ->whereDate('b.tanggalKerja', '<=', $end)
+        ->whereBetween('b.tanggalKerja', [$start, $end])
         ->join('detail_borongans as db', 'b.id', '=',  'db.boronganId')
         ->join('employees as e', 'e.id', '=',  'db.employeeId')
         ->count();
@@ -354,8 +339,9 @@ class SalaryController extends Controller
                 $salaryId = DB::table('salaries')->insertGetId($data);
             }
 
-            $affected = DB::table('borongans')
+            $affected = DB::table('borongans as b')
             ->where('status', 1)
+            ->whereBetween('b.tanggalKerja', [$start, $end])
             ->update([
                 'status' => 2, 
                 'salariesId' => $salaryId
@@ -373,14 +359,6 @@ class SalaryController extends Controller
             ->get();
 
             foreach($moveGeneratedData as $row){
-                /*
-                DB::statement('insert into detail_payrolls (employeeId, borongan, idPayroll, idPayrollEmpid) values (
-                    '.$row->empid.', 
-                    borongan+'.($row->jumlah).', 
-                    '.$payrollId.', 
-                    concat('.$payrollId.',"x",'.$row->empid.')
-                ) on duplicate key update borongan = borongan+'.($row->jumlah));
-                */
                 DB::table('detail_payrolls')
                 ->upsert([
                     ['idPayroll'        => $payrollId, 
@@ -392,11 +370,6 @@ class SalaryController extends Controller
                     ['borongan']
                 );
             }
-
-
-
-
-
             $retValue = $affected." record kerja borongan telah digenerate";
         } else{
             $retValue = "Tidak terdapat record kerja borongan yang belum digenerate";
