@@ -68,7 +68,9 @@
                     data : {"_token":"{{ csrf_token() }}"},
                     dataType: "json",
                     success:function(data){
-                        $('[name="existingStock"]').val(data);
+                        $('[name="existingStock"]').val(data['amount']);
+                        $('[name="weightbase"]').val(data['weightbase']);
+                        $('[name="existingStockInKg"]').val(data['amount']*data['weightbase']);
                     }
                 });
             }else{
@@ -160,7 +162,7 @@
                                     <option value="-1">--Choose Species First--</option>
                                 </select>
                             </div>
-                        </div>             
+                        </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                                 <span class="label">Stok saat ini</span>
@@ -169,6 +171,23 @@
                                 <div class="input-group">
                                     <input id="existingStock" value="{{ old('existingStock') }}" name="existingStock" type="text" class="form-control text-end" readonly>
                                     <span class="input-group-text">MC / Bag</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="existingStockInKg" value="{{ old('existingStockInKg') }}" name="existingStockInKg" type="text" class="form-control text-end" readonly>
+                                    <span class="input-group-text">Kg</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Weightbase</span>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="weightbase" value="{{ old('weightbase') }}" name="weightbase" type="text" class="form-control text-end" readonly>
+                                    <span class="input-group-text">Kg per MC/Bag</span>
                                 </div>
                             </div>
                         </div>

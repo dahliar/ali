@@ -75,13 +75,12 @@ class DetailTransactionController extends Controller
             Rule::exists('transactions', 'id')->where('id', $request->transactionId),], 
             'species' => 'required|integer|gt:0', 
             'item' => 'required|integer|gt:0', 
-            'amount' => 'required|numeric|lte:existingStock|gt:0',
+            'amount' => 'required|numeric|gt:0',
             'harga' => 'required|numeric|gt:0',
         ],[
             'species.gt'=> 'Pilih satu Species',
             'item.gt'=> 'Pilih jenis Item',
             'amount.gt' => 'Amount harus lebih dari 0', 
-            'amount.lte' => 'Amount harus kurang dari atau sama dengan stock eksisting', 
             'harga.gt' => 'Harga harus lebih dari 0', 
             'harga.integer' => 'Harga harus berupa angka',
         ]);

@@ -172,7 +172,7 @@ Route::get('/getOneRekening/{rekening}', function (Rekening $rekening) {
 
 //to get item stock amount
 Route::get('/getItemAmount/{item}', function (Item $item) { 
-    return $item->amount; 
+    return $item; 
 });
 
 
