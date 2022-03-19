@@ -89,7 +89,7 @@
                 <div class="col-md-2">Batas Tanggal
                 </div>
                 <div class="col-md-3">
-                    <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 week')))}}" > 
+                    <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 month')))}}" > 
                 </div>
                 <div class="col-md-3">
                     <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
