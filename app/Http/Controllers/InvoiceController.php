@@ -301,8 +301,8 @@ class InvoiceController extends Controller
                 ->join('detail_borongans as db', 'db.boronganId', '=', 'b.id')
                 ->where('b.salariesId', '=', $sal->id)
                 ->where('db.employeeId', '=', $detail_payroll->employeeId)
-                //->whereBetween('b.tanggalKerja', [$sal->startDate, $sal->endDate])
                 ->get();
+
                 break;
                 case('4') : 
                 $honorarium = DB::table('honorariums as h')

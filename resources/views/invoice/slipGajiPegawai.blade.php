@@ -116,6 +116,13 @@
                     </td>
                 </tr>
             </table>
+            @php
+            $thp = 0;
+            $total=0;
+            $no=1;
+            @endphp         
+
+            @if((count($harian)>0))
             <span class="label" id="spanLabel"><b><h3>Presensi Harian</h3></b></span>
             <table width="100%" id="invoice">
                 <thead style="text-align: center;">
@@ -127,11 +134,6 @@
                     </tr>
                 </thead>
                 <tbody style="font-size: 12px;">
-                    @php
-                    $thp = 0;
-                    $total=0;
-                    $no=1;
-                    @endphp         
                     @foreach ($harian as $h)
                     <tr>
                         <td width="5%">{{$no}}
@@ -192,6 +194,8 @@
                     </tr>
                 </tfoot>        
             </table>
+            @endif
+            @if(!empty($borongan))
             <span class="label" id="spanLabel"><b><h3>Borongan</h3></b></span>
             <table width="100%" id="invoice">
                 <thead style="text-align: center;">
@@ -209,7 +213,7 @@
                     @php
                     $total=0;
                     $no=1;
-                    @endphp         
+                    @endphp 
                     @foreach ($borongan as $b)
                     <tr>
                         <td width="5%" style="text-align:left">{{$no}}</td>
@@ -249,6 +253,8 @@
                     </tr>
                 </tfoot>        
             </table>
+            @endif
+            @if((count($honorarium)>0))
             <span class="label" id="spanLabel"><b><h3>Honorarium</h3></b></span>
             <table width="100%" id="invoice">
                 <thead style="text-align: center;">
@@ -293,6 +299,7 @@
                     </tr>
                 </tfoot>        
             </table>
+            @endif
             <table width="100%">
                 <thead>
                     <tr >

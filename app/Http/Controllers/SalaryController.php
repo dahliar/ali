@@ -1156,6 +1156,7 @@ class SalaryController extends Controller
         ->join('detail_payrolls as dp', 'dp.idPayroll', '=', 'p.id')
         ->join('users as u', 'u.id', '=', 'p.creator')
         ->whereBetween('p.payDate', [$start, $end])
+        ->groupBy('p.id')
         ->get();
 
         return datatables()->of($query)

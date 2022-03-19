@@ -18,38 +18,6 @@
         }
     });
 
-    function hapusGenerateBorongan($sid){
-        Swal.fire({
-            title: 'Yakin menghapus?',
-            text: "Menghapus record generate gaji borongan",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '{{ url("hapusGenerateBorongan") }}',
-                    type: "POST",
-                    data: {
-                        "_token":"{{ csrf_token() }}",
-                        sid : $sid
-                    },
-                    dataType: "json",
-                    success:function(data){
-                        Swal.fire(
-                            'Deleted!',
-                            "Data generate gaji borongan telah dihapus",
-                            'success'
-                            );
-                        myFunction();
-                    }
-                });
-            }
-        })
-    }
-
     function printPayrollList($payrollId){
         window.open(('{{ url("printPayrollList") }}' + "/"+ $payrollId), '_blank');
     }
