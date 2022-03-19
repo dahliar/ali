@@ -99,6 +99,15 @@
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
             {{ session('status') }}
+            @if (session('listBarang'))
+            <ol>
+                @foreach(session('listBarang') as $barang)
+                <li>
+                    {{$barang}}
+                </li>
+                @endforeach
+            </ol>
+            @endif
         </div>
         <div class="col-md-1 text-center">
             <span class="label"><strong >x</strong></span>

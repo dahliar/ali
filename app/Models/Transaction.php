@@ -34,7 +34,7 @@ class Transaction extends Model
             DB::raw('(CASE WHEN t.isundername ="1" THEN "Internal"
                 WHEN t.isundername ="2" then "Undername" END) AS undername'),
             DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
-                WHEN t.status ="1" then "On Progress"
+                WHEN t.status ="1" then "Offering"
                 WHEN t.status ="2" then "Finished"
                 WHEN t.status ="3" then "Canceled"
                 WHEN t.status ="4" then "Sailing"
@@ -138,10 +138,12 @@ class Transaction extends Model
         't.status as status',
         DB::raw('(CASE WHEN t.isundername ="1" THEN "Internal"
             WHEN t.isundername ="2" then "Undername" END) AS undername'),
-        DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
-            WHEN t.status ="1" then "On Progress"
+        DB::raw('(CASE 
+            WHEN t.status ="1" then "Offering"
             WHEN t.status ="2" then "Finished"
-            ELSE "Cancelled" END) AS status')
+            WHEN t.status ="3" THEN "Canceled"
+            WHEN t.status ="4" THEN "Sailing"
+            END) AS status')
     )
        ->whereBetween('transactionDate', [$end, $start])
        ->join('companies as c', 'c.id', '=', 't.companyid')

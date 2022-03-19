@@ -266,73 +266,110 @@ class TransactionController extends Controller
             'status.gt'=> 'Pilih salah satu jenis status',
         ]);
 
-        $result = DB::table('transactions')
-        ->select('status')
-        ->where('id', $request->transactionId)
-        ->first();
+        //check dlu apakah jumlah barangnya cukup atau ngga
+        
 
-        $curStatus=$result->status;
-        $tnum=$request->transactionNum;
+        //cek disini
+        $result = DB::table('detail_transactions as dt')
+        ->select(
+            'dt.itemId as itemId', 
+            DB::raw('concat(sp.name," ",g.name," ", s.name) as itemName'),
+            DB::raw('sum(dt.amount) as amount'),
+            'i.amount as currentAmount'
+        )
+        ->join('items as i', 'i.id', '=', 'dt.itemId')
+        ->join('grades as g', 'i.gradeid', '=', 'g.id')
+        ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->where('transactionId', $request->transactionId)
+        ->orderBy('sp.name', 'desc')
+        ->orderBy('g.name', 'asc')
+        ->orderByRaw('s.name+0', 'asc')
+        ->groupBy('i.id')
+        ->get();
 
-        //generate nomor invoice dilakukan pada saat perubahan dari penawaran ke loading atau selesai
-        if (($curStatus==1) and (($request->status == 2) or ($request->status == 4))){
-            $this->inv = new InvoiceController();
-            $tnum = $this->inv->createtransactionnum($request->transactionId);
-        }
-
-        $data = [
-            'userId' => auth()->user()->id,
-            'transactionNum' => $tnum,
-            'companyId' =>  $request->company,
-            'companydetail' =>  $request->companydetail,
-            'shipper' =>  $request->shipper,
-            'shipperAddress' =>  $request->shipperAddress,
-            'rekeningId' => $request->rekening,
-            'countryId' => $request->countryId,
-            'swiftcode' => $request->swiftcode,
-            'valuta' => $request->valuta,
-            'packer' =>  $request->packer,
-            'loadingport' =>  $request->loadingPort,
-            'destinationport' =>  $request->destinationPort,
-            'containerParty' =>  $request->containerParty,
-            'containerType' =>  $request->containerParty,
-            'containerNumber' =>  $request->containerNumber,
-            'containerSeal' =>  $request->containerSeal,
-            'containerVessel' =>  $request->containerVessel,
-            'payment' =>  $request->payment,
-            'advance' =>  $request->advance,
-            'forwarderid' => $request->forwarder,
-            'isundername' => $request->undername,
-            'valutaType' =>  $request->valutaType,
-            'transactionDate' => $request->transactionDate,
-            'departureDate' =>  $request->departureDate,
-            'loadingDate' =>  $request->loadingDate,
-            'arrivalDate' => $request->arrivalDate,
-            'shippedDatePlan' => $request->shippedDatePlan,
-            'paymentPlan' => $request->paymentPlan,
-            'status' =>  $request->status
-        ];
-
-        $oneStore = $this->transaction->updateOneTransaction($data, $request->transactionId, $curStatus);
-
-        //the plan is, delete all notes existed in the table, and insert the new edited list
-        if (!empty($request->pinotes)){
-            $a=0;
-            foreach ($request->pinotes as $notes){            
-                $notesData[$a] = [
-                    'transactionId' =>  $request->transactionId,
-                    'note' => $notes
-                ];
-                $a=$a+1;
+        $jumlahBarangNotEnough=0;
+        $listBarang=array();
+        foreach ($result as $dtitem){
+            if ($dtitem->amount>$dtitem->currentAmount){
+                $jumlahBarangNotEnough++;
+                array_push($listBarang, $dtitem->itemName);
             }
-            DB::table('transaction_notes')->where('transactionId', $request->transactionId)->delete();
-            $this->transaction->storeNotes($notesData);
         }
 
+        if (($jumlahBarangNotEnough<=0) or ($request->status==3)) {
+            $result = DB::table('transactions')
+            ->select('status')
+            ->where('id', $request->transactionId)
+            ->first();
 
-        $companyName=Company::select('name')->where('id', $request->company)->value('name');
-        return redirect('transactionList')
-        ->with('status','Update Transaksi pengiriman ke '.$companyName.' berhasil diperbaharui.');
+            $curStatus=$result->status;
+            $tnum=$request->transactionNum;
+
+            //generate nomor invoice dilakukan pada saat perubahan dari penawaran ke loading atau selesai
+            if (($curStatus==1) and (($request->status == 2) or ($request->status == 4))){
+                $this->inv = new InvoiceController();
+                $tnum = $this->inv->createtransactionnum($request->transactionId);
+            }
+
+            $data = [
+                'userId' => auth()->user()->id,
+                'transactionNum' => $tnum,
+                'companyId' =>  $request->company,
+                'companydetail' =>  $request->companydetail,
+                'shipper' =>  $request->shipper,
+                'shipperAddress' =>  $request->shipperAddress,
+                'rekeningId' => $request->rekening,
+                'countryId' => $request->countryId,
+                'swiftcode' => $request->swiftcode,
+                'valuta' => $request->valuta,
+                'packer' =>  $request->packer,
+                'loadingport' =>  $request->loadingPort,
+                'destinationport' =>  $request->destinationPort,
+                'containerParty' =>  $request->containerParty,
+                'containerType' =>  $request->containerParty,
+                'containerNumber' =>  $request->containerNumber,
+                'containerSeal' =>  $request->containerSeal,
+                'containerVessel' =>  $request->containerVessel,
+                'payment' =>  $request->payment,
+                'advance' =>  $request->advance,
+                'forwarderid' => $request->forwarder,
+                'isundername' => $request->undername,
+                'valutaType' =>  $request->valutaType,
+                'transactionDate' => $request->transactionDate,
+                'departureDate' =>  $request->departureDate,
+                'loadingDate' =>  $request->loadingDate,
+                'arrivalDate' => $request->arrivalDate,
+                'shippedDatePlan' => $request->shippedDatePlan,
+                'paymentPlan' => $request->paymentPlan,
+                'status' =>  $request->status
+            ];
+
+
+            $oneStore = $this->transaction->updateOneTransaction($data, $request->transactionId, $curStatus);
+
+            //the plan is, delete all notes existed in the table, and insert the new edited list
+            if (!empty($request->pinotes)){
+                $a=0;
+                foreach ($request->pinotes as $notes){            
+                    $notesData[$a] = [
+                        'transactionId' =>  $request->transactionId,
+                        'note' => $notes
+                    ];
+                    $a=$a+1;
+                }
+                DB::table('transaction_notes')->where('transactionId', $request->transactionId)->delete();
+                $this->transaction->storeNotes($notesData);
+            }
+
+            $companyName=Company::select('name')->where('id', $request->company)->value('name');
+            return redirect('transactionList')
+            ->with('status','Update Transaksi pengiriman ke '.$companyName.' berhasil diperbaharui.');
+        }else{
+            return redirect('transactionList')
+            ->with('status', 'Update Transaksi gagal, jumlah stock tidak mencukupi')
+            ->with('listBarang', $listBarang);
+        }
     }
 
     /**
