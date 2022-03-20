@@ -90,7 +90,7 @@
                         </div>                    
                         <div class="row form-group mb-2">
                             <div class="col-md-3 text-end">
-                                <span class="label">Tanggal pencatatan transaksi</span>
+                                <span class="label">Tanggal pembayaran transaksi</span>
                             </div>
                             <div class="col-md-4">
                                 <input type="date" id="tanggalKerja" name="tanggalKerja" class="form-control text-end" value="{{date('Y-m-d')}}" value="{{old('tanggalKerja')}}">
