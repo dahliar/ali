@@ -53,6 +53,11 @@
             if (speciesId>0){
                 selectOptionChange(speciesId, -1);
             }else{
+                $('#item')
+                .empty()
+                .append('<option value="-1">--Pilih spesies dahulu--</option>');
+                $('[name="amount"]').val(0);
+                $('[name="harga"]').val(0);
                 swal.fire('warning','Choose Species first!','info');
             }
         });
@@ -97,7 +102,7 @@
 </div>
 
 <div class="container-fluid">
-    <div class="row form-group">
+    <div class="row form-group mb-2">
         <div class="d-grid gap">
             <form id="purchaseItemAddForm" action="{{url('purchaseItemStore')}}" method="get" name="purchaseItemAddForm">
                 <div class="modal-content">
@@ -105,14 +110,14 @@
                         <h5 class="modal-title" id="exampleModalLabel">Tambah detil transaksi pembelian</h5>
                     </div>
                     <div class="modal-body">
-                        <div class="row form-group">
+                        <div class="row form-group mb-2">
                             <div class="col-md-5 form-inline">
                                 <div class="col-md-6">                      
                                     <input id="purchaseId" name="purchaseId" type="hidden" value="{{ old('purchaseId', $purchase->id) }}">
                                 </div>
                             </div>
                         </div>
-                        <div class="row form-group">
+                        <div class="row form-group mb-2">
                             <div class="col-md-2 text-end">
                                 <span class="label">Spesies*</span>
                             </div>
@@ -132,17 +137,17 @@
                                 <span class="label err" id="speciesListAddLabel"></span>
                             </div>
                         </div>
-                        <div class="row form-group">
+                        <div class="row form-group mb-2">
                             <div class="col-md-2 text-end">
-                                <span class="label">Items*</span>
+                                <span class="label">Barang*</span>
                             </div>
                             <div class="col-md-8">
                                 <select id="item" name="item" class="form-control" >
-                                    <option value="-1">--Choose Species First--</option>
+                                    <option value="-1">--Pilih Spesies dahulu--</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="row form-group">
+                        <div class="row form-group mb-2">
                             <div class="col-md-2 text-end">
                                 <span class="label">Jumlah*</span>
                             </div>
@@ -153,7 +158,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row form-group">
+                        <div class="row form-group mb-2">
                             <div class="col-md-2 text-end">
                                 <span class="label">Harga*</span>
                             </div>
@@ -165,7 +170,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row form-group">
+                        <div class="row form-group mb-2">
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-6">

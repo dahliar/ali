@@ -69,7 +69,7 @@
 </div>
 
 <div class="container-fluid">
-    <div class="row form-group">
+    <div class="row form-group mb-2">
         <form id="tambahBorongan" method="POST" action="{{url('boronganStore')}}" name="tambahBorongan">
             @csrf
             <div class="modal-dialog modal-xl">
@@ -80,24 +80,24 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
+                        <div class="row form-group mb-2">
+                            <div class="col-md-3 text-end">
                                 <span class="label">Nama</span>
                             </div>
                             <div class="col-md-8">
-                                <input type="text" id="name" name="name" class="form-control" placeholder="Isi keterangan/nama untuk mempermudah pencarian, misal borongan cumi kupas" value="{{old('name')}}">
+                                <input type="text" id="name" name="name" class="form-control" placeholder="Isi keterangan/nama untuk mempermudah pencarian, misal borongan cumi kupas dan tanggal" value="{{old('name')}}">
                             </div>
                         </div>                    
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Tanggal Kerja</span>
+                        <div class="row form-group mb-2">
+                            <div class="col-md-3 text-end">
+                                <span class="label">Tanggal pencatatan transaksi</span>
                             </div>
                             <div class="col-md-4">
-                                <input type="date" id="tanggalKerja" name="tanggalKerja" class="form-control text-end" value="{{date('Y-m-d')}}"  value="{{old('tanggalKerja')}}">
+                                <input type="date" id="tanggalKerja" name="tanggalKerja" class="form-control text-end" value="{{date('Y-m-d')}}" value="{{old('tanggalKerja')}}">
                             </div>
                         </div>                    
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
+                        <div class="row form-group mb-2">
+                            <div class="col-md-3 text-end">
                                 <span class="label">Honor per Kg</span>
                             </div>
                             <div class="col-md-4">
@@ -108,8 +108,8 @@
                                 </div>
                             </div>
                         </div>                    
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
+                        <div class="row form-group mb-2">
+                            <div class="col-md-3 text-end">
                                 <span class="label">Berat timbangan</span>
                             </div>
                             <div class="col-md-4">
@@ -119,8 +119,8 @@
                                 </div>
                             </div>   
                         </div>         
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
+                        <div class="row form-group mb-2">
+                            <div class="col-md-3 text-end">
                                 <span class="label" id="spanPayment">Jenis</span>
                             </div>
                             <div class="col-md-4">
@@ -131,8 +131,8 @@
                                 </select>
                             </div>                    
                         </div>         
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
+                        <div class="row form-group mb-2">
+                            <div class="col-md-3 text-end">
                                 <span class="label" id="spanPayment">Loading</span>
                             </div>
                             <div class="col-md-4">
@@ -140,8 +140,8 @@
                                 <input type="hidden" id="cbval" name="cbval" value="0">
                             </div>                    
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
+                        <div class="row form-group mb-2">
+                            <div class="col-md-3 text-end">
                                 <span class="label">Jumlah Pekerja</span>
                             </div>
                             <div class="col-md-4">
