@@ -279,15 +279,30 @@ class EmployeeController extends Controller
             'noRekening'            => ['required', 'gt:0'],
             'pendidikan'            => ['required', 'gte:0'],
             'bidangPendidikan'      => ['required', 'string'],
-            'isactive'              => ['required', 'gt:0']
+            'isactive'              => ['required']
         ]);
 
+        DB::beginTransaction();
 
-        $this->employee->userUpdate($request->role, $request->email, $request->userid);
-        $this->employee->employeeUpdate($request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
+        try {
+            $this->employee->userUpdate($request->role, $request->email, $request->userid);
+            $this->employee->employeeUpdate($request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
+            $this->employeeIsNotActive($request->employeeId);
+            DB::commit();
+            return redirect('employeeList')
+            ->with('status','Data Karyawan berhasil diubah.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect('employeeList')
+            ->with('status','Data gagal diperbaharui');
+        }
 
-        return redirect('employeeList')
-        ->with('status','Data Karyawan berhasil diubah.');
+    }
+
+    public function employeeIsNotActive($employeeId){
+        DB::table('employeeorgstructuremapping')
+        ->where('idemp', $employeeId)
+        ->update(['isActive' => 0]);
     }
 
 
