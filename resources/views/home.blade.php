@@ -26,6 +26,7 @@
 						</nav>
 					</div>
 				</div>
+				<!--
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-2">
@@ -82,9 +83,10 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			-->
 		</div>
 	</div>
+</div>
 </body>
 @else
 @include('partial.noAccess')
