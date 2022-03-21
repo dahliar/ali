@@ -140,14 +140,6 @@ class SalaryController extends Controller
             ->get();
 
             foreach($moveGeneratedData as $row){
-                /*
-                DB::statement('insert into detail_payrolls (employeeId, honorarium, idPayroll, idPayrollEmpid) values (
-                    '.$row->empid.', 
-                    honorarium+'.($row->jumlah).', 
-                    '.$payrollId.', 
-                    concat('.$payrollId.',"x",'.$row->empid.')
-                ) on duplicate key update honorarium = honorarium+'.($row->jumlah));
-                */
                 DB::table('detail_payrolls')
                 ->upsert([
                     ['idPayroll'        => $payrollId, 

@@ -109,22 +109,8 @@ class BoronganController extends Controller
                 </button>
                 ';
             }
-
-            if ($row->status == 2){
+            if (($row->status == 2) or ($row->status == 3)) {
                 $html .= '
-                <button class="btn btn-xs btn-secondary" disabled>
-                <i class="fa fa-plus" style="font-size:20px"></i>
-                </button>
-                <a  data-rowid="'.$row->id.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Detail pekerja borongan" href="boronganWorkerList/'.$row->id.'"><i class="fa fa-list"></i>
-                </a>
-                <button class="btn btn-xs btn-secondary" disabled>
-                <i class="fa fa-trash" style="font-size:20px"></i>
-                </button>
-                
-                ';
-            }
-            if ($row->status == 3){
-                $html .= '                
                 <button class="btn btn-xs btn-secondary" disabled>
                 <i class="fa fa-plus" style="font-size:20px"></i>
                 </button>
@@ -178,9 +164,12 @@ class BoronganController extends Controller
         if ($borongan->jenis==2){
             if (($jmlCowok==0) or ($jmlCewek==0)){
                 $price = ($borongan->hargaSatuan * $borongan->netweight) / $borongan->worker;
+                $price=ceil($price/100) * 100;
                 $dataSalary=[
                     '1'=>$price, 
                     '2'=>$price
+
+
                 ];
             }else{
                 if($borongan->loading==0){
@@ -190,6 +179,7 @@ class BoronganController extends Controller
             }            
         } else {
             $price = ($borongan->hargaSatuan * $borongan->netweight) / $borongan->worker;
+            $price=ceil($price/100) * 100;
             $dataSalary=[
                 '1'=>$price, 
                 '2'=>$price
@@ -215,46 +205,6 @@ class BoronganController extends Controller
 
         return redirect('boronganList')
         ->with('status','Item berhasil ditambahkan.');
-
-
-        /*
-        //pas masih ada halfday
-        $limit=$request->worker;
-        $request->validate([
-            'boronganWorker' => ['required','array',"min:$limit","max:$limit"]
-        ]);
-
-        $a=0;
-
-        $fullWorker=count($request->boronganWorker);
-        $halfDay=$fullWorker - count($request->boronganType);
-        $satuanHalfday = (($fullWorker-$halfDay)*2)+$halfDay;
-        $netPriceHalf = ($borongan->hargaSatuan * $borongan->netweight) / $satuanHalfday;
-
-        foreach($request->boronganWorker as $boronganWorker){
-            $price=$netPriceHalf;
-            $isFullday = 0;
-            if(in_array($boronganWorker, $request->boronganType)){
-                $price=$netPriceHalf * 2;
-                $isFullday = 1;
-            }
-            $data[$a] = [
-                'employeeId' => $boronganWorker,
-                'boronganId' => $request->boronganId,
-                'isFullday' => $isFullday,
-                'netPayment' => $price
-            ];
-            $a++;
-        }
-
-        DB::table('detail_borongans')->insert($data);
-        DB::table('borongans')
-        ->where('id', $request->boronganId)
-        ->update(['status' => 1]);
-
-        return redirect('boronganList')
-        ->with('status','Item berhasil ditambahkan.');
-        */
     }
 
     function hitungBoronganPacking($berat, $hargaperkg, $jmlCowok, $jmlCewek, $percentage){
@@ -264,9 +214,10 @@ class BoronganController extends Controller
 
         $honorCowok=( ($x) / ($y) ) - ( $z / $jmlCewek);
         $honorCewek=( ($x) / ($y) ) + ( $z / $jmlCowok);
+
         $harga=[
-            '1'=>$honorCewek, 
-            '2'=>$honorCowok
+            '1'=>ceil($honorCewek/100) * 100, 
+            '2'=>ceil($honorCewek/100) * 100
         ];
 
         return $harga;

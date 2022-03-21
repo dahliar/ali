@@ -26,13 +26,11 @@ class DetailTransaction extends Model
             'f.name as freezingName', 
             'g.name as gradeName', 
             'p.name as packingName', 
+            'p.shortname as pshortname',
             's.name as sizeName', 
             't.status as status', 
-            DB::raw(
-                'concat(dt.amount, " ",p.shortname) 
-                as amount'),
-            DB::raw('
-                concat((dt.amount * i.weightbase)," Kg") as weight'),
+            'dt.amount as jumlah',
+            'i.weightbase as wb',
             'dt.price as price',
         )
         ->join('transactions as t', 't.id', '=', 'dt.transactionId')
@@ -48,6 +46,14 @@ class DetailTransaction extends Model
 
 
         return datatables()->of($query)
+        ->addColumn('weight', function ($row) {
+            $html = ($row->jumlah * $row->wb).' Kg';
+            return $html;
+        })
+        ->addColumn('amount', function ($row) {
+            $html = $row->jumlah.' '.$row->pshortname;
+            return $html;
+        })
         ->addColumn('action', function ($row) {
             $html = '
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Detail" onclick="deleteItem('."'".$row->id."'".')">
@@ -59,6 +65,7 @@ class DetailTransaction extends Model
             if ($row->status != '2') return ;
 
             //return $html;
-        })->addIndexColumn()->toJson();
+        })
+        ->addIndexColumn()->toJson();
     }
 }

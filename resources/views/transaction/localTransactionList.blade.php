@@ -25,7 +25,7 @@
         window.open(('{{ url("transactionEdit") }}'+"/"+id), '_self');
     }
     function tambahTransaksi(){
-        window.open(('{{ url("transactionAdd") }}'), '_self');
+        window.open(('{{ url("localTransactionAdd") }}'), '_self');
     }
 
     function cetakPI(id){
@@ -36,12 +36,6 @@
     }
 
     function myFunction(){
-        var e = document.getElementById("negara");
-        var negara = e.options[e.selectedIndex].value;       
-        //var companyName = e.options[e.selectedIndex].text;
-        var e = document.getElementById("jenis");
-        var jenis = e.options[e.selectedIndex].value;       
-
         var e = document.getElementById("statusTransaksi");
         var statusTransaksi = e.options[e.selectedIndex].value;       
 
@@ -54,10 +48,8 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             ajax:{
-                url: '{{ url("getAllExportTransaction") }}',
+                url: '{{ url("getAllLocalTransaction") }}',
                 data: function (d){
-                    d.negara = negara,
-                    d.jenis = jenis,
                     d.statusTransaksi = statusTransaksi,
                     d.start = start,
                     d.end = end
@@ -74,17 +66,13 @@
             {   "width": "15%",  "targets": [1], "className": "text-left" },
             {   "width": "15%",  "targets": [2], "className": "text-left" },
             {   "width": "15%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":   [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "15%", "targets":  [6], "className": "text-left" }
+            {   "width": "10%", "targets":   [4], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'name', name: 'name'},
-            {data: 'nation', name: 'nation'},
             {data: 'number', name: 'number'},
             {data: 'tanggal', name: 'tanggal'},
-            {data: 'undername', name: 'undername'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -125,7 +113,7 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Transactions</li>
+                        <li class="breadcrumb-item active">Transaksi Lokal</li>
                     </ol>
                 </nav>
                 <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Transaksi">
@@ -134,26 +122,7 @@
             </div>
             <br>
             <div class="row form-inline">
-                <div class="row form-group">
-                    <div class="col-md-3">
-                        <select class="form-select" id="negara" name="negara">
-                            <option value="-1">--Semua Negara--</option>
-                            @foreach ($nations as $nation)
-                            @if ( $nation->id == old('negara') )
-                            <option value="{{ $nation->id }}" selected>{{ $nation->name }} - {{ $nation->registration }}</option>
-                            @else
-                            <option value="{{ $nation->id }}">{{ $nation->name }} - {{ $nation->registration }}</option>
-                            @endif
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <select class="form-select" id="jenis" name="jenis" >
-                            <option value="-1" selected>--Semua Jenis--</option>
-                            <option value="1" @if(old('jenis') == 1) selected @endif>Internal</option>
-                            <option value="2" @if(old('jenis') == 2) selected @endif>Undername</option>
-                        </select>
-                    </div>
+                <div class="row form-group">                    
                     <div class="col-md-2">
                         <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
                             <option value="-1" selected>--Semua Status--</option>
@@ -184,10 +153,8 @@
                         <thead>
                             <tr style="font-size: 12px;">
                                 <th>Perusahaan</th>
-                                <th>Negara</th>
                                 <th>No Surat</th>
                                 <th>Tanggal</th>
-                                <th>Jenis</th>
                                 <th>Status</th>
                                 <th>Act</th>
                             </tr>

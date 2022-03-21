@@ -68,6 +68,19 @@ Route::get('detailtransactionAdd/{transaction}',[DetailTransactionController::cl
 Route::get('itemDetailTransactionAdd',[DetailTransactionController::class, 'store'])->middleware(['auth'])->name('itemDetailTransactionAdd');
 
 Route::get('itemDetailTransactionDelete/{detail_transaction}',[DetailTransactionController::class, 'destroy'])->middleware(['auth'])->name('itemDetailTransactionDelete');
+Route::GET('getAllExportTransaction', [TransactionController::class, 'getAllExportTransaction'])->middleware(['auth']);
+Route::GET('getAllDetail/{transactionId}', [DetailTransactionController::class, 'getAllDetail'])->middleware(['auth']);
+Route::get('/transaction/pi/{transaction}', [InvoiceController::class, 'cetak_pi'])->middleware(['auth']);
+Route::get('/transaction/ipl/{transaction}', [InvoiceController::class, 'cetak_ipl'])->middleware(['auth']);
+
+
+/*
+*   Route Transaksi Penjualan Lokal
+*
+*/
+Route::get('localTransactionList',[TransactionController::class, 'indexLocal'])->middleware(['auth']);
+Route::GET('getAllLocalTransaction', [TransactionController::class, 'getAllLocaltransaction'])->middleware(['auth']);
+Route::get('localTransactionAdd',[TransactionController::class, 'createLocal'])->middleware(['auth']);
 
 /*
 *   Route Transaksi Pembelian/Purchase
@@ -154,11 +167,6 @@ Route::get('companyEdit/{company}',[CompanyController::class, 'edit'])->middlewa
 Route::get('companyStore',[CompanyController::class, 'store'])->middleware(['auth'])->name('companyStore');
 Route::get('companyUpdate',[CompanyController::class, 'update'])->middleware(['auth'])->name('companyUpdate');
 Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middleware(['auth']);
-
-Route::GET('getAllTransaction', [TransactionController::class, 'getAlltransaction'])->middleware(['auth']);
-Route::GET('getAllDetail/{transactionId}', [DetailTransactionController::class, 'getAllDetail'])->middleware(['auth']);
-Route::get('/transaction/pi/{transaction}', [InvoiceController::class, 'cetak_pi'])->middleware(['auth']);
-Route::get('/transaction/ipl/{transaction}', [InvoiceController::class, 'cetak_ipl'])->middleware(['auth']);
 
 //to get size for all species
 Route::GET('getItemsTransactionForSelectOption/{speciesId}/{tid}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);

@@ -16,7 +16,7 @@ class Transaction extends Model
     use HasFactory;
     protected $primaryKey = 'id';
 
-    public function getAllItemData(Request $request){
+    public function getAllExportTransactionData(Request $request){
         $start=$request->start;
         $end=$request->end;
         $query = DB::table('transactions as t')
@@ -125,61 +125,60 @@ class Transaction extends Model
     }
 
     public function getAllTransactionData($jenis, $negara, $statusTransaksi, $start, $end){
+        $query = DB::table('transactions as t')
+        ->select(
+            't.id as id', 
+            't.transactionnum as nosurat', 
+            'c.name as name', 
+            'n.name as nation', 
+            't.departureDate as etd',
+            't.arrivalDate as eta',
+            't.transactiondate as tanggaltransaksi',
+            't.status as status',
+            DB::raw('(CASE WHEN t.isundername ="1" THEN "Internal"
+                WHEN t.isundername ="2" then "Undername" END) AS undername'),
+            DB::raw('(CASE 
+                WHEN t.status ="1" then "Offering"
+                WHEN t.status ="2" then "Finished"
+                WHEN t.status ="3" THEN "Canceled"
+                WHEN t.status ="4" THEN "Sailing"
+                END) AS status')
+        )
+        ->whereBetween('transactionDate', [$end, $start])
+        ->join('companies as c', 'c.id', '=', 't.companyid')
+        ->join('countries as n', 'n.id', '=', 'c.nation');
 
-       $query = DB::table('transactions as t')
-       ->select(
-        't.id as id', 
-        't.transactionnum as nosurat', 
-        'c.name as name', 
-        'n.name as nation', 
-        't.departureDate as etd',
-        't.arrivalDate as eta',
-        't.transactiondate as tanggaltransaksi',
-        't.status as status',
-        DB::raw('(CASE WHEN t.isundername ="1" THEN "Internal"
-            WHEN t.isundername ="2" then "Undername" END) AS undername'),
-        DB::raw('(CASE 
-            WHEN t.status ="1" then "Offering"
-            WHEN t.status ="2" then "Finished"
-            WHEN t.status ="3" THEN "Canceled"
-            WHEN t.status ="4" THEN "Sailing"
-            END) AS status')
-    )
-       ->whereBetween('transactionDate', [$end, $start])
-       ->join('companies as c', 'c.id', '=', 't.companyid')
-       ->join('countries as n', 'n.id', '=', 'c.nation');
+        if ($jenis!=-1){
+            $query->where('t.isundername', $jenis);
+        }
+        if ($negara!=-1){
+            $query->where('n.id', $negara);
+        }
+        if ($statusTransaksi!=-1){
+            $query->where('t.status', $statusTransaksi);
+        }
+        $query->get();  
 
-       if ($jenis!=-1){
-        $query->where('t.isundername', $jenis);
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')">
+            <i class="fa fa-plus" style="font-size:20px"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
+            <i class="fa fa-edit" style="font-size:20px"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="PI" onclick="cetakPI('."'".$row->id."'".')">PI
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="IPL" onclick="cetakIPL('."'".$row->id."'".')">IPL
+            </button>
+            ';
+            return $html;
+        })->addIndexColumn()->toJson();
     }
-    if ($negara!=-1){
-        $query->where('n.id', $negara);
-    }
-    if ($statusTransaksi!=-1){
-        $query->where('t.status', $statusTransaksi);
-    }
-    $query->get();  
 
-
-    return datatables()->of($query)
-    ->addColumn('action', function ($row) {
-
-        $html = '
-        <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')">
-        <i class="fa fa-plus" style="font-size:20px"></i>
-        </button>
-        <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
-        <i class="fa fa-edit" style="font-size:20px"></i>
-        </button>
-        <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="PI" onclick="cetakPI('."'".$row->id."'".')">PI
-        </button>
-        <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="IPL" onclick="cetakIPL('."'".$row->id."'".')">IPL
-        </button>
-        ';
-        return $html;
-    })->addIndexColumn()->toJson();
-}
-public function whenUndernameIsTrue($transactionId){
+    public function whenUndernameIsTrue($transactionId){
         /****
          * ketika isundername=2
          * 1. create transaction Number
@@ -242,29 +241,124 @@ public function whenUndernameIsTrue($transactionId){
     }
 
     public function transactionCanceled($transactionId){
-            /*
-            1. get all data from detailTransaction where transactionId=$transactionId
-            2. Update Item foreach item result from poin1, increment the amount sebesar amount dari poin1
-            3. update detailTransaction->status menjadi 0 semua (Tidak aktif)
-            */
-            
-            $result1 = DB::table('detail_transactions as dt')
-            ->select(
-                'dt.id as id', 
-                'dt.itemId as itemId', 
-                'dt.transactionId as tranId', 
-                'dt.amount as amount', 
-            )
-            ->where('transactionId', $transactionId)
-            ->get();
+        /*
+        1. get all data from detailTransaction where transactionId=$transactionId
+        2. Update Item foreach item result from poin1, increment the amount sebesar amount dari poin1
+        3. update detailTransaction->status menjadi 0 semua (Tidak aktif)
+        */
 
-            foreach ($result1 as $itemDetail){
-                DB::table('items')
-                ->where('id', $itemDetail->itemId)
-                ->increment('amount', $itemDetail->amount);
-            }
+        $result1 = DB::table('detail_transactions as dt')
+        ->select(
+            'dt.id as id', 
+            'dt.itemId as itemId', 
+            'dt.transactionId as tranId', 
+            'dt.amount as amount', 
+        )
+        ->where('transactionId', $transactionId)
+        ->get();
 
+        foreach ($result1 as $itemDetail){
+            DB::table('items')
+            ->where('id', $itemDetail->itemId)
+            ->increment('amount', $itemDetail->amount);
         }
-
-
     }
+    public function getAllLocalTransactionData(Request $request){
+        $start=$request->start;
+        $end=$request->end;
+        $query = DB::table('transactions as t')
+        ->select(
+            't.id as id', 
+            't.transactionnum as invnum', 
+            't.pinum as pinum', 
+            'c.name as name', 
+            't.loadingDate as ld',
+            't.transactionDate as td',
+            't.departureDate as etd',
+            't.arrivalDate as eta',
+            't.transactiondate as tanggaltransaksi',
+            DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
+                WHEN t.status ="1" then "Offering"
+                WHEN t.status ="2" then "Finished"
+                WHEN t.status ="3" then "Canceled"
+                WHEN t.status ="4" then "Sailing"
+                END) AS status')
+        )
+        ->join('companies as c', 'c.id', '=', 't.companyid')
+        ->join('countries as n', 'n.id', '=', 'c.nation')
+        ->where(function($query2) use ($start, $end){
+            $query2->whereBetween('loadingDate', [$start, $end])
+            ->orWhereBetween('transactionDate', [$start, $end])
+            ->orWhereBetween('departureDate', [$start, $end])
+            ->orWhereBetween('arrivalDate', [$start, $end]);
+        })
+        ->orderBy('t.id');
+
+        if($request->statusTransaksi != -1){
+            $query->where('t.status', '=', $request->statusTransaksi);
+        }
+        $query->get();  
+
+
+        return datatables()->of($query)
+        ->addColumn('number', function ($row) {
+            $html = '
+            <div class="row form-group">
+            <span class="col-2">PI</span>
+            <span class="col-1">:</span>
+            <span class="col-8">'.$row->pinum.'</span>
+            </div>
+            <div class="row form-group">
+            <span class="col-2">INV</span>
+            <span class="col-1">:</span>
+            <span class="col-8">'.$row->invnum.'</span>
+            </div>';
+            return $html;
+        })
+        ->addColumn('tanggal', function ($row) {
+            $html = '
+            <div class="row form-group">
+            <span class="col-4">Transaksi</span>
+            <span class="col-1">:</span>
+            <span class="col-6">'.$row->td.'</span>
+            </div>
+
+            <div class="row form-group">
+            <span class="col-4">Loading</span>
+            <span class="col-1">:</span>
+            <span class="col-6">'.$row->ld.'</span>
+            </div>
+
+            <div class="row form-group">
+            <span class="col-4">Departure</span>
+            <span class="col-1">:</span>
+            <span class="col-6">'.$row->etd.'</span>
+            </div>
+
+            <div class="row form-group">
+            <span class="col-4">Arrival</span>
+            <span class="col-1">:</span>
+            <span class="col-6">'.$row->eta.'</span>
+            </div>';
+
+            return $html;
+        })
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')">
+            <i class="fa fa-plus" style="font-size:20px"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
+            <i class="fa fa-edit" style="font-size:20px"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="IPL" onclick="cetakIPL('."'".$row->id."'".')">IPL
+            </button>
+            ';
+            return $html;
+        })
+        ->rawColumns(['action', 'tanggal', 'number'])
+        ->toJson();
+    }
+
+
+}

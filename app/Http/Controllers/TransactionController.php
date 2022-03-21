@@ -26,11 +26,11 @@ class TransactionController extends Controller
     public function index()
     {
         $nations = Countries::where('isActive',1)->get();
-
         return view('transaction.transactionList', compact('nations'));
     }
-    public function getAllTransaction(Request $request){
-        return $this->transaction->getAllItemData($request);
+
+    public function getAllExportTransaction(Request $request){
+        return $this->transaction->getAllExportTransactionData($request);
     }
 
     /**
@@ -372,14 +372,25 @@ class TransactionController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Transaction  $transaction
-     * @return \Illuminate\Http\Response
+    /*
+     * LOCAL Transaction
+     * 
+     * 
      */
-    public function destroy(Transaction $transaction)
+
+    public function indexLocal()
     {
-        //
+        return view('transaction.localTransactionList');
     }
+    public function getAllLocalTransaction(Request $request){
+        return $this->transaction->getAllLocalTransactionData($request);
+    }
+    public function createLocal()
+    {
+        $companies = Company::all();
+        $rekenings = Rekening::all();
+
+        return view('transaction.localTransactionAdd', compact('companies', 'rekenings'));
+    }
+
 }
