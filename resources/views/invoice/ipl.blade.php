@@ -212,8 +212,8 @@
                         <th width="40%">Goods Description</th>
                         <th width="12%">Quantity</th>
                         <th width="15%">Net Weight</th>
-                        <th width="15%">Unit Price ({{$valutaType}})</th>
-                        <th width="18%">Total ({{$valutaType}})</th>
+                        <th width="16%">Unit Price ({{$valutaType}})</th>
+                        <th width="17%">Total ({{$valutaType}})</th>
                     </tr>
                 </thead>
                 <tbody style="font-size:12px">
@@ -234,12 +234,12 @@
                             echo number_format($detail->netweight, 2, ',', '.').' Kg'
                             @endphp
                         </td>
-                        <td width="15%" style="text-align: right;">
+                        <td width="16%" style="text-align: right;">
                             @php 
                             echo number_format($detail->price, 2, ',', '.')
                             @endphp
                         </td>
-                        <td width="18%" style="text-align: right;">
+                        <td width="17%" style="text-align: right;">
                             @php 
                             echo number_format($detail->totalPrice, 2, ',', '.')
                             @endphp
@@ -256,9 +256,9 @@
                             echo number_format($totalNetWeight, 2, ',', '.').' Kg'
                             @endphp
                         </td>
-                        <td width="15%" style="text-align: right;">
+                        <td width="16%" style="text-align: right;">
                         </td>
-                        <td width="18%" style="text-align: right;">
+                        <td width="17%" style="text-align: right;">
                             @php
                             echo number_format($totalTransactionPrice, 2, ',', '.')
                             @endphp
