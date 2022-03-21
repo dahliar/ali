@@ -213,7 +213,7 @@
                         <th width="15%">Quantity</th>
                         <th width="15%">Net Weight</th>
                         <th width="15%">Unit Price ({{$valutaType}})</th>
-                        <th width="15%">Total Amount ({{$valutaType}})</th>
+                        <th width="15%">Total ({{$valutaType}})</th>
                     </tr>
                 </thead>
                 <tbody style="font-size:12px">
