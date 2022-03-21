@@ -210,10 +210,10 @@
                 <thead style="text-align: center;">
                     <tr >
                         <th width="40%">Goods Description</th>
-                        <th width="15%">Quantity</th>
+                        <th width="12%">Quantity</th>
                         <th width="15%">Net Weight</th>
                         <th width="15%">Unit Price ({{$valutaType}})</th>
-                        <th width="15%">Total ({{$valutaType}})</th>
+                        <th width="18%">Total ({{$valutaType}})</th>
                     </tr>
                 </thead>
                 <tbody style="font-size:12px">
@@ -226,7 +226,7 @@
                     @endphp            
                     <tr >
                         <td width="40%">{{$detail->goods}}</td>
-                        <td width="15%" style="text-align: right;">
+                        <td width="12%" style="text-align: right;">
                             {{$detail->quantity}}
                         </td>
                         <td width="15%" style="text-align: right;">
@@ -239,7 +239,7 @@
                             echo number_format($detail->price, 2, ',', '.')
                             @endphp
                         </td>
-                        <td width="15%" style="text-align: right;">
+                        <td width="18%" style="text-align: right;">
                             @php 
                             echo number_format($detail->totalPrice, 2, ',', '.')
                             @endphp
@@ -250,7 +250,7 @@
                 <tfoot>
                     <tr >
                         <td width="40%"><b>TOTAL</b></td>
-                        <td width="15%"></td>
+                        <td width="12%"></td>
                         <td width="15%" style="text-align: right;">
                             @php
                             echo number_format($totalNetWeight, 2, ',', '.').' Kg'
@@ -258,7 +258,7 @@
                         </td>
                         <td width="15%" style="text-align: right;">
                         </td>
-                        <td width="15%" style="text-align: right;">
+                        <td width="18%" style="text-align: right;">
                             @php
                             echo number_format($totalTransactionPrice, 2, ',', '.')
                             @endphp
