@@ -226,8 +226,16 @@
                     @endphp            
                     <tr >
                         <td width="40%">{{$detail->goods}}</td>
-                        <td width="15%" style="text-align: right;">{{$detail->quantity}}</td>
-                        <td width="15%" style="text-align: right;">{{$detail->netweight}} Kg</td>
+                        <td width="15%" style="text-align: right;">
+                            @php 
+                            echo number_format($detail->quantity, 2, ',', '.')
+                            @endphp
+                        </td>
+                        <td width="15%" style="text-align: right;">
+                            @php 
+                            echo number_format($detail->netweight, 2, ',', '.').' Kg'
+                            @endphp
+                        </td>
                         <td width="15%" style="text-align: right;">
                             @php 
                             echo number_format($detail->price, 2, ',', '.')
