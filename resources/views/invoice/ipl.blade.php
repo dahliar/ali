@@ -247,7 +247,7 @@
                     </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
+                <tfoot style="font-size:12px">
                     <tr >
                         <td width="40%"><b>TOTAL</b></td>
                         <td width="12%"></td>
