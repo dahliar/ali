@@ -10,6 +10,7 @@ class DashboardController extends Controller
     public function index()
     {
         //BELUM GENERATE
+        /*
         $lembur = DB::table('dailysalaries as ds')
         ->select(
             DB::raw('count(distinct(ds.employeeId)) as jumlah')
@@ -49,11 +50,9 @@ class DashboardController extends Controller
         ->where('h.isGenerated', '=', '0')
         ->where('h.isPaid', '=', null)
         ->first();
-        $ungenerate=[$lembur->jumlah, $harian->jumlah, $borongan->jumlah, $honorarium->jumlah];
-
-
-
-
+        */
+        $ungenerate=[0, 0, 0, 0];
+        /*
         //Sudah GENERATE tapi BELUM BAYAR
         $lembur = DB::table('dailysalaries as ds')
         ->select(
@@ -95,9 +94,9 @@ class DashboardController extends Controller
         ->join('employees as e', 'e.id', '=', 'h.employeeId')
         ->where('h.isGenerated', '=', '1')
         ->where('h.isPaid', '=', null)
-        ->first();
+        ->first();*/
 
-        $unpaid=[$lembur->jumlah, $harian->jumlah, $borongan->jumlah, $honorarium->jumlah];
+        $unpaid=[0,0,0,0];
 
         return view('home', compact('unpaid', 'ungenerate'));
     }
