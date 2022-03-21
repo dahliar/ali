@@ -227,9 +227,7 @@
                     <tr >
                         <td width="40%">{{$detail->goods}}</td>
                         <td width="15%" style="text-align: right;">
-                            @php 
-                            echo number_format($detail->quantity, 2, ',', '.')
-                            @endphp
+                            {{$detail->quantity}}
                         </td>
                         <td width="15%" style="text-align: right;">
                             @php 
