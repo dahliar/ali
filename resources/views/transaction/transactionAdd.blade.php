@@ -122,7 +122,7 @@
 <div class="row">
     <div class="col-1"></div>
     <div class="col-10">
-        <form id="TransactionForm" action="{{route('transactionStore')}}"  method="get" name="TransactionForm">
+        <form id="TransactionForm" action="{{url('transactionStore')}}"  method="POST" name="TransactionForm">
             @csrf
             <div class="d-grid gap-1">
                 <div class="row form-group">

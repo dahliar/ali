@@ -43,11 +43,25 @@
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>
-					<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-funnel-dollar"></i> Transaksi Penjualan
+					<a class="dropdown-item"><i class="fas fa-file-invoice-dollar"></i> Penjualan &raquo;
+					</a>
+					<ul class="dropdown-menu dropdown-submenu">
+						<li>
+							<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-ship"></i> Export
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('localTransactionList')}}"><i class="fas fa-truck"></i> Lokal
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a class="dropdown-item" href="{{ url('purchaseList')}}"><i class="fas fa-shopping-cart"></i> Pembelian
 					</a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Perusahaan Supplier/Buyer 
+					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Perusahaan Supplier/Buyer
 					</a>
 				</li>
 			</ul>

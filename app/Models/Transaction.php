@@ -30,7 +30,6 @@ class Transaction extends Model
             't.transactionDate as td',
             't.departureDate as etd',
             't.arrivalDate as eta',
-            't.transactiondate as tanggaltransaksi',
             DB::raw('(CASE WHEN t.isundername ="1" THEN "Internal"
                 WHEN t.isundername ="2" then "Undername" END) AS undername'),
             DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
@@ -42,13 +41,14 @@ class Transaction extends Model
         )
         ->join('companies as c', 'c.id', '=', 't.companyid')
         ->join('countries as n', 'n.id', '=', 'c.nation')
+        ->where('t.jenis', '=', 1)
         ->where(function($query2) use ($start, $end){
             $query2->whereBetween('loadingDate', [$start, $end])
             ->orWhereBetween('transactionDate', [$start, $end])
             ->orWhereBetween('departureDate', [$start, $end])
             ->orWhereBetween('arrivalDate', [$start, $end]);
         })
-        ->orderBy('t.id');
+        ->orderBy('t.id', 'desc');
 
         if($request->negara != -1){
             $query->where('n.id', '=', $request->negara);
@@ -108,10 +108,10 @@ class Transaction extends Model
         ->addColumn('action', function ($row) {
             $html = '
             <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')">
-            <i class="fa fa-plus" style="font-size:20px"></i>
+            <i class="fa fa-plus""></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
-            <i class="fa fa-edit" style="font-size:20px"></i>
+            <i class="fa fa-edit""></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="PI" onclick="cetakPI('."'".$row->id."'".')">PI
             </button>
@@ -124,6 +124,7 @@ class Transaction extends Model
         ->toJson();
     }
 
+    /*
     public function getAllTransactionData($jenis, $negara, $statusTransaksi, $start, $end){
         $query = DB::table('transactions as t')
         ->select(
@@ -146,7 +147,8 @@ class Transaction extends Model
         )
         ->whereBetween('transactionDate', [$end, $start])
         ->join('companies as c', 'c.id', '=', 't.companyid')
-        ->join('countries as n', 'n.id', '=', 'c.nation');
+        ->join('countries as n', 'n.id', '=', 'c.nation')
+        ->orderBy('t.id', 'desc');
 
         if ($jenis!=-1){
             $query->where('t.isundername', $jenis);
@@ -164,10 +166,10 @@ class Transaction extends Model
         ->addColumn('action', function ($row) {
             $html = '
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')">
-            <i class="fa fa-plus" style="font-size:20px"></i>
+            <i class="fa fa-plus""></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
-            <i class="fa fa-edit" style="font-size:20px"></i>
+            <i class="fa fa-edit""></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="PI" onclick="cetakPI('."'".$row->id."'".')">PI
             </button>
@@ -177,6 +179,8 @@ class Transaction extends Model
             return $html;
         })->addIndexColumn()->toJson();
     }
+    */
+
 
     public function whenUndernameIsTrue($transactionId){
         /****
@@ -276,23 +280,23 @@ class Transaction extends Model
             't.transactionDate as td',
             't.departureDate as etd',
             't.arrivalDate as eta',
-            't.transactiondate as tanggaltransaksi',
-            DB::raw('(CASE WHEN t.status ="0" THEN "New Submission"
-                WHEN t.status ="1" then "Offering"
-                WHEN t.status ="2" then "Finished"
-                WHEN t.status ="3" then "Canceled"
-                WHEN t.status ="4" then "Sailing"
+            DB::raw('(CASE
+                WHEN t.status ="1" then "Transaksi baru"
+                WHEN t.status ="2" then "Selesai"
+                WHEN t.status ="3" then "Batal"
+                WHEN t.status ="4" then "Dalam perjalanan"
                 END) AS status')
         )
         ->join('companies as c', 'c.id', '=', 't.companyid')
         ->join('countries as n', 'n.id', '=', 'c.nation')
+        ->where('t.jenis', '=', 2)
         ->where(function($query2) use ($start, $end){
             $query2->whereBetween('loadingDate', [$start, $end])
             ->orWhereBetween('transactionDate', [$start, $end])
             ->orWhereBetween('departureDate', [$start, $end])
             ->orWhereBetween('arrivalDate', [$start, $end]);
         })
-        ->orderBy('t.id');
+        ->orderBy('t.transactionnum');
 
         if($request->statusTransaksi != -1){
             $query->where('t.status', '=', $request->statusTransaksi);
@@ -301,63 +305,21 @@ class Transaction extends Model
 
 
         return datatables()->of($query)
-        ->addColumn('number', function ($row) {
-            $html = '
-            <div class="row form-group">
-            <span class="col-2">PI</span>
-            <span class="col-1">:</span>
-            <span class="col-8">'.$row->pinum.'</span>
-            </div>
-            <div class="row form-group">
-            <span class="col-2">INV</span>
-            <span class="col-1">:</span>
-            <span class="col-8">'.$row->invnum.'</span>
-            </div>';
-            return $html;
-        })
-        ->addColumn('tanggal', function ($row) {
-            $html = '
-            <div class="row form-group">
-            <span class="col-4">Transaksi</span>
-            <span class="col-1">:</span>
-            <span class="col-6">'.$row->td.'</span>
-            </div>
-
-            <div class="row form-group">
-            <span class="col-4">Loading</span>
-            <span class="col-1">:</span>
-            <span class="col-6">'.$row->ld.'</span>
-            </div>
-
-            <div class="row form-group">
-            <span class="col-4">Departure</span>
-            <span class="col-1">:</span>
-            <span class="col-6">'.$row->etd.'</span>
-            </div>
-
-            <div class="row form-group">
-            <span class="col-4">Arrival</span>
-            <span class="col-1">:</span>
-            <span class="col-6">'.$row->eta.'</span>
-            </div>';
-
-            return $html;
-        })
         ->addColumn('action', function ($row) {
             $html = '
             <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')">
-            <i class="fa fa-plus" style="font-size:20px"></i>
+            <i class="fa fa-plus""></i>
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
-            <i class="fa fa-edit" style="font-size:20px"></i>
+            <i class="fa fa-edit""></i>
             </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="IPL" onclick="cetakIPL('."'".$row->id."'".')">IPL
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Invoice" onclick="cetakIPL('."'".$row->id."'".')">Invoice
             </button>
             ';
             return $html;
         })
         ->rawColumns(['action', 'tanggal', 'number'])
-        ->toJson();
+        ->addIndexColumn()->toJson();
     }
 
 

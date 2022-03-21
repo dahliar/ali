@@ -59,7 +59,7 @@ Route::get('transactionList',[TransactionController::class, 'index'])->middlewar
 Route::get('transactionAdd',[TransactionController::class, 'create'])->middleware(['auth']);
 Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth']);
 Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'])->middleware(['auth']);
-Route::get('transactionStore',[TransactionController::class, 'store'])->middleware(['auth'])->name('transactionStore');
+Route::POST('transactionStore',[TransactionController::class, 'store'])->middleware(['auth']);
 Route::POST('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth'])->name('transactionUpdate');
 
 
@@ -78,9 +78,16 @@ Route::get('/transaction/ipl/{transaction}', [InvoiceController::class, 'cetak_i
 *   Route Transaksi Penjualan Lokal
 *
 */
-Route::get('localTransactionList',[TransactionController::class, 'indexLocal'])->middleware(['auth']);
+Route::get('localTransactionList',[TransactionController::class, 'localIndex'])->middleware(['auth']);
 Route::GET('getAllLocalTransaction', [TransactionController::class, 'getAllLocaltransaction'])->middleware(['auth']);
-Route::get('localTransactionAdd',[TransactionController::class, 'createLocal'])->middleware(['auth']);
+Route::get('localTransactionAdd',[TransactionController::class, 'localCreate'])->middleware(['auth']);
+Route::POST('localTransactionStore',[TransactionController::class, 'localStore'])->middleware(['auth']);
+Route::get('localTransactionEdit/{transaction}',[TransactionController::class, 'localEdit'])->middleware(['auth']);
+Route::POST('localTransactionUpdate',[TransactionController::class, 'localUpdate'])->middleware(['auth']);
+Route::get('/transaction/localIpl/{transaction}', [InvoiceController::class, 'cetak_local_ipl'])->middleware(['auth']);
+
+
+
 
 /*
 *   Route Transaksi Pembelian/Purchase

@@ -197,6 +197,24 @@ class InvoiceController extends Controller
         $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
         return $pdf->download($filename);
     }
+    public function cetak_local_ipl(Transaction $transaction)
+    {
+        $detailTransactions = $this->invoice->getOneInvoiceDetail($transaction->id);
+        $companyName = Company::select('name')->where('id',$transaction->companyId)->first();
+
+        $rekening = Rekening::where('id',$transaction->rekeningid)->first();
+        $valutaType = "";
+        switch($transaction->valutaType){
+            case(1) : $valutaType="Rp";   break;
+            case(2) : $valutaType="USD";  break;
+            case(3) : $valutaType="RMB";  break;
+        }
+        $payerName = Auth::user()->name;
+
+        $pdf = PDF::loadview('invoice.localIpl', compact('valutaType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
+        $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
+        return $pdf->download($filename);
+    }
 
 
     public function cetakNotaPembelian(Purchase $purchase)

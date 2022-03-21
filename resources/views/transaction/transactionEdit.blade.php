@@ -457,12 +457,12 @@
                                 </select>
                             </div>                    
                         </div> 
-                        @if ($transaction->status == 1)
                         <div class="row form-group">
                             <div class="col-md-3 text-md-right">
                                 <span class="label">Status</span>
                             </div>
                             <div class="col-md-3">
+                                @if ($transaction->status == 1)
                                 <select id="status" name="status" class="form-select" >
                                     <option value="-1">--Choose One--</option>
                                     <option value="1" @if($transaction->status == 1) selected @endif>Penawaran</option>
@@ -470,37 +470,23 @@
                                     <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
                                     <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
                                 </select>
-                            </div>
-                        </div> 
-                        @endif
-                        @if (($transaction->status == 2) or ($transaction->status == 3))
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label">Status</span>
-                            </div>
-                            <div class="col-md-3">
+                                @endif
+                                @if (($transaction->status == 2) or ($transaction->status == 3))
                                 <select id="status" name="status" class="form-select" disabled>
                                     <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
                                     <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
                                 </select>
-                            </div>
-                        </div> 
-                        @endif
-                        @if($transaction->status == 4)
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label">Status</span>
-                            </div>
-                            <div class="col-md-3">
+                                @endif
+                                @if($transaction->status == 4)
                                 <select id="status" name="status" class="form-select">
                                     <option value="-1">--Choose One--</option>
                                     <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
                                     <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
                                     <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
                                 </select>
+                                @endif
                             </div>
                         </div> 
-                        @endif
 
                         <table width="100%">
                             <tr>

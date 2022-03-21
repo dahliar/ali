@@ -7,17 +7,6 @@
 
 <script type="text/javascript"> 
     $(document).ready(function() {
-        var i=1;
-        $('#add').click(function(){
-            i++;  
-            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">notes</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>'); 
-        });
-        $(document).on('click', '.btn_remove', function(){  
-            var button_id = $(this).attr("id");   
-            $('#row'+button_id+'').remove();  
-        });
-
-
         $('#rekening').on('change', function() {
             var rekening = $(this).val();
             if (rekening>0){
@@ -48,11 +37,14 @@
                     success:function(data){
                         if(data){
                             $('[name="companydetail"]').val(data.address+'. '+data.nation);
+                            $('[name="companyName"]').val(data.name);
                         }else{
                         }
                     }
                 });
             }else{
+                $('[name="companydetail"]').val("");
+                $('[name="companyName"]').val("");
                 swal.fire('warning','Choose Company first!','info');
             }
         });
@@ -120,37 +112,14 @@
 <div class="row">
     <div class="col-1"></div>
     <div class="col-10">
-        <form id="TransactionForm" action="{{route('transactionStore')}}"  method="get" name="TransactionForm">
+        <form id="TransactionForm" action="{{url('localTransactionStore')}}"  method="POST" name="TransactionForm">
             @csrf
             <div class="d-grid gap-1">
                 <div class="row form-group">
                     <div class="col-md-3 text-md-right">
-                        <span class="label" id="spanBank">Bank*</span>
-                    </div>
-                    <div class="col-md-4">
-                        <select class="form-select w-100" id="rekening" name="rekening">
-                            <option value="-1">--Choose One--</option>
-                            @foreach ($rekenings as $rekening)
-                            @if ( $rekening->id == old('rekening') )
-                            <option value="{{ $rekening->id }}" selected>{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>
-                            @else
-                            <option value="{{ $rekening->id }}">{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>
-                            @endif
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="input-group">
-                            <span class="input-group-text col-3">Valuta</span>
-                            <input id="valuta" name="valuta" rows="4"  class="form-control" value="{{ old('valuta') }}" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-3 text-md-right">
                         <span class="label" id="companyName">Pembeli*</span>
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-4">
                         <select id="company" name="company" class="form-select" >
                             <option value="-1">--Choose One--</option>
                             @foreach ($companies as $company)
@@ -161,6 +130,7 @@
                             @endif
                             @endforeach
                         </select>
+                        <input type="hidden" id="companyName" name="companyName" class="form-control" value="{{ old('companyName') }}" readonly>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -214,7 +184,30 @@
                             <input type="date" id="loadingDate" name="loadingDate" value="{{ old('loadingDate', date('Y-m-d')) }}" class="form-control text-end">
                         </div>
                     </div>
-                </div>                              
+                </div>          
+                <div class="row form-group">
+                    <div class="col-md-3 text-md-right">
+                        <span class="label" id="spanBank">Bank*</span>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select w-100" id="rekening" name="rekening">
+                            <option value="-1">--Choose One--</option>
+                            @foreach ($rekenings as $rekening)
+                            @if ( $rekening->id == old('rekening') )
+                            <option value="{{ $rekening->id }}" selected>{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>
+                            @else
+                            <option value="{{ $rekening->id }}">{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>
+                            @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <span class="input-group-text col-3">Valuta</span>
+                            <input id="valuta" name="valuta" class="form-control" value="{{ old('valuta') }}" readonly>
+                        </div>
+                    </div>
+                </div>                    
                 <div class="row form-group">
                     <div class="col-md-3 text-md-right">
                         <span class="label" id="spanPayment">Valuta bayar*</span>
@@ -239,10 +232,9 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row form-group">
                     <div class="col-md-3 text-md-right">
-                        <span class="label" id="spanPayment">Jumlah DP*</span>
+                        <span class="label" id="spanPayment">Uang muka*</span>
                     </div>
                     <div class="col-md-5">
                         <div class="input-group">
@@ -251,32 +243,17 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-md-3 text-md-right"></div>
-                <div class="text-center col-md-8">
-                    <button type="submit" class="btn btn-primary">Save</button>
-                    <input type="reset" value="Reset" class="btn btn-secondary">
+                <div class="row form-group">
+                    <div class="col-md-3 text-md-right"></div>
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <input type="reset" value="Reset" class="btn btn-secondary">
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-</div>
-
-@if ($errors->any())
-@if (!empty(old('pinotes')))
-<script type="text/javascript">
-    var i=1;
-    var $arr = @json(old('pinotes'));
-    for ($note of $arr){
-        i++;  
-        $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">'+$note+'</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');  
-    }
-</script>
-@endif
-@endif
-
 @else
 @include('partial.noAccess')
 @endif

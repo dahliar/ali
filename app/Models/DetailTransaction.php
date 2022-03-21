@@ -48,7 +48,7 @@ class DetailTransaction extends Model
         return datatables()->of($query)
         ->addColumn('weight', function ($row) {
 
-            
+
             $html = number_format(($row->jumlah * $row->wb), 2, ',', '.').' Kg';
             return $html;
         })

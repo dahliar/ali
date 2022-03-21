@@ -22,7 +22,7 @@
         window.open(('{{ url("detailtransactionList") }}'+"/"+id), '_blank');
     }
     function editTransaksi(id){
-        window.open(('{{ url("transactionEdit") }}'+"/"+id), '_self');
+        window.open(('{{ url("localTransactionEdit") }}'+"/"+id), '_self');
     }
     function tambahTransaksi(){
         window.open(('{{ url("localTransactionAdd") }}'), '_self');
@@ -32,7 +32,7 @@
         window.open(('{{ url("transaction/pi") }}'+"/"+id), '_blank');
     }
     function cetakIPL(id){
-        window.open(('{{ url("transaction/ipl") }}'+"/"+id), '_blank');
+        window.open(('{{ url("transaction/localIpl") }}'+"/"+id), '_blank');
     }
 
     function myFunction(){
@@ -49,10 +49,10 @@
             },
             ajax:{
                 url: '{{ url("getAllLocalTransaction") }}',
-                data: function (d){
-                    d.statusTransaksi = statusTransaksi,
-                    d.start = start,
-                    d.end = end
+                data: function (data){
+                    data.statusTransaksi = statusTransaksi,
+                    data.start = start,
+                    data.end = end
                 }
             },
             dataType: 'json',            
@@ -62,17 +62,19 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "20%", "targets":  [0], "className": "text-left"   },
-            {   "width": "15%",  "targets": [1], "className": "text-left" },
+            {   "width": "10%", "targets":   [0], "className": "text-left" },
+            {   "width": "30%", "targets":  [1], "className": "text-left" },
             {   "width": "15%",  "targets": [2], "className": "text-left" },
-            {   "width": "15%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":   [4], "className": "text-left" }
+            {   "width": "15%",  "targets": [3], "className": "text-left" },
+            {   "width": "15%", "targets":  [4], "className": "text-left" },
+            {   "width": "15%", "targets":  [5], "className": "text-left" }
             ], 
 
             columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
-            {data: 'number', name: 'number'},
-            {data: 'tanggal', name: 'tanggal'},
+            {data: 'invnum', name: 'invnum'},
+            {data: 'td', name: 'td'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -152,9 +154,10 @@
                     <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                         <thead>
                             <tr style="font-size: 12px;">
+                                <th>No</th>
                                 <th>Perusahaan</th>
                                 <th>No Surat</th>
-                                <th>Tanggal</th>
+                                <th>Tanggal Transaksi</th>
                                 <th>Status</th>
                                 <th>Act</th>
                             </tr>

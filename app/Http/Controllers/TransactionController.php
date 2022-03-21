@@ -44,7 +44,7 @@ class TransactionController extends Controller
     {
         $companies = Company::all();
         $rekenings = Rekening::all();
-        $forwarders = Forwarder::orderBy('name', 'ASC')->get();
+        $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         $countryRegister = Countries::where('isActive',1)->get();
 
         //$notes = TransactionNote::where('transactionId',$transaction->id)->get();
@@ -148,7 +148,8 @@ class TransactionController extends Controller
             'arrivalDate' => $request->arrivalDate,
             'shippedDatePlan' => $request->shippedDatePlan,
             'paymentPlan' => $request->paymentPlan,
-            'status' =>  1
+            'status' =>  1,
+            'jenis' => 1
         ];
         
         $lastTransactionIdStored = $this->transaction->storeOneTransaction($data);
@@ -205,7 +206,7 @@ class TransactionController extends Controller
         $companies = Company::all();
         $rekenings = Rekening::all();
         $countryRegister = Countries::where('isActive',1)->get();
-        $forwarders = Forwarder::orderBy('name', 'ASC')->get();
+        $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         
         $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
@@ -378,19 +379,174 @@ class TransactionController extends Controller
      * 
      */
 
-    public function indexLocal()
+    public function localIndex()
     {
         return view('transaction.localTransactionList');
     }
     public function getAllLocalTransaction(Request $request){
         return $this->transaction->getAllLocalTransactionData($request);
     }
-    public function createLocal()
+    public function localCreate()
     {
         $companies = Company::all();
         $rekenings = Rekening::all();
 
         return view('transaction.localTransactionAdd', compact('companies', 'rekenings'));
+    }
+
+    public function localStore(Request $request)
+    {   
+        $request->validate(
+            [
+                'rekening' => 'required|gt:0',
+                'valuta' => 'required',
+                'company' => 'required|gt:0',
+                'companydetail' => 'required',
+                'loadingPort' => 'required',
+                'destinationPort' => 'required',
+                'containerParty' => 'required',
+                'transactionDate' => 'required|date|before_or_equal:today',
+                'loadingDate' => 'required|date',
+                'valutaType' => 'required|gt:0',
+                'payment' => 'required|gt:0',
+                'advance' => 'required|gte:0',
+            ],
+            [
+                'rekening.gt'=> 'Pilih salah satu rekening',
+                'company.gt'=> 'Pilih salah satu perusahaan',
+                'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
+            ]
+        );
+
+        //21 validasi inputan wajib
+        //2 default value dari inputan : swiftcode, valuta
+        //3 inputan default: userId, creationDate, status
+        $data = [
+            'countryId' => 10,
+            'forwarderid' => 9,
+            'status' =>  1,
+            'orderType' => 1,
+            'isundername' => 1,
+            'userId' => auth()->user()->id,
+            'rekeningId' => $request->rekening,
+            'valuta' => $request->valuta,
+            'companyId' =>  $request->company,
+            'companydetail' =>  $request->companydetail,
+            'loadingport' =>  $request->loadingPort,
+            'destinationport' =>  $request->destinationPort,
+            'containerParty' =>  $request->containerParty,
+            'transactionDate' => $request->transactionDate,
+            'loadingDate' =>  $request->loadingDate,
+            'valutaType' =>  $request->valutaType,
+            'payment' =>  $request->payment,
+            'advance' =>  $request->advance,
+            'creationDate' =>  date('Y-m-d'),
+            'jenis' => 2
+        ];
+        
+        $lastTransactionIdStored = DB::table('transactions')->insertGetId($data);
+        $companyName=Company::select('name')->where('id', $request->company)->value('name');
+        return redirect('localTransactionList')
+        ->with('status','Transaksi penjualan ke '.$companyName.' berhasil ditambahkan.');
+    }
+
+    public function localEdit(Transaction $transaction)
+    {
+        $companyName = Company::where('id', '=', $transaction->companyId)->first()->name;
+        $rekenings = Rekening::all();
+        return view('transaction.localTransactionEdit', compact('companyName', 'rekenings', 'transaction'));
+    }
+
+    public function localUpdate(Request $request, Transaction $transaction)
+    {
+        $request->validate([
+            'companydetail' => 'required',
+            'loadingPort' => 'required',
+            'destinationPort' => 'required',
+            'containerParty' => 'required',
+            'transactionDate' => 'required|date|before_or_equal:today',
+            'loadingDate' => 'required|date',
+            'rekening' => 'required|gt:0',
+            'valuta' => 'required',
+            'valutaType' => 'required|gt:0',
+            'payment' => 'required|gt:0',
+            'advance' => 'required|gt:0',
+            'status' => 'required|gt:0'
+        ],[
+            'rekening.gt'=> 'Pilih salah satu rekening',
+            'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
+            'status.gt'=> 'Pilih salah satu jenis status',
+        ]);
+
+        //check dlu apakah jumlah barangnya cukup atau ngga
+        //cek disini
+        $result = DB::table('detail_transactions as dt')
+        ->select(
+            'dt.itemId as itemId', 
+            DB::raw('concat(sp.name," ",g.name," ", s.name) as itemName'),
+            DB::raw('sum(dt.amount) as amount'),
+            'i.amount as currentAmount'
+        )
+        ->join('items as i', 'i.id', '=', 'dt.itemId')
+        ->join('grades as g', 'i.gradeid', '=', 'g.id')
+        ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->where('transactionId', $request->transactionId)
+        ->orderBy('sp.name', 'desc')
+        ->orderBy('g.name', 'asc')
+        ->orderByRaw('s.name+0', 'asc')
+        ->groupBy('i.id')
+        ->get();
+
+        $jumlahBarangNotEnough=0;
+        $listBarang=array();
+        foreach ($result as $dtitem){
+            if ($dtitem->amount>$dtitem->currentAmount){
+                $jumlahBarangNotEnough++;
+                array_push($listBarang, $dtitem->itemName);
+            }
+        }
+
+        if (($jumlahBarangNotEnough<=0) or ($request->status==3)) {
+            $result = DB::table('transactions')
+            ->select('status')
+            ->where('id', $request->transactionId)
+            ->first();
+
+            $curStatus=$result->status;
+            $tnum=$request->transactionNum;
+
+            //generate nomor invoice dilakukan pada saat perubahan dari penawaran ke loading atau selesai
+            if (($curStatus==1) and (($request->status == 2) or ($request->status == 4))){
+                $this->inv = new InvoiceController();
+                $tnum = $this->inv->createtransactionnum($request->transactionId);
+            }
+
+            $data = [
+                'userId' => auth()->user()->id,
+                'transactionNum' => $tnum,
+                'companydetail' =>  $request->companydetail,
+                'loadingport' =>  $request->loadingPort,
+                'destinationport' =>  $request->destinationPort,
+                'containerParty' =>  $request->containerParty,
+                'transactionDate' => $request->transactionDate,
+                'loadingDate' =>  $request->loadingDate,
+                'rekeningId' => $request->rekening,
+                'valuta' => $request->valuta,
+                'valutaType' =>  $request->valutaType,
+                'payment' =>  $request->payment,
+                'advance' =>  $request->advance,
+                'status' =>  $request->status
+            ];
+
+            $oneStore = $this->transaction->updateOneTransaction($data, $request->transactionId, $curStatus);
+            return redirect('localTransactionList')
+            ->with('status','Update Transaksi penjualan ke '.$request->companyName.' berhasil diperbaharui.');
+        }else{
+            return redirect('localTransactionList')
+            ->with('status', 'Update Transaksi gagal, jumlah stock tidak mencukupi')
+            ->with('listBarang', $listBarang);
+        }
     }
 
 }
