@@ -247,7 +247,6 @@
                         <td width="15%"></td>
                         <td width="15%" style="text-align: right;">
                             @php
-                            echo 
                             echo number_format($totalNetWeight, 2, ',', '.').' Kg'
                             @endphp
                         </td>
