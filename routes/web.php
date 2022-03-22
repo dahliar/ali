@@ -139,6 +139,9 @@ Route::get('speciesStockList',[ItemController::class, 'indexStockSpecies'])->mid
 Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->middleware(['auth']);
 
 
+Route::get('priceList',[ItemController::class, 'indexHarga'])->middleware(['auth']);
+Route::post('getPriceList', [ItemController::class, 'getPriceList'])->middleware(['auth']);
+
 
 
 

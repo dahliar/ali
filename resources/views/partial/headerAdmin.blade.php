@@ -63,6 +63,7 @@
 					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Perusahaan Supplier/Buyer
 					</a>
 				</li>
+
 			</ul>
 		</li>
 

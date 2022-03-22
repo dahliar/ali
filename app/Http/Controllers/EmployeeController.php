@@ -331,7 +331,8 @@ class EmployeeController extends Controller
             'gajipokok'             => $request->gajiPokok,
             'uangharian'            => $request->uangHarian,
             'isactive'              => 1,
-            'uanglembur'            => $request->uangLembur
+            'uanglembur'            => $request->uangLembur,
+            'updatedBy'             => Session()->get('employeeId')
         ];
         $this->employee->userMappingUpdate($dataOrgStructure, $request->mappingid);
 
