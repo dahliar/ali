@@ -10,7 +10,7 @@
 
 
 @section('content')
-@if ((Auth::user()->isProduction() or Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
+@if (Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -34,6 +34,7 @@
                     d.end = end;
                 },
                 type: 'post',
+
             },
             serverSide: false,
             processing: true,
@@ -54,6 +55,7 @@
             {data: 'avgPrice', name: 'avgPrice'},
             {data: 'maxPrice', name: 'maxPrice'}
             ]
+
         });
     }
 
