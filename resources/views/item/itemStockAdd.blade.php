@@ -161,7 +161,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input oninput="totalAmount()" id="packedTambah" name="packedTambah" value="{{ old('packedTambah',0) }}" type="number" class="form-control text-end">
+                                    <input oninput="totalAmount()" id="packedTambah" name="packedTambah" value="{{ old('packedTambah',0) }}" type="number" class="form-control text-end" step="0.01">
                                     <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
                                 </div>
                             </div>
@@ -209,7 +209,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input oninput="totalAmount()" id="unpackedTambah" name="unpackedTambah" value="{{ old('unpackedTambah',0) }}" type="number" class="form-control text-end">
+                                    <input oninput="totalAmount()" id="unpackedTambah" name="unpackedTambah" value="{{ old('unpackedTambah',0) }}" type="number" class="form-control text-end" step="0.01">
                                     <span class="input-group-text col-3">Kg</span>
                                 </div>
                             </div>
