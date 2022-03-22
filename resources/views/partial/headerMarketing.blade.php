@@ -37,7 +37,7 @@
 				<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-warehouse"></i>Stock per-Barang</a></li>
 			</ul>
 		</li>
-		<li class="nav-item dropdown">
+				<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 				<i class="fas fa-file-contract"></i> Transaksi
 			</a>
@@ -62,6 +62,11 @@
 				</li>
 				<li>
 					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Perusahaan Supplier/Buyer
+					</a>
+				</li>
+				<li><hr class="dropdown-divider"></li>
+				<li>
+					<a class="dropdown-item" href="{{ url('priceList')}}"><i class="fas fa-store"></i> Informasi Harga
 					</a>
 				</li>
 			</ul>
