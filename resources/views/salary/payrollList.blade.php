@@ -37,17 +37,25 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left" },
+            {   "width": "10%", "targets":  [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "20%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
+            {   "width": "10%", "targets":  [3], "className": "text-left" },
+            {   "width": "15%", "targets":  [4], "className": "text-end" },
+            {   "width": "15%", "targets":  [5], "className": "text-end" },
+            {   "width": "15%", "targets":  [6], "className": "text-end" },
+            {   "width": "15%", "targets":  [7], "className": "text-end" },
+            {   "width": "5%", "targets":  [8], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex',   name: 'DT_RowIndex'},
             {data: 'payDate',       name: 'payDate'},
             {data: 'generator',     name: 'generator'},
-            {data: 'total',         name: 'total'},
+            {data: 'totalPegawai',  name: 'totalPegawai'},
+            {data: 'harian',        name: 'harian'},
+            {data: 'borongan',      name: 'borongan'},
+            {data: 'honorarium',    name: 'honorarium'},
+            {data: 'totalBayar',    name: 'totalBayar'},
             {data: 'action',        name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -105,9 +113,13 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Tanggal Payroll</th>
+                            <th>Tanggal</th>
                             <th>Generator</th>
-                            <th>Jumlah Pegawai</th>
+                            <th>Jumlah</th>
+                            <th>Harian</th>
+                            <th>Borongan</th>
+                            <th>Honorarium</th>
+                            <th>Total</th>
                             <th>Act</th>
                         </tr>
                     </thead>
@@ -120,7 +132,6 @@
 
 
     <ol>
-        <li></li>
         <li>Laman ini digunakan untuk melihat daftar gaji yang harus dibayarkan</li>
         <li>Ketika dilakukan </li>
     </ol>

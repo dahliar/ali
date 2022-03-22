@@ -1114,7 +1114,10 @@ class SalaryController extends Controller
             'p.id as id',
             'p.payDate as payDate',
             'u.name as generator',
-            DB::raw('count(dp.id) as total'),
+            DB::raw('count(dp.id) as totalPegawai'),
+            DB::raw('sum(dp.harian) as harian'),
+            DB::raw('sum(dp.borongan) as borongan'),
+            DB::raw('sum(dp.honorarium) as honorarium'),
             'p.id as action'
 
         )
@@ -1126,8 +1129,22 @@ class SalaryController extends Controller
 
         return datatables()->of($query)
         ->addIndexColumn()
-        ->editColumn('total', function ($row) {
-            return $row->total.' Pegawai';
+
+        
+        ->editColumn('totalPegawai', function ($row) {
+            return $row->totalPegawai.' Pegawai';
+        })
+        ->editColumn('totalBayar', function ($row) {
+            return 'Rp. '.number_format(($row->harian+$row->borongan+$row->honorarium), 2, ',', '.');
+        })
+        ->editColumn('harian', function ($row) {
+            return 'Rp. '.number_format($row->harian, 2, ',', '.');
+        })
+        ->editColumn('borongan', function ($row) {
+            return 'Rp. '.number_format($row->borongan, 2, ',', '.');
+        })
+        ->editColumn('honorarium', function ($row) {
+            return 'Rp. '.number_format($row->honorarium, 2, ',', '.');
         })
         ->addColumn('action', function ($row) {
             /*
