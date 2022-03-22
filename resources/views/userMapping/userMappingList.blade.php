@@ -1,3 +1,5 @@
+<!--pageId == 1-->
+<meta name="_token" content="{{ csrf_token() }}">
 @extends('layouts.layout')
 
 @section('header')
@@ -9,78 +11,62 @@
 @endsection
 
 @section('content')
-@if (Auth::user()->isAdmin() and Session::has('employeeId') and (Session()->get('levelAccess') <= 3))
+@if (Auth::user()->haveAccess(1, 3, auth()->user()->id))
+
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    function employeePresenceHistory(id){
-        window.open(('{{ url("employeePresenceHarianHistory") }}'+"/"+id), '_blank');
-    }
-    function slipGajiPegawai(id){
-        alert("belum");
+    function userMapping($userId){
         var mapForm = document.createElement("form");
-        mapForm.target = "_blank";    
+        mapForm.target = "_self";    
         mapForm.method = "POST";
-        mapForm.action = "{{url("slipGajiKaryawan")}}";
+        mapForm.action = "{{url("userMapping")}}";
 
-        var mapInput = document.createElement("input");
-        mapInput.type = "text";
-        mapInput.name = "empid";
-        mapInput.value = id;
+        var csrftoken = document.createElement("input");
+        csrftoken.type = "hidden";
+        csrftoken.name = "_token";
+        csrftoken.value = "{{ csrf_token() }}";
+        mapForm.appendChild(csrftoken);
 
-        mapForm.appendChild(mapInput);
+
+        var uid = document.createElement("input");
+        uid.type = "hidden";
+        uid.name = "userId";
+        uid.value = $userId;
+
+        mapForm.appendChild(uid);
 
         document.body.appendChild(mapForm);
         mapForm.submit();
     }
 
-    function editEmployee(id){
-        window.open(('{{ url("employeeEdit") }}'+"/"+id), '_self');
-    }
-    function editPassword(id){
-        window.open(('{{ url("passedit") }}'+"/"+id), '_self');
-    }
-    function editPemetaan(id){
-        window.open(('{{ url("employeeMappingEdit") }}'+"/"+id), '_self');
-    }
-
-    function tambahTransaksi(){
-        window.open(('{{ url("employeeAdd") }}'), '_self');
-    }
-
     function myFunction(){
         $('#datatable').DataTable({
-            ajax:'{{ url("getAllEmployees") }}',
+            ajax:'{{ url("getEmployeesMappingList") }}',
             serverSide: false,
             processing: true,
             deferRender: true,
-            type: 'GET',
+            type: 'post',
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
             {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "5%", "targets":  [2], "className": "text-left"   },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [2], "className": "text-left" },
+            {   "width": "25%", "targets":  [3], "className": "text-left" },
             {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-left" },
-            {   "width": "5%",  "targets":  [8], "className": "text-left" },
-            {   "width": "15%", "targets":  [9], "className": "text-center" }
+            {   "width": "5%", "targets":  [5], "className": "text-left" },
+            {   "width": "5%", "targets":  [6], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
-            {data: 'gender', name: 'gender'},
-            {data: 'nip', name: 'nip'},
-            {data: 'nik', name: 'nik'},
             {data: 'username', name: 'username'},
-            {data: 'jenisPenggajian', name: 'jenisPenggajian'},
-            {data: 'lamaKerja', name: 'lamaKerja'},
+            {data: 'jabatan', name: 'jabatan'},
+            {data: 'bagian', name: 'bagian'},
             {data: 'statusKepegawaian', name: 'statusKepegawaian'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -113,25 +99,20 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Pegawai</li>
+                        <li class="breadcrumb-item active">Pemetaan Aplikasi Pengguna</li>
                     </ol>
                 </nav>
-                <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Pegawai"><i class="fa fa-plus" style="font-size:20px"></i>
-                </button>
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
-                    <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                    <table class="table table-striped table-hover table-bordered data-table" id="datatable" style="font-size:14px">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Gender</th>
-                                <th>NIP</th>
-                                <th>NIK</th>
                                 <th>Username</th>
-                                <th>Jenis Karyawan</th>
-                                <th>Masa Kerja</th>
+                                <th>Jabatan</th>
+                                <th>Bagian</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>

@@ -20,6 +20,7 @@ use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\BoronganController;
 use App\Http\Controllers\HonorariumController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserPageMappingController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -369,5 +370,18 @@ Route::GET('getAllStructuralPosition',[StructuralPositionController::class, 'get
 Route::GET('getAllWorkPosition',[WorkPositionController::class, 'getAllWorkPosition'])->middleware('auth');
 
 Route::post('orgStructureList', [EmployeeController::class, 'orgStructureList'])->name('orgStructureList');
+
+
+/*
+USER PAGE MAPPING
+*/
+
+Route::get('userMappingList', [UserPageMappingController::class, 'index'])->middleware('auth');
+Route::get('getEmployeesMappingList', [UserPageMappingController::class, 'getEmployeesMappingList'])->middleware('auth');
+Route::post('userMapping', [UserPageMappingController::class, 'mapping'])->middleware('auth');
+Route::post('applicationMappingStore', [UserPageMappingController::class, 'store'])->middleware('auth');
+
+
+
 
 require __DIR__.'/auth.php';

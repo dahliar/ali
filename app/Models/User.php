@@ -76,21 +76,20 @@ class User extends Authenticatable
         }
         return false;
     }
-    public function userLevelAccess(){
-        /*
-        $query = DB::table('users as u')
-        ->select('sp.levelAccess as levelAccess')
-        ->join('employees as e', 'u.id', '=', 'e.employeeId')
-        ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
-        ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
-        ->join('structural_positions sp', 'os.idstructuralpos', '=', 'sp.id')
-        ->where('eosm.isactive', '=', 1)
-        ->where('e.isActive', '=', 1)
-        ->first();
-        
 
-        return $query->levelAccess;
-        */
+    public function haveAccess($pageId, $levelAccess, $userId){
+        if (Auth::check() and (Auth::user()->id == $userId)){
+            $exist = DB::table('user_page_mappings as upm')
+            ->where('upm.pageId', '=', $pageId)
+            ->where('upm.userId', '=', $userId)
+            ->exists();
+            if ($exist and Session()->get('levelAccess')<=$levelAccess){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        return false;
     }
-
 }

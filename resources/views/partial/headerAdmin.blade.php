@@ -183,5 +183,17 @@
 				</li>
 			</ul>
 		</li>
+		@if (auth()->user()->id == 1)
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<i class="fas fa-database"></i> Apps Admin
+			</a>
+			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<li>
+					<a class="dropdown-item" href="{{ url('userMappingList')}}"><i class="fas fa-users"></i> User Mapping</a>
+				</li>
+			</ul>
+		</li>
+		@endif
 	</ul>
 </body>

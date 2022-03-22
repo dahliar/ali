@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class UserPageMapping extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'userId',
+        'pageId'
+    ];
+    
 }
