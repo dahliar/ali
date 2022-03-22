@@ -235,7 +235,8 @@ class Item extends Model
         ->where('p.isActive','=', 1)
         ->where('i.isActive','=', 1)
         ->orderBy('g.name')
-        ->orderByRaw('s.name+0 asc');
+        ->orderByRaw('s.name+0 asc')
+        ->orderBy('f.name');
 
 
         $list = DB::table("detail_transactions")
