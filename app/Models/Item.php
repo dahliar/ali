@@ -14,43 +14,6 @@ class Item extends Model
     protected $primaryKey = 'id';
 
     public function getAllItemData($speciesId){
-        /*
-        $query = DB::table('items as i')
-        ->select(
-            'i.id as id', 
-            'sp.name as speciesName', 
-            'i.amount as jumlahPacked',
-            'amountUnpacked as jumlahUnpacked',
-            'p.shortname as packingShortname',
-            DB::raw('(select sum(dt.amount) from detail_transactions as dt where dt.status=1 and dt.itemId=i.id) as jumlahOnProgress'),
-            'i.name as iname',
-            's.name as sname',
-            'f.name as fname',
-            'g.name as gname',
-            'baseprice',
-            'weightbase'
-        )
-        //->leftjoin('detail_transactions as dt', 'dt.itemId', '=', 'i.id')
-        //->leftjoin('transactions as t', 't.id', '=', 'dt.transactionId')
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        //->where('dt.status','=', 1)
-        ->where('i.isActive','=', 1)
-        ->groupBy('i.name')
-        ->orderBy('sp.name', 'desc')
-        ->orderBy('g.name', 'asc')
-        ->orderByRaw('s.name+0', 'asc');
-
-
-        if ($speciesId>0){
-            $query->where('sp.id','=', $speciesId);
-        }
-        $query->get();  
-        */
-
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
@@ -86,10 +49,10 @@ class Item extends Model
 
         return datatables()->of($query)
         ->addColumn('wb', function ($row) {
-            return $row->weightbase. " Kg/". $row->packingShortname;
+            return number_format($row->weightbase, 1). " Kg/". $row->packingShortname;
         })
         ->addColumn('stockOnHand', function ($row) {
-            $jumlah = ((($row->jumlahPacked) * $row->weightbase) + $row->jumlahUnpacked).' Kg';
+            $jumlah = number_format(((($row->jumlahPacked) * $row->weightbase) + $row->jumlahUnpacked), 2).' Kg';
             return $jumlah;
         })
         ->addColumn('itemName', function ($row) {
@@ -97,7 +60,7 @@ class Item extends Model
             return $name;
         })
         ->addColumn('amountPacked', function ($row) {
-            return $row->jumlahPacked.' '.$row->packingShortname;
+            return number_format($row->jumlahPacked, 2).' '.$row->packingShortname;
         })
         ->addColumn('amountUnpacked', function ($row) {
             return number_format($row->jumlahUnpacked, 2).' Kg';
