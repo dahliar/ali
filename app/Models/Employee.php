@@ -43,7 +43,8 @@ class Employee extends Model
             'isactive'          => $isactive,
             'jenjangPendidikan' => $pendidikan,
             'bidangPendidikan'  => $bidangPendidikan,
-            'bankid'            => $bankid
+            'bankid'            => $bankid,
+            
         ]);
     }
     public function orgStructureStore($data){

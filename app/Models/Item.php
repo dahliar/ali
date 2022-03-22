@@ -319,32 +319,27 @@ class Item extends Model
         $query = DB::table('items as i')
         ->select(
             'i.id as id',
-            'i.name as itemName',
-            //DB::raw('concat(sp.name," ",g.name, " ", s.name, " ", f.name) as itemName'),
-            //DB::raw('ifnull(min(dp.price),0) as minPrice'),
-            //DB::raw('ifnull(avg(dp.price),0) as avgPrice'),
-            //DB::raw('ifnull(max(dp.price),0) as maxPrice'),
-
-            DB::raw('dp.price as minPrice'),
-            DB::raw('dp.price as avgPrice'),
-            DB::raw('dp.price as maxPrice')
+            DB::raw('concat(sp.name," ",g.name, " ", s.name, " ", f.name) as itemName'),
+            DB::raw('ifnull(min(dp.price),0) as minPrice'),
+            DB::raw('ifnull(avg(dp.price),0) as avgPrice'),
+            DB::raw('ifnull(max(dp.price),0) as maxPrice')
         )
         ->leftjoin('detail_purchases as dp', 'i.id', '=', 'dp.itemId')
         ->join('purchases as pur', 'dp.purchasesId', '=', 'pur.id')
-        //->join('sizes as s', 'i.sizeId', '=', 's.id')
-        //->join('species as sp', 's.speciesId', '=', 'sp.id')
-        //->join('grades as g', 'i.gradeId', '=', 'g.id')
-        //->join('packings as p', 'i.packingId', '=', 'p.id')
-        //->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        //->where('i.isActive','=', 1)
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        ->where('i.isActive','=', 1)
         ->whereBetween('pur.purchaseDate', [$start." 00:00:00", $end." 23:59:59"])
-        ->groupBy('i.id');
-        //->orderBy('sp.name', 'desc')
-        //->orderBy('g.name', 'asc')
-        //->orderByRaw('s.name+0', 'asc');
+        ->groupBy('i.id')
+        ->orderBy('sp.name', 'desc')
+        ->orderBy('g.name', 'asc')
+        ->orderByRaw('s.name+0', 'asc');
 
         if ($speciesId>0){
-        //    $query->where('sp.id','=', $speciesId);
+            $query->where('sp.id','=', $speciesId);
         }
         $query->get();  
 

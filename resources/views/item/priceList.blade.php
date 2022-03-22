@@ -104,7 +104,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 days')))}}" > 
+                                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 year')))}}" > 
                                     </div>
                                     <div class="col-md-2">
                                         <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
@@ -138,8 +138,8 @@
     </div>
 </body>
 <ol>
-    <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
-    <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
+    <li>Harga diatas adalah harga dengan basis pembelian pada rentang tanggal yang dipilih</li>
+    <li>Harga berasal dari berbagai supplier</li>
 </ol>
 @else
 @include('partial.noAccess')
