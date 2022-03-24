@@ -26,7 +26,6 @@ class DetailTransactionController extends Controller
     public function index($transactionId)
     {
         $tranStatus=Transaction::select('status')->where('id', $transactionId)->value('status');
-
         return view('detail.detailList', compact('transactionId', 'tranStatus'));
     }
 

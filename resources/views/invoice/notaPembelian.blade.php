@@ -127,19 +127,13 @@
                             <td width="5%" style="text-align: right;font-size:14px">{{$rowCount}}</td>
                             <td width="52%" style="font-size:14px">{{$detail->goodsBahasa}}</td>
                             <td width="10%" style="text-align: right;font-size:14px">
-                                @php
-                                echo number_format($detail->amount, 2, ',', '.');
-                                @endphp
+                                {{number_format($detail->amount, 2, ',', '.')}}
                             </td>
                             <td width="18%" style="text-align: right;font-size:14px">
-                                @php
-                                echo number_format($detail->price, 2, ',', '.');
-                                @endphp
+                                {{number_format($detail->price, 2, ',', '.')}}
                             </td>
                             <td width="18%" style="text-align: right;font-size:14px">
-                                @php
-                                echo number_format(($detail->amount*$detail->price), 2, ',', '.');
-                                @endphp
+                                {{number_format(($detail->amount*$detail->price), 2, ',', '.')}}
                             </td>
                         </tr>
                         @endforeach
@@ -148,17 +142,12 @@
                         <tr >
                             <td colspan="2" width="40%"><b>TOTAL</b></td>
                             <td width="15%" style="text-align: right;">
-                                @php
-                                echo number_format($totalAmount, 2, ',', '.');
-                                @endphp
-
+                                {{number_format($totalAmount, 2, ',', '.')}}
                             </td>
                             <td width="15%" style="text-align: right;">
                             </td>
                             <td width="15%" style="text-align: right;">
-                                @php
-                                echo number_format($totalPrice, 2, ',', '.');
-                                @endphp
+                                {{number_format($totalPrice, 2, ',', '.')}}
                             </td>
                         </tr>
                     </tfoot>        
@@ -172,9 +161,7 @@
                     </td>
                     <td width="3%" style="text-align: center;">:</td>
                     <td width="67%">
-                        @php
-                        echo $valutaType.' '.number_format($totalPrice, 2, ',', '.');
-                        @endphp
+                        {{$valutaType.' '.number_format($totalPrice, 2, ',', '.')}}
                     </td>
                 </tr>
                 <tr>
@@ -183,9 +170,7 @@
                     </td>
                     <td width="3%" style="text-align: center;">:</td>
                     <td>
-                        @php
-                        echo number_format($purchase->taxPercentage, 2, ',', '.').' %';
-                        @endphp
+                        {{number_format($purchase->taxPercentage, 2, ',', '.').' %'}}
                     </td>
                 </tr>
                 @php
@@ -204,13 +189,11 @@
                 @endphp                
                 <tr>
                     <td>
-                        <span class="label" id="spanLabel"><b>@php echo $taxIncluded;@endphp</b></span>
+                        <span class="label" id="spanLabel"><b>{{$taxIncluded}}</b></span>
                     </td>
                     <td width="3%" style="text-align: center;">:</td>
                     <td>
-                        @php
-                        echo $valutaType.' '.number_format($tax, 2, ',', '.');
-                        @endphp
+                        {{$valutaType.' '.number_format($tax, 2, ',', '.')}}
                     </td>
                 </tr>
                 <tr>
@@ -219,9 +202,7 @@
                     </td>
                     <td width="3%" style="text-align: center;">:</td>
                     <td>
-                        @php
-                        echo $valutaType.' '.number_format($finalAmount, 2, ',', '.');
-                        @endphp
+                        {{$valutaType.' '.number_format($finalAmount, 2, ',', '.')}}
                     </td>
                 </tr>                
             </table>
@@ -247,10 +228,10 @@
                         <br><br><br><br>
                         {{$company->name}}
                     </td>
-                </tr>       
+                </tr>
             </table>
+            Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}                
         </main>
     </body>
-    Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}
     </html>
     @endif

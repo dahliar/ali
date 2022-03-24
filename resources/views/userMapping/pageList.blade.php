@@ -1,6 +1,7 @@
 @php
-$pageId = 1
+$pageId = 6
 @endphp
+
 <meta name="_token" content="{{ csrf_token() }}">
 @extends('layouts.layout')
 
@@ -21,7 +22,15 @@ $pageId = 1
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function tambahAplikasi(){
+        alert("inject db aja");
+    }
+    function editAplikasi($id){
+        alert("ini juga inject db aja dengan id : "+$id);
+    }
     function userMapping($userId){
+        /*
         var mapForm = document.createElement("form");
         mapForm.target = "_self";    
         mapForm.method = "POST";
@@ -43,33 +52,34 @@ $pageId = 1
 
         document.body.appendChild(mapForm);
         mapForm.submit();
+        */
     }
 
     function myFunction(){
         $('#datatable').DataTable({
-            ajax:'{{ url("getEmployeesMappingList") }}',
+            ajax:'{{ url("getPageList") }}',
             serverSide: false,
             processing: true,
             deferRender: true,
             type: 'post',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
+            {   "width": "10%",  "targets": [0], "className": "text-center" },
             {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "25%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "5%", "targets":  [5], "className": "text-left" },
-            {   "width": "5%", "targets":  [6], "className": "text-left" }
+            {   "width": "30%", "targets":  [2], "className": "text-left" },
+            {   "width": "10%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "10%", "targets":  [5], "className": "text-left" },
+            {   "width": "10%", "targets":  [6], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'appName', name: 'appName'},
             {data: 'name', name: 'name'},
-            {data: 'username', name: 'username'},
-            {data: 'jabatan', name: 'jabatan'},
-            {data: 'bagian', name: 'bagian'},
-            {data: 'statusKepegawaian', name: 'statusKepegawaian'},
+            {data: 'level', name: 'level'},
+            {data: 'icon', name: 'icon'},
+            {data: 'isActive', name: 'isActive'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -101,9 +111,11 @@ $pageId = 1
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Pemetaan Aplikasi Pengguna</li>
+                        <li class="breadcrumb-item active">Daftar Page</li>
                     </ol>
                 </nav>
+                <button class="btn btn-primary" onclick="tambahPage()" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Aplikasi"><i class="fa fa-plus" style="font-size:20px"></i>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
@@ -111,12 +123,12 @@ $pageId = 1
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Nama</th>
-                                <th>Username</th>
-                                <th>Jabatan</th>
-                                <th>Bagian</th>
+                                <th>Aplikasi</th>
+                                <th>Page</th>
+                                <th>Level</th>
+                                <th>Icon</th>
                                 <th>Status</th>
-                                <th>Aksi</th>
+                                <th>Act</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -1,4 +1,6 @@
-<!--pageId == 1-->
+@php
+$pageId = 2
+@endphp
 
 @extends('layouts.layout')
 
@@ -11,7 +13,7 @@
 @endsection
 
 @section('content')
-@if (Auth::user()->haveAccess(1, 3, auth()->user()->id))
+@if (Auth::user()->haveAccess($pageId, auth()->user()->id))
 @if (session('status'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -78,8 +80,7 @@
                             <tr>
                                 <th style="width: 5%;text-align: center;">No</th>
                                 <th style="width: 5%;text-align: center;">Pilih</th>
-                                <th style="width: 5%;text-align: center;">PID</th>
-                                <th style="width: 40%;">Aplikasi</th>
+                                <th style="width: 45%;">Aplikasi</th>
                                 <th style="width: 45%;">Page</th>
                             </tr>
                         </thead>
@@ -96,8 +97,7 @@
                                     <input id="mapping[{{$page->pageId}}]" type="checkbox" class="form-check-input" name="mapping[{{$page->pageId}}]" value="{{$page->pageId}}" @if ($page->upmPageId != null) checked @endif >
                                     <input id="mappingHidden[{{$page->pageId}}]" type="hidden" class="form-control" name="mappingHidden[{{$page->pageId}}]" value="@if ($page->upmPageId != null) {{$page->pageId}} @endif"  >
                                 </td>
-                                <td style="width: 5%;text-align: center;">{{$page->nomorAplikasi}}</td>
-                                <td style="width: 40%;">{{$page->applicationName}}</td>
+                                <td style="width: 45%;">{{$page->applicationName}}</td>
                                 <td style="width: 45%;">{{$page->pageName}}</td>
                                 @php $no+=1;    @endphp                                    
                             </tr>

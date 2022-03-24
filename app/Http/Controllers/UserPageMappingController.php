@@ -10,9 +10,17 @@ use DB;
 
 class UserPageMappingController extends Controller
 {
-    public function index()
+    public function userMappingIndex()
     {
         return view('userMapping.userMappingList');
+    }
+    public function applicationIndex()
+    {
+        return view('userMapping.applicationList');
+    }
+    public function pageIndex()
+    {
+        return view('userMapping.pageList');
     }
 
     public function getEmployeesMappingList(){
@@ -49,6 +57,58 @@ class UserPageMappingController extends Controller
             return $html;
         })->addIndexColumn()->toJson();
     }
+
+    public function getApplicationList(){
+        $query = DB::table('applications as a')
+        ->select(
+            'a.id as id', 
+            'a.name as name', 
+            DB::raw('
+                (CASE WHEN a.isActive="0" THEN "Non-Aktif" WHEN a.isActive="1" THEN "Aktif" END) AS isActive
+                '),
+        )
+        ->orderBy('a.name');
+        $query->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Aplikasi" onclick="editAplikasi('.$row->id.')">
+            <i class="fa fa-edit"></i>
+            </button>
+            ';            
+            return $html;
+        })->addIndexColumn()->toJson();
+    }
+
+    public function getPageList(){
+        $query = DB::table('pages as p')
+        ->select(
+            'p.id as id', 
+            'p.name as name',
+            'a.name as appName',
+            'p.level as level',
+            'p.icon as icon',
+            DB::raw('
+                (CASE WHEN a.isActive="0" THEN "Non-Aktif" WHEN a.isActive="1" THEN "Aktif" END) AS isActive
+                '),
+        )
+        ->join('application as a', 'a.id', '=', 'p.applicationId')
+        ->orderBy('a.name')
+        ->orderBy('a.name');
+        $query->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Aplikasi" onclick="editAplikasi('.$row->id.')">
+            <i class="fa fa-edit"></i>
+            </button>
+            ';            
+            return $html;
+        })->addIndexColumn()->toJson();
+    }
+
     public function mapping(Request $request)
     {
         $user = DB::table('users as u')
@@ -74,7 +134,7 @@ class UserPageMappingController extends Controller
         ->select(
             'p.name as pageName',
             'a.name as applicationName',
-            'p.pageId as nomorAplikasi',
+            'p.id as nomorAplikasi',
             'a.id as applicationId',
             'p.id as pageId',
             'upm.pageId as upmPageId'

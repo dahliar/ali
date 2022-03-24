@@ -155,25 +155,19 @@
                                 <span class="col-md-3">Kerja</span>
                                 <span class="col-md-1">:</span>
                                 <span class="col-md-7">
-                                    @php
-                                    echo $h->jk.' / '.number_format($h->uh, 0, ',', '.');
-                                    @endphp
+                                    {{$h->jk.' / '.number_format($h->uh, 0, ',', '.')}}
                                 </span>
                             </div>
                             <div class="row form-group">
                                 <span class="col-md-3">Lembur</span>
                                 <span class="col-md-1">:</span>
                                 <span class="col-md-7">
-                                    @php
-                                    echo $h->jl.' / '.number_format($h->ul, 0, ',', '.');
-                                    @endphp
+                                    {{$h->jl.' / '.number_format($h->ul, 0, ',', '.')}}
                                 </span>
                             </div>                            
                         </td>                        
                         <td width="20%" style="text-align: right;">
-                            @php
-                            echo 'Rp. '.number_format(($h->uh+$h->ul), 0, ',', '.');
-                            @endphp
+                            {{'Rp. '.number_format(($h->uh+$h->ul), 0, ',', '.')}}
                         </td>
                     </tr>
                     @php
@@ -186,8 +180,8 @@
                     <tr >
                         <td colspan="3">Total</td>
                         <td width="20%" style="text-align: right;">
+                            {{'Rp. '.number_format($total, 0, ',', '.')}}
                             @php
-                            echo 'Rp. '.number_format($total, 0, ',', '.');
                             $thp+=$total;
                             @endphp
                         </td>
@@ -219,20 +213,14 @@
                         <td width="5%" style="text-align:left">{{$no}}</td>
                         <td width="25%" style="text-align:left">{{$b->name}}</td>
                         <td width="10%" style="text-align:center">{{$b->tanggalkerja}}</td>
-                        <td width="10%" style="text-align:right">@php
-                            echo 'Rp. '.number_format($b->hargaSatuan, 0, ',', '.');
-                            @endphp
+                        <td width="10%" style="text-align:right">{{'Rp. '.number_format($b->hargaSatuan, 0, ',', '.')}}
                         </td>
                         <td width="15%" style="text-align:right">
-                            @php
-                            echo number_format($b->netweight, 2, ',', '.').' Kg';
-                            @endphp
+                            {{number_format($b->netweight, 2, ',', '.').' Kg'}}
                         </td>
                         <td width="10%" style="text-align:right">{{$b->worker}} orang</td>
                         <td width="15%" style="text-align:right">
-                            @php
-                            echo 'Rp. '.number_format($b->netPayment, 2, ',', '.');
-                            @endphp
+                            {{'Rp. '.number_format($b->netPayment, 2, ',', '.')}}
                         </td>
                     </tr>
                     @php
@@ -245,8 +233,8 @@
                     <tr >
                         <td colspan="6">Total</td>
                         <td width="20%" style="text-align: right;">
+                            {{'Rp. '.number_format($total, 0, ',', '.')}}
                             @php
-                            echo 'Rp. '.number_format($total, 0, ',', '.');
                             $thp+=$total;
                             @endphp
                         </td>
@@ -275,9 +263,7 @@
                         <td width="5%" style="text-align:left">{{$no}}</td>
                         <td width="15%" style="text-align:center">{{$h->tanggalKerja}}</td>
                         <td width="65%" style="text-align:left">{{$h->keterangan}}</td>
-                        <td width="15%" style="text-align:right">@php
-                            echo 'Rp. '.number_format($h->jumlah, 0, ',', '.');
-                            @endphp
+                        <td width="15%" style="text-align:right">{{'Rp. '.number_format($h->jumlah, 0, ',', '.')}}
                         </td>
                         
                     </tr>
@@ -291,8 +277,8 @@
                     <tr >
                         <td colspan="3">Total</td>
                         <td width="20%" style="text-align: right;">
+                            {{'Rp. '.number_format($total, 0, ',', '.')}}
                             @php
-                            echo 'Rp. '.number_format($total, 0, ',', '.');
                             $thp+=$total;
                             @endphp
                         </td>
@@ -305,9 +291,7 @@
                     <tr >
                         <th width="70%" style="text-align: left;">Jumlah Total Gaji </th>
                         <th width="30%" style="text-align: right;"><h2>
-                            @php
-                            echo 'Rp. '.number_format($thp, 2, ',', '.');
-                            @endphp
+                            {{'Rp. '.number_format($thp, 2, ',', '.')}}
                         </h2></th>
                     </tr>
                 </thead>
@@ -322,12 +306,8 @@
                     </td>
                 </tr>       
             </table>
-            <br>
-            <span style="font-size: 10px;">
-                Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}
-            </span>
+            Dokumen ini dicetak pada : {{Carbon\Carbon::now()}}
         </main>
     </body>
-
     </html>
     @endif

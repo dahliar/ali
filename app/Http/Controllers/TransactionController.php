@@ -28,6 +28,11 @@ class TransactionController extends Controller
         $nations = Countries::where('isActive',1)->get();
         return view('transaction.transactionList', compact('nations'));
     }
+    public function indexTesting()
+    {
+        $nations = Countries::where('isActive',1)->get();
+        return view('transaction.transactionListTesting', compact('nations'));
+    }
 
     public function getAllExportTransaction(Request $request){
         return $this->transaction->getAllExportTransactionData($request);

@@ -376,11 +376,19 @@ Route::post('orgStructureList', [EmployeeController::class, 'orgStructureList'])
 USER PAGE MAPPING
 */
 
-Route::get('userMappingList', [UserPageMappingController::class, 'index'])->middleware('auth');
+Route::get('userMappingList', [UserPageMappingController::class, 'userMappingIndex'])->middleware('auth');
+Route::get('applicationList', [UserPageMappingController::class, 'applicationIndex'])->middleware('auth');
+Route::get('pageList/{applicationId}', [UserPageMappingController::class, 'pageIndex'])->middleware('auth');
+
+
+
 Route::get('getEmployeesMappingList', [UserPageMappingController::class, 'getEmployeesMappingList'])->middleware('auth');
+Route::get('getApplicationList', [UserPageMappingController::class, 'getApplicationList'])->middleware('auth');
+
+
 Route::post('userMapping', [UserPageMappingController::class, 'mapping'])->middleware('auth');
 Route::post('applicationMappingStore', [UserPageMappingController::class, 'store'])->middleware('auth');
-
+Route::get('transactionListTesting',[TransactionController::class, 'indexTesting'])->middleware(['auth']);
 
 
 

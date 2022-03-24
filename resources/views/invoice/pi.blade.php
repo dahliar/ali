@@ -222,19 +222,13 @@
                 <td width="40%">{{$detail->goods}}</td>
                 <td width="12%" style="text-align: right;">{{$detail->quantity}}</td>
                 <td width="15%" style="text-align: right;">
-                    @php
-                    echo number_format($detail->netweight, 2, ',', '.')
-                    @endphp
+                    {{number_format($detail->netweight, 2, ',', '.')}}
                 </td>
                 <td width="16%" style="text-align: right;">
-                    @php
-                    echo number_format($detail->price, 2, ',', '.')
-                    @endphp
+                    {{number_format($detail->price, 2, ',', '.')}}
                 </td>
                 <td width="17%" style="text-align: right;">
-                    @php
-                    echo number_format($detail->totalPrice, 2, ',', '.')
-                    @endphp
+                    {{number_format($detail->totalPrice, 2, ',', '.')}}
                 </td>
             </tr>
             @endforeach
@@ -244,16 +238,12 @@
                 <td width="40%"><b>TOTAL</b></td>
                 <td width="12%"></td>
                 <td width="15%" style="text-align: right;">
-                    @php
-                    echo number_format($totalNetWeight, 2, ',', '.')
-                    @endphp
+                    {{number_format($totalNetWeight, 2, ',', '.')}}
                 </td>
                 <td width="16%" style="text-align: right;">
                 </td>
                 <td width="17%" style="text-align: right;">
-                    @php
-                    echo number_format($totalTransactionPrice, 2, ',', '.')
-                    @endphp
+                    {{number_format($totalTransactionPrice, 2, ',', '.')}}
                 </td>
             </tr>
         </tfoot>        
@@ -269,9 +259,7 @@
             </td>
             <td width="3%">:</td>
             <td width="67%">
-                @php
-                echo number_format($totalGrossWeight, 2, ',', '.').' Kg'
-                @endphp
+                {{number_format($totalGrossWeight, 2, ',', '.').' Kg'}}
             </td>
         </tr>
         @endif
@@ -281,9 +269,7 @@
             </td>
             <td width="3%">:</td>
             <td width="67%">
-                @php
-                echo $valutaType.' '.number_format($totalTransactionPrice, 2, ',', '.')
-                @endphp
+                {{$valutaType.' '.number_format($totalTransactionPrice, 2, ',', '.')}}
             </td>
         </tr>
         <tr>
@@ -292,9 +278,7 @@
             </td>
             <td>:</td>
             <td>
-                @php
-                echo $valutaType.' '.number_format($transaction->advance, 2, ',', '.')
-                @endphp
+                {{$valutaType.' '.number_format($transaction->advance, 2, ',', '.')}}
             </td>
         </tr>
         <tr>
@@ -303,9 +287,7 @@
             </td>
             <td>:</td>
             <td>
-                @php
-                echo $valutaType.' '.number_format(($totalTransactionPrice - $transaction->advance), 2, ',', '.')
-                @endphp
+                {{$valutaType.' '.number_format(($totalTransactionPrice - $transaction->advance), 2, ',', '.')}}
             </td>
         </tr>
     </table>
@@ -337,7 +319,7 @@
             @endphp
 
             <tr >
-                <td width="5%" align="center">@php echo $a; @endphp</td>
+                <td width="5%" align="center">{{$a}}</td>
                 <td width="95%">{{$note->note}}</td>
             </tr>
             @endforeach
@@ -372,8 +354,7 @@
             </td>
         </tr>       
     </table>
-    <br>
+    Document generated at : {{Carbon\Carbon::now()}}
 </body>
-Document generated at : {{Carbon\Carbon::now()}}
 </html>
 @endif
