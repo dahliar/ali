@@ -143,6 +143,7 @@ class BoronganController extends Controller
      */
     public function storePekerja(Request $request, Borongan $borongan)
     {
+
         $limit=$request->worker;
         $request->validate([
             'boronganWorker' => ['required','array',"min:$limit","max:$limit"]
@@ -162,14 +163,13 @@ class BoronganController extends Controller
         $percentage=0.2;
         $dataSalary[]="";
         if ($borongan->jenis==2){
+
             if (($jmlCowok==0) or ($jmlCewek==0)){
                 $price = ($borongan->hargaSatuan * $borongan->netweight) / $borongan->worker;
                 $price=ceil($price/100) * 100;
                 $dataSalary=[
                     '1'=>$price, 
                     '2'=>$price
-
-
                 ];
             }else{
                 if($borongan->loading==0){
@@ -185,7 +185,6 @@ class BoronganController extends Controller
                 '2'=>$price
             ];
         }
-
         $data[]="";
         foreach($request->boronganWorker as $bw){
             $price = $dataSalary[$request->boronganGender[$bw]];
@@ -217,7 +216,7 @@ class BoronganController extends Controller
 
         $harga=[
             '1'=>ceil($honorCewek/100) * 100, 
-            '2'=>ceil($honorCewek/100) * 100
+            '2'=>ceil($honorCowok/100) * 100
         ];
 
         return $harga;

@@ -74,6 +74,7 @@ class UserPageMappingController extends Controller
         ->select(
             'p.name as pageName',
             'a.name as applicationName',
+            'p.pageId as nomorAplikasi',
             'a.id as applicationId',
             'p.id as pageId',
             'upm.pageId as upmPageId'

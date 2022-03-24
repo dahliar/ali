@@ -76,9 +76,10 @@
                     <table style="width: 50%;" class="center table table-striped table-hover table-bordered">
                         <thead>
                             <tr>
-                                <th style="width: 5%;">No</th>
+                                <th style="width: 5%;text-align: center;">No</th>
                                 <th style="width: 5%;text-align: center;">Pilih</th>
-                                <th style="width: 45%;">Aplikasi</th>
+                                <th style="width: 5%;text-align: center;">PID</th>
+                                <th style="width: 40%;">Aplikasi</th>
                                 <th style="width: 45%;">Page</th>
                             </tr>
                         </thead>
@@ -88,14 +89,15 @@
                             @endphp
                             @foreach($pages as $page)
                             <tr>
-                                <td style="width: 5%;">
+                                <td style="width: 5%;text-align: center;">
                                     @php echo $no @endphp 
                                 </td>
                                 <td style="width: 5%;text-align: center;">
                                     <input id="mapping[{{$page->pageId}}]" type="checkbox" class="form-check-input" name="mapping[{{$page->pageId}}]" value="{{$page->pageId}}" @if ($page->upmPageId != null) checked @endif >
                                     <input id="mappingHidden[{{$page->pageId}}]" type="hidden" class="form-control" name="mappingHidden[{{$page->pageId}}]" value="@if ($page->upmPageId != null) {{$page->pageId}} @endif"  >
                                 </td>
-                                <td style="width: 45%;">{{$page->applicationName}}</td>
+                                <td style="width: 5%;text-align: center;">{{$page->nomorAplikasi}}</td>
+                                <td style="width: 40%;">{{$page->applicationName}}</td>
                                 <td style="width: 45%;">{{$page->pageName}}</td>
                                 @php $no+=1;    @endphp                                    
                             </tr>
