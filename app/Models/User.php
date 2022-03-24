@@ -22,6 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
+        'levelAccess',
         'role',
         'email',
         'password',
@@ -83,7 +84,7 @@ class User extends Authenticatable
             ->join('pages as p', 'p.id', '=', 'upm.pageId')
             ->where('upm.pageId', '=', $pageId)
             ->where('upm.userId', '=', $userId)
-            ->where('p.minimumAccessLevel', '>=', Session()->get('levelAccess'))
+            ->where('p.minimumAccessLevel', '>=', Auth::user()->accessLevel)
             ->exists();
 
             if ($exist){

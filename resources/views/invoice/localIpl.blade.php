@@ -1,3 +1,8 @@
+<!--BELUM-->
+@php
+$pageId = -1;
+@endphp
+
 @if ((Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 
 

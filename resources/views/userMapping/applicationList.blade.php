@@ -29,30 +29,8 @@ $pageId = 5
     function editAplikasi($id){
         alert("ini juga inject db aja dengan id : "+$id);
     }
-    function userMapping($userId){
-        /*
-        var mapForm = document.createElement("form");
-        mapForm.target = "_self";    
-        mapForm.method = "POST";
-        mapForm.action = "{{url("userMapping")}}";
-
-        var csrftoken = document.createElement("input");
-        csrftoken.type = "hidden";
-        csrftoken.name = "_token";
-        csrftoken.value = "{{ csrf_token() }}";
-        mapForm.appendChild(csrftoken);
-
-
-        var uid = document.createElement("input");
-        uid.type = "hidden";
-        uid.name = "userId";
-        uid.value = $userId;
-
-        mapForm.appendChild(uid);
-
-        document.body.appendChild(mapForm);
-        mapForm.submit();
-        */
+    function kelolaPages($id){
+        window.open(('{{ url("pageList") }}'+"/"+$id), '_self');
     }
 
     function myFunction(){

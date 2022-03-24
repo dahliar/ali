@@ -18,9 +18,11 @@ class UserPageMappingController extends Controller
     {
         return view('userMapping.applicationList');
     }
-    public function pageIndex()
+    public function pageIndex($appid)
     {
-        return view('userMapping.pageList');
+        $application = DB::table('applications')->where('id', '=', $appid)->first();
+        $pages = DB::table('pages as p')->where('p.applicationId', '=', $appid)->get();
+        return view('userMapping.pageList', compact('application', 'pages'));
     }
 
     public function getEmployeesMappingList(){
@@ -76,26 +78,30 @@ class UserPageMappingController extends Controller
             <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Aplikasi" onclick="editAplikasi('.$row->id.')">
             <i class="fa fa-edit"></i>
             </button>
+            <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Aplikasi" onclick="kelolaPages('.$row->id.')">
+            <i class="fa fa-list"></i>
+            </button>
             ';            
             return $html;
         })->addIndexColumn()->toJson();
     }
 
-    public function getPageList(){
+    public function getPageList($applicationId){
         $query = DB::table('pages as p')
         ->select(
             'p.id as id', 
             'p.name as name',
             'a.name as appName',
-            'p.level as level',
+            'p.minimumAccessLevel as level',
             'p.icon as icon',
             DB::raw('
                 (CASE WHEN a.isActive="0" THEN "Non-Aktif" WHEN a.isActive="1" THEN "Aktif" END) AS isActive
                 '),
         )
-        ->join('application as a', 'a.id', '=', 'p.applicationId')
+        ->join('applications as a', 'a.id', '=', 'p.applicationId')
+        ->where('p.applicationId', '=', $applicationId)
         ->orderBy('a.name')
-        ->orderBy('a.name');
+        ->orderBy('p.name');
         $query->get();
 
         return datatables()->of($query)
@@ -106,7 +112,9 @@ class UserPageMappingController extends Controller
             </button>
             ';            
             return $html;
-        })->addIndexColumn()->toJson();
+        })
+        ->rawColumns(['action', 'icon'])
+        ->addIndexColumn()->toJson();
     }
 
     public function mapping(Request $request)
@@ -118,7 +126,6 @@ class UserPageMappingController extends Controller
             'u.username as uname',
             'os.name as jabatan',
             'wp.name as bagian',
-
         )
         ->join('employees as e', 'e.userid', '=', 'u.id')
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
@@ -146,6 +153,8 @@ class UserPageMappingController extends Controller
         ->join('applications as a', 'a.id', '=', 'p.applicationId')
         ->where('a.isActive','=', 1)
         ->where('p.isActive','=', 1)
+        ->orderBy('a.name')
+        ->orderBy('p.name')
         ->get();
         return view('userMapping.userMapping', compact('user', 'pages'));
     }

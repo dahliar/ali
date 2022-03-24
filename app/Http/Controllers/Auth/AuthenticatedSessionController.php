@@ -42,6 +42,11 @@ class AuthenticatedSessionController extends Controller
         */
         $query = DB::table('employees')->select('id as empid')->where('userid', Auth::user()->id)->first();
         
+
+        //Ini kalau sudah menggunakan HaveAccess harus dihapus
+        //Ini kalau sudah menggunakan HaveAccess harus dihapus
+        //Ini kalau sudah menggunakan HaveAccess harus dihapus
+        //Ini kalau sudah menggunakan HaveAccess harus dihapus
         $levelAccess = DB::table('users as u')
         ->select('sp.levelAccess as levelAccess')
         ->join('employees as e', 'u.id', '=', 'e.userid')

@@ -1,3 +1,8 @@
+<!--BELUM-->
+@php
+$pageId = -1;
+@endphp
+
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 @extends('layouts.layout')

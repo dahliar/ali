@@ -384,6 +384,7 @@ Route::get('pageList/{applicationId}', [UserPageMappingController::class, 'pageI
 
 Route::get('getEmployeesMappingList', [UserPageMappingController::class, 'getEmployeesMappingList'])->middleware('auth');
 Route::get('getApplicationList', [UserPageMappingController::class, 'getApplicationList'])->middleware('auth');
+Route::get('getPageList/{applicationId}', [UserPageMappingController::class, 'getPageList'])->middleware('auth');
 
 
 Route::post('userMapping', [UserPageMappingController::class, 'mapping'])->middleware('auth');

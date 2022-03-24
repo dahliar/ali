@@ -1,3 +1,8 @@
+<!--BELUM-->
+@php
+$pageId = -1;
+@endphp
+
 @extends('layouts.layout')
 
 @section('header')
