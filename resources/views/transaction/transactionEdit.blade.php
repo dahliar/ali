@@ -19,8 +19,7 @@ $pageId = -1;
 @if ((Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript"> 
     var i=1;
-
-    function disableForm() {        
+    function disableForm() { 
         @if(($transaction->status == 2) or ($transaction->status == 3))
         var inputs = document.getElementsByTagName("input");
         for (var i = 0; i < inputs.length; i++) {
@@ -240,11 +239,11 @@ $pageId = -1;
                         </div>
                         <div class="row form-group">
                             <div class="col-md-3 text-md-right">
-                                <span class="label" id="companyName">Company*</span>
+                                <span class="label">Company*</span>
                             </div>
                             <div class="col-md-9">
                                 <select id="company" name="company" class="form-select">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="-1" selected>--Choose One--</option>
                                     @foreach ($companies as $company)
                                     @if ( $company->id == $transaction->companyId)
                                     <option value="{{ $company->id }}" selected>{{ $company->name }}</option>
@@ -467,6 +466,7 @@ $pageId = -1;
                                 <span class="label">Status</span>
                             </div>
                             <div class="col-md-3">
+                                <input id="currentStatus" name="currentStatus" type="hidden" value="{{ $transaction->status }}">
                                 @if ($transaction->status == 1)
                                 <select id="status" name="status" class="form-select" >
                                     <option value="-1">--Choose One--</option>

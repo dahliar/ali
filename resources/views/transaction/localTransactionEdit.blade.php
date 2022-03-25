@@ -278,6 +278,7 @@ $pageId = -1;
                                 <span class="label">Status</span>
                             </div>
                             <div class="col-md-3">
+                                <input id="currentStatus" name="currentStatus" type="hidden" value="{{ $transaction->status }}">
                                 @if ($transaction->status == 1)
                                 <select id="status" name="status" class="form-select" >
                                     <option value="-1">--Choose One--</option>
