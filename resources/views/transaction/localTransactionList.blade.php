@@ -67,16 +67,14 @@ $pageId = -1;
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "10%", "targets":   [0], "className": "text-left" },
-            {   "width": "30%", "targets":  [1], "className": "text-left" },
+            {   "width": "40%", "targets":  [0], "className": "text-left" },
+            {   "width": "20%", "targets":  [1], "className": "text-left" },
             {   "width": "15%",  "targets": [2], "className": "text-left" },
-            {   "width": "15%",  "targets": [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "15%", "targets":  [5], "className": "text-left" }
+            {   "width": "10%",  "targets": [3], "className": "text-left" },
+            {   "width": "15%", "targets":  [4], "className": "text-left" }
             ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
             {data: 'invnum', name: 'invnum'},
             {data: 'td', name: 'td'},
@@ -159,7 +157,6 @@ $pageId = -1;
                     <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                         <thead>
                             <tr style="font-size: 12px;">
-                                <th>No</th>
                                 <th>Perusahaan</th>
                                 <th>No Surat</th>
                                 <th>Tanggal Transaksi</th>

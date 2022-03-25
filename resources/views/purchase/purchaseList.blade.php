@@ -69,12 +69,12 @@ $pageId = -1;
             columnDefs: [
             {   "width": "4%",  "targets":  [0], "className": "text-center" },
             {   "width": "16%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
+            {   "width": "7%", "targets":  [2], "className": "text-left" },
             {   "width": "15%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-left" },
+            {   "width": "7%", "targets":  [4], "className": "text-end" },
             {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "15%", "targets":  [7], "className": "text-left" }
+            {   "width": "8%", "targets":  [6], "className": "text-left" },
+            {   "width": "10%", "targets":  [7], "className": "text-left" }
             ], 
 
             columns: [

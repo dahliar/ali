@@ -68,13 +68,11 @@ class Transaction extends Model
             $html = '
             <div class="row form-group">
             <span class="col-2">PI</span>
-            <span class="col-1">:</span>
-            <span class="col-8">'.$row->pinum.'</span>
+            <span class="col-10 text-end">'.$row->pinum.'</span>
             </div>
             <div class="row form-group">
             <span class="col-2">INV</span>
-            <span class="col-1">:</span>
-            <span class="col-8">'.$row->invnum.'</span>
+            <span class="col-10 text-end">'.$row->invnum.'</span>
             </div>';
             return $html;
         })
@@ -82,26 +80,21 @@ class Transaction extends Model
             $html = '
             <div class="row form-group">
             <span class="col-4">Transaksi</span>
-            <span class="col-1">:</span>
-            <span class="col-6">'.$row->td.'</span>
+            <span class="col-8 text-end">'.$row->td.'</span>
             </div>
 
             <div class="row form-group">
             <span class="col-4">Loading</span>
-            <span class="col-1">:</span>
-            <span class="col-6">'.$row->ld.'</span>
+            <span class="col-8 text-end">'.$row->ld.'</span>
             </div>
-
             <div class="row form-group">
             <span class="col-4">Departure</span>
-            <span class="col-1">:</span>
-            <span class="col-6">'.$row->etd.'</span>
+            <span class="col-8 text-end">'.$row->etd.'</span>
             </div>
 
             <div class="row form-group">
             <span class="col-4">Arrival</span>
-            <span class="col-1">:</span>
-            <span class="col-6">'.$row->eta.'</span>
+            <span class="col-8 text-end">'.$row->eta.'</span>
             </div>';
 
             return $html;
@@ -114,6 +107,7 @@ class Transaction extends Model
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
             <i class="fa fa-edit""></i>
             </button>
+            <br>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="PI" onclick="cetakPI('."'".$row->id."'".')">PI
             </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="IPL" onclick="cetakIPL('."'".$row->id."'".')">IPL
