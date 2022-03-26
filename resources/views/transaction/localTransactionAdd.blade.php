@@ -120,7 +120,7 @@ $pageId = -1;
             <div class="d-grid gap-1">
                 <div class="row form-group">
                     <div class="col-md-3 text-md-right">
-                        <span class="label" id="company">Pembeli*</span>
+                        <span class="label" id="spanCompany">Pembeli*</span>
                     </div>
                     <div class="col-md-4">
                         <select id="company" name="company" class="form-select" >
