@@ -55,19 +55,20 @@ $pageId = -1;
             var e = document.getElementById("valutaType");
             setValutaSpan(e);
         });
-    });
 
-    function setValutaSpan(e){
-        var valutaType = e.options[e.selectedIndex].value;
-        var valText = e.options[e.selectedIndex].text;
 
-        if (valutaType>0){
-            document.getElementById("spanAm").textContent=valText;
-            document.getElementById("spanAd").textContent=valText;
-        }else{
-            swal.fire('warning','Choose Payment Valuta first!','info');
+        function setValutaSpan(e){
+            var valutaType = e.options[e.selectedIndex].value;
+            var valText = e.options[e.selectedIndex].text;
+
+            if (valutaType>0){
+                document.getElementById("spanAm").textContent=valText;
+                document.getElementById("spanAd").textContent=valText;
+            }else{
+                swal.fire('warning','Choose Payment Valuta first!','info');
+            }
         }
-    }
+    });
 </script>
 
 @if (session('success'))

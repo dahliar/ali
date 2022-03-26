@@ -35,7 +35,6 @@ $pageId = -1;
                         if(data){
                             $('[name="swiftcode"]').val(data.swiftcode);
                             $('[name="valuta"]').val(data.valuta);
-
                         }else{
                         }
                     }
@@ -60,6 +59,7 @@ $pageId = -1;
                     }
                 });
             }else{
+                $('[name="companydetail"]').val("");
                 swal.fire('warning','Choose Company first!','info');
             }
         });
