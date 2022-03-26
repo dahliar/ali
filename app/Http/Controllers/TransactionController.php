@@ -596,8 +596,6 @@ class TransactionController extends Controller
     {   
         $request->validate(
             [
-                'rekening' => 'required|gt:0',
-                'valuta' => 'required',
                 'company' => 'required|gt:0',
                 'companydetail' => 'required',
                 'loadingPort' => 'required',
@@ -605,9 +603,11 @@ class TransactionController extends Controller
                 'containerParty' => 'required',
                 'transactionDate' => 'required|date|before_or_equal:today',
                 'loadingDate' => 'required|date',
+                'rekening' => 'required|gt:0',
+                'valuta' => 'required',
                 'valutaType' => 'required|gt:0',
                 'payment' => 'required|gt:0',
-                'advance' => 'required|gte:0',
+                'advance' => 'required|gte:0',                
             ],
             [
                 'rekening.gt'=> 'Pilih salah satu rekening',

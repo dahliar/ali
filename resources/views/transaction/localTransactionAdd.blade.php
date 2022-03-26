@@ -42,14 +42,12 @@ $pageId = -1;
                     success:function(data){
                         if(data){
                             $('[name="companydetail"]').val(data.address+'. '+data.nation);
-                            $('[name="companyName"]').val(data.name);
                         }else{
                         }
                     }
                 });
             }else{
                 $('[name="companydetail"]').val("");
-                $('[name="companyName"]').val("");
                 swal.fire('warning','Choose Company first!','info');
             }
         });
@@ -122,7 +120,7 @@ $pageId = -1;
             <div class="d-grid gap-1">
                 <div class="row form-group">
                     <div class="col-md-3 text-md-right">
-                        <span class="label" id="companyName">Pembeli*</span>
+                        <span class="label" id="company">Pembeli*</span>
                     </div>
                     <div class="col-md-4">
                         <select id="company" name="company" class="form-select" >
@@ -135,7 +133,6 @@ $pageId = -1;
                             @endif
                             @endforeach
                         </select>
-                        <input type="hidden" id="companyName" name="companyName" class="form-control" value="{{ old('companyName') }}" readonly>
                     </div>
                 </div>
                 <div class="row form-group">
