@@ -6,6 +6,7 @@ use App\Models\UserPageMapping;
 use Illuminate\Http\Request;
 
 use DB;
+use Auth;
 
 
 class UserPageMappingController extends Controller
@@ -189,18 +190,15 @@ class UserPageMappingController extends Controller
         ->join('applications as a', 'a.id', '=', 'p.applicationId')
         ->where('a.isActive','=', 1)
         ->where('p.isActive','=', 1)
-        ->orderBy('a.name')
-        ->orderBy('p.name');
-
-        if (Auth::user()->accessLevel != 0){
-            $pages->where('p.minimumAccessLevel','>', 0);
+        ->orderBy('a.name');
+        if(Auth::user()->accessLevel != 0){
+            $pages->where('p.minimumAccessLevel', '>', 0);
         }
-        $pages->get();
+        $pages=$pages->get();
         return view('userMapping.userMapping', compact('user', 'pages'));
     }
     public function store(Request $request)
     {
-        //dd($request);
         $dataDelete = array();
         if ($request->has('mapping')){
             foreach($request->mapping as $mapping)
