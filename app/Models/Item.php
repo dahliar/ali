@@ -66,7 +66,7 @@ class Item extends Model
             return number_format($row->jumlahUnpacked, 2).' Kg';
         })
         ->addColumn('loading', function ($row) {
-            return number_format($row->jumlahOnLoading, 2).' '.$row->packingShortname;
+            return number_format(($row->jumlahOnLoading*$row->weightbase), 2).' Kg';
         })
         ->addColumn('action', function ($row) {
             $html="";
