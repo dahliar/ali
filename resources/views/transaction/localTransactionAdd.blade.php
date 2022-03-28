@@ -12,6 +12,7 @@ $pageId = -1;
 
 <script type="text/javascript"> 
     $(document).ready(function() {
+        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
         $('#rekening').on('change', function() {
             var rek = $(this).val();
             if (rek>0){
