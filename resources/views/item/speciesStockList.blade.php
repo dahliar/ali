@@ -86,7 +86,7 @@ $pageId = 3;
                                         <th>Name</th>
                                         <th>Packed (Kg)</th>
                                         <th>Unpacked (Kg)</th>
-                                        <th>Stock gudang (Kg)</th>
+                                        <th>Stock in hand (Kg)</th>
                                         <th>On Progress (Kg)</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -102,8 +102,8 @@ $pageId = 3;
     </div>
 </body>
 <ol>
-    <li>On Progress : Jumlah barang yang saat ini tercatat dalam proses transaksi, namun transaksi belum terselesaikan. Jika transaksi di-cancel, barang akan kembali ke dalam daftar packed</li>
-    <li>Total adalah jumlah total jumlah stock dalam satuan Kilogram, hasil penjumlahan dari Packed + On Progress + Unpacked</li>
+    <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
+    <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
 </ol>
 @else
 @include('partial.noAccess')
