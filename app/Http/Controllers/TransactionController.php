@@ -594,7 +594,6 @@ class TransactionController extends Controller
 
     public function localStore(Request $request)
     {   
-        dd($request);
         $request->validate(
             [
                 'company' => 'required|gt:0',
