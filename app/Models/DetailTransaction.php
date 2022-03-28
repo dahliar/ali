@@ -28,6 +28,7 @@ class DetailTransaction extends Model
             'p.name as packingName', 
             'p.shortname as pshortname',
             's.name as sizeName', 
+            'sp.name as speciesName', 
             't.status as status', 
             'dt.amount as jumlah',
             'i.weightbase as wb',
@@ -46,9 +47,10 @@ class DetailTransaction extends Model
 
 
         return datatables()->of($query)
+        ->editColumn('itemName', function ($row) {
+            return ($row->speciesName.' '.$row->itemName);
+        })
         ->addColumn('weight', function ($row) {
-
-
             $html = number_format(($row->jumlah * $row->wb), 2, ',', '.').' Kg';
             return $html;
         })
