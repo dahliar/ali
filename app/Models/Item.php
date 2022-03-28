@@ -234,7 +234,7 @@ class Item extends Model
         ->where('f.isActive','=', 1)
         ->where('p.isActive','=', 1)
         ->where('i.isActive','=', 1)
-        ->orderBy('g.name')
+        ->orderBy('g.name', 'desc')
         ->orderByRaw('s.name+0 asc')
         ->orderBy('f.name');
 

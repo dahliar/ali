@@ -42,13 +42,17 @@ class DetailTransaction extends Model
         ->join('sizes as s', 'i.sizeid', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->where('t.id','=', $transactionId)
-        ->orderBy('sp.name');
+        ->orderBy('sp.name')
+        ->orderBy('g.name', 'desc')
+        ->orderByRaw('s.name+0 asc')
+        ->orderBy('f.name');
+
         $query->get();  
 
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
-            return ($row->speciesName.' '.$row->itemName);
+            return ($row->speciesName.' '.$row->gradeName.' '.$row->sizeName.' '.$row->freezingName.' '.$row->itemName);
         })
         ->addColumn('weight', function ($row) {
             $html = number_format(($row->jumlah * $row->wb), 2, ',', '.').' Kg';

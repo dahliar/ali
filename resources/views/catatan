@@ -7,8 +7,16 @@ truncate table detail_payrolls;
 truncate table salaries;
 truncate table payrolls;
 
-
-"select `i`.`id` as `id`, `sp`.`name` as `speciesName`, `i`.`amount` as `jumlahPacked`, `amountUnpacked` as `jumlahUnpacked`, `p`.`shortname` as `packingShortname`, (select sum(amount) from detail_transactions as dt where dt.status=1 and dt.id=i.id) as jumlahOnProgress, `i`.`name` as `iname`, `s`.`name` as `sname`, `f`.`name` as `fname`, `g`.`name` as `gname`, `baseprice`, `weightbase` from `items` as `i` inner join `sizes` as `s` on `i`.`sizeId` = `s`.`id` inner join `species` as `sp` on `s`.`speciesId` = `sp`.`id` inner join `grades` as `g` on `i`.`gradeId` = `g`.`id` inner join `packings` as `p` on `i`.`packingId` = `p`.`id` inner join `freezings` as `f` on `i`.`freezingId` = `f`.`id` where `i`.`isActive` = ? group by `i`.`id` order by `sp`.`name` desc, `g`.`name` asc, s.name+0"
+select 
+sp.id as id, 
+sp.name as name, 
+(select (sum(dt.amount * i2.weightbase)) 
+ 	from transactions t join detail_transactions as dt on dt.transactionId=t.id 
+ 	join items as i2 on i2.id=dt.itemId 
+ 	join sizes as s2 on s2.id=i2.sizeId 
+ 	join species as sp2 on sp2.id=s2.speciesId 
+ 	where t.status=4 and sp2.id=sp.id group by sp2.id) 
+from items as i join sizes as s on i.sizeId =s.id join species as sp on s.speciesId = sp.id where i.isActive = 1 and s.isActive = 1
 
 
 
