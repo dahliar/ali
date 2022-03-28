@@ -146,7 +146,7 @@ $pageId = -1;
                     <div class="col-md-4">
                         <div class="input-group">
                             <span class="input-group-text col-3">Valuta</span>
-                            <input id="valuta" name="valuta" class="form-control" value="{{ old('valuta') }}" readonly>
+                            <input id="valuta" name="valuta" class="form-control" value="{{ old('valuta', 'USD') }}">
                         </div>
                     </div>
                 </div>                    
