@@ -190,7 +190,9 @@ class UserPageMappingController extends Controller
         ->join('applications as a', 'a.id', '=', 'p.applicationId')
         ->where('a.isActive','=', 1)
         ->where('p.isActive','=', 1)
-        ->orderBy('a.name');
+        ->orderBy('a.name')
+        ->orderBy('p.name');
+
         if(Auth::user()->accessLevel != 0){
             $pages->where('p.minimumAccessLevel', '>', 0);
         }
