@@ -21,8 +21,6 @@ $pageId = -1;
             var button_id = $(this).attr("id");   
             $('#row'+button_id+'').remove();  
         });
-
-
         $('#rekening').on('change', function() {
             var rekening = $(this).val();
             if (rekening>0){
@@ -67,7 +65,6 @@ $pageId = -1;
             var e = document.getElementById("valutaType");
             setValutaSpan(e);
         });
-
         function setValutaSpan(e){
             var valutaType = e.options[e.selectedIndex].value;
             var valText = e.options[e.selectedIndex].text;

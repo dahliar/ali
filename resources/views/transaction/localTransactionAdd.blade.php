@@ -55,8 +55,6 @@ $pageId = -1;
             var e = document.getElementById("valutaType");
             setValutaSpan(e);
         });
-
-
         function setValutaSpan(e){
             var valutaType = e.options[e.selectedIndex].value;
             var valText = e.options[e.selectedIndex].text;
