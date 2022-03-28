@@ -24,6 +24,36 @@ class UserPageMappingController extends Controller
         $pages = DB::table('pages as p')->where('p.applicationId', '=', $appid)->get();
         return view('userMapping.pageList', compact('application', 'pages'));
     }
+    public function pageAdd($appid)
+    {
+        $application = DB::table('applications')->where('id', '=', $appid)->first();
+        $access_levels = DB::table('access_levels')->orderBy('level')->get();
+        return view('userMapping.pageAdd', compact('application', 'access_levels'));
+    }
+
+    public function pageStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:100|unique:pages',
+            'route' => 'required|max:1000|unique:pages',
+            'level' => 'required|gte:0',
+
+        ]);        
+        $data = [
+            'name' => $request->name,
+            'minimumAccessLevel' => $request->level,
+            'route' => $request->route,
+            'icon' =>  $request->icon,
+            'applicationId' =>  $request->appid,
+            'isActive' =>  1
+        ];
+
+        $id = DB::table('pages')->insertGetId($data);
+        return redirect('pageList'.'/'.$request->appid)
+        ->with('status','Item berhasil ditambahkan dengan id '.$id);
+
+    }
+
 
     public function getEmployeesMappingList(){
         $query = DB::table('employees as e')
@@ -65,11 +95,15 @@ class UserPageMappingController extends Controller
         ->select(
             'a.id as id', 
             'a.name as name', 
+            DB::raw('count(p.id) as jumlahPage'),
             DB::raw('
                 (CASE WHEN a.isActive="0" THEN "Non-Aktif" WHEN a.isActive="1" THEN "Aktif" END) AS isActive
                 '),
         )
-        ->orderBy('a.name');
+        ->join('pages as p', 'p.applicationId', '=', 'a.id')
+        ->orderBy('a.name')
+        ->groupBy('a.id');
+
         $query->get();
 
         return datatables()->of($query)
@@ -78,7 +112,7 @@ class UserPageMappingController extends Controller
             <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Aplikasi" onclick="editAplikasi('.$row->id.')">
             <i class="fa fa-edit"></i>
             </button>
-            <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Aplikasi" onclick="kelolaPages('.$row->id.')">
+            <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar Pages" onclick="kelolaPages('.$row->id.')">
             <i class="fa fa-list"></i>
             </button>
             ';            
@@ -92,6 +126,7 @@ class UserPageMappingController extends Controller
             'p.id as id', 
             'p.name as name',
             'a.name as appName',
+            'p.route as route',
             'p.minimumAccessLevel as level',
             'p.icon as icon',
             DB::raw('

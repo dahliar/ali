@@ -1,6 +1,6 @@
 <!--BELUM-->
 @php
-$pageId = -1;
+$pageId = 44;
 @endphp
 
 <meta name="csrf-token" content="{{ csrf_token() }}" />

@@ -95,8 +95,10 @@ $pageId = -1;
                     </nav>
                 </div>
                 <div class="col-md-3 text-end">
-                    <a href="{{url('printSalaryHarianList')}}/{{$salary->id}}" target="_blank" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak dokumen gaji">Cetak daftar gaji
-                    </a>
+                        <!--
+                        <a href="{{url('printSalaryHarianList')}}/{{$salary->id}}" target="_blank" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak dokumen gaji">Cetak daftar gaji
+                        </a>
+                    -->
                 </div>
             </div>
 

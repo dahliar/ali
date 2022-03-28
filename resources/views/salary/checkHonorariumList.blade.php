@@ -121,10 +121,12 @@ $pageId = -1;
                         </ol>
                     </nav>
                 </div>
-                <div class="col-md-3 text-end">
+                    <!--
+                    <div class="col-md-3 text-end">                    
                     <a href="{{url('printSalaryHonorariumList')}}/{{$salary->id}}" target="_blank" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak dokumen gaji">Cetak daftar honorarium
                     </a>
-                </div>
+                    </div>
+                -->
             </div>
 
             <div class="modal-body">

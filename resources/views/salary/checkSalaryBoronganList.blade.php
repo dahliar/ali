@@ -121,8 +121,10 @@ $pageId = -1;
                     </nav>
                 </div>
                 <div class="col-md-3 text-end">
-                    <a href="{{url('printSalaryBoronganList')}}/{{$borongan->id}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Daftar Gaji" target="_blank"><i class="fas fa-money-check-alt"></i>
-                    </a>
+                        <!--
+                        <a href="{{url('printSalaryBoronganList')}}/{{$borongan->id}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Daftar Gaji" target="_blank"><i class="fas fa-money-check-alt"></i>
+                        </a>
+                    -->
                 </div>
             </div>
             <input type="hidden" value="{{$borongan->id}}" id="boronganId" name="boronganId" class="form-control" readonly>

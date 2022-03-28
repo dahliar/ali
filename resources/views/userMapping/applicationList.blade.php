@@ -43,14 +43,16 @@ $pageId = 5
             destroy:true,
             columnDefs: [
             {   "width": "10%",  "targets": [0], "className": "text-center" },
-            {   "width": "50%", "targets":  [1], "className": "text-left"   },
-            {   "width": "20%", "targets":  [2], "className": "text-left" },
-            {   "width": "20%", "targets":  [3], "className": "text-left" }
+            {   "width": "40%", "targets":  [1], "className": "text-left"   },
+            {   "width": "10%", "targets":  [2], "className": "text-center" },
+            {   "width": "10%", "targets":  [3], "className": "text-center" },
+            {   "width": "10%", "targets":  [4], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
+            {data: 'jumlahPage', name: 'jumlahPage'},
             {data: 'isActive', name: 'isActive'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -96,6 +98,7 @@ $pageId = 5
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
+                                <th>Jumlah page</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>

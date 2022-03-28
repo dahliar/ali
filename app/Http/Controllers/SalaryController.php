@@ -52,7 +52,6 @@ class SalaryController extends Controller
     }
     public function viewSlipGaji(Request $request)
     {
-        dd($request);
         return view('salary.slipGajiPegawai');
     }
     public function store(Request $request)

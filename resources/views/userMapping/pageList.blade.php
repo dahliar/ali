@@ -23,8 +23,8 @@ $pageId = 6
         }
     });
 
-    function tambahPage(){
-        alert("ke laman tambah page");
+    function tambahPage(id){
+        window.open(('{{ url("pageAdd") }}'+"/"+id), '_self');        
     }
     function editAplikasi($id){
         alert("ke laman edit page dengan id : "+$id);
@@ -41,19 +41,21 @@ $pageId = 6
             columnDefs: [
             {   "width": "5%",  "targets": [0], "className": "text-center" },
             {   "width": "15%", "targets": [1], "className": "text-left" },
-            {   "width": "8%", "targets": [2], "className": "text-left" },
-            {   "width": "27%", "targets": [3], "className": "text-left" },
-            {   "width": "5%", "targets": [4], "className": "text-left" },
+            {   "width": "25%", "targets": [2], "className": "text-left" },
+            {   "width": "25%", "targets": [3], "className": "text-left" },
+            {   "width": "5%", "targets": [4], "className": "text-center" },
             {   "width": "5%", "targets": [5], "className": "text-center" },
-            {   "width": "5%", "targets": [6], "className": "text-left" },
-            {   "width": "10%", "targets": [7], "className": "text-center" }
+            {   "width": "5%", "targets": [6], "className": "text-center" },
+            {   "width": "5%", "targets": [7], "className": "text-center" },
+            {   "width": "10%", "targets": [8], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'appName', name: 'appName'},
-            {data: 'id', name: 'id'},
             {data: 'name', name: 'name'},
+            {data: 'route', name: 'route'},
+            {data: 'id', name: 'id'},
             {data: 'level', name: 'level'},
             {data: 'icon', name: 'icon'},
             {data: 'isActive', name: 'isActive'},
@@ -89,7 +91,7 @@ $pageId = 6
                         <li class="breadcrumb-item active">Daftar Page Aplikasi {{$application->name}}</li>
                     </ol>
                 </nav>
-                <button class="btn btn-primary" onclick="tambahPage()" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Aplikasi"><i class="fa fa-plus" style="font-size:20px"></i>
+                <button class="btn btn-primary" onclick="tambahPage({{$application->id}})" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Aplikasi"><i class="fa fa-plus" style="font-size:20px"></i>
                 </button>
             </div>
             <div class="modal-body">
@@ -99,8 +101,9 @@ $pageId = 6
                             <tr>
                                 <th>No</th>
                                 <th>Aplikasi</th>
-                                <th>Page ID</th>
-                                <th>Page name</th>
+                                <th>Name</th>
+                                <th>Route</th>
+                                <th>ID</th>
                                 <th>Level</th>
                                 <th>Icon</th>
                                 <th>Status</th>

@@ -1,6 +1,6 @@
 <!--BELUM-->
 @php
-$pageId = -1;
+$pageId = 46;
 @endphp
 
 @extends('layouts.layout')
