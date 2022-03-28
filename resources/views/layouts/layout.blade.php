@@ -2,7 +2,7 @@
 <!--
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 -->
-<script src="../resources/js/jquery-3.6.0.min.js"></script>
+<script src="{{ asset('../resources/js/jquery-3.6.0.min.js') }}"></script>
 
 <script src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js" type="text/javascript" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
