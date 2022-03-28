@@ -93,25 +93,25 @@ class Item extends Model
     }
 
     public function getSpeciesStock(){
-        //DB::enableQueryLog();
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
             'sp.name as name', 
-            DB::raw('sum(i.amount * i.weightbase) as jumlahPacked'),
-            'amountUnpacked as jumlahUnpacked',
-            DB::raw('(select (sum(dt.amount * i.weightbase)) from detail_transactions as dt join transactions t on dt.transactionId=t.id where t.status=4 and dt.itemId=i.id group by i.id) as jumlahOnLoading'),
+            DB::raw('sum(i.amount*weightbase) as jumlahPacked'),
+            DB::raw('sum(amountUnpacked) as jumlahUnpacked'),
+            'p.shortname as packingShortname',
+            DB::raw('sum((select sum(dt.amount*weightbase) from detail_transactions as dt join transactions t on dt.transactionId=t.id join items i2 on i2.id=dt.itemId join sizes s2 on s2.id=i2.sizeid join species sp2 on sp2.id=s2.speciesId where t.status=4 and dt.itemId=i.id group by sp2.id)) as jumlahOnLoading')            
         )
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->where('i.isActive','=', 1)
-        ->where('s.isActive','=', 1)
+        ->orderBy('sp.name', 'desc')
+        ->orderBy('g.name', 'asc')
         ->groupBy('sp.id')
-        ->orderBy('sp.name')
-        ->get();  
-        //$q=DB::getQueryLog();
-        //dd($q);
-
+        ->orderByRaw('s.name+0', 'asc');
 
         return datatables()->of($query)
         ->addColumn('total', function ($row) {
@@ -125,13 +125,9 @@ class Item extends Model
             return number_format($row->jumlahUnpacked, 2);
         })
         ->editColumn('jumlahOnLoading', function ($row) {
-            return number_format($row->jumlahOnLoading, 2);
+            return number_format(($row->jumlahOnLoading), 2);
         })
-        ->addColumn('action', function ($row) {
-            $html="";
-
-            return $html;
-        })->addIndexColumn()->toJson();
+        ->addIndexColumn()->toJson();
     }
 
 

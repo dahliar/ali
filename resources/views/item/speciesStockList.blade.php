@@ -31,8 +31,7 @@ $pageId = 3;
             {   "width": "15%", "targets":  [2], "className": "text-end" },
             {   "width": "10%", "targets":  [3], "className": "text-end" },
             {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" }
+            {   "width": "10%", "targets":  [5], "className": "text-end" }
             ], 
 
             columns: [
@@ -41,8 +40,7 @@ $pageId = 3;
             {data: 'packed', name: 'jumlahPacked'},
             {data: 'unpacked', name: 'jumlahUnpacked'},
             {data: 'total', name: 'total'},
-            {data: 'jumlahOnLoading', name: 'jumlahOnLoading'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
+            {data: 'jumlahOnLoading', name: 'jumlahOnLoading'}
             ]
         });
     }
@@ -88,7 +86,6 @@ $pageId = 3;
                                         <th>Unpacked (Kg)</th>
                                         <th>Stock in hand (Kg)</th>
                                         <th>On Progress (Kg)</th>
-                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
