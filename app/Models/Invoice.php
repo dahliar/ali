@@ -12,7 +12,7 @@ class Invoice extends Model
     public function getOneInvoiceDetail($transactionId){
         $query = DB::table('detail_transactions as dt')
         ->select(
-            DB::raw('concat(sp.name,    " ",s.name,         " ",i.name) as goods'),
+            DB::raw('concat(sp.name,    " ",g.name,    " ",s.name,         " ",i.name) as goods'),
             DB::raw('concat(dt.amount,  " ",p.shortname)                as quantity'),
             DB::raw('(dt.amount * i.weightbase) as netweight'),
             DB::raw('(dt.amount * (i.weightbase+0.5)) as grossweight'),
@@ -33,6 +33,10 @@ class Invoice extends Model
         ->join('sizes as s', 'i.sizeid', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->where('t.id','=', $transactionId)
+        ->orderBy('sp.name')
+        ->orderBy('g.name', 'desc')
+        ->orderByRaw('s.name+0 asc')
+        ->orderBy('f.name')
         ->get();  
 
 
