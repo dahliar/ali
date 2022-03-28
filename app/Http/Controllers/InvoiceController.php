@@ -26,7 +26,6 @@ class InvoiceController extends Controller
         $month = date('m');
         $year = date('Y');
         $isActive=1;
-        $createdAt=date('Y-m-d');
 
         $result = DB::table('document_numbers as dn')
         ->where('month', $month)
@@ -48,8 +47,7 @@ class InvoiceController extends Controller
             'bagian'=>$bagian,
             'month'=>$month,
             'year'=>$year,
-            'isActive'=>$isActive,
-            'createdAt'=>$createdAt,
+            'isActive'=>$isActive
         ];
         $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
         DB::table('document_numbers')->insert($data);
@@ -63,7 +61,6 @@ class InvoiceController extends Controller
         $month = date('m');
         $year = date('Y');
         $isActive=1;
-        $createdAt=date('Y-m-d');
 
         $result = DB::table('document_numbers as dn')
         ->where('month', $month)
@@ -86,8 +83,7 @@ class InvoiceController extends Controller
             //'documentType'=>$documentType,
             'month'=>$month,
             'year'=>$year,
-            'isActive'=>$isActive,
-            'createdAt'=>$createdAt,
+            'isActive'=>$isActive
         ];
         $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
         DB::table('document_numbers')->insert($data);
@@ -100,7 +96,6 @@ class InvoiceController extends Controller
         $month = date('m');
         $year = date('Y');
         $isActive=1;
-        $createdAt=date('Y-m-d');
 
         $result = DB::table('document_numbers as dn')
         ->where('month', $month)
@@ -125,8 +120,7 @@ class InvoiceController extends Controller
             'month'=>$month,
             //'documentType'=>$documentType,
             'year'=>$year,
-            'isActive'=>$isActive,
-            'createdAt'=>$createdAt,
+            'isActive'=>$isActive
         ];
         $pinum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
         DB::table('document_numbers')->insert($data);
