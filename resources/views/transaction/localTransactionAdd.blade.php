@@ -12,60 +12,7 @@ $pageId = -1;
 
 <script type="text/javascript"> 
     $(document).ready(function() {
-        $('#rekening').on('change', function() {
-            var rekening = $(this).val();
-            if (rekening>0){
-                $.ajax({
-                    url: '{{ url("getOneRekening") }}'+"/"+rekening,
-                    type: "GET",
-                    data : {"_token":"{{ csrf_token() }}"},
-                    dataType: "json",
-                    success:function(data){
-                        if(data){
-                            $('[name="valuta"]').val(data.valuta);
-                        }else{
-                        }
-                    }
-                });
-            }else{
-                swal.fire('warning','Choose Rekening first!','info');
-            }
-        });
-        $('#company').on('change', function() {
-            var company = $(this).val();
-            if (company>0){
-                $.ajax({
-                    url: '{{ url("getOneCompany") }}'+"/"+company,
-                    type: "GET",
-                    data : {"_token":"{{ csrf_token() }}"},
-                    dataType: "json",
-                    success:function(data){
-                        if(data){
-                            $('[name="companydetail"]').val(data.address+'. '+data.nation);
-                        }else{
-                        }
-                    }
-                });
-            }else{
-                $('[name="companydetail"]').val("");
-                swal.fire('warning','Choose Company first!','info');
-            }
-        });
-        $('#valutaType').on('change', function() {
-            var e = document.getElementById("valutaType");
-            setValutaSpan(e);
-        });
-        function setValutaSpan(e){
-            var valutaType = e.options[e.selectedIndex].value;
-            var valText = e.options[e.selectedIndex].text;
 
-            if (valutaType>0){
-                document.getElementById("spanAm").textContent=valText;
-                document.getElementById("spanAd").textContent=valText;
-            }else{
-                swal.fire('warning','Choose Payment Valuta first!','info');
-            }
-        }
     });
 </script>
 
