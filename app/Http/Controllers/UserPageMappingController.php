@@ -172,6 +172,7 @@ class UserPageMappingController extends Controller
         ->where('e.isActive', '=', 1)
         ->first();
         $uid=$request->userId;
+
         $pages=DB::table('pages as p')
         ->select(
             'p.name as pageName',
@@ -189,8 +190,12 @@ class UserPageMappingController extends Controller
         ->where('a.isActive','=', 1)
         ->where('p.isActive','=', 1)
         ->orderBy('a.name')
-        ->orderBy('p.name')
-        ->get();
+        ->orderBy('p.name');
+
+        if (Auth::user()->accessLevel != 0){
+            $pages->where('p.minimumAccessLevel','>', 0);
+        }
+        $pages->get();
         return view('userMapping.userMapping', compact('user', 'pages'));
     }
     public function store(Request $request)
