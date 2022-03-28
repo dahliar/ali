@@ -22,6 +22,11 @@
   }
 </style>
 
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+  });
+</script>
 <head>  
   <meta charset="UTF-8" />
   <title>{{ config('app.name', 'ALISeafood') }}</title>

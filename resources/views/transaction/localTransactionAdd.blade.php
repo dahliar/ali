@@ -12,7 +12,12 @@ $pageId = -1;
 
 <script type="text/javascript"> 
     $(document).ready(function() {
-        $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+
+        var i=1;
+        $('#add').click(function(){
+            i++;  
+            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">notes</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>'); 
+        });
         $('#rekening').on('change', function() {
             var rek = $(this).val();
             if (rek>0){
