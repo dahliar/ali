@@ -121,7 +121,7 @@ class Item extends Model
             return number_format($row->jumlahUnpacked, 2);
         })
         ->editColumn('jumlahOnLoading', function ($row) {
-            return number_format($row->jumlahOnLoading, 2);
+            return 'xxx '.number_format($row->jumlahOnLoading, 2);
         })
         ->addColumn('action', function ($row) {
             $html="";
