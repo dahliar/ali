@@ -100,7 +100,7 @@ class Item extends Model
             'sp.name as name', 
             DB::raw('sum(i.amount * i.weightbase) as jumlahPacked'),
             'amountUnpacked as jumlahUnpacked',
-            DB::raw('(select (sum(dt.amount * i2.weightbase)) from detail_transactions as dt join transactions t on dt.transactionId=t.id join items as i2 on dt.itemId=i2.id where t.status=4 and dt.itemId=i.id) as jumlahOnLoading'),
+            DB::raw('(select (sum(dt.amount)) from detail_transactions as dt join transactions t on dt.transactionId=t.id where t.status=4 and dt.itemId=i.id) as jumlahOnLoading'),
         )
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
