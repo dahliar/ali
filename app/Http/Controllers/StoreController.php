@@ -21,6 +21,7 @@ class StoreController extends Controller
     public function __construct(){
         $this->store = new Store();
         $this->item = new Item();
+        $this->transaction = new TransactionController();
     }
 
     public function itemStoreDetail($storeId)
@@ -76,6 +77,8 @@ class StoreController extends Controller
         ];
         $oneItemStore = $this->store->unpackedUpdate($data);
 
+        $this->transaction->stockChangeLog(1, "Update stock dari unpacked ke packed", $request->itemId, $request->amountPacking);
+
         $teks1 = $request->speciesName." ".$request->sizeName." ".$request->gradeName;
         $teks2 = $request->amountPacking.' '.$request->input('packingName');
         return redirect('itemStockList')
@@ -110,6 +113,9 @@ class StoreController extends Controller
             'isApproved' => 1
         ];
         $oneItemStore = $this->store->storeOneItem($data);
+        
+        $this->transaction->stockChangeLog(1, "Tambah stock Packed tanggal ".$request->tanggalPacking, $request->itemId, $request->packedTambah);
+        /*$this->transaction->stockChangeLog(1, "Tambah stock Unpacked tanggal ".$request->tanggalPacking, $request->itemId, $request->unpackedTambah);*/
 
         $teks1 = $request->speciesName." ".$request->sizeName." ".$request->gradeName;
         $teks2 = $request->amount.' '.$request->input('packingName');

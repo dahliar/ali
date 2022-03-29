@@ -73,7 +73,6 @@ class TransactionController extends Controller
         //2 default value dari inputan : swiftcode, valuta
         //3 inputan default: userId, creationDate, status
 
-
         $request->validate(
             [
                 //'transactionNum' => 'required|unique:transactions',
@@ -528,6 +527,8 @@ class TransactionController extends Controller
             DB::table('items')
             ->where('id', $itemDetail->itemId)
             ->decrement('amount', $itemDetail->amount);
+
+            $this->stockChangeLog(2, "Transaction ID ".$transactionId." dari Penawaran ke Sailing/Finished", $itemDetail->itemId, $itemDetail->amount);
         }
     }
 
@@ -552,7 +553,20 @@ class TransactionController extends Controller
             DB::table('items')
             ->where('id', $itemDetail->itemId)
             ->increment('amount', $itemDetail->amount);
+
+            $this->stockChangeLog(1, "Transaction ID ".$transactionId." dari Sailing/Finished ke batal", $itemDetail->itemId, $itemDetail->amount);
         }
+    }
+
+    public function stockChangeLog($jenis, $info, $itemId, $amount){
+        $data = [
+            'userId'    => auth()->user()->name,
+            'jenis'     => $jenis,
+            'informasiTransaksi' => $info,
+            'itemId'    =>  $itemId,
+            'amount'    =>  $amount                
+        ];
+        DB::table('stock_histories')->insert($data);
     }
     public function updatePinotes($pinotes){
         //the plan is, delete all notes existed in the table, and insert the new edited list
