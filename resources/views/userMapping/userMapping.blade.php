@@ -13,7 +13,7 @@ $pageId = 2
 @endsection
 
 @section('content')
-@if (Auth::user()->haveAccess($pageId, auth()->user()->id))
+<!--@if (Auth::user()->haveAccess($pageId, auth()->user()->id))-->
 @if (session('status'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -117,8 +117,10 @@ $pageId = 2
         </form>
     </div>
 </body>
+<!--
 @else
 @include('partial.noAccess')
 @endif
+-->
 
 @endsection

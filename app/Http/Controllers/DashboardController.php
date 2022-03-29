@@ -97,7 +97,6 @@ class DashboardController extends Controller
         ->first();*/
 
         $unpaid=[0,0,0,0];
-
         return view('home', compact('unpaid', 'ungenerate'));
     }
 }
