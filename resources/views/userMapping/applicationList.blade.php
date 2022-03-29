@@ -14,8 +14,6 @@ $pageId = 5
 @endsection
 
 @section('content')
-@if (Auth::user()->haveAccess($pageId, auth()->user()->id))
-
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -23,11 +21,7 @@ $pageId = 5
         }
     });
 
-    function tambahAplikasi(){
-        alert("inject db aja");
-    }
     function editAplikasi($id){
-        alert("ini juga inject db aja dengan id : "+$id);
     }
     function kelolaPages($id){
         window.open(('{{ url("pageList") }}'+"/"+$id), '_self');
@@ -88,8 +82,6 @@ $pageId = 5
                         <li class="breadcrumb-item active">Pemetaan Aplikasi Pengguna</li>
                     </ol>
                 </nav>
-                <button class="btn btn-primary" onclick="tambahAplikasi()" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Aplikasi"><i class="fa fa-plus" style="font-size:20px"></i>
-                </button>
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
@@ -111,8 +103,4 @@ $pageId = 5
         </div>
     </div>
 </body>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

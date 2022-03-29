@@ -1,14 +1,8 @@
-<!--BELUM-->
-@php
-$pageId = 7;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 @extends('layouts.layout')
 
 @section('content')
-@if (Auth::user()->haveAccess($pageId, auth()->user()->id))
 @if (session('success'))
 <script type="text/javascript">
     swal.fire("Success", "Data perusahaan berhasil ditambahkan", "info");
@@ -119,20 +113,11 @@ $pageId = 7;
         </form>
     </div>
 </div>
-
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection
-
-
-
 
 @section('footer')
 @include('partial.footer')
 @endsection
-
 
 @section('header')
 @include('partial.header')

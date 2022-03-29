@@ -1,7 +1,3 @@
-@php
-$pageId = 6
-@endphp
-
 <meta name="_token" content="{{ csrf_token() }}">
 @extends('layouts.layout')
 
@@ -14,8 +10,6 @@ $pageId = 6
 @endsection
 
 @section('content')
-@if (Auth::user()->haveAccess($pageId, auth()->user()->id))
-
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -118,8 +112,4 @@ $pageId = 6
         </div>
     </div>
 </body>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

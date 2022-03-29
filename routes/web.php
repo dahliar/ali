@@ -1,5 +1,7 @@
 <?php
-
+/*
+tambah 'authorized' di middleware untuk otorisasi akses
+*/
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TransactionController;
@@ -48,9 +50,12 @@ Route::get('/', function () {
 });
 
 Route::get('home',[DashboardController::class, 'index'])->middleware(['auth']);
-Route::get('unauthenticated', function () {
-    return view('partial.footer');
-})->name('unauthenticated');
+Route::get('home2',[DashboardController::class, 'indexHome2'])->middleware(['auth']);
+
+
+Route::get('unauthorized', function () {
+    return view('partial.noAccess');
+});
 
 /*
 *   Route Transaksi Penjualan
@@ -375,15 +380,11 @@ Route::post('orgStructureList', [EmployeeController::class, 'orgStructureList'])
 /*
 USER PAGE MAPPING
 */
-
-Route::get('userMappingList', [UserPageMappingController::class, 'userMappingIndex'])->middleware('auth');
-Route::get('applicationList', [UserPageMappingController::class, 'applicationIndex'])->middleware('auth');
+Route::get('applicationList', [UserPageMappingController::class, 'applicationIndex'])->middleware('auth', 'authorized');
 Route::get('pageList/{applicationId}', [UserPageMappingController::class, 'pageIndex'])->middleware('auth', 'authorized');
-Route::get('pageAdd/{applicationId}', [UserPageMappingController::class, 'pageAdd'])->middleware('auth');
-Route::post('pageStore', [UserPageMappingController::class, 'pageStore'])->middleware('auth');
-
-
-
+Route::get('pageAdd/{applicationId}', [UserPageMappingController::class, 'pageAdd'])->middleware('auth', 'authorized');
+Route::get('userMappingList', [UserPageMappingController::class, 'userMappingIndex'])->middleware('auth', 'authorized');
+Route::post('userMapping', [UserPageMappingController::class, 'mapping'])->middleware('auth', 'authorized');
 
 
 Route::get('getEmployeesMappingList', [UserPageMappingController::class, 'getEmployeesMappingList'])->middleware('auth');
@@ -391,11 +392,7 @@ Route::get('getApplicationList', [UserPageMappingController::class, 'getApplicat
 Route::get('getPageList/{applicationId}', [UserPageMappingController::class, 'getPageList'])->middleware('auth');
 
 
-
-Route::post('userMapping', [UserPageMappingController::class, 'mapping'])->middleware('auth', 'authorized');
+Route::post('pageStore', [UserPageMappingController::class, 'pageStore'])->middleware('auth');
 Route::post('applicationMappingStore', [UserPageMappingController::class, 'store'])->middleware('auth');
-Route::get('transactionListTesting',[TransactionController::class, 'indexTesting'])->middleware(['auth']);
-
-
 
 require __DIR__.'/auth.php';

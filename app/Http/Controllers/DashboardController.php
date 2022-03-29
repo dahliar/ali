@@ -99,4 +99,8 @@ class DashboardController extends Controller
         $unpaid=[0,0,0,0];
         return view('home', compact('unpaid', 'ungenerate'));
     }
+    public function indexHome2()
+    {
+        return view('home2');
+    }
 }
