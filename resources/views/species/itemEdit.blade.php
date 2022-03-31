@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 48;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -16,7 +11,6 @@ $pageId = 48;
 
 
 @section('content')
-@if ((Auth::user()->isProduction() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript"> 
 
     function editChecker(){
@@ -207,8 +201,4 @@ $pageId = 48;
         </form>
     </div>
 </div>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

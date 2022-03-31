@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 26;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -16,7 +11,6 @@ $pageId = 26;
 
 
 @section('content')
-@if ((Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript"> 
     var i=1;
     function disableForm() { 
@@ -575,10 +569,6 @@ $pageId = 26;
     }
 </script>
 @endif
-@endif
-
-@else
-@include('partial.noAccess')
 @endif
 
 @endsection

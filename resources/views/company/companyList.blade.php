@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 22;
-@endphp
-
 @extends('layouts.layout')
 
 @section('header')
@@ -13,9 +8,7 @@ $pageId = 22;
 @include('partial.footer')
 @endsection
 
-
 @section('content')
-@if ( (Auth::user()->isAdmin() or Auth::user()->isProduction() or Auth::user()->isMarketing() ) and Session::has('employeeId') and (Session()->get('levelAccess') <= 3))
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -116,8 +109,4 @@ $pageId = 22;
     </div>
 </div>
 </body>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

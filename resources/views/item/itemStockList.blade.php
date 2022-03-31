@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 49;
-@endphp
-
 @extends('layouts.layout')
 
 @section('header')
@@ -15,7 +10,6 @@ $pageId = 49;
 
 
 @section('content')
-@if ((Auth::user()->isProduction() or Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -165,8 +159,4 @@ $pageId = 49;
     <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
     <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
 </ol>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

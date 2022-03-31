@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 60;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -15,8 +10,6 @@ $pageId = 60;
 @endsection
     
 @section('content')
-@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
-
 @if ($errors->any())
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -72,9 +65,4 @@ $pageId = 60;
     </div>
 </div>
 </div>
-
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

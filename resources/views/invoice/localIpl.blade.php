@@ -1,11 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 32;
-@endphp
-
-@if ((Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
-
-
 <!doctype html>
     <html lang="en">
 
@@ -268,4 +260,3 @@ $pageId = 32;
         </main>
     </body>
     </html>
-    @endif

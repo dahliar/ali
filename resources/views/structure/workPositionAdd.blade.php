@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 63;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -15,7 +10,6 @@ $pageId = 63;
 @endsection
     
 @section('content')
-@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 
 @if ($errors->any())
 <div class="alert alert-success">
@@ -72,9 +66,5 @@ $pageId = 63;
     </div>
 </div>
 </div>
-
-@else
-@include('partial.noAccess')
-@endif
 
 @endsection

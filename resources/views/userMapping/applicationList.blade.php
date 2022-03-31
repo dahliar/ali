@@ -1,7 +1,3 @@
-@php
-$pageId = 5
-@endphp
-
 <meta name="_token" content="{{ csrf_token() }}">
 @extends('layouts.layout')
 

@@ -1,9 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 41;
-@endphp
-
-@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 <!doctype html>
     <html lang="en">
     <style type="text/css">
@@ -315,4 +309,3 @@ $pageId = 41;
         </main>
     </body>
     </html>
-    @endif

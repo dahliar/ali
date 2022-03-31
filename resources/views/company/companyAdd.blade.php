@@ -1,14 +1,8 @@
-<!--BELUM-->
-@php
-$pageId = 23;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 @extends('layouts.layout')
 
 @section('content')
-@if ( (Auth::user()->isAdmin() or Auth::user()->isMarketing() or Auth::user()->isProduction() ) and Session::has('employeeId') and (Session()->get('levelAccess') <= 3))
 <script type="text/javascript"> 
     $(document).ready(function() {
         var i=1;
@@ -168,19 +162,11 @@ $pageId = 23;
 @endif
 @endif
 
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection
-
-
-
 
 @section('footer')
 @include('partial.footer')
 @endsection
-
 
 @section('header')
 @include('partial.header')

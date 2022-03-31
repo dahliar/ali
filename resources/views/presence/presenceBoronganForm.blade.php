@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 73;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -15,7 +10,6 @@ $pageId = 73;
 @endsection
 
 @section('content')
-@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript"> 
     $(document).ready(function() {
         $('#jenis').on('change', function() {
@@ -167,9 +161,4 @@ $pageId = 73;
         </form>
     </div>
 </div>
-
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

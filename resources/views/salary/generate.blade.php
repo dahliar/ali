@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 76;
-@endphp
-
 @extends('layouts.layout')
 
 @section('header')
@@ -14,7 +9,6 @@ $pageId = 76;
 @endsection
 
 @section('content')
-@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @if (Session::has('val'))
 <div class="alert alert-success">
@@ -98,8 +92,4 @@ $pageId = 76;
         <li>Jika sudah selesai, cek pada setiap laman penggajian untuk melakukan pencetakan slip penggajian dan menandai jika sudah dilakukan pembayaran</li>
     </ol>
 </body>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

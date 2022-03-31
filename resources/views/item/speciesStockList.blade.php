@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 3;
-@endphp
-
 @extends('layouts.layout')
 
 @section('header')
@@ -15,7 +10,6 @@ $pageId = 3;
 
 
 @section('content')
-@if ((Auth::user()->isProduction() or Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript">
     function myFunction(){
         $('#datatable').DataTable({
@@ -102,8 +96,4 @@ $pageId = 3;
     <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
     <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
 </ol>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

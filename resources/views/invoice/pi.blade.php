@@ -1,9 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 30;
-@endphp
-
-@if ((Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <!doctype html>
     <html lang="en">
 
@@ -362,4 +356,3 @@ $pageId = 30;
     Document generated at : {{Carbon\Carbon::now()}}
 </body>
 </html>
-@endif

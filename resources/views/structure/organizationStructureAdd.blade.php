@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 57;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -16,7 +11,6 @@ $pageId = 57;
 
 
 @section('content')
-@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 <script type="text/javascript"> 
 
     function getOrgStructureSelectOptionList(workPos, structuralPos, orgstructure){
@@ -273,9 +267,4 @@ $pageId = 57;
     </div>
 </div>
 </div>
-
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

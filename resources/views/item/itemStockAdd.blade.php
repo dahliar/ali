@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 50;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -16,9 +11,6 @@ $pageId = 50;
 
 
 @section('content')
-@if ((Auth::user()->isProduction() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
-
-
 <script type="text/javascript">
     function totalAmount(){
         var packedLama = parseFloat(document.getElementById("packedLama").value);
@@ -311,8 +303,4 @@ $pageId = 50;
         </form>
     </div>
 </div>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

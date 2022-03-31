@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 80;
-@endphp
-
 @extends('layouts.layout')
 
 @section('header')
@@ -14,7 +9,6 @@ $pageId = 80;
 @endsection
 
 @section('content')
-@if ((Auth::user()->isHumanResources() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 2)
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <script type="text/javascript">
     $.ajaxSetup({
@@ -141,8 +135,4 @@ $pageId = 80;
         <li>Ketika dilakukan </li>
     </ol>
 </body>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 40;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -15,7 +10,6 @@ $pageId = 40;
 @endsection
 
 @section('content')
-@if ((Auth::user()->isAdmin() or Auth::user()->isProduction()) and Session::has('employeeId') and (Session()->get('levelAccess') <= 3))
 <script type="text/javascript"> 
     function selectOptionChange(speciesId, itemId){
         $.ajax({
@@ -193,13 +187,4 @@ $pageId = 40;
         </div>
     </div>
 </div>
-
-
-
-
-
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 37;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -15,7 +10,6 @@ $pageId = 37;
 @endsection
 
 @section('content')
-@if ( (Auth::user()->isAdmin() or Auth::user()->isMarketing()) and Session::has('employeeId') and (Session()->get('levelAccess') <= 3))
 <script type="text/javascript"> 
 
     function selectOptionChange(speciesId, itemId){
@@ -189,69 +183,60 @@ $pageId = 37;
                             <div class="col-md-3">
                                 <div class="input-group">
                                     <input id="existingStockInKg" value="{{number_format(old('existingStockInKg'), 2, ',', '.')}}" name="existingStockInKg" type="text" class="form-control text-end" readonly>
-                                        <span class="input-group-text">Kg</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row form-group mb-2">
-                                <div class="col-md-2 text-end">
-                                    <span class="label">Weightbase</span>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group">
-                                        <input id="weightbase" value="{{ old('weightbase') }}" name="weightbase" type="text" class="form-control text-end" readonly>
-                                        <span class="input-group-text">Kg per MC/Bag</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row form-group mb-2">
-                                <div class="col-md-2 text-end">
-                                    <span class="label">Jumlah*</span>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group">
-                                        <input id="amount" value="{{ old('amount',0) }}" name="amount" type="number" class="form-control text-end" step="0.01">
-                                        <span class="input-group-text">MC / Bag</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row form-group mb-2">
-                                <div class="col-md-2 text-end">
-                                    <span class="label">Harga*</span>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="input-group">
-                                        <span class="input-group-text">{{$marker}}</span>
-                                        <input id="harga" value="{{ old('harga',0) }}" name="harga" type="number" class="form-control text-end" step="0.01">
-                                        <span class="input-group-text">per Kg</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row form-group mb-2">
-                                <div class="col-md-2 text-end">
-                                </div>
-                                <div class="col-md-6">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <input type="reset" value="Reset" class="btn btn-secondary">
+                                    <span class="input-group-text">Kg</span>
                                 </div>
                             </div>
                         </div>
+                        <div class="row form-group mb-2">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Weightbase</span>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="weightbase" value="{{ old('weightbase') }}" name="weightbase" type="text" class="form-control text-end" readonly>
+                                    <span class="input-group-text">Kg per MC/Bag</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group mb-2">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Jumlah*</span>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <input id="amount" value="{{ old('amount',0) }}" name="amount" type="number" class="form-control text-end" step="0.01">
+                                    <span class="input-group-text">MC / Bag</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group mb-2">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Harga*</span>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <span class="input-group-text">{{$marker}}</span>
+                                    <input id="harga" value="{{ old('harga',0) }}" name="harga" type="number" class="form-control text-end" step="0.01">
+                                    <span class="input-group-text">per Kg</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group mb-2">
+                            <div class="col-md-2 text-end">
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <input type="reset" value="Reset" class="btn btn-secondary">
+                            </div>
+                        </div>
                     </div>
-                </form>
-                <h3>Catatan : </h3>
-                <ol>
-                    <li>Gunakan koma untuk untuk desimal</li>
-                </ol>
-            </div>
+                </div>
+            </form>
+            <h3>Catatan : </h3>
+            <ol>
+                <li>Gunakan koma untuk untuk desimal</li>
+            </ol>
         </div>
     </div>
-
-
-
-
-
-    @else
-    @include('partial.noAccess')
-    @endif
-
-    @endsection
+</div>
+@endsection

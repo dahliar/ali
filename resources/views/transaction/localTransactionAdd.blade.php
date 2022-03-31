@@ -1,15 +1,8 @@
-<!--BELUM-->
-@php
-$pageId = 28;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 @extends('layouts.layout')
 
 @section('content')
-@if ((Auth::user()->isMarketing() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
-
 <script type="text/javascript"> 
     $(document).ready(function() {
         $('#rekening').on('change', function() {
@@ -252,9 +245,6 @@ $pageId = 28;
         </form>
     </div>
 </div>
-@else
-@include('partial.noAccess')
-@endif
 @endsection
 
 @section('footer')

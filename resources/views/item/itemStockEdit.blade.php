@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 54;
-@endphp
-
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
@@ -16,7 +11,6 @@ $pageId = 54;
 
 
 @section('content')
-@if ((Auth::user()->isProduction() or Auth::user()->isAdmin()) and Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript">
     function totalAmount(){
         var addedPacked = parseFloat(document.getElementById("amountPacked").value);
@@ -273,8 +267,4 @@ $pageId = 54;
         </form>
     </div>
 </div>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection

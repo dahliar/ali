@@ -1,8 +1,3 @@
-<!--BELUM-->
-@php
-$pageId = 55;
-@endphp
-
 @extends('layouts.layout')
 
 @section('header')
@@ -15,7 +10,6 @@ $pageId = 55;
 
 
 @section('content')
-@if (Session::has('employeeId') and Session()->get('levelAccess') <= 3)
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -148,8 +142,4 @@ $pageId = 55;
     <li>Harga diatas adalah harga dengan basis pembelian pada rentang tanggal yang dipilih</li>
     <li>Harga berasal dari berbagai supplier</li>
 </ol>
-@else
-@include('partial.noAccess')
-@endif
-
 @endsection
