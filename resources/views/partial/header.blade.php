@@ -39,22 +39,8 @@ $pageId = -1;
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-				@if (Auth::user()->isAdmin() and (Session()->get('levelAccess') <= 3))
 				@include('partial.headerAdmin')
-				@endif
-
-				@if (Auth::user()->isProduction() and (Session()->get('levelAccess') <= 3))
-				@include('partial.headerProduction')
-				@endif
-
-				@if (Auth::user()->isHumanResources() and (Session()->get('levelAccess') <= 3))
-				@include('partial.headerHumanResources')
-				@endif
-
-				@if (Auth::user()->isMarketing() and (Session()->get('levelAccess') <= 3))
-				@include('partial.headerMarketing')
-				@endif
+				
 
 				<ul class="d-flex navbar-nav mb-s">
 					<li class="nav-item dropdown">

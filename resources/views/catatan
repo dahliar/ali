@@ -23,3 +23,23 @@ from items as i join sizes as s on i.sizeId =s.id join species as sp on s.specie
 DB::enableQueryLog();
 $q=DB::getQueryLog();
 dd($q);
+
+
+di header.blade.php
+<!--
+					@if (Auth::user()->isAdmin() and (Session()->get('levelAccess') <= 3))
+					@include('partial.headerAdmin')
+					@endif
+
+					@if (Auth::user()->isProduction() and (Session()->get('levelAccess') <= 3))
+					@include('partial.headerProduction')
+					@endif
+
+					@if (Auth::user()->isHumanResources() and (Session()->get('levelAccess') <= 3))
+					@include('partial.headerHumanResources')
+					@endif
+
+					@if (Auth::user()->isMarketing() and (Session()->get('levelAccess') <= 3))
+					@include('partial.headerMarketing')
+					@endif
+				-->
