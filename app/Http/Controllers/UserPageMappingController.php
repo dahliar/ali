@@ -201,6 +201,7 @@ class UserPageMappingController extends Controller
     }
     public function store(Request $request)
     {
+
         $dataDelete = array();
         if ($request->has('mapping')){
             foreach($request->mapping as $mapping)
@@ -217,6 +218,7 @@ class UserPageMappingController extends Controller
                 );
             }
         }
+
         if ($request->has('mappingHidden')){
             if ($request->has('mapping')){
                 foreach($request->mappingHidden as $mapping)
