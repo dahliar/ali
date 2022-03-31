@@ -22,7 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
-        'levelAccess',
+        'accessLevel',
         'role',
         'email',
         'password',
@@ -78,6 +78,7 @@ class User extends Authenticatable
         return false;
     }
 
+    /*
     public function haveAccess($pageId, $userId){
         if (Auth::check() and (Auth::user()->id == $userId)){
             $exist = DB::table('user_page_mappings as upm')
@@ -96,4 +97,5 @@ class User extends Authenticatable
         }
         return false;
     }
+    */
 }
