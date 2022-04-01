@@ -27,8 +27,8 @@ class AccessAuthorization
         ->exists();
 
         if (!$exist){
-            return redirect('unauthorized')->with('message', "");
-            //return redirect('unauthorized')->with('message', Route::current()->uri);
+            //return redirect('unauthorized')->with('message', "");
+            return redirect('unauthorized')->with('message', Route::current()->uri);
         }
         return $next($request);
     }
