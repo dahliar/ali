@@ -16,9 +16,8 @@
         }
     });
 
-    function presenceForTodayModal(id, name){
+    function presenceForTodayModal(id){
         document.getElementById("empidModal").value = id;
-        document.getElementById("modalName").value = name;
         $('#employeePresenceHonorariumModal').modal('show');
     }
     function presenceForTodayStore(id){
@@ -153,15 +152,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="empidModal" name="empidModal" class="form-control" readonly>
-                    <div class="row form-group">
-                        <div class="col-md-2 text-end">
-                            <span class="label">Nama</span>
-                        </div>
-                        <div class="col-md-8">
-                            <input type="text" id="modalName" name="modalName" class="form-control" readonly>
-                        </div>
-                    </div>                    
+                    <input type="hidden" id="empidModal" name="empidModal" class="form-control" readonly>                   
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
                             <span class="label">Tanggal Kerja</span>
