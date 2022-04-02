@@ -262,6 +262,7 @@ Route::GET('printPayrollList/{payrollId}',[SalaryController::class, 'printPayrol
 Route::GET('getEmployeeDetailSalaries/{payrollId}',[SalaryController::class, 'getEmployeeDetailSalaries'])->middleware('auth');
 
 
+
 Route::GET('generateGajiBulananStore',[SalaryController::class, 'indexGenerate'])->name('generateGaji')->middleware('auth');
 
 

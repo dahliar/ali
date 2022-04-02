@@ -279,7 +279,7 @@ class InvoiceController extends Controller
         $presence="";
         $borongan="";
         $harian="";
-        $honorarirum="";
+        $honorarium="";
         $startDate=$salaries[0]->startDate;
         $endDate=$salaries[0]->endDate;
         foreach($salaries as $sal){
