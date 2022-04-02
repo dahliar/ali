@@ -121,7 +121,7 @@
             $no=1;
             @endphp         
 
-            @if((count($harian)>0))
+            @if(!empty($harian))
             <span class="label" id="spanLabel"><b><h3>Presensi Harian</h3></b></span>
             <table width="100%" id="invoice">
                 <thead style="text-align: center;">

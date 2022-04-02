@@ -75,7 +75,6 @@ class SalaryController extends Controller
         ->select('id as id')
         ->where('payDate', '=', $request->end)
         ->first();
-
         $harian = $this->salaryHarianGenerate($request->start, $request->end, $payrollId->id);
         //$bulanan = $this->lemburBulananGenerate($request->start, $request->end, $payrollId->id);
         $borongan = $this->salaryBoronganGenerate($request->start, $request->end, $payrollId->id);
