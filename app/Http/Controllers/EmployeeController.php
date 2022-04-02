@@ -414,6 +414,7 @@ class EmployeeController extends Controller
         })->addIndexColumn()->toJson();
     }
 
+    /*
     public function getEmployeesBulanan(){
         $query = DB::table('employees as e')
         ->select(
@@ -453,5 +454,6 @@ class EmployeeController extends Controller
         })
         ->addIndexColumn()->toJson();
     }
+    */
 
 }

@@ -260,9 +260,16 @@ Route::GET('getSalariesList/{salaryId}',[SalaryController::class, 'getSalariesLi
 Route::GET('getPayrollList/{start}/{end}',[SalaryController::class, 'getPayrollList'])->middleware('auth');
 Route::GET('printPayrollList/{payrollId}',[SalaryController::class, 'printPayrollList'])->middleware('auth', 'authorized');
 Route::GET('getEmployeeDetailSalaries/{payrollId}',[SalaryController::class, 'getEmployeeDetailSalaries'])->middleware('auth');
+
+
+Route::GET('generateGajiBulananStore',[SalaryController::class, 'indexGenerate'])->name('generateGaji')->middleware('auth');
+
+
+
+/*
 Route::GET('getEmployeesBulanan',[EmployeeController::class, 'getEmployeesBulanan'])->middleware('auth');
 
-
+*/
 
 
 
