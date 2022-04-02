@@ -74,23 +74,25 @@ class HonorariumController extends Controller
             DB::raw('count(id) as jumlah'),
             'id as salaryId'
         )
-        ->where('enddate', '=', Carbon::now()->toDateString())
+        ->where('enddate', '=', $request->tanggalKerja)
         ->where('jenis', '=', 4)
         ->where('isPaid', '=', null)
         ->first();
 
+        /*
         $salaryId="";
         if($salariesPaidExist->jumlah > 0){
             $salaryId = $salariesPaidExist->salaryId;
         } else{
             $data = [
-                'endDate'           => Carbon::now()->toDateString(),
+                'endDate'           => $request->tanggalKerja,
                 'userIdGenerator'   => auth()->user()->id,
                 'jenis'             => 4,
                 'isPaid'            => null
             ];
             $salaryId = DB::table('salaries')->insertGetId($data);
         }
+        */
 
         $dataHonorarium = [
             'employeeId'        => $request->empid,
@@ -98,7 +100,7 @@ class HonorariumController extends Controller
             'jumlah'            => $request->jumlah,
             'keterangan'        => $request->keterangan,
             'isGenerated'       => 0,
-            'salaryId'          => $salaryId
+            //'salaryId'          => $salaryId
         ];
 
         $affected = DB::table('honorariums')->insert($dataHonorarium);
