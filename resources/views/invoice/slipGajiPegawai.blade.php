@@ -241,7 +241,7 @@
                 </tfoot>        
             </table>
             @endif
-            @if((count($honorarium)>0))
+            @if(!empty($honorarium))
             <span class="label" id="spanLabel"><b><h3>Honorarium</h3></b></span>
             <table width="100%" id="invoice">
                 <thead style="text-align: center;">
