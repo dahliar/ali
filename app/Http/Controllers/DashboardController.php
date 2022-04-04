@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
+
+    public function getServerDate(){
+        return Carbon::now()->toDateString();
+    }
     public function index()
     {
         //BELUM GENERATE

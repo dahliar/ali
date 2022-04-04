@@ -140,7 +140,10 @@
 						<li><hr class="dropdown-divider"></li>
 						<li>
 							<a class="dropdown-item" href="{{ url('payrollList')}}">
-								<i class="fas fa-file-invoice-dollar"></i> Daftar Gaji
+								<i class="fas fa-file-invoice-dollar"></i> Daftar Gaji Pegawai Harian/Borongan
+							</a>
+							<a class="dropdown-item" href="{{ url('payrollListBulanan')}}">
+								<i class="fas fa-file-invoice-dollar"></i> Daftar Gaji Pegawai Bulanan
 							</a>
 						</li>
 					</ul>

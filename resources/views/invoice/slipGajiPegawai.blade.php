@@ -121,6 +121,30 @@
             $no=1;
             @endphp         
 
+            @if(!empty($bulanan))
+            <span class="label" id="spanLabel"><b><h3>Bulanan</h3></b></span>
+            <table width="100%" id="invoice">
+                <thead style="text-align: center;">
+                    <tr >
+                        <th width="5%">No</th>
+                        <th width="15%">Tanggal</th>
+                        <th width="15%">Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 12px;">
+                    <tr>
+                        <td width="5%" style="text-align:left">1</td>
+                        <td width="30%" style="text-align:center">{{$bulanan->tanggal}}</td>
+                        <td width="65%" style="text-align:right;">
+                            {{'Rp. '.number_format($bulanan->jumlah, 2, ',', '.')}}
+                        </td>
+                    </tr>
+                    @php
+                    $thp+=$bulanan->jumlah;
+                    @endphp
+                </tbody>      
+            </table>
+            @endif
             @if(!empty($harian))
             <span class="label" id="spanLabel"><b><h3>Presensi Harian</h3></b></span>
             <table width="100%" id="invoice">
@@ -264,7 +288,7 @@
                         <td width="65%" style="text-align:left">{{$h->keterangan}}</td>
                         <td width="15%" style="text-align:right">{{'Rp. '.number_format($h->jumlah, 0, ',', '.')}}
                         </td>
-                        
+
                     </tr>
                     @php
                     $total+=$h->jumlah;

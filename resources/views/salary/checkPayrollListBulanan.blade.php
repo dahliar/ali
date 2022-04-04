@@ -16,14 +16,14 @@
         }
     });
     function cetakSlipGajiPayroll(dpid){
-        window.open(('{{ url("slipGaji/slipGajiPerPayroll") }}'+"/"+dpid), '_blank');
+        window.open(('{{ url("slipGaji/slipGajiPerPayrollBulanan") }}'+"/"+dpid), '_blank');
     };
     function myFunction($payrollId){
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getEmployeeDetailSalaries") }}'+"/2/"+$payrollId,
+            ajax:'{{ url("getEmployeeDetailSalaries") }}'+"/1/"+$payrollId,
             dataType: "JSON",
             serverSide: false,
             processing: true,

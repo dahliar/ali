@@ -56,7 +56,92 @@ class Presence extends Model
         return $retValue;        
     }
 
-    function simpanPresenseHarian($start, $end){
+    function hitungPresenceHarianRamadhan($start, $end){
+        //hitung jam kerja
+        $dateAcuan = $start->toDateString();
+        if ($start->lte(Carbon::parse($dateAcuan." 08:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 08:00:00");
+            $shift=1;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 09:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 09:00:00");
+            $shift=1;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 10:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 10:00:00");
+            $shift=1;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 11:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 11:00:00");
+            $shift=1;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 13:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 13:00:00");
+            $shift=2;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 14:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 14:00:00");
+            $shift=2;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 15:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 15:00:00");
+            $shift=2;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 16:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 16:00:00");
+            $shift=3;
+        } else {
+            $masuk=$start;
+            $shift=3;
+        }
+
+        $isLembur=false;
+        $keluar = $end;
+        if ($end->gte(Carbon::parse($dateAcuan." 16:15:00"))){
+            $keluar=Carbon::parse($dateAcuan." 16:00:00");
+            $isLembur=true;
+        }
+
+        $menitKerja = $masuk->diffInMinutes($keluar); 
+        $jamKerja = $masuk->diffInHours($keluar); 
+        
+        $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
+        if ($selisihMenitSisa > 30){
+            $jamKerja+=1;
+        }
+
+        //mengurangi jam istirahat
+        if ((Carbon::parse($dateAcuan." 12:00:00")->between($start,$end)) and (Carbon::parse($dateAcuan." 13:00:00")->between($start,$end))) {
+            $jamKerja-=1;
+        }
+
+
+        //hitung jam lembur
+        $jamLembur=0;
+        if($isLembur)
+        {
+            if ($end->gte(Carbon::parse($dateAcuan." 19:00:00"))){
+                $masuk=$start;
+                if($start->lte(Carbon::parse($dateAcuan." 19:15:00"))){
+                    $masuk = Carbon::parse($dateAcuan." 19:00:00");
+                }
+                $keluar=$end;
+
+                $menitKerja = $masuk->diffInMinutes($keluar); 
+                $jamLembur = $masuk->diffInHours($keluar); 
+
+                $selisihMenitSisa = $menitKerja - ($jamLembur * 60);
+                if ($selisihMenitSisa >= 30){
+                    $jamLembur+=1;
+                }
+            }
+        }
+
+        $dataJam=[
+            'jamKerja'=>$jamKerja, 
+            'jamLembur'=>$jamLembur,
+            'shift'=>$shift
+        ];
+
+        return $dataJam;
+
+    }
+
+
+    function hitungPresenceHarian($start, $end){
         //hitung jam kerja
         $dateAcuan = $start->toDateString();
         if ($start->lte(Carbon::parse($dateAcuan." 08:15:00"))){
@@ -140,7 +225,14 @@ class Presence extends Model
 
 
     function simpanPresenceTunggal($empid, $start, $end, $isLembur){
-        $dataJam = $this->simpanPresenseHarian($start, $end);
+        $ramadhanStart = Carbon::parse("2022-04-03 00:00:00"); 
+        $ramadhanEnd = Carbon::parse("2022-05-01 23:59:59"); 
+        $dataJam=null;
+        if (($start->gte($ramadhanStart)) and ($start->lte($ramadhanEnd))) {
+            $dataJam = $this->hitungPresenceHarianRamadhan($start, $end);
+        } else{
+            $dataJam = $this->hitungPresenceHarian($start, $end);
+        }
 
         $presenceExist=DB::table('presences')
         ->select(
@@ -150,6 +242,7 @@ class Presence extends Model
         ->whereDate('start', '=', $start->toDateString())
         ->where('employeeId', '=', $empid)
         ->first();
+
         $dataPresensi = [
             'employeeId'    => $empid,
             'start'         => $start,
@@ -174,9 +267,19 @@ class Presence extends Model
         ->where('isactive', 1)
         ->first();
 
+
+        $isPegawaiBulanan = DB::table('employees')
+        ->select('employmentStatus as empStatus')
+        ->where('id', '=', $empid)
+        ->first()->empStatus;
+
+        $isSunday=$start->dayOfWeekIso;
+
         //hitung uang harian proporsional terhadap jam
         $uh = ceil($honor->uh * ($dataJam['jamKerja']/7) / 100) * 100;
-
+        if (($isPegawaiBulanan==1) and ($isSunday!=7)){
+            $uh=0;
+        }
 
         //hitung uang lembur berdasar isLembur
         $jamLembur=0;
@@ -212,182 +315,5 @@ class Presence extends Model
         } else {
             DB::table('dailysalaries')->insert($datasalary);
         }
-
-
-
-        //dump($start);
-        //dump($end);
-        //dd($dataJam);
-        /*
-        $batasMasuk         = $start;
-        $batasPulangKerja   = Carbon::parse($start->toDateString()." 16:00:00");
-        $menitKerja =0;
-        $jamKerja=0;
-        $menitLembur =0;
-        $jamLembur=0;
-
-        $shift = 1;
-        $jamLembur=0;
-        if ($start->gte($batasPulangKerja)) {
-            $shift = 3; 
-            $batasMasuk = Carbon::parse($start->toDateString()." 16:00:00");
-            if($start->lte(Carbon::parse($start->toDateString()." 16:15:00"))){
-                $menitKerja = $batasMasuk->diffInMinutes($end); 
-                $jamLembur = $batasMasuk->diffInHours($end); 
-            } else{
-                $menitKerja = $start->diffInMinutes($end); 
-                $jamLembur = $start->diffInHours($end); 
-            }
-
-            $selisihMenitSisa = $menitKerja - ($jamLembur * 60);
-            if ($selisihMenitSisa > 30){
-                $jamLembur+=1;
-            }
-        } else if ($start->gte(Carbon::parse($start->toDateString()." 12:00:00"))){
-            $shift = 2; 
-            $batasMasuk = Carbon::parse($start->toDateString()." 13:00:00");
-            if($start->lte(Carbon::parse($start->toDateString()." 13:15:00"))){
-                $mulai = $batasMasuk;
-            } else{
-                $mulai = $start;
-            }
-
-            $batasToleransiPulangKerja=Carbon::parse($start->toDateString()." 16:15:00");
-
-            if($end->lte($batasToleransiPulangKerja)) {
-                //kerja
-                $menitKerja = $mulai->diffInMinutes($end);
-                $jamKerja = $mulai->diffInHours($end);
-            } else {
-                //kerja dan lembur
-                $menitKerja = $mulai->diffInMinutes($batasPulangKerja); 
-                $jamKerja = $mulai->diffInHours($batasPulangKerja);
-
-                $menitLembur = $batasPulangKerja->diffInMinutes($end); 
-                $jamLembur = $batasPulangKerja->diffInHours($end);
-            }
-
-            //jam kerja
-            $selisihMenit = $menitKerja - ($jamKerja * 60);
-            if ($selisihMenit >= 30){
-                $jamKerja+=1;
-            }
-            //jam lembur
-            $selisihMenit = $menitLembur - ($jamLembur * 60);
-            if ($selisihMenit >= 30){
-                $jamLembur+=1;
-            }
-        } else {
-            $shift=1;
-            $batasMasuk = Carbon::parse($start->toDateString()." 08:00:00");
-
-            if($start->lte($batasMasuk)) {
-                $mulai = $batasMasuk;
-            } else{
-                $mulai = $start;
-            }
-
-            $batasToleransiPulangKerja=Carbon::parse($start->toDateString()." 16:15:00");
-
-            if($end->lte($batasToleransiPulangKerja)) {
-                //kerja
-                $menitKerja = $mulai->diffInMinutes($end); 
-                $jamKerja = $mulai->diffInHours($end);
-            } else {
-                //kerja dan lembur
-                $menitKerja = $mulai->diffInMinutes($batasPulangKerja); 
-                $jamKerja = $mulai->diffInHours($batasPulangKerja);
-
-                $menitLembur = $batasPulangKerja->diffInMinutes($end); 
-                $jamLembur = $batasPulangKerja->diffInHours($end);
-            }
-
-            //jam kerja
-            $selisihMenit = $menitKerja - ($jamKerja * 60);
-            if ($selisihMenit >= 30){
-                $jamKerja+=1;
-            }
-            //jam lembur
-            $selisihMenit = $menitLembur - ($jamLembur * 60);
-            if ($selisihMenit >= 30){
-                $jamLembur+=1;
-            }
-
-            //berapa batas dikuranginya
-            //berapa batas dikuranginya
-            //berapa batas dikuranginya
-            //berapa batas dikuranginya
-            if ($end->gte(Carbon::parse($start->toDateString()." 14:00:00"))){
-                    $jamKerja-=1;   //mengurangi jam istirahat
-                }
-            }
-            //berapa batas dikuranginya
-            //berapa batas dikuranginya
-            //berapa batas dikuranginya
-            //berapa batas dikuranginya
-
-            dump($start.' '.$end.' '.$jamKerja.' '.$jamLembur);
-        /*
-        $presenceExist=DB::table('presences')
-        ->select(
-            DB::raw('count(id) as jumlah'),
-            'id as presenceId'
-        )
-        ->whereDate('start', '=', $start->toDateString())
-        ->where('employeeId', '=', $empid)
-        ->first();
-
-        $dataPresensi = [
-            'employeeId'    => $empid,
-            'start'         => $start,
-            'end'           => $end,
-            'jamKerja'      => $jamKerja,
-            'jamLembur'     => $jamLembur,
-            'shift'         => $shift
-        ];
-
-        if($presenceExist->jumlah > 0){
-            DB::table('presences')
-            ->where('id', '=', $presenceExist->presenceId)
-            ->update($dataPresensi);
-        } else{
-            DB::table('presences')->insert($dataPresensi);
-        }
-
-
-        /*
-        $honor = DB::table('employeeorgstructuremapping')
-        ->select('uangharian as uh', 'uanglembur as ul')
-        ->where('idemp', $empid)
-        ->where('isactive', 1)
-        ->first();
-
-        //hitung uang harian proporsional terhadap jam
-        $uh = ceil($honor->uh * ($jamKerja/7) / 100) * 100;
-        $dailySalariesExist=DB::table('dailysalaries')
-        ->select(
-            DB::raw('count(id) as jumlah'),
-            'id as dsid'
-        )
-        ->whereDate('presenceDate', '=', $start->toDateString())
-        ->where('employeeId', '=', $empid)
-        ->first();
-
-        $datasalary = [
-            'employeeId'    => $empid,
-            'presenceDate'  => $start->toDateString(),
-            'uangharian'    => $uh,
-            'jamKerja'      => $jamKerja,
-            'jamLembur'     => $jamLembur,
-            'uanglembur'    => ($honorarium->ul * $jamLembur)
-        ];
-        if($dailySalariesExist->jumlah > 0){
-            DB::table('dailysalaries')
-            ->where('id', '=', $dailySalariesExist->dsid)
-            ->update($datasalary);
-        } else {
-            DB::table('dailysalaries')->insert($datasalary);
-        }
-        */
     }
 }
