@@ -59,6 +59,10 @@ class Presence extends Model
     function getMasukKerjaDanShift($start, $dateAcuan){
         $masuk=null;
         $shift=0;
+
+
+
+
         if ($start->lte(Carbon::parse($dateAcuan." 08:15:00"))){
             $masuk=Carbon::parse($dateAcuan." 08:00:00");
             $shift=1;
@@ -250,7 +254,6 @@ class Presence extends Model
         } else{
             $dataJam = $this->hitungPresenceHarian($start, $end);
         }
-        dd($dataJam);
         $presenceExist=DB::table('presences')
         ->select(
             DB::raw('count(id) as jumlah'),
