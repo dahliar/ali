@@ -240,7 +240,6 @@ class Presence extends Model
             $dataJam = $this->hitungPresenceHarian($start, $end);
         }
 
-        dd($dataJam);
         $presenceExist=DB::table('presences')
         ->select(
             DB::raw('count(id) as jumlah'),
