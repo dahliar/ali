@@ -28,7 +28,6 @@ class InvoiceController extends Controller
         $isActive=1;
 
         $result = DB::table('document_numbers as dn')
-        ->where('month', $month)
         ->where('year', $year)
         ->where('bagian', $bagian)
         ->where('purchaseId','!=', null)
@@ -63,7 +62,6 @@ class InvoiceController extends Controller
         $isActive=1;
 
         $result = DB::table('document_numbers as dn')
-        ->where('month', $month)
         ->where('year', $year)
         ->where('bagian', $bagian)
         ->where('transactionId','!=', null)
@@ -98,10 +96,8 @@ class InvoiceController extends Controller
         $isActive=1;
 
         $result = DB::table('document_numbers as dn')
-        ->where('month', $month)
         ->where('year', $year)
         ->where('bagian', $bagian)
-        //->where('documentType', $documentType)
         ->orderBy('id', 'desc')
         ->first();
 
