@@ -71,6 +71,9 @@ class Presence extends Model
         } else if ($start->lte(Carbon::parse($dateAcuan." 11:15:00"))){
             $masuk=Carbon::parse($dateAcuan." 11:00:00");
             $shift=1;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 12:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 12:00:00");
+            $shift=1;
         } else if ($start->lte(Carbon::parse($dateAcuan." 13:15:00"))){
             $masuk=Carbon::parse($dateAcuan." 13:00:00");
             $shift=2;
@@ -156,6 +159,9 @@ class Presence extends Model
         } else if ($start->lte(Carbon::parse($dateAcuan." 11:15:00"))){
             $masuk=Carbon::parse($dateAcuan." 11:00:00");
             $shift=1;
+        } else if ($start->lte(Carbon::parse($dateAcuan." 12:15:00"))){
+            $masuk=Carbon::parse($dateAcuan." 12:00:00");
+            $shift=1;
         } else if ($start->lte(Carbon::parse($dateAcuan." 13:15:00"))){
             $masuk=Carbon::parse($dateAcuan." 13:00:00");
             $shift=2;
@@ -234,6 +240,7 @@ class Presence extends Model
             $dataJam = $this->hitungPresenceHarian($start, $end);
         }
 
+        dd($dataJam);
         $presenceExist=DB::table('presences')
         ->select(
             DB::raw('count(id) as jumlah'),
