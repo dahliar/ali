@@ -12,26 +12,57 @@
 
 @section('content')
 <script type="text/javascript"> 
-
     function editChecker(){
-        var checker="";
+        var $name = document.getElementById("name").value;
+
         var e = document.getElementById("size");
-        var size = e.options[e.selectedIndex].value;
+        var $size = e.options[e.selectedIndex].value;
 
         e = document.getElementById("grade");
-        var grade = e.options[e.selectedIndex].value;
+        var $grade = e.options[e.selectedIndex].value;
 
         e = document.getElementById("packing");
-        var packing = e.options[e.selectedIndex].value;
+        var $packing = e.options[e.selectedIndex].value;
 
         e = document.getElementById("freezing");
-        var freezing = e.options[e.selectedIndex].value;
+        var $freezing = e.options[e.selectedIndex].value;
 
-        var weightbase = document.getElementById("weightbase").value;
+        var $weightbase = document.getElementById("weightbase").value;
 
-        checker = checker.concat(size,':',grade,':',packing,':',freezing,':',weightbase);
-        document.getElementById("checker").value = checker;
+        if (  ($size!=-1) && ($grade!=-1) && ($packing!=-1) && ($freezing!=-1) && ($weightbase)  && ($name) ) {
+            $.ajax({
+                url: '{{ url("getIsItemAlreadyExist") }}',
+                type: "POST",
+                data: {
+                    "_token":"{{ csrf_token() }}",
+                    name: $name,
+                    size: $size,
+                    grade: $grade,
+                    packing: $packing,
+                    freezing: $freezing,
+                    weightbase: $weightbase
+                },
+                dataType: "json",
+                success:function(data){
+                    var myspan = document.getElementById('info');
+                    if (data==1)
+                    {
+                        document.getElementById("buttonSubmit").disabled=true;
+                        myspan.innerText = "Item barang sudah digunakan";
+                    } else {
+                        document.getElementById("buttonSubmit").disabled=false;
+                        myspan.innerText = "";
+                    }
+                    
+                }
+            });
+        }
+
+        return false;
     }
+
+
+
     $(document).ready(function() {
         $('#packing').on('change', function() {
             var e = document.getElementById("packing");
@@ -87,19 +118,18 @@
                 <div class="modal-body">
                     <div class="d-grid gap-1">
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Species*</span>
                             </div>
                             <div class="col-md-5">
-                                <input id="speciesId" name="speciesId" type="hidden" class="form-control text-md-right" value="{{$species->id}}" readonly>
-                                <input id="speciesName" name="speciesName" type="text" class="form-control text-md-right" value="{{$species->name}}" readonly>
-                                <input id="checker" name="checker" type="hidden" class="form-control text-md-right" value="{{old('checker')}}" readonly>
+                                <input id="speciesId" name="speciesId" type="hidden" class="form-control text-md-end" value="{{$species->id}}" readonly>
+                                <input id="speciesName" name="speciesName" type="text" class="form-control text-md-end" value="{{$species->name}}" readonly>
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Size*</span>
                             </div>
                             <div class="col-md-5">
@@ -116,8 +146,8 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Grade*</span>
                             </div>
                             <div class="col-md-5">
@@ -134,8 +164,8 @@
                             </div>
                         </div>                      
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Packing Type*</span>
                             </div>
                             <div class="col-md-5">
@@ -152,8 +182,8 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Freeze Type*</span>
                             </div>
                             <div class="col-md-5">
@@ -170,17 +200,17 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Item Name*</span>
                             </div>
                             <div class="col-md-5">
-                                <input id="name" name="name" type="text" class="form-control text-md-right" value="{{old('name')}}" placeholder="Nama harus unik untuk species & size tersebut">
+                                <input onchange="editChecker()" id="name" name="name" type="text" class="form-control text-md-end" value="{{old('name')}}" placeholder="Nama harus unik untuk species & size tersebut">
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Base Price*</span>
                             </div>
                             <div class="col-md-5">
@@ -191,8 +221,8 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Weight Base*</span>
                             </div>
                             <div class="col-md-5">
@@ -204,8 +234,8 @@
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Initial Amount*</span>
                             </div>
                             <div class="col-md-5">
@@ -216,8 +246,8 @@
                             </div>
                         </div>   
                         <div class="row form-group">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3 text-md-right">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
                                 <span class="label">Gambar</span>
                             </div>
                             <div class="col-md-5">
@@ -226,10 +256,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
+                                <span class="label"></span>
+                            </div>
+                            <div class="col-md-5">
+                                <span id="info" style="color:red" class="col-4"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="justify-content: center;">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button id="buttonSubmit" type="submit" class="btn btn-primary">Save</button>
                     <input type="reset" value="Reset" class="btn btn-secondary">
                 </div>
             </div>

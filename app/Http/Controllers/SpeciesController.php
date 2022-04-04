@@ -136,13 +136,29 @@ class SpeciesController extends Controller
         ->with('status','Item berhasil ditambahkan.');
 
     }
+    public function getIsItemAlreadyExist(Request $request){
+        $query = DB::table('items')
+        ->where("name", $request->name)
+        ->where("sizeId", $request->size)
+        ->where("gradeId", $request->grade)
+        ->where("packingId", $request->packing)
+        ->where("freezingId", $request->freezing)
+        ->where("weightbase", $request->weightbase)
+        ->where("isActive", 1)
+        ->count();
+
+        if ($query>0){
+            return 1;
+        }
+        return 0;
+    }
+
 
     public function storeItem(Request $request)
     {
         $validated = $request->validate(
             [
                 'name' => 'required|unique:items',
-                'checker' => 'required|unique:items',
                 'grade' => 'required|gt:0',
                 'packing' => 'required|gt:0',
                 'freezing' => 'required|gt:0',
@@ -150,12 +166,9 @@ class SpeciesController extends Controller
                 'weightbase' => 'required|numeric|gt:0',
                 'amount' => 'required|numeric|gte:0',
             ],[
-                'name.unique' => 'Nama harus unik, ":input" sudah digunakan',
-                'checker.unique' => 'Kombinasi Data: size, grade, packing, freezing, weightbase harus unik'
+                'name.unique' => 'Nama harus unik, ":input" sudah digunakan'
             ]
         );
-
-        $checker = $request->size.':'.$request->grade.':'.$request->packing.':'.$request->freezing.':'.$request->weightbase;
 
         $file="";
         $filename="";
@@ -175,16 +188,14 @@ class SpeciesController extends Controller
             'amount' =>  $request->amount,
             'baseprice' => $request->baseprice,
             'weightbase' => $request->weightbase,
-            'checker' => $checker,
             'isActive' =>  1,
             'imageurl' => "images/items/".$filename
         ];
-
-        //dd($data);
-        DB::table('items')->insert($data);
+        $itemId=DB::table('items')->insertGetId($data);
+        $this->transaction = new TransactionController();
+        $this->transaction->stockChangeLog(1, "Input Item baru", $itemId, $request->amount);
         return redirect('itemList/'.$request->speciesId)
         ->with('status','Item berhasil ditambahkan.');
-
     }
 
 

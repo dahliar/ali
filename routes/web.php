@@ -171,6 +171,9 @@ Route::get('addSpeciesItem/{speciesId}',[SpeciesController::class, 'createItem']
 Route::get('sizeCreateStore',[SpeciesController::class, 'storeSize'])->middleware(['auth']);
 Route::post('itemCreateStore',[SpeciesController::class, 'storeItem'])->middleware(['auth']);
 
+Route::POST('getIsItemAlreadyExist', [SpeciesController::class, 'getIsItemAlreadyExist'])->middleware(['auth']);
+
+
 Route::get('sizeEditStore',[SpeciesController::class, 'updateSize'])->middleware(['auth']);
 Route::get('itemEditStore',[SpeciesController::class, 'updateItem'])->middleware(['auth']);
 

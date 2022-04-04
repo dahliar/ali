@@ -103,6 +103,7 @@ class Species extends Model
             'g.name as gradeName', 
             'p.name as packingName', 
             'i.imageurl as url', 
+             DB::raw('(CASE WHEN i.isActive=0 THEN "Tidak" WHEN i.isActive="1" THEN "Ya" END) AS isActive'),
             'fr.name as freezingName', 
         )
         ->join('sizes as si', 'i.sizeId', '=', 'si.id')

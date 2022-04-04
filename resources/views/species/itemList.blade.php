@@ -42,7 +42,8 @@
             {   "width": "5%", "targets":  [5], "className": "text-center" },
             {   "width": "9%", "targets":  [6], "className": "text-center" },
             {   "width": "10%", "targets":  [7], "className": "text-left" },
-            {   "width": "5%", "targets":  [8], "className": "text-center" }
+            {   "width": "5%", "targets":  [8], "className": "text-left" },
+            {   "width": "5%", "targets":  [9], "className": "text-center" }
             ], 
 
             columns: [
@@ -54,6 +55,7 @@
             {data: 'gradeName', name: 'gradeName'},
             {data: 'freezingName', name: 'freezingName'},
             {data: 'packingName', name: 'packingName'},
+            {data: 'isActive', name: 'isActive'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -117,6 +119,7 @@
                                         <th>Grade</th>
                                         <th>Freeze</th>
                                         <th>Package</th>
+                                        <th>Aktif</th>
                                         <th>Act</th>
                                     </tr>
                                 </thead>
