@@ -44,15 +44,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:{
-                url: '{{ url("getPurchaseList") }}',
-                data: function (d){
-                    d.negara = negara;
-                    d.statusTransaksi = statusTransaksi;
-                    d.start = start;
-                    d.end = end;
-                }
-            },
+            ajax: '{{ url("getPurchaseList") }}' + "/"+ negara + "/"+ statusTransaksi + "/"+ start + "/"+ end,
             dataType: 'json',
             serverSide: false,
             processing: true,
@@ -71,7 +63,7 @@
             ], 
 
             columns: [
-            {data: 'id', name: 'DT_RowIndex'},
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
             {data: 'nation', name: 'nation'},
             {data: 'nosurat', name: 'nosurat'},

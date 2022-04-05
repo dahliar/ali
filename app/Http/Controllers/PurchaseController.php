@@ -26,7 +26,7 @@ class PurchaseController extends Controller
         return view('purchase.purchaseList', compact('nations'));
     }
 
-    public function getPurchaseList(Request $request)
+    public function getPurchaseList($negara, $statusTransaksi, $start, $end)
     {
         $query = DB::table('purchases as p')
         ->select(
@@ -45,16 +45,16 @@ class PurchaseController extends Controller
         )
         ->join('companies as c', 'c.id', '=', 'p.companyid')
         ->join('countries as n', 'n.id', '=', 'c.nation')
-        ->whereBetween('purchaseDate', [$request->start, $request->end])
+        ->whereBetween('purchaseDate', [$start, $end])
         ->orderBy('p.status', 'asc')
         ->orderBy('p.created_at', 'asc')
         ->orderBy('p.id', 'asc');
 
-        if($request->negara != -1){
-            $query->where('n.id', '=', $request->negara);
+        if($negara != -1){
+            $query->where('n.id', '=', $negara);
         }
-        if($request->statusTransaksi != -1){
-            $query->where('p.status', '=', $request->statusTransaksi);
+        if($statusTransaksi != -1){
+            $query->where('p.status', '=', $statusTransaksi);
         }
 
         $query->get();  

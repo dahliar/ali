@@ -24,17 +24,8 @@
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
         $('#datatable').DataTable({
-            ajax:{
-                url: '{{ url("getPriceList") }}',
-                data: function (d){
-                    d._token = "{{ csrf_token() }}";
-                    d.species = selectSpecies;
-                    d.start = start;
-                    d.end = end;
-                },
-                type: 'post',
-
-            },
+            ajax: '{{ url("getPriceList") }}' + "/"+ selectSpecies + "/"+ start + "/"+ end,
+            type: 'get',
             serverSide: false,
             processing: true,
             deferRender: true,

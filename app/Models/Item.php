@@ -280,9 +280,10 @@ class Item extends Model
     }
 
     public function getPriceListByPurchasing($speciesId, $start, $end){
+
+        
         $query = DB::table('items as i')
         ->select(
-            'i.id as id',
             DB::raw('concat(sp.name," ",g.name, " ", s.name, " ", f.name) as itemName'),
             DB::raw('ifnull(min(dp.price),0) as minPrice'),
             DB::raw('ifnull(avg(dp.price),0) as avgPrice'),
@@ -305,7 +306,6 @@ class Item extends Model
         if ($speciesId>0){
             $query->where('sp.id','=', $speciesId);
         }
-        $query->get();  
 
         return datatables()->of($query)
         ->editColumn('minPrice', function ($row) {
@@ -317,6 +317,7 @@ class Item extends Model
         ->editColumn('avgPrice', function ($row) {
             return number_format($row->avgPrice, 2);
         })
-        ->addIndexColumn()->toJson();
+        ->addIndexColumn()
+        ->toJson();
     }
 }

@@ -74,8 +74,8 @@ class ItemController extends Controller
         $speciesList = Species::orderBy('name')->get();
         return view('item.priceList', compact('speciesList'));
     }
-    public function getPriceList(Request $request){
-        return $this->item->getPriceListByPurchasing($request->species, $request->start, $request->end);
+    public function getPriceList($species, $start, $end){
+        return $this->item->getPriceListByPurchasing($species, $start, $end);
     }
 
     public function indexHpp(Request $request)

@@ -100,7 +100,7 @@ Route::get('/transaction/localIpl/{transaction}', [InvoiceController::class, 'ce
 *
 */
 Route::get('purchaseList',[PurchaseController::class, 'index'])->middleware(['auth', 'authorized']);
-Route::GET('getPurchaseList', [PurchaseController::class, 'getPurchaseList'])->middleware(['auth']);
+Route::GET('getPurchaseList/{negara}/{statusTransaksi}/{start}/{end}', [PurchaseController::class, 'getPurchaseList'])->middleware(['auth']);
 Route::get('purchaseAdd',[PurchaseController::class, 'create'])->middleware(['auth', 'authorized']);
 Route::get('purchaseStore',[PurchaseController::class, 'store'])->middleware(['auth'])->name('purchaseStore');
 Route::get('purchaseEdit/{purchase}',[PurchaseController::class, 'edit'])->middleware(['auth', 'authorized']);
@@ -146,7 +146,7 @@ Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->mid
 
 
 Route::get('priceList',[ItemController::class, 'indexHarga'])->middleware(['auth', 'authorized']);
-Route::post('getPriceList', [ItemController::class, 'getPriceList'])->middleware(['auth']);
+Route::get('getPriceList/{species}/{start}/{end}', [ItemController::class, 'getPriceList'])->middleware(['auth']);
 
 Route::get('hppList',[ItemController::class, 'indexHpp'])->name('hppList')->middleware(['auth', 'authorized']);
 Route::post('getHpp', [ItemController::class, 'getHpp'])->middleware(['auth']);
