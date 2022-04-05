@@ -77,4 +77,73 @@ class ItemController extends Controller
     public function getPriceList(Request $request){
         return $this->item->getPriceListByPurchasing($request->species, $request->start, $request->end);
     }
+
+    public function indexHpp(Request $request)
+    {
+        return view('item.hppList');
+    }
+    public function getHpp(Request $request){
+        $harian = DB::table('dailysalaries')
+        ->select(
+            DB::raw('sum(uangHarian + uangLembur) as total'),
+            DB::raw('count(id) as jumlahOrang'),
+        )
+        ->whereBetween('presenceDate', [$request->start, $request->end])
+        ->first();
+
+        $dataHarian=[
+            'total' => $harian->total,
+            'orang' => $harian->jumlahOrang
+        ];
+        
+        $borongan = DB::table('borongans as b')
+        ->select(
+            DB::raw('sum(db.netPayment) as total'),
+            DB::raw('count(distinct(db.employeeId)) as jumlahOrang'),
+        )
+        ->join('detail_borongans as db', 'db.boronganId', '=', 'b.id')
+        ->whereBetween('b.tanggalKerja', [$request->start, $request->end])
+        ->first();
+
+        $dataBorongan=[
+            'total' => $borongan->total,
+            'orang' => $borongan->jumlahOrang
+        ];
+
+        $honorarium = DB::table('honorariums as h')
+        ->select(
+            DB::raw('sum(jumlah) as total'),            
+            DB::raw('count(distinct(h.employeeId)) as jumlahOrang'),
+        )
+        ->whereBetween('tanggalKerja', [$request->start, $request->end])
+        ->first();
+
+        $dataHonorarium=[
+            'total' => $honorarium->total,
+            'orang' => $honorarium->jumlahOrang
+        ];
+
+        $purchases= DB::table('purchases as pur')
+        ->join('companies as c', 'c.id', '=', 'pur.companyId')
+        ->join('detail_purchases as dp', 'dp.purchasesId', '=', 'pur.id')
+        ->join('items as i', 'i.id', '=', 'dp.itemId')
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        ->select(
+            'c.name as perusahaan',
+            DB::raw('concat(sp.name, " ", g.name, " ", s.name) as name'), 
+            'pur.purchaseDate as tanggal',
+            'dp.amount as amount',
+            'dp.price as price'
+        )
+        ->whereBetween('pur.purchaseDate', [$request->start, $request->end])
+        ->get();
+        $start=$request->start;
+        $end=$request->end;
+
+        return view('item.hppList', compact('start','end','dataHarian', 'dataBorongan', 'dataHonorarium', 'purchases'));    
+    }
 }

@@ -148,6 +148,10 @@ Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->mid
 Route::get('priceList',[ItemController::class, 'indexHarga'])->middleware(['auth', 'authorized']);
 Route::post('getPriceList', [ItemController::class, 'getPriceList'])->middleware(['auth']);
 
+Route::get('hppList',[ItemController::class, 'indexHpp'])->name('hppList')->middleware(['auth', 'authorized']);
+Route::post('getHpp', [ItemController::class, 'getHpp'])->middleware(['auth']);
+
+
 
 
 

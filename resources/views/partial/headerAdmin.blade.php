@@ -67,6 +67,8 @@
 				<li>
 					<a class="dropdown-item" href="{{ url('priceList')}}"><i class="fas fa-store"></i> Informasi Harga
 					</a>
+					<a class="dropdown-item" href="{{ url('hppList')}}"><i class="fas fa-store"></i> Harga Pokok Produksi
+					</a>
 				</li>
 			</ul>
 		</li>
