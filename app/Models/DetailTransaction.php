@@ -30,7 +30,11 @@ class DetailTransaction extends Model
             's.name as sizeName', 
             'sp.name as speciesName', 
             't.status as status', 
-            't.valuta as valuta', 
+            DB::raw('(CASE   WHEN t.valutaType="1" THEN "Rp. " 
+                WHEN t.valutaType="2" THEN "USD. " 
+                WHEN t.valutaType="3" THEN "Rmb. " 
+                END) as valuta'
+            ), 
             'dt.amount as amount',
             'i.weightbase as wb',
             'dt.price as price',
