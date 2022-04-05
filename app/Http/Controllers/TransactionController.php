@@ -641,7 +641,7 @@ class TransactionController extends Controller
             'isundername' => 1,
             'userId' => auth()->user()->id,
             'rekeningId' => $request->rekening,
-            'valuta' => $request->valuta,
+            'valuta' => $request->valutaType,
             'companyId' =>  $request->company,
             'companydetail' =>  $request->companydetail,
             'loadingport' =>  $request->loadingPort,
