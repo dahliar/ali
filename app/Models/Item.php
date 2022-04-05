@@ -208,7 +208,7 @@ class Item extends Model
         ->addIndexColumn()->toJson();    
     }
 
-    public function getItemForSelectOption($speciesId, $transactionId){
+    public function getItemForSelectOption($transactionId, $purchaseId, $speciesId){
         $query = DB::table('items as i')
         ->select(
             'i.id as itemId', 
@@ -238,14 +238,20 @@ class Item extends Model
         ->orderByRaw('s.name+0 asc')
         ->orderBy('f.name');
 
-
-        $list = DB::table("detail_transactions")
-        ->select('itemId')
-        ->where('transactionId', '=', $transactionId)
-        ->get()
-        ->pluck('itemId');
-
         if($transactionId>0){
+            $list = DB::table("detail_transactions")
+            ->select('itemId')
+            ->where('transactionId', '=', $transactionId)
+            ->get()
+            ->pluck('itemId');
+            $query->whereNotIn('i.id', $list);
+        }
+        if($purchaseId>0){
+            $list = DB::table("detail_purchases")
+            ->select('itemId')
+            ->where('purchasesId', '=', $purchaseId)
+            ->get()
+            ->pluck('itemId');
             $query->whereNotIn('i.id', $list);
         }
 
@@ -281,7 +287,7 @@ class Item extends Model
 
     public function getPriceListByPurchasing($speciesId, $start, $end){
 
-        
+
         $query = DB::table('items as i')
         ->select(
             DB::raw('concat(sp.name," ",g.name, " ", s.name, " ", f.name) as itemName'),

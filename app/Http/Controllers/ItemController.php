@@ -20,8 +20,8 @@ class ItemController extends Controller
         $this->item = new Item();
     }
 
-    public function getItemForSelectOption($speciesId, $tid){
-        $something=$this->item->getItemForSelectOption($speciesId, $tid);
+    public function getItemForSelectOption($tid, $pid, $speciesId){
+        $something=$this->item->getItemForSelectOption($tid, $pid, $speciesId);
         return $something;
     }
 
@@ -80,9 +80,11 @@ class ItemController extends Controller
 
     public function indexHpp(Request $request)
     {
-        return view('item.hppList');
+        $species = Species::orderBy('name')->get();
+        return view('item.hppList', compact('species'));
     }
     public function getHpp(Request $request){
+        $species = Species::orderBy('name')->get();
         $harian = DB::table('dailysalaries')
         ->select(
             DB::raw('sum(uangHarian + uangLembur) as total'),
@@ -139,11 +141,21 @@ class ItemController extends Controller
             'dp.amount as amount',
             'dp.price as price'
         )
-        ->whereBetween('pur.purchaseDate', [$request->start, $request->end])
-        ->get();
+        ->whereBetween('pur.purchaseDate', [$request->start, $request->end]);
+        if ($request->species > 0){
+            $purchases = $purchases->where('sp.id', '=', $request->species);
+        }
+        if ($request->item > 0){
+            $purchases = $purchases->where('i.id', '=', $request->item);
+        }
+
+        $purchases = $purchases->get();
         $start=$request->start;
         $end=$request->end;
+        $speciesChoosen=$request->species;
+        $itemChoosen=$request->item;
+        $showDetail=$request->showDetail;
 
-        return view('item.hppList', compact('start','end','dataHarian', 'dataBorongan', 'dataHonorarium', 'purchases'));    
+        return view('item.hppList', compact('showDetail','species','start','end','dataHarian', 'dataBorongan', 'dataHonorarium', 'purchases', 'speciesChoosen', 'itemChoosen'));    
     }
 }

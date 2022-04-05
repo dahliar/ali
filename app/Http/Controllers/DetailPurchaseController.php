@@ -110,6 +110,7 @@ class DetailPurchaseController extends Controller
         $query = DB::table('detail_purchases as dp')
         ->select(
             'dp.id as id', 
+            'sp.name as speciesName', 
             'dp.purchasesId as purchasesId', 
             'i.name as itemName', 
             'f.name as freezingName', 
@@ -122,15 +123,9 @@ class DetailPurchaseController extends Controller
                 WHEN pur.valutaType="3" THEN "Rmb. " 
                 END) as valuta'
             ), 
-            DB::raw(
-                'concat(dp.amount, " Kg") 
-                as amount'),
-            DB::raw('
-                concat((dp.amount * dp.price)) as bayar'
-            ),
-            DB::raw('
-                concat(dp.price, " /Kg") as price'
-            )
+            'dp.amount as amount',
+            DB::raw('(dp.amount * dp.price) as bayar'),
+            'dp.price as price'
         )
         ->join('purchases as pur', 'pur.id', '=', 'dp.purchasesId')
         ->join('items as i', 'i.id', '=', 'dp.itemId')
@@ -140,15 +135,29 @@ class DetailPurchaseController extends Controller
         ->join('sizes as s', 'i.sizeid', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->where('pur.id','=', $purchaseId)
-        ->orderBy('sp.name');
+        ->orderBy('sp.name')
+        ->orderBy('g.name', 'desc')
+        ->orderByRaw('s.name+0 asc')
+        ->orderBy('f.name');
         $query->get();  
 
 
         return datatables()->of($query)
-        ->addColumn('valutaPrice', function($row){
-            return $row->valuta.' '.$row->price;})
-        ->addColumn('valutaBayar', function($row){
-            return $row->valuta.' '.$row->bayar;})
+        ->addColumn('itemName', function ($row) {
+            return ($row->speciesName.' '.$row->gradeName.' '.$row->sizeName.' '.$row->freezingName.' '.$row->packingName.' ['.$row->itemName.']');
+        })
+        ->editColumn('amount', function ($row) {
+            $html = number_format($row->amount, 2, ',', '.').' Kg';
+            return $html;
+        })
+        ->editColumn('price', function ($row) {
+            $html = 'Rp.'. number_format($row->price, 2, ',', '.');
+            return $html;
+        })
+        ->editColumn('bayar', function ($row) {
+            $html = 'Rp.'.number_format($row->price, 2, ',', '.');
+            return $html;
+        })
         ->addColumn('action', function ($row) {
             $html = '
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Detail" onclick="deleteItem('."'".$row->id."'".')">

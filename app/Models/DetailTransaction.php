@@ -30,7 +30,8 @@ class DetailTransaction extends Model
             's.name as sizeName', 
             'sp.name as speciesName', 
             't.status as status', 
-            'dt.amount as jumlah',
+            't.valuta as valuta', 
+            'dt.amount as amount',
             'i.weightbase as wb',
             'dt.price as price',
         )
@@ -52,14 +53,22 @@ class DetailTransaction extends Model
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
-            return ($row->speciesName.' '.$row->gradeName.' '.$row->sizeName.' '.$row->freezingName.' '.$row->itemName);
+            return ($row->speciesName.' '.$row->gradeName.' '.$row->sizeName.' '.$row->freezingName.' '.$row->packingName.' ['.$row->itemName.']');
         })
         ->addColumn('weight', function ($row) {
-            $html = number_format(($row->jumlah * $row->wb), 2, ',', '.').' Kg';
+            $html = number_format(($row->amount * $row->wb), 2, ',', '.').' Kg';
             return $html;
         })
-        ->addColumn('amount', function ($row) {
-            $html = $row->jumlah.' '.$row->pshortname;
+        ->editColumn('amount', function ($row) {
+            $html = number_format($row->amount, 2, ',', '.').' '.$row->pshortname;
+            return $html;
+        })
+        ->editColumn('price', function ($row) {
+            $html = $row->valuta.' '.number_format($row->price, 2, ',', '.').' /Kg';
+            return $html;
+        })
+        ->editColumn('harga', function ($row) {
+            $html = $row->valuta.' '.number_format(($row->price * $row->amount * $row->wb), 2, ',', '.');
             return $html;
         })
         ->addColumn('action', function ($row) {

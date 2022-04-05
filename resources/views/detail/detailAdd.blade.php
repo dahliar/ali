@@ -14,7 +14,7 @@
 
     function selectOptionChange(speciesId, itemId){
         $.ajax({
-            url: '{{ url("getItemsTransactionForSelectOption") }}'+"/"+speciesId+"/"+'{{ $transactionId }}',
+            url: '{{ url("getItemsForSelectOption") }}/'+'{{ $transactionId }}'+"/0/"+speciesId,
             type: "GET",
             data : {"_token":"{{ csrf_token() }}"},
             dataType: "json",

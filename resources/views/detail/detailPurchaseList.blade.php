@@ -61,28 +61,22 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "3%",  "targets":  [0], "className": "text-center" },
-            {   "width": "15%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%",  "targets": [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "12%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" },
-            {   "width": "10%", "targets":  [8], "className": "text-end" },
-            {   "width": "5%", "targets":  [9], "className": "text-center" }
+            {   "width": "5%",  "targets":  [0], "className": "text-center" },
+            {   "width": "40%", "targets":  [1], "className": "text-left"   },
+            {   "width": "15%",  "targets": [2], "className": "text-left" },
+            {   "width": "10%", "targets":  [3], "className": "text-end" },
+            {   "width": "10%", "targets":  [4], "className": "text-end" },
+            {   "width": "15%", "targets":  [5], "className": "text-end" },
+            {   "width": "5%", "targets":  [6], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'itemName', name: 'itemName'},
-            {data: 'sizeName', name: 'sizeName'},
-            {data: 'gradeName', name: 'gradeName'},
             {data: 'packingName', name: 'packingName'},
-            {data: 'freezingName', name: 'freezingName'},
-            {data: 'valutaPrice', name: 'valutaPrice'},
+            {data: 'price', name: 'price'},
             {data: 'amount', name: 'amount'},
-            {data: 'valutaBayar', name: 'valutaBayar'},
+            {data: 'bayar', name: 'bayar'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -129,17 +123,14 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Barang</th>
-                                    <th>Size</th>
-                                    <th>Grade</th>
                                     <th>Packing</th>
-                                    <th>Freezing</th>
-                                    <th>Harga (/kg)</th>
+                                    <th>Harga per Kg</th>
                                     <th>Berat</th>
                                     <th>Bayar</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody style="font-size: 14px;">
                             </tbody>
                         </table>                
                     </div>

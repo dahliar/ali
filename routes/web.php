@@ -192,8 +192,7 @@ Route::get('companyUpdate',[CompanyController::class, 'update'])->middleware(['a
 Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middleware(['auth']);
 
 //to get size for all species
-Route::GET('getItemsTransactionForSelectOption/{speciesId}/{tid}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);
-Route::GET('getItemsPurchaseForSelectOption/{speciesId}/{tid}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);
+Route::GET('getItemsForSelectOption/{tid}/{pid}/{speciesId}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);
 Route::GET('getOneStore/{storeId}', [StoreController::class, 'getOneStore'])->middleware(['auth']);
 
 //to get one full Rekening record with current rekening id
