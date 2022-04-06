@@ -62,15 +62,17 @@
                     <div class="col-md-6">
                         <input type="date" id="start" name="start" class="form-control text-end" value="{{old('start', date('Y-m-d', strtotime('-1 week')))}}">
                     </div>
-                </div>                    
-                <div class="row form-group">
+                </div>
+                    <!--                    
+                    <div class="row form-group">
                     <div class="col-md-3 text-end">
                         <span class="label">Tanggal Akhir</span>
                     </div>
                     <div class="col-md-6">
                         <input type="date" id="end" name="end" class="form-control text-end" value="{{old('end', date('Y-m-d'))}}">
                     </div>
-                </div> 
+                    </div> 
+                -->
             </div>                   
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary">Generate</button>

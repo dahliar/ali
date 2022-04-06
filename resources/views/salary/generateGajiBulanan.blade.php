@@ -61,7 +61,7 @@
                         success:function(data){
                             Swal.fire(
                                 'Berhasil digenerate!',
-                                data[0]+' dan '+data[1]+' pegawai bulanan yang digenerate',
+                                data[0]+', '+data[1]+', '+data[2],
                                 'success'
                                 );
                         }

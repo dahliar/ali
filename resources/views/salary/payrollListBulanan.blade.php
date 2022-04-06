@@ -96,10 +96,10 @@
                 <div class="col-md-2">Batas Tanggal
                 </div>
                 <div class="col-md-3">
-                    <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 month')))}}" > 
+                    <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', $start)}}" > 
                 </div>
                 <div class="col-md-3">
-                    <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
+                    <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', $end)}}" >
                 </div>
                 <div class="col-md-2">
                     <button type="button" onclick="showPayrolList()" class="btn btn-primary">Tampilkan</button>

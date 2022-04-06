@@ -20,7 +20,7 @@
         window.open(('{{ url("presenceHarianEdit") }}'), '_blank');
     }
 
-    function presenceForTodayModal(id, name){
+    function presenceForTodayModal(id){
         document.getElementById("empidModal").value = id;
         document.getElementById("nameModal").value = name;
         $('#employeePresenceHarianModal').modal('show');

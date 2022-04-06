@@ -27,11 +27,23 @@ class SalaryController extends Controller
     }
     public function indexPayroll()
     {
-        return view('salary.payrollList');
+        $end = Carbon::now();
+        if ($end->dayOfWeekIso != 6){
+            $end = Carbon::now()->next(6);
+        }
+        $end=$end->toDateString();
+        $start=Carbon::now()->subDays(30)->toDateString();
+        return view('salary.payrollList', compact('start','end'));
     }
     public function indexPayrollBulanan()
     {
-        return view('salary.payrollListBulanan');
+        $end = Carbon::now();
+        if ($end->dayOfWeekIso != 6){
+            $end = Carbon::now()->endOfMonth();
+        }
+        $end=$end->toDateString();
+        $start=Carbon::now()->subDays(120)->toDateString();
+        return view('salary.payrollListBulanan', compact('start','end'));
     }
 
 
@@ -66,89 +78,85 @@ class SalaryController extends Controller
     {
         $request->validate(
             [
-                'start' => 'required|date|before_or_equal:end',
-                'end' => 'required|date|before_or_equal:today'
+                'start' => 'required|date|before_or_equal:today'
             ],
             [
-                'start.before_or_equal'=>'Tanggal awal harus sebelum tanggal akhir atau hari ini',
-                'end.before_or_equal'=>'Tanggal akhir harus sebelum hari ini'
+                'start.before_or_equal'=>'Tanggal awal harus sebelum tanggal akhir atau hari ini'
             ]
         );
-        DB::table('payrolls')
-        ->upsert([
-            ['payDate' => $request->end, 'creator' =>auth()->user()->id]
-        ], ['payDate'], ['creator'] );
+        $start=Carbon::parse($request->start);
+        $nextSaturday = Carbon::now();
+        if ($nextSaturday->dayOfWeekIso != 6){
+            $nextSaturday = Carbon::now()->next(6);
+        }
 
-        $payrollId = DB::table('payrolls')
-        ->select('id as id')
-        ->where('payDate', '=', $request->end)
+        $data = [
+            'payDate' => $nextSaturday->toDateString(), 
+            'jenis' => 2, 
+            'creator' =>auth()->user()->id
+        ];
+
+        $payrollExist=DB::table('payrolls as p')
+        ->select(
+            DB::raw('max(p.id) as pid'),
+        )
+        ->where('payDate', '=', $nextSaturday->toDateString())
+        ->where('p.jenis', '=', 2)
         ->first();
 
-        $harian = $this->salaryHarianGenerate($request->start, $request->end, $payrollId->id);
-        //$bulanan = $this->lemburBulananGenerate($request->start, $request->end, $payrollId->id);
-        $borongan = $this->salaryBoronganGenerate($request->start, $request->end, $payrollId->id);
-        $honorarium = $this->honorariumGenerate($request->start, $request->end, $payrollId->id);
-        //$val = array($harian, $borongan, $bulanan, $honorarium);
+        $pid="";
+        if($payrollExist->pid == null){
+            $pid = DB::table('payrolls')->insertGetId($data);
+        } else{
+            $pid = $payrollExist->pid;
+        }
+
+
+        $end=$nextSaturday->subDays(1);
+
+        $harian = $this->salaryHarianGenerate($start, $end, $pid, 2);
+        $borongan = $this->salaryBoronganGenerate($start, $end, $pid);
+        $honorarium = $this->honorariumGenerate($start, $end, $pid, 2);
         $val = array($harian, $borongan, $honorarium);
         return redirect()->route('generateGaji')->with('val', $val);        
     }
 
-
-
     public function generateGajiBulananStore(Request $request)
     {
-        $start = "21-".$request->monthBefore."-".$request->yearBefore;
-        $end = "20-".$request->monthPresent."-".$request->yearPresent;
+        $start  = Carbon::parse("21-".$request->monthBefore."-".$request->yearBefore);
+        $end    = Carbon::parse("20-".$request->monthPresent."-".$request->yearPresent);
 
-        $start=Carbon::parse($start)->toDateString();
-        $end=Carbon::parse($end)->toDateString();
+        $data = [
+            'payDate' => $end->toDateString(), 
+            'jenis' => 1, 
+            'creator' =>auth()->user()->id
+        ];
 
-        DB::table('payrolls')
-        ->upsert([
-            ['payDate' => $end, 'creator' =>auth()->user()->id]
-        ], ['payDate'], ['creator'] );
-
-        $payrollId = DB::table('payrolls')
-        ->select('id as id')
-        ->where('payDate', '=', $end)
-        ->first();
-
-        $salariesPaidExist=DB::table('salaries')
+        $payrollExist=DB::table('payrolls as p')
         ->select(
-            DB::raw('count(id) as jumlah'),
-            'id as salaryId'
+            DB::raw('max(p.id) as pid'),
         )
-        ->where('startdate', '=', $start)
-        ->where('enddate', '=', $end)
-        ->where('jenis', '=', 1)
-        ->where('isPaid', '=', null)
+        ->where('payDate', '=', $end->toDateString())
+        ->where('p.jenis', '=', 1)
         ->first();
 
-
-        $salaryId="";
-        if($salariesPaidExist->jumlah > 0){
-            $salaryId = $salariesPaidExist->salaryId;
+        $pid="";
+        if($payrollExist->pid == null){
+            $pid = DB::table('payrolls')->insertGetId($data);
         } else{
-            $salaryId = DB::table('salaries')->insertGetId(
-                [
-                    'startDate'         => $start,
-                    'endDate'           => $end,
-                    'userIdGenerator'   => auth()->user()->id,
-                    'jenis'             => 1,
-                    'isPaid'            => null,
-                    'idPayroll'         => $payrollId->id
-                ]
-            );
+            $pid = $payrollExist->pid;
         }
 
-        $bulananGaji = $this->gajiBulananGenerate($start, $end, $salaryId, $payrollId->id);
-        $bulananLembur = $this->lemburBulananGenerate($start, $end, $salaryId, $payrollId->id);
+        //perhitungan [lembur dan salary harian, dan honorarium] untuk pegawai bulanan sama dengan pegawai harian
+        $bulananHarian = $this->salaryHarianGenerate($start, $end, $pid, 1);
+        $bulananHonorarium = $this->honorariumGenerate($start, $end, $pid, 1);
+        $bulananGaji = $this->gajiBulananGenerate($start, $end, $pid);
+        $val = array($bulananGaji, $bulananHarian, $bulananHonorarium);
 
-        $val = array($bulananGaji, $bulananLembur);
         return $val;
     }
 
-    public function gajiBulananGenerate($start, $end, $salaryId, $payrollId)
+    public function gajiBulananGenerate($start, $end, $payrollId)
     {
         $employeeMonthlyList = DB::table('employees as e')
         ->select(
@@ -160,13 +168,41 @@ class SalaryController extends Controller
         ->where('eosm.isactive', '=', '1')
         ->get();
 
+
+        $salariesPaidExist=DB::table('salaries as s')
+        ->select(
+            DB::raw('max(s.id) as sid'),
+        )
+        ->join('payrolls as p', 'p.id', '=', 's.idPayroll')
+        ->where('endDate', '=', $end->toDateString())
+        ->where('p.jenis', 1)
+        ->where('s.jenis', '=', 1)
+        ->where('isPaid', '=', null)
+        ->first();
+
+        $data = [
+            'startDate'         => $start->toDateString(),
+            'endDate'           => $end->toDateString(),
+            'userIdGenerator'   => auth()->user()->id,
+            'jenis'             => 1,
+            'isPaid'            => null,
+            'idPayroll'         => $payrollId
+        ];
+
+        $salaryId="";
+        if($salariesPaidExist->sid == null){
+            $salaryId = DB::table('salaries')->insertGetId($data);
+        } else{
+            $salaryId = $salariesPaidExist->sid;
+        }
+
         foreach($employeeMonthlyList as $detail){
             DB::table('monthly_salaries')
             ->upsert(
                 [
                     'employeeId'        => $detail->id,
-                    'tanggalGenerate'   => $end,
-                    'empiddate'         => $detail->id.'-'.$end,
+                    'tanggalGenerate'   => $end->toDateString(),
+                    'empiddate'         => $detail->id.'-'.$end->toDateString(),
                     'salaryId'          => $salaryId,
                     'jumlah'            => $detail->gp
                 ], 
@@ -193,50 +229,78 @@ class SalaryController extends Controller
                 ['bulanan']
             );
         }
-        return count($moveGeneratedData)." record gaji";
+        return count($moveGeneratedData)." record gaji bulanan";
     }
 
 
 
-    public function honorariumGenerate($start, $end, $payrollId)
+    public function honorariumGenerate($start, $end, $payrollId, $jenis)
     {
         $rowCount = DB::table('honorariums as h')
-        ->whereBetween('h.tanggalKerja', [$start, $end])
-        ->where('h.isGenerated', 0)
-        ->count();
+        ->join('employees as e', 'e.id', '=',  'h.employeeId')
+        ->whereBetween('h.tanggalKerja', [$start->toDateString(), $end->toDateString()])
+        ->where('h.isGenerated', 0);
+
+        if ($jenis==1){
+            //bulanan
+            $rowCount=$rowCount->whereIn('e.employmentStatus', [1]);
+        } else {
+            //harian
+            $rowCount=$rowCount->whereIn('e.employmentStatus', [2,3]);
+        }
+
+        $rowCount=$rowCount->count();
 
         $retValue="";
         if ($rowCount>0){
             $data = [
-                'startDate'         => $start,
-                'endDate'           => $end,
+                'startDate'         => $start->toDateString(),
+                'endDate'           => $end->toDateString(),
                 'userIdGenerator'   => auth()->user()->id,
                 'jenis'             => 4,
                 'isPaid'            => null,
                 'idPayroll'         => $payrollId
             ];
 
-            $salariesPaidExist=DB::table('salaries')
+            $salariesPaidExist=DB::table('salaries as s')
             ->select(
-                DB::raw('count(id) as jumlah'),
-                'id as salaryId'
+                DB::raw('max(s.id) as sid'),
             )
-            ->where('enddate', '=', $end)
-            ->where('jenis', '=', 4)
-            ->where('isPaid', '=', null)
-            ->first();
+            ->join('payrolls as p', 'p.id', '=', 's.idPayroll')
+            ->where('endDate', '=', $end->toDateString())
+            ->where('s.jenis', '=', 4)
+            ->where('isPaid', '=', null);
+
+            if ($jenis==1){
+            //bulanan
+                $salariesPaidExist=$salariesPaidExist->where('p.jenis', 1);
+            } else{
+            //harian
+                $salariesPaidExist=$salariesPaidExist->where('p.jenis', 2);
+            }
+            $salariesPaidExist=$salariesPaidExist->first();
 
             $salaryId="";
-            if($salariesPaidExist->jumlah > 0){
-                $salaryId = $salariesPaidExist->salaryId;
-            } else{
+            if($salariesPaidExist->sid == null){
                 $salaryId = DB::table('salaries')->insertGetId($data);
+            } else{
+                $salaryId = $salariesPaidExist->sid;
             }
 
             $affected = DB::table('honorariums as h')
             ->whereBetween('h.tanggalKerja', [$start, $end])
             ->where('h.isGenerated', 0)
-            ->update([
+            ->join('employees as e', 'e.id', '=',  'h.employeeId');
+
+            if ($jenis==1){
+            //bulanan
+                $affected=$affected->whereIn('e.employmentStatus', [1]);
+            } else{
+            //harian
+                $affected=$affected->whereIn('e.employmentStatus', [2,3]);
+            }
+
+            $affected=$affected->update([
                 'h.isGenerated' => 1, 
                 'h.salaryid' => $salaryId
             ]);
@@ -267,106 +331,74 @@ class SalaryController extends Controller
         }
         return $retValue;
     }
-    public function lemburBulananGenerate($start, $end, $salaryId, $payrollId)
+
+    public function salaryHarianGenerate($start, $end, $payrollId, $jenis)
     {
         $rowCount = DB::table('dailysalaries as ds')
-        ->where('ds.isGenerated', 0)
-        ->where('e.employmentStatus', 1)
-        ->whereBetween('ds.presenceDate', [$start, $end])
-        ->where('ds.uangLembur', '>', '0')
         ->join('employees as e', 'e.id', '=',  'ds.employeeId')
-        ->count();
+        ->where('ds.isGenerated', 0)
+        ->whereBetween('ds.presenceDate', [$start->startOfDay(), $end->endOfDay()]);
 
-        $retValue="";
-        if ($rowCount>0){
-            $affected = DB::table('dailysalaries as ds')
-            ->where('ds.isGenerated', 0)
-            ->where('e.employmentStatus', 1)
-            ->whereBetween('ds.presenceDate', [$start, $end])
-            ->where('ds.uangLembur', '>', '0')
-            ->join('employees as e', 'e.id', '=',  'ds.employeeId')
-            ->update([
-                'ds.isGenerated' => 1, 
-                'ds.salaryid' => $salaryId
-            ]);
-
-            $moveGeneratedData = DB::table('dailysalaries as ds')
-            ->select(
-                'ds.employeeId as empid',
-                DB::raw('sum(uangHarian) as uh'),
-                DB::raw('sum(uangLembur) as ul'),
-                DB::raw('sum(jamKerja) as jk'),
-                DB::raw('sum(jamLembur) as jl'),
-                DB::raw('count(id) as hari'),
-            )
-            ->where('ds.salaryId', '=', $salaryId)
-            ->groupBy('ds.employeeId')
-            ->get();
-            foreach($moveGeneratedData as $row){
-                $query = DB::table('detail_payrolls')
-                ->upsert([
-                    ['idPayroll'    => $payrollId, 
-                    'employeeId'    => $row->empid, 
-                    'idPayrollEmpid'=> ($payrollId.'-'.$row->empid),
-                    'jamKerja'      => $row->jk,
-                    'jamLembur'     => $row->jl,
-                    'hariKerja'     => $row->hari,
-                    'harian'        => DB::raw('harian+'.($row->uh + $row->ul))]],
-                    ['idPayrollEmpid'], 
-                    ['harian', 'jamKerja', 'jamLembur', 'hariKerja']
-                );
-                
-            }
-            $retValue = $affected." record lembur";
+        if ($jenis==1){
+            //bulanan
+            $rowCount=$rowCount->where('e.employmentStatus', 1);
         } else{
-            $retValue = "0 record lembur";
+            //harian
+            $rowCount=$rowCount->where('e.employmentStatus', 2);
         }
-        return $retValue;
-    }
 
-    public function salaryHarianGenerate($start, $end, $payrollId)
-    {
-        $rowCount = DB::table('dailysalaries as ds')
-        ->where('ds.isGenerated', 0)
-        ->where('e.employmentStatus', 2)
-        ->whereBetween('ds.presenceDate', [$start, $end])
-        ->join('employees as e', 'e.id', '=',  'ds.employeeId')
-        ->count();
+        $rowCount=$rowCount->count();
 
         $retValue="";
         if ($rowCount>0){
             $data = [
-                'startDate'         => $start,
-                'endDate'           => $end,
+                'startDate'         => $start->toDateString(),
+                'endDate'           => $end->toDateString(),
                 'userIdGenerator'   => auth()->user()->id,
                 'jenis'             => 2,
                 'isPaid'            => null,
                 'idPayroll'         => $payrollId
             ];
 
-            $salariesPaidExist=DB::table('salaries')
+            $salariesPaidExist=DB::table('salaries as s')
             ->select(
-                DB::raw('count(id) as jumlah'),
-                'id as salaryId'
+                DB::raw('max(s.id) as sid'),
             )
-            ->where('endDate', '=', $end)
-            ->where('jenis', '=', 2)
-            ->where('isPaid', '=', null)
-            ->first();
+            ->join('payrolls as p', 'p.id', '=', 's.idPayroll')
+            ->where('endDate', '=', $end->toDateString())
+            ->where('s.jenis', '=', 2)
+            ->where('isPaid', '=', null);
+
+            if ($jenis==1){
+            //bulanan
+                $salariesPaidExist=$salariesPaidExist->where('p.jenis', 1);
+            } else{
+            //harian
+                $salariesPaidExist=$salariesPaidExist->where('p.jenis', 2);
+            }
+            $salariesPaidExist=$salariesPaidExist->first();
 
             $salaryId="";
-            if($salariesPaidExist->jumlah > 0){
-                $salaryId = $salariesPaidExist->salaryId;
-            } else{
+            if($salariesPaidExist->sid == null){
                 $salaryId = DB::table('salaries')->insertGetId($data);
+            } else{
+                $salaryId = $salariesPaidExist->sid;
             }
 
             $affected = DB::table('dailysalaries as ds')
             ->where('ds.isGenerated', 0)
-            ->where('e.employmentStatus', 2)
-            ->whereBetween('ds.presenceDate', [$start, $end])
-            ->join('employees as e', 'e.id', '=',  'ds.employeeId')
-            ->update([
+            ->whereBetween('ds.presenceDate', [$start->toDateString(), $end->toDateString()])
+            ->join('employees as e', 'e.id', '=',  'ds.employeeId');
+
+            if ($jenis==1){
+            //bulanan
+                $affected=$affected->where('e.employmentStatus', 1);
+            } else{
+            //harian
+                $affected=$affected->where('e.employmentStatus', 2);
+            }
+
+            $affected=$affected->update([
                 'ds.isGenerated' => 1, 
                 'ds.salaryid' => $salaryId
             ]);
@@ -383,24 +415,27 @@ class SalaryController extends Controller
             ->where('ds.salaryId', '=', $salaryId)
             ->groupBy('ds.employeeId')
             ->get();
+
             foreach($moveGeneratedData as $row){
                 $query = DB::table('detail_payrolls')
                 ->upsert([
-                    ['idPayroll'    => $payrollId, 
-                    'employeeId'    => $row->empid, 
-                    'idPayrollEmpid'=> ($payrollId.'-'.$row->empid),
-                    'jamKerja'      => $row->jk,
-                    'jamLembur'     => $row->jl,
-                    'hariKerja'     => $row->hari,
-                    'harian'        => DB::raw('harian+'.($row->uh + $row->ul))]],
-                    ['idPayrollEmpid'], 
-                    ['harian']
-                );
-                
+                    [
+                        'idPayroll'    => $payrollId, 
+                        'employeeId'    => $row->empid, 
+                        'idPayrollEmpid'=> ($payrollId.'-'.$row->empid),
+                        'jamKerja'      => $row->jk,
+                        'jamLembur'     => $row->jl,
+                        'hariKerja'     => $row->hari,
+                        'harian'        => ($row->uh + $row->ul)
+                    ]
+                ],
+                ['idPayrollEmpid'], 
+                ['harian', 'jamKerja', 'jamLembur', 'hariKerja']
+            );                
             }
-            $retValue = $affected." record presensi pegawai harian telah digenerate";
+            $retValue = $affected." record presensi pegawai telah digenerate";
         } else{
-            $retValue = "Tidak terdapat record presensi pegawai harian yang belum digenerate";
+            $retValue = "Tidak terdapat record presensi pegawai yang belum digenerate";
         }
 
         return $retValue;
@@ -427,26 +462,28 @@ class SalaryController extends Controller
                 'idPayroll'         => $payrollId
             ];
 
-            $salariesPaidExist=DB::table('salaries')
+
+            $salariesPaidExist=DB::table('salaries as s')
             ->select(
-                DB::raw('count(id) as jumlah'),
-                'id as salaryId'
+                DB::raw('max(s.id) as sid'),
             )
-            ->where('endDate', '=', $end)
-            ->where('jenis', '=', 3)
+            ->join('payrolls as p', 'p.id', '=', 's.idPayroll')
+            ->where('endDate', '=', $end->toDateString())
+            ->where('s.jenis', '=', 3)
             ->where('isPaid', '=', null)
+            ->where('p.jenis', 2)
             ->first();
 
             $salaryId="";
-            if($salariesPaidExist->jumlah > 0){
-                $salaryId = $salariesPaidExist->salaryId;
-            } else{
+            if($salariesPaidExist->sid == null){
                 $salaryId = DB::table('salaries')->insertGetId($data);
+            } else{
+                $salaryId = $salariesPaidExist->sid;
             }
 
             $affected = DB::table('borongans as b')
             ->where('status', 1)
-            ->whereBetween('b.tanggalKerja', [$start, $end])
+            ->whereBetween('b.tanggalKerja', [$start->toDateString(), $end->toDateString()])
             ->update([
                 'status' => 2, 
                 'salariesId' => $salaryId
@@ -466,14 +503,17 @@ class SalaryController extends Controller
             foreach($moveGeneratedData as $row){
                 DB::table('detail_payrolls')
                 ->upsert([
-                    ['idPayroll'        => $payrollId, 
-                    'employeeId'        => $row->empid, 
-                    'idPayrollEmpid'    => ($payrollId.'-'.$row->empid), 
-                    'berat'             => $row->berat,
-                    'borongan'          => $row->jumlah]],
-                    ['idPayrollEmpid'], 
-                    ['borongan']
-                );
+                    [
+                        'idPayroll'         => $payrollId, 
+                        'employeeId'        => $row->empid, 
+                        'idPayrollEmpid'    => ($payrollId.'-'.$row->empid), 
+                        'berat'             => $row->berat,
+                        'borongan'          => $row->jumlah
+                    ]
+                ],
+                ['idPayrollEmpid'], 
+                ['borongan', 'berat']
+            );
             }
             $retValue = $affected." record kerja borongan telah digenerate";
         } else{
@@ -634,7 +674,7 @@ class SalaryController extends Controller
         }
         return true;
     }
-    
+
     public function getSalariesHarian(){
         $query = DB::table('salaries as s')
         ->select(
@@ -924,7 +964,7 @@ class SalaryController extends Controller
         $salary = DB::table('salaries as s')
         ->where('s.id', '=', $borongan->salariesId)
         ->first();
-        
+
         return view('invoice.slipGajiBorongan', compact('salary','borongan', 'detail_borongans', 'payerName', 'generatorName'));
     }
 
@@ -1066,7 +1106,7 @@ class SalaryController extends Controller
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
-        
+
         ->where('ds.salaryid', $salary->id)
         ->where('e.employmentStatus', 2)
         ->where('eosm.isactive', 1)
@@ -1222,29 +1262,30 @@ class SalaryController extends Controller
         ->toJson();
     }  
     public function getPayrollList($start, $end){
+        $start = Carbon::parse($start);
+        $end = Carbon::parse($end);
+
         $query = DB::table('payrolls as p')
         ->select(
             'p.id as id',
             'p.payDate as payDate',
             'u.name as generator',
-            DB::raw('count(dp.id) as totalPegawai'),
+            DB::raw('count(distinct(dp.id)) as totalPegawai'),
             DB::raw('sum(dp.harian) as harian'),
             DB::raw('sum(dp.borongan) as borongan'),
-            DB::raw('sum(dp.honorarium) as honorarium'),
-            'p.id as action'
+            DB::raw('sum(dp.honorarium) as honorarium')
         )
         ->join('detail_payrolls as dp', 'dp.idPayroll', '=', 'p.id')
         ->join('users as u', 'u.id', '=', 'p.creator')
-        ->join('employees as e' , 'e.id', '=', 'dp.employeeId')
-        ->whereBetween('p.payDate', [$start, $end])
-        ->whereIn('e.employmentStatus', ['2', '3'])
+        ->where('p.jenis', '=', '2')
+        ->whereBetween('p.payDate', [$start->startOfDay(), $end->endOfDay()])
         ->groupBy('p.id')
         ->get();
 
         return datatables()->of($query)
         ->addIndexColumn()
 
-        
+
         ->editColumn('totalPegawai', function ($row) {
             return $row->totalPegawai.' Pegawai';
         })
@@ -1261,12 +1302,6 @@ class SalaryController extends Controller
             return 'Rp. '.number_format($row->honorarium, 2, ',', '.');
         })
         ->addColumn('action', function ($row) {
-            /*
-            <a data-rowid="'.$row->id.'" class="btn btn-xs btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar detil salary" target="_blank" href="salariesList/'.$row->id.'">
-            <i class="fa fa-list"></i>
-            </a>
-            */
-
             $html = '
             <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak daftar gaji pegawai" onclick="printPayrollList('.$row->id.')">
             <i class="fa fa-print" style="font-size:20px"></i>
@@ -1277,29 +1312,30 @@ class SalaryController extends Controller
         ->toJson();
     }  
     public function getPayrollListBulanan($start, $end){
+        $start = Carbon::parse($start);
+        $end = Carbon::parse($end);
+
         $query = DB::table('payrolls as p')
         ->select(
             'p.id as id',
             'p.payDate as payDate',
             'u.name as generator',
-            DB::raw('count(dp.id) as totalPegawai'),
+            DB::raw('count(distinct(dp.id)) as totalPegawai'),
             DB::raw('sum(dp.harian) as harian'),
             DB::raw('sum(dp.bulanan) as bulanan'),
-            DB::raw('sum(dp.honorarium) as honorarium'),
-            'p.id as action'
+            DB::raw('sum(dp.honorarium) as honorarium')
         )
         ->join('detail_payrolls as dp', 'dp.idPayroll', '=', 'p.id')
         ->join('users as u', 'u.id', '=', 'p.creator')
-        ->join('employees as e' , 'e.id', '=', 'dp.employeeId')
-        ->whereBetween('p.payDate', [$start, $end])
-        ->whereIn('e.employmentStatus', ['1'])
+        ->where('p.jenis', '=', '1')
+        ->whereBetween('p.payDate', [$start->startOfDay(), $end->startOfDay()])
         ->groupBy('p.id')
         ->get();
 
         return datatables()->of($query)
         ->addIndexColumn()
 
-        
+
         ->editColumn('totalPegawai', function ($row) {
             return $row->totalPegawai.' Pegawai';
         })
@@ -1394,24 +1430,24 @@ class SalaryController extends Controller
         ->addColumn('detilHarian', function ($row) {
             $html = '
             <div style="text-align:left" class="row form-group">
-            <span class="col-4">Hari Kerja</span>
+            <span class="col-5">Hari Kerja</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-6">'.$row->hk.' hari</span>
+            <span style="text-align:right" class="col-5">'.$row->hk.' hari</span>
             </div>
             <div style="text-align:left" class="row form-group">
-            <span class="col-4">Jam Kerja</span>
+            <span class="col-5">Jam Kerja</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-6">'.$row->jk.' jam</span>
+            <span style="text-align:right" class="col-5">'.$row->jk.' jam</span>
             </div>
             <div style="text-align:left" class="row form-group">
-            <span class="col-4">Jam Lembur</span>
+            <span class="col-5">Jam Lembur</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-6">'.$row->jl.' jam</span>
+            <span style="text-align:right" class="col-5">'.$row->jl.' jam</span>
             </div>
             <div style="text-align:left" class="row form-group">
-            <span class="col-4">Borongan</span>
+            <span class="col-5">Borongan</span>
             <span class="col-1">:</span>
-            <span style="text-align:right" class="col-6">'.number_format($row->berat, 2, ',', '.')." Kg".'</span>
+            <span style="text-align:right" class="col-5">'.number_format($row->berat, 2, ',', '.')." Kg".'</span>
             </div>
             ';
             return $html;

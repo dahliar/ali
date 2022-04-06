@@ -47,8 +47,8 @@
             {data: 'name', name: 'name'},
             {data: 'bank', name: 'bank'},
             {data: 'detilHarian', name: 'detilHarian'},
+            {data: 'bulanan', name: 'bulanan'},
             {data: 'harian', name: 'harian'},
-            {data: 'borongan', name: 'borongan'},
             {data: 'honorarium', name: 'honorarium'},
             {data: 'total', name: 'total'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
@@ -93,8 +93,8 @@
                                 <th>Nama</th>
                                 <th>Rekening</th>
                                 <th>Detil Harian</th>
+                                <th>Bulanan (Rp)</th>
                                 <th>Harian (Rp)</th>
-                                <th>Borongan (Rp)</th>
                                 <th>Honorarium (Rp)</th>
                                 <th>Total</th>
                                 <th>Act</th>

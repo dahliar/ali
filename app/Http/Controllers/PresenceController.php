@@ -263,7 +263,7 @@ class PresenceController extends Controller
             $html = '';
             if (is_null($row->presenceToday)){
                 $html.='
-                <button type="button" class="btn" onclick="presenceForTodayModal('."'".$row->id."'".', '."'".$row->name."'".')" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Presensi '.$row->name.' Hari ini">
+                <button type="button" class="btn" onclick="presenceForTodayModal('."'".$row->id."'".')" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Presensi '.$row->name.' Hari ini">
                 <i class="fa fa-check" style="font-size:20px"></i>
                 </button>
                 ';
