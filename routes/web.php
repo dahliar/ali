@@ -394,6 +394,8 @@ Route::post('getHpp', [DashboardController::class, 'getHpp'])->middleware(['auth
 Route::get('rekapitulasiGaji',[DashboardController::class, 'rekapitulasiGaji'])->name('rekapitulasiGaji')->middleware(['auth', 'authorized']);
 Route::post('getRekapitulasiGaji', [DashboardController::class, 'getRekapitulasiGaji'])->middleware(['auth']);
 
+Route::get('rekapitulasiGajiPerBulan',[DashboardController::class, 'rekapitulasiGajiPerBulan'])->middleware(['auth', 'authorized']);
+Route::post('getRekapitulasiGajiPerBulan', [DashboardController::class, 'getRekapitulasiGajiPerBulan'])->middleware(['auth']);
 
 
 

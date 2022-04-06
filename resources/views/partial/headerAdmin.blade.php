@@ -176,6 +176,8 @@
 					</a>
 					<a class="dropdown-item" href="{{ url('rekapitulasiGaji')}}"><i class="fas fa-store"></i> Rekapitulasi Gaji
 					</a>
+					<a class="dropdown-item" href="{{ url('rekapitulasiGajiPerBulan')}}"><i class="fas fa-store"></i> Rekapitulasi Gaji Per-bulan
+					</a>
 				</li>
 			</ul>
 		</li>

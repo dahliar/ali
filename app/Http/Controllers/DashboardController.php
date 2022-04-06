@@ -258,7 +258,42 @@ class DashboardController extends Controller
         $tahun = $request->tahun;
         return view('dashboard.rekapitulasiGaji', compact('tahun', 'payroll'));        
     }
+    public function rekapitulasiGajiPerBulan(){
+        return view('dashboard.rekapitulasiGajiPerBulan');
+    }
+    public function getRekapitulasiGajiPerBulan(Request $request){
+        $request->validate(
+            [
+                'tahun'    => 'required|gt:0',
+                'bulan'    => 'required|gt:0'
+            ],[
+                'tahun.*'  => 'Pilih tahun',
+                'bulan.*'  => 'Pilih bulan'
+            ]
+        );
 
+        $payroll = DB::table('detail_payrolls as dp')
+        ->select(
+            DB::raw('dp.employeeId as empid'),
+            DB::raw('u.name as name'),
+            DB::raw('sum(dp.bulanan) as bulanan'),
+            DB::raw('sum(dp.harian) as harian'),
+            DB::raw('sum(dp.borongan) as borongan'),
+            DB::raw('sum(dp.honorarium) as honorarium')
+        )
+        ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
+        ->join('employees as e', 'e.id', '=', 'dp.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->whereMonth('p.payDate', $request->bulan)
+        ->whereYear('p.payDate', $request->tahun)
+        ->groupBy('dp.employeeId')
+        ->get();
+
+        $tahun = $request->tahun;
+        $bulan = $request->bulan;
+
+        return view('dashboard.rekapitulasiGajiPerBulan', compact('tahun','bulan', 'payroll'));        
+    }
 
 
 
