@@ -101,7 +101,7 @@ class ItemController extends Controller
         $borongan = DB::table('borongans as b')
         ->select(
             DB::raw('sum(db.netPayment) as total'),
-            DB::raw('count(distinct(db.employeeId)) as jumlahOrang'),
+            DB::raw('count(db.employeeId) as jumlahOrang'),
         )
         ->join('detail_borongans as db', 'db.boronganId', '=', 'b.id')
         ->whereBetween('b.tanggalKerja', [$request->start, $request->end])
@@ -115,7 +115,7 @@ class ItemController extends Controller
         $honorarium = DB::table('honorariums as h')
         ->select(
             DB::raw('sum(jumlah) as total'),            
-            DB::raw('count(distinct(h.employeeId)) as jumlahOrang'),
+            DB::raw('count(h.employeeId) as jumlahOrang'),
         )
         ->whereBetween('tanggalKerja', [$request->start, $request->end])
         ->first();
