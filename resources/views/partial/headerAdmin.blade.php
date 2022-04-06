@@ -35,7 +35,7 @@
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li><a class="dropdown-item" href="{{ route('employeeList')}}"><i class="fas fa-address-card"></i> Daftar Karyawan</a></li>
 			</ul>
-		</li>
+		</li>		
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 				<i class="fas fa-file-contract"></i> Transaksi
@@ -68,6 +68,8 @@
 					<a class="dropdown-item" href="{{ url('priceList')}}"><i class="fas fa-store"></i> Informasi Harga
 					</a>
 					<a class="dropdown-item" href="{{ url('hppList')}}"><i class="fas fa-store"></i> Harga Pokok Produksi
+					</a>
+					<a class="dropdown-item" href="{{ url('rekapitulasiGaji')}}"><i class="fas fa-store"></i> Rekapitulasi Gaji
 					</a>
 				</li>
 			</ul>
@@ -160,6 +162,21 @@
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li><a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-fish"></i>Stock per-Spesies</a></li>
 				<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-fish"></i>Stock per-Barang</a></li>
+			</ul>
+		</li>
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				<i class="fas fa-file-contract"></i> Dashboard
+			</a>
+			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<li>
+					<a class="dropdown-item" href="{{ url('priceList')}}"><i class="fas fa-store"></i> Informasi Harga
+					</a>
+					<a class="dropdown-item" href="{{ url('hppList')}}"><i class="fas fa-store"></i> Harga Pokok Produksi
+					</a>
+					<a class="dropdown-item" href="{{ url('rekapitulasiGaji')}}"><i class="fas fa-store"></i> Rekapitulasi Gaji
+					</a>
+				</li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">

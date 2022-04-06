@@ -145,11 +145,6 @@ Route::get('speciesStockList',[ItemController::class, 'indexStockSpecies'])->mid
 Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->middleware(['auth']);
 
 
-Route::get('priceList',[ItemController::class, 'indexHarga'])->middleware(['auth', 'authorized']);
-Route::get('getPriceList/{species}/{start}/{end}', [ItemController::class, 'getPriceList'])->middleware(['auth']);
-
-Route::get('hppList',[ItemController::class, 'indexHpp'])->name('hppList')->middleware(['auth', 'authorized']);
-Route::post('getHpp', [ItemController::class, 'getHpp'])->middleware(['auth']);
 
 
 
@@ -302,18 +297,6 @@ Route::get('/slipGaji/slipGajiPerPayroll/{dpid}', [InvoiceController::class, 'sl
 Route::get('/slipGaji/slipGajiPerPayrollBulanan/{dpid}', [InvoiceController::class, 'slipGajiPerPayrollBulanan'])->middleware(['auth', 'authorized']);
 
 
-
-
-
-
-
-/*
-Route::POST('salaryHarianGenerate',[SalaryController::class, 'salaryHarianGenerate'])->middleware('auth');
-Route::POST('salaryBoronganGenerate',[SalaryController::class, 'salaryBoronganGenerate'])->middleware('auth');
-
-*/
-
-
 //Penggajian harian
 Route::GET('salaryHarianList',[SalaryController::class, 'indexHarian'])->middleware('auth', 'authorized');
 Route::GET('getSalariesHarian',[SalaryController::class, 'getSalariesHarian'])->middleware('auth');
@@ -329,21 +312,11 @@ Route::GET('getLemburPegawaiBulanan/{salary}',[SalaryController::class, 'getLemb
 Route::GET('checkCetakLemburPegawaiBulanan/{salary}',[SalaryController::class, 'checkCetakLemburPegawaiBulanan'])->middleware('auth', 'authorized');
 Route::POST('markLemburIsPaid',[SalaryController::class, 'markLemburIsPaid'])->middleware('auth');
 
-
-
-
-
 //hapus generate
 Route::POST('hapusGenerateGajiHarian',[SalaryController::class, 'hapusGenerateGajiHarian'])->middleware('auth');
 Route::POST('hapusGenerateLemburBulanan',[SalaryController::class, 'hapusGenerateLemburBulanan'])->middleware('auth');
 Route::POST('hapusGenerateHonorarium',[SalaryController::class, 'hapusGenerateHonorarium'])->middleware('auth');
 Route::POST('hapusGenerateBorongan',[SalaryController::class, 'hapusGenerateBorongan'])->middleware('auth');
-
-
-
-
-
-
 
 //Penggajian Borongan
 Route::GET('salaryBoronganList',[SalaryController::class, 'indexBorongan'])->middleware('auth', 'authorized');
@@ -403,6 +376,27 @@ Route::GET('getAllStructuralPosition',[StructuralPositionController::class, 'get
 Route::GET('getAllWorkPosition',[WorkPositionController::class, 'getAllWorkPosition'])->middleware('auth');
 
 Route::post('orgStructureList', [EmployeeController::class, 'orgStructureList'])->name('orgStructureList');
+
+
+
+/*
+*
+*
+Reporting
+*
+*/
+Route::get('priceList',[DashboardController::class, 'indexHarga'])->middleware(['auth', 'authorized']);
+Route::get('getPriceList/{species}/{start}/{end}', [DashboardController::class, 'getPriceList'])->middleware(['auth']);
+
+Route::get('hppList',[DashboardController::class, 'indexHpp'])->name('hppList')->middleware(['auth', 'authorized']);
+Route::post('getHpp', [DashboardController::class, 'getHpp'])->middleware(['auth']);
+
+Route::get('rekapitulasiGaji',[DashboardController::class, 'rekapitulasiGaji'])->name('rekapitulasiGaji')->middleware(['auth', 'authorized']);
+Route::post('getRekapitulasiGaji', [DashboardController::class, 'getRekapitulasiGaji'])->middleware(['auth']);
+
+
+
+
 
 
 /*

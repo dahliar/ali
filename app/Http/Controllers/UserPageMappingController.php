@@ -101,7 +101,7 @@ class UserPageMappingController extends Controller
                 (CASE WHEN a.isActive="0" THEN "Non-Aktif" WHEN a.isActive="1" THEN "Aktif" END) AS isActive
                 '),
         )
-        ->join('pages as p', 'p.applicationId', '=', 'a.id')
+        ->leftjoin('pages as p', 'p.applicationId', '=', 'a.id')
         ->orderBy('a.name')
         ->groupBy('a.id');
 
