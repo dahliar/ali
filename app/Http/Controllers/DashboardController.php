@@ -470,7 +470,7 @@ class DashboardController extends Controller
         $opsi = $request->opsi;
 
         $pdf = PDF::loadview('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'))->setPaper('a4', 'landscape');
-        $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
+        $filename = 'Rekap pembelian '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
 
 
