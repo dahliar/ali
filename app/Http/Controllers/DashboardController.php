@@ -344,7 +344,95 @@ class DashboardController extends Controller
 
     }
 
+    public function rekapitulasiPembelianPerBulan(){
+        return view('dashboard.rekapitulasiPembelianPerBulan');
+    }
+    public function getRekapitulasiPembelianPerBulan(Request $request){
+        $request->validate(
+            [
+                'tahun'    => 'required|gt:0',
+                'bulan'    => 'required|gt:0'
+            ],[
+                'tahun.*'  => 'Pilih tahun',
+                'bulan.*'  => 'Pilih bulan'
+            ]
+        );
 
+        $payroll = DB::table('purchases as p')
+        ->select(
+            DB::raw('c.name as name'),
+            DB::raw('p.purchasingNum as nomor'),
+            DB::raw('c.npwp as npwp'),
+            DB::raw('p.purchaseDate as tanggal'),
+            DB::raw('p.paymentAmount as jumlah'),
+            DB::raw('p.taxPercentage as persen'),
+            DB::raw('p.tax as pajak'),
+            DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
+                WHEN p.taxIncluded="1" THEN "Ya" 
+                END) as taxIncluded'
+            )
+        )
+        ->join('companies as c', 'p.companyId', '=', 'c.id')
+        ->whereMonth('p.purchaseDate', $request->bulan)
+        ->whereYear('p.purchaseDate', $request->tahun)
+        ->orderByRaw('p.purchasingNum+0', 'asc')
+        ->orderBy('p.purchaseDate')
+        ->get();
+
+        $tahun = $request->tahun;
+        $bulan = $request->bulan;
+
+        return view('dashboard.rekapitulasiPembelianPerBulan', compact('tahun','bulan', 'payroll'));        
+    }
+
+    public function cetakRekapPembelianPerBulan(Request $request){
+        $bulan="";
+        switch($request->bulan){
+            case 1 : $bulan="Januari";break;
+            case 2 : $bulan="Februari";break;
+            case 3 : $bulan="Maret";break;
+            case 4 : $bulan="April";break;
+            case 5 : $bulan="Mei";break;
+            case 6 : $bulan="Juni";break;
+            case 7 : $bulan="Juli";break;
+            case 8 : $bulan="Agustus";break;
+            case 9 : $bulan="September";break;
+            case 10 : $bulan="Oktober";break;
+            case 11 : $bulan="November";break;
+            case 12 : $bulan="Desember";break;
+        }
+
+        $payroll = DB::table('purchases as p')
+        ->select(
+            DB::raw('c.name as name'),
+            DB::raw('p.purchasingNum as nomor'),
+            DB::raw('c.npwp as npwp'),
+            DB::raw('p.purchaseDate as tanggal'),
+            DB::raw('p.paymentAmount as jumlah'),
+            DB::raw('p.taxPercentage as persen'),
+            DB::raw('p.tax as pajak'),
+            DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
+                WHEN p.taxIncluded="1" THEN "Ya" 
+                END) as taxIncluded'
+            )
+        )
+        ->join('companies as c', 'p.companyId', '=', 'c.id')
+        ->whereMonth('p.purchaseDate', $request->bulan)
+        ->whereYear('p.purchaseDate', $request->tahun)
+        ->orderByRaw('p.purchasingNum+0', 'asc')
+        ->orderBy('p.purchaseDate')
+        ->get();
+        
+
+        $monthYear = $bulan.' '.$request->tahun;
+
+        $pdf = PDF::loadview('invoice.rekapPembelianPerBulan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
+        $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
+        return $pdf->download($filename);
+
+
+
+    }
 
 
 }
