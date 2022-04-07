@@ -289,6 +289,7 @@ class DashboardController extends Controller
         ->whereMonth('p.payDate', $request->bulan)
         ->whereYear('p.payDate', $request->tahun)
         ->groupBy('dp.employeeId')
+        ->orderBy('u.name')
         ->get();
 
         $tahun = $request->tahun;
@@ -328,6 +329,7 @@ class DashboardController extends Controller
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->whereMonth('p.payDate', $request->bulan)
         ->whereYear('p.payDate', $request->tahun)
+        ->orderBy('u.name')
         ->groupBy('dp.employeeId')
         ->get();
         
