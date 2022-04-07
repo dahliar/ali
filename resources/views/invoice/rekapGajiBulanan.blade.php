@@ -41,7 +41,7 @@
     </style>
     <head>
         <meta charset="UTF-8">
-        <title>Rekap Gaji Bulanan - {{$bulan}}/{{$tahun}}</title>
+        <title>Rekap Gaji Bulanan - {{$monthYear}}</title>
     </head>
     <body>
         <header>
@@ -75,18 +75,18 @@
                 <h3 align="center" style="margin-top: 0; margin-bottom: 0;">
                 Rekapitulasi Gaji Bulan</h3>
                 <h4 align="center"  style="margin-top: 0; margin-bottom: 10px;">
-                    {{$bulan}} {{$tahun}}
+                    {{$monthYear}}
                 </h4>
             </div>
             <table width="100%" id="invoice">
                 <thead style="text-align: center;">
                     <tr>
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 15%;">Nama</th>
-                        <th style="width: 15%;">Bulanan</th>
-                        <th style="width: 15%;">Harian</th>
-                        <th style="width: 15%;">Borongan</th>
-                        <th style="width: 15%;">Honorarium</th>
+                        <th style="width: 4%;">No</th>
+                        <th style="width: 20%;">Nama</th>
+                        <th style="width: 14%;">Bulanan</th>
+                        <th style="width: 14%;">Harian</th>
+                        <th style="width: 14%;">Borongan</th>
+                        <th style="width: 14%;">Honorarium</th>
                         <th style="width: 20%;">Total</th>
                     </tr>
                 </thead>
@@ -121,12 +121,12 @@
                         </td>
                         <td style="text-align: right;">Rp. {{number_format($paymonth->borongan, 2, ',', '.')}}</td>
                         <td style="text-align: right;">Rp. {{number_format($paymonth->honorarium, 2, ',', '.')}}</td>
-                        <td style="text-align: right;">{{number_format($totalBulan, 2, ',', '.')}}</td>
+                        <td style="text-align: right;">Rp. {{number_format($totalBulan, 2, ',', '.')}}</td>
                         @php $no+=1;    @endphp                                    
                     </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
+                <tfoot style="font-size:12px">
                     <tr>
                         <td style="text-align: center;"></td>
                         <td style="text-align: center;"></td>

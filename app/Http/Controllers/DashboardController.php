@@ -298,6 +298,21 @@ class DashboardController extends Controller
     }
 
     public function cetakRekapGajiBulanan(Request $request){
+        $bulan="";
+        switch($request->bulan){
+            case 1 : $bulan="Januari";break;
+            case 2 : $bulan="Februari";break;
+            case 3 : $bulan="Maret";break;
+            case 4 : $bulan="April";break;
+            case 5 : $bulan="Mei";break;
+            case 6 : $bulan="Juni";break;
+            case 7 : $bulan="Juli";break;
+            case 8 : $bulan="Agustus";break;
+            case 9 : $bulan="September";break;
+            case 10 : $bulan="Oktober";break;
+            case 11 : $bulan="November";break;
+            case 12 : $bulan="Desember";break;
+        }
 
         $payroll = DB::table('detail_payrolls as dp')
         ->select(
@@ -317,11 +332,10 @@ class DashboardController extends Controller
         ->get();
         
 
-        $tahun = $request->tahun;
-        $bulan = $request->bulan;
+        $monthYear = $bulan.' '.$request->tahun;
 
-        $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('tahun','bulan', 'payroll'))->setPaper('a4', 'landscape');
-        $filename = 'Rekap Gaji '.$request->bulan.' - '.$request->tahun.' cetak tanggal '.today().'.pdf';
+        $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
+        $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
 
 
