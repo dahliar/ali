@@ -73,6 +73,7 @@ class EmployeeController extends Controller
             'username'              => ['required', 'string', 'max:255', 'unique:users'],
             'password'              => ['required', 'confirmed', Rules\Password::defaults()],
             'role'                  => ['required', 'gt:0'],
+            'phone'                 => ['required'],
             'email'                 => ['email'],
             'nik'                   => ['required', 'string', 'max:20', 'unique:employees'],
             'birthdate'             => ['required', 'date', 'before:today'],
@@ -117,6 +118,7 @@ class EmployeeController extends Controller
             'userid'                => $userid,
             'nik'                   => $request->nik,
             'nip'                   => $nip,
+            'phone'                 => $request->phone,
             'birthdate'             => $request->birthdate,
             'gender'                => $request->gender,
             'startdate'             => $request->startdate,
@@ -271,6 +273,7 @@ class EmployeeController extends Controller
         //
         $request->validate([
             'email'                 => ['email'],
+            'phone'                 => ['required'],
             'role'                  => ['required', 'gt:0'],
             'address'               => ['required', 'string'],
             'gender'                => ['required', 'integer', 'gt:0'],
@@ -286,7 +289,7 @@ class EmployeeController extends Controller
 
         try {
             $this->employee->userUpdate($request->role, $request->email, $request->userid);
-            $this->employee->employeeUpdate($request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
+            $this->employee->employeeUpdate($request->phone, $request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
             $this->employeeIsNotActive($request->employeeId);
             DB::commit();
             return redirect('employeeList')
@@ -357,6 +360,7 @@ class EmployeeController extends Controller
             'e.id as id', 
             'u.name as name', 
             'e.nik as nik', 
+            'e.phone as phone',
             DB::raw('
                 (CASE WHEN e.gender="1" THEN "L" WHEN e.gender="2" THEN "P" END) AS gender
                 '),
@@ -398,6 +402,7 @@ class EmployeeController extends Controller
                 ';                            
             }
             if (Auth::user()->isAdmin() or Auth::user()->isHumanResources()){
+                /*
                 $html .= '
                 <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="History Presensi" onclick="employeePresenceHistory('."'".$row->id."'".')">
                 <i class="fa fa-history"></i>
@@ -405,7 +410,8 @@ class EmployeeController extends Controller
                 <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Slip Gaji Pegawai" onclick="slipGajiPegawai('."'".$row->id."'".')">
                 <i class="fas fa-file-invoice-dollar"></i>
                 </button>
-                ';                            
+                ';                 
+                */           
             }
 
 

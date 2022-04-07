@@ -66,17 +66,15 @@
             {   "width": "15%", "targets":  [4], "className": "text-left" },
             {   "width": "10%", "targets":  [5], "className": "text-left" },
             {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-left" },
-            {   "width": "5%",  "targets":  [8], "className": "text-left" },
-            {   "width": "15%", "targets":  [9], "className": "text-center" }
+            {   "width": "5%",  "targets":  [7], "className": "text-left" },
+            {   "width": "15%", "targets":  [8], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
             {data: 'gender', name: 'gender'},
-            {data: 'nip', name: 'nip'},
-            {data: 'nik', name: 'nik'},
+            {data: 'phone', name: 'phone'},
             {data: 'username', name: 'username'},
             {data: 'jenisPenggajian', name: 'jenisPenggajian'},
             {data: 'lamaKerja', name: 'lamaKerja'},
@@ -126,8 +124,7 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Gender</th>
-                                <th>NIP</th>
-                                <th>NIK</th>
+                                <th>Telepon</th>
                                 <th>Username</th>
                                 <th>Jenis Karyawan</th>
                                 <th>Masa Kerja</th>

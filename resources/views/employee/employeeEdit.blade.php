@@ -74,6 +74,14 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
+                                <label class="form-label">Telepon</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="phone" name="phone" type="text" class="form-control" autocomplete="off" value="{{old('phone', $employee->phone)}}">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
                                 <label class="form-label">Role</label>
                             </div>
                             <div class="col-md-4">

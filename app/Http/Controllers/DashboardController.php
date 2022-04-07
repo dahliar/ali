@@ -394,8 +394,7 @@ class DashboardController extends Controller
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
             ->groupBy("c.id")
-            ->orderByRaw('p.purchasingNum+0', 'asc')
-            ->orderBy('p.purchaseDate');
+            ->orderBy('c.name');
         }
         $payroll = $payroll->get();
 
@@ -460,8 +459,7 @@ class DashboardController extends Controller
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
             ->groupBy("c.id")
-            ->orderByRaw('p.purchasingNum+0', 'asc')
-            ->orderBy('p.purchaseDate');
+            ->orderBy('c.name');
         }
         $payroll = $payroll->get();
 
