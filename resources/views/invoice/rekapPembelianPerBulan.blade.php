@@ -41,7 +41,7 @@
     </style>
     <head>
         <meta charset="UTF-8">
-        <title>Rekap Gaji Bulanan - {{$monthYear}}</title>
+        <title>Rekap Pembelian Bulanan - {{$monthYear}}</title>
     </head>
     <body>
         <header>
@@ -73,7 +73,7 @@
         <main>
             <div>
                 <h3 align="center" style="margin-top: 0; margin-bottom: 0;">
-                Rekapitulasi Gaji Bulan</h3>
+                Rekapitulasi Pembelian per-Bulan</h3>
                 <h4 align="center"  style="margin-top: 0; margin-bottom: 10px;">
                     {{$monthYear}}
                 </h4>

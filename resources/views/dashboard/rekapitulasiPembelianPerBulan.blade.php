@@ -96,7 +96,7 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Informasi penggajian per bulan</li>
+                        <li class="breadcrumb-item active">Informasi rekap pembelian per bulan</li>
                     </ol>
                 </nav>
             </div>
