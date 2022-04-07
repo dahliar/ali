@@ -242,10 +242,6 @@ class InvoiceController extends Controller
             case(3) : $valutaType="RMB";  break;
         }
 
-
-
-        //return  view('invoice.ipl', 
-        //    compact('containerType','companyName','transaction', 'detailTransactions', 'rekening'));
         $pdf = PDF::loadview('invoice.ipl', compact('valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
         $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
         return $pdf->download($filename);

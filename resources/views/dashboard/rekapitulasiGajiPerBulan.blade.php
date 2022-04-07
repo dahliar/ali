@@ -8,8 +8,65 @@
 @include('partial.footer')
 @endsection
 
-
 @section('content')
+<script type="text/javascript">
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    function cetak(){
+        $bulan = document.getElementById("bulan").value;
+        $tahun = document.getElementById("tahun").value;
+        $valBulan = document.getElementById("valBulan").value;
+        $valTahun = document.getElementById("valTahun").value;
+        
+        if (($bulan=="-1") || ($tahun=="-1")) {
+            Swal.fire(
+                'Pilihan kosong!',
+                "Pilih data dulu",
+                'warning'
+                );
+        } else {
+            if (($bulan!=$valBulan) || ($tahun!=$valTahun)){
+                Swal.fire(
+                    'Terdapat perubahan opsi pilihan.',
+                    "Cari data dulu!",
+                    'info'
+                    );
+
+            }
+            else {
+                openWindowWithPost('{{ url("cetakRekapGajiBulanan") }}', {
+                    '_token': "{{ csrf_token() }}" ,
+                    bulan: $bulan,
+                    tahun: $tahun
+                });
+            }
+        }
+    }
+
+
+    function openWindowWithPost(url, data) {
+        var form = document.createElement("form");
+        form.target = "_blank";
+        form.method = "POST";
+        form.action = url;
+        form.style.display = "none";
+
+        for (var key in data) {
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = data[key];
+            form.appendChild(input);
+        }
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+    }
+</script>
 @if ($errors->any())
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -47,13 +104,17 @@
                         <div class="card-header">
                             <div class="row form-group">
                                 <div class="col-md-3">
+
                                     @if(empty($tahun))
+                                    <input type="hidden" name="valTahun" id="valTahun" value="-1">
                                     <select id="tahun" name="tahun" class="form-select" >
                                         <option value="-1" selected>--Pilih Tahun--</option>
                                         <option value="2022">2022</option>
                                         <option value="2023">2023</option>
                                     </select>
                                     @else
+                                    <input type="hidden" name="valTahun" id="valTahun" value="{{$tahun}}">
+
                                     <select id="tahun" name="tahun" class="form-select" >
                                         <option value="-1" selected>--Pilih Tahun--</option>
                                         <option value="2022" @if($tahun == 2022) selected @endif>2022</option>
@@ -63,6 +124,8 @@
                                 </div>
                                 <div class="col-md-3">
                                     @if(empty($bulan))
+                                    <input type="hidden" name="valBulan" id="valBulan" value="-1">
+
                                     <select id="bulan" name="bulan" class="form-select" >
                                         <option value="-1" selected>--Pilih Bulan--</option>
                                         <option value="1">Januari</option>
@@ -79,6 +142,7 @@
                                         <option value="12">Desember</option>
                                     </select>
                                     @else
+                                    <input type="hidden" name="valBulan" id="valBulan" value="{{$bulan}}">
                                     <select id="bulan" name="bulan" class="form-select" >
                                         <option value="-1" selected>--Pilih Bulan--</option>
                                         <option value="1" @if($bulan == 1) selected @endif>Januari</option>
@@ -99,11 +163,20 @@
                                 <div class="col-md-2">
                                     <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
                                 </div>
+                                @if(!empty($payroll))
+                                @if(count($payroll)>1)
+                                <div class="col-md-2">
+                                    <button type="button" id="hitButton" class="form-control btn-primary" onclick="cetak()">Print</button>
+                                </div>               
+                                @endif                 
+                                @endif
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="row form-group">
                              @if(!empty($payroll))
+                             <input type="hidden" name="payroll" id="payroll" value="{{$payroll}}">
+
                              <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
                                 <thead style="text-align: center;">
                                     <tr>

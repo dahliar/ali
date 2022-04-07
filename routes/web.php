@@ -396,10 +396,7 @@ Route::post('getRekapitulasiGaji', [DashboardController::class, 'getRekapitulasi
 
 Route::get('rekapitulasiGajiPerBulan',[DashboardController::class, 'rekapitulasiGajiPerBulan'])->middleware(['auth', 'authorized']);
 Route::post('getRekapitulasiGajiPerBulan', [DashboardController::class, 'getRekapitulasiGajiPerBulan'])->middleware(['auth']);
-
-
-
-
+Route::post('cetakRekapGajiBulanan', [DashboardController::class, 'cetakRekapGajiBulanan'])->middleware(['auth', 'authorized']);
 
 /*
 USER PAGE MAPPING

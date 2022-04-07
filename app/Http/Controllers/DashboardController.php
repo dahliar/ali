@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 use App\Models\Species;
+use PDF;
+
 
 
 class DashboardController extends Controller
@@ -293,6 +295,37 @@ class DashboardController extends Controller
         $bulan = $request->bulan;
 
         return view('dashboard.rekapitulasiGajiPerBulan', compact('tahun','bulan', 'payroll'));        
+    }
+
+    public function cetakRekapGajiBulanan(Request $request){
+
+        $payroll = DB::table('detail_payrolls as dp')
+        ->select(
+            DB::raw('dp.employeeId as empid'),
+            DB::raw('u.name as name'),
+            DB::raw('sum(dp.bulanan) as bulanan'),
+            DB::raw('sum(dp.harian) as harian'),
+            DB::raw('sum(dp.borongan) as borongan'),
+            DB::raw('sum(dp.honorarium) as honorarium')
+        )
+        ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
+        ->join('employees as e', 'e.id', '=', 'dp.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->whereMonth('p.payDate', $request->bulan)
+        ->whereYear('p.payDate', $request->tahun)
+        ->groupBy('dp.employeeId')
+        ->get();
+        
+
+        $tahun = $request->tahun;
+        $bulan = $request->bulan;
+
+        $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('tahun','bulan', 'payroll'))->setPaper('a4', 'landscape');
+        $filename = 'Rekap Gaji '.$request->bulan.' - '.$request->tahun.' cetak tanggal '.today().'.pdf';
+        return $pdf->download($filename);
+
+
+
     }
 
 

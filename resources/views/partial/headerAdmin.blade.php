@@ -63,15 +63,6 @@
 					<a class="dropdown-item" href="{{ url('companyList')}}"><i class="fas fa-store"></i> Perusahaan Supplier/Buyer
 					</a>
 				</li>
-				<li><hr class="dropdown-divider"></li>
-				<li>
-					<a class="dropdown-item" href="{{ url('priceList')}}"><i class="fas fa-store"></i> Informasi Harga
-					</a>
-					<a class="dropdown-item" href="{{ url('hppList')}}"><i class="fas fa-store"></i> Harga Pokok Produksi
-					</a>
-					<a class="dropdown-item" href="{{ url('rekapitulasiGaji')}}"><i class="fas fa-store"></i> Rekapitulasi Gaji
-					</a>
-				</li>
 			</ul>
 		</li>
 
