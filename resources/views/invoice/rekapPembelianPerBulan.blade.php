@@ -84,8 +84,10 @@
                         <th style="width: 5%;">No</th>
                         <th style="width: 15%;">Supplier</th>
                         <th style="width: 10%;">NPWP</th>
+                        @if($opsi==1)
                         <th style="width: 14%;">Nomor</th>
                         <th style="width: 7%;">Tanggal</th>
+                        @endif
                         <th style="width: 12%;">Jumlah</th>
                         <th style="width: 5%;">Pajak</th>
                         <th style="width: 10%;">Potongan</th>
@@ -118,8 +120,10 @@
                         <td style="text-align: center;">{{$no}}</td>
                         <td style="text-align: left;">{{$paymonth->name}}</td>
                         <td style="text-align: right;">{{$paymonth->npwp}}</td>
+                        @if($opsi==1)
                         <td style="text-align: right;">{{$paymonth->nomor}}</td>
                         <td style="text-align: center;">{{$paymonth->tanggal}}</td>
+                        @endif
                         <td style="text-align: right;">Rp. {{number_format($paymonth->jumlah, 2, ',', '.')}}</td>
                         <td style="text-align: right;">{{$paymonth->persen*10}}%</td>
                         <td style="text-align: right;">Rp. {{number_format($paymonth->pajak, 2, ',', '.')}}</td>
@@ -133,8 +137,11 @@
                 </tbody>
                 <tfoot>
                     <tr style="font-size:12px">
-                        <td colspan="5" style="text-align: center;">
-                        </td>
+                        @if($opsi==1)
+                        <td colspan="5" style="text-align: center;"></td>
+                        @else
+                        <td colspan="3" style="text-align: center;"></td>
+                        @endif
                         <td style="text-align: right;">
                             Rp. {{number_format($totalAmount, 2, ',', '.')}}
                         </td>

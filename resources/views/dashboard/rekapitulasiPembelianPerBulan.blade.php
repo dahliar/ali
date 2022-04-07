@@ -19,6 +19,8 @@
     function cetak(){
         $bulan = document.getElementById("bulan").value;
         $tahun = document.getElementById("tahun").value;
+        $opsi = document.getElementById("opsi").value;
+
         $valBulan = document.getElementById("valBulan").value;
         $valTahun = document.getElementById("valTahun").value;
         
@@ -41,7 +43,8 @@
                 openWindowWithPost('{{ url("cetakRekapPembelianPerBulan") }}', {
                     '_token': "{{ csrf_token() }}" ,
                     bulan: $bulan,
-                    tahun: $tahun
+                    tahun: $tahun,
+                    opsi: $opsi
                 });
             }
         }
@@ -103,12 +106,11 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="row form-group">
-                                <div class="col-md-3">
-
+                                <div class="col-md-2">
                                     @if(empty($tahun))
                                     <input type="hidden" name="valTahun" id="valTahun" value="-1">
                                     <select id="tahun" name="tahun" class="form-select" >
-                                        <option value="-1" selected>--Pilih Tahun--</option>
+                                        <option value="-1" selected>--Tahun--</option>
                                         <option value="2022">2022</option>
                                         <option value="2023">2023</option>
                                     </select>
@@ -116,13 +118,13 @@
                                     <input type="hidden" name="valTahun" id="valTahun" value="{{$tahun}}">
 
                                     <select id="tahun" name="tahun" class="form-select" >
-                                        <option value="-1" selected>--Pilih Tahun--</option>
+                                        <option value="-1" selected>-- Tahun--</option>
                                         <option value="2022" @if($tahun == 2022) selected @endif>2022</option>
                                         <option value="2023" @if($tahun == 2023) selected @endif>2023</option>
                                     </select>
                                     @endif
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     @if(empty($bulan))
                                     <input type="hidden" name="valBulan" id="valBulan" value="-1">
 
@@ -161,11 +163,22 @@
                                     @endif
                                 </div>
                                 <div class="col-md-2">
+                                    <select id="opsi" name="opsi" class="form-select" >
+                                        @if(empty($opsi))
+                                        <option value="1" selected>Detil</option>
+                                        <option value="2">Per Supplier</option>
+                                        @else
+                                        <option value="1" @if($opsi == 1) selected @endif>Detil</option>
+                                        <option value="2" @if($opsi == 2) selected @endif>Per Supplier</option>
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
                                     <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
                                 </div>
                                 @if(!empty($payroll))
                                 @if(count($payroll)>1)
-                                <div class="col-md-2">
+                                <div class="col-md-1">
                                     <button type="button" id="hitButton" class="form-control btn-primary" onclick="cetak()">Print</button>
                                 </div>               
                                 @endif                 
@@ -183,8 +196,10 @@
                                         <th style="width: 5%;">No</th>
                                         <th style="width: 15%;">Supplier</th>
                                         <th style="width: 10%;">NPWP</th>
+                                        @if($opsi==1)
                                         <th style="width: 14%;">Nomor</th>
                                         <th style="width: 7%;">Tanggal</th>
+                                        @endif
                                         <th style="width: 12%;">Jumlah</th>
                                         <th style="width: 5%;">Pajak</th>
                                         <th style="width: 10%;">Potongan</th>
@@ -217,8 +232,10 @@
                                         <td style="text-align: center;">{{$no}}</td>
                                         <td style="text-align: left;">{{$paymonth->name}}</td>
                                         <td style="text-align: right;">{{$paymonth->npwp}}</td>
+                                        @if($opsi==1)
                                         <td style="text-align: right;">{{$paymonth->nomor}}</td>
                                         <td style="text-align: center;">{{$paymonth->tanggal}}</td>
+                                        @endif
                                         <td style="text-align: right;">Rp. {{number_format($paymonth->jumlah, 2, ',', '.')}}</td>
                                         <td style="text-align: right;">{{$paymonth->persen*10}}%</td>
                                         <td style="text-align: right;">Rp. {{number_format($paymonth->pajak, 2, ',', '.')}}</td>
@@ -232,8 +249,13 @@
                                 </tbody>
                                 <tfoot>
                                     <tr style="font-size:12px">
+                                        @if(empty($opsi))
                                         <td colspan="5" style="text-align: center;">
                                         </td>
+                                        @else
+                                        <td colspan="3" style="text-align: center;">
+                                        </td>
+                                        @endif
                                         <td style="text-align: right;">
                                             Rp. {{number_format($totalAmount, 2, ',', '.')}}
                                         </td>

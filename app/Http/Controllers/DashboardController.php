@@ -358,31 +358,52 @@ class DashboardController extends Controller
             ]
         );
 
-        $payroll = DB::table('purchases as p')
-        ->select(
-            DB::raw('c.name as name'),
-            DB::raw('p.purchasingNum as nomor'),
-            DB::raw('c.npwp as npwp'),
-            DB::raw('p.purchaseDate as tanggal'),
-            DB::raw('p.paymentAmount as jumlah'),
-            DB::raw('p.taxPercentage as persen'),
-            DB::raw('p.tax as pajak'),
-            DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
-                WHEN p.taxIncluded="1" THEN "Ya" 
-                END) as taxIncluded'
+        $payroll = DB::table('purchases as p');
+        if($request->opsi == '1'){
+            $payroll = $payroll->select(
+                DB::raw('c.name as name'),
+                DB::raw('p.purchasingNum as nomor'),
+                DB::raw('c.npwp as npwp'),
+                DB::raw('p.purchaseDate as tanggal'),
+                DB::raw('p.paymentAmount as jumlah'),
+                DB::raw('p.taxPercentage as persen'),
+                DB::raw('p.tax as pajak'),
+                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
+                    WHEN p.taxIncluded="1" THEN "Ya" 
+                    END) as taxIncluded'
+                )
             )
-        )
-        ->join('companies as c', 'p.companyId', '=', 'c.id')
-        ->whereMonth('p.purchaseDate', $request->bulan)
-        ->whereYear('p.purchaseDate', $request->tahun)
-        ->orderByRaw('p.purchasingNum+0', 'asc')
-        ->orderBy('p.purchaseDate')
-        ->get();
+            ->join('companies as c', 'p.companyId', '=', 'c.id')
+            ->whereMonth('p.purchaseDate', $request->bulan)
+            ->whereYear('p.purchaseDate', $request->tahun)
+            ->orderByRaw('p.purchasingNum+0', 'asc')
+            ->orderBy('p.purchaseDate');
+        } else if($request->opsi == '2'){
+            $payroll = $payroll->select(
+                DB::raw('c.name as name'),
+                DB::raw('c.npwp as npwp'),
+                DB::raw('sum(p.paymentAmount) as jumlah'),
+                DB::raw('p.taxPercentage as persen'),
+                DB::raw('sum(p.tax) as pajak'),
+                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
+                    WHEN p.taxIncluded="1" THEN "Ya" 
+                    END) as taxIncluded'
+                )
+            )
+            ->join('companies as c', 'p.companyId', '=', 'c.id')
+            ->whereMonth('p.purchaseDate', $request->bulan)
+            ->whereYear('p.purchaseDate', $request->tahun)
+            ->groupBy("c.id")
+            ->orderByRaw('p.purchasingNum+0', 'asc')
+            ->orderBy('p.purchaseDate');
+        }
+        $payroll = $payroll->get();
 
         $tahun = $request->tahun;
         $bulan = $request->bulan;
+        $opsi = $request->opsi;
 
-        return view('dashboard.rekapitulasiPembelianPerBulan', compact('tahun','bulan', 'payroll'));        
+        return view('dashboard.rekapitulasiPembelianPerBulan', compact('opsi','tahun','bulan', 'payroll'));        
     }
 
     public function cetakRekapPembelianPerBulan(Request $request){
@@ -402,31 +423,53 @@ class DashboardController extends Controller
             case 12 : $bulan="Desember";break;
         }
 
-        $payroll = DB::table('purchases as p')
-        ->select(
-            DB::raw('c.name as name'),
-            DB::raw('p.purchasingNum as nomor'),
-            DB::raw('c.npwp as npwp'),
-            DB::raw('p.purchaseDate as tanggal'),
-            DB::raw('p.paymentAmount as jumlah'),
-            DB::raw('p.taxPercentage as persen'),
-            DB::raw('p.tax as pajak'),
-            DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
-                WHEN p.taxIncluded="1" THEN "Ya" 
-                END) as taxIncluded'
+        $payroll = DB::table('purchases as p');
+
+        if($request->opsi == '1'){
+            $payroll = $payroll->select(
+                DB::raw('c.name as name'),
+                DB::raw('p.purchasingNum as nomor'),
+                DB::raw('c.npwp as npwp'),
+                DB::raw('p.purchaseDate as tanggal'),
+                DB::raw('p.paymentAmount as jumlah'),
+                DB::raw('p.taxPercentage as persen'),
+                DB::raw('p.tax as pajak'),
+                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
+                    WHEN p.taxIncluded="1" THEN "Ya" 
+                    END) as taxIncluded'
+                )
             )
-        )
-        ->join('companies as c', 'p.companyId', '=', 'c.id')
-        ->whereMonth('p.purchaseDate', $request->bulan)
-        ->whereYear('p.purchaseDate', $request->tahun)
-        ->orderByRaw('p.purchasingNum+0', 'asc')
-        ->orderBy('p.purchaseDate')
-        ->get();
-        
+            ->join('companies as c', 'p.companyId', '=', 'c.id')
+            ->whereMonth('p.purchaseDate', $request->bulan)
+            ->whereYear('p.purchaseDate', $request->tahun)
+            ->orderByRaw('p.purchasingNum+0', 'asc')
+            ->orderBy('p.purchaseDate');
+        } else if($request->opsi == '2'){
+            $payroll = $payroll->select(
+                DB::raw('c.name as name'),
+                DB::raw('c.npwp as npwp'),
+                DB::raw('sum(p.paymentAmount) as jumlah'),
+                DB::raw('p.taxPercentage as persen'),
+                DB::raw('sum(p.tax) as pajak'),
+                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
+                    WHEN p.taxIncluded="1" THEN "Ya" 
+                    END) as taxIncluded'
+                )
+            )
+            ->join('companies as c', 'p.companyId', '=', 'c.id')
+            ->whereMonth('p.purchaseDate', $request->bulan)
+            ->whereYear('p.purchaseDate', $request->tahun)
+            ->groupBy("c.id")
+            ->orderByRaw('p.purchasingNum+0', 'asc')
+            ->orderBy('p.purchaseDate');
+        }
+        $payroll = $payroll->get();
+
 
         $monthYear = $bulan.' '.$request->tahun;
+        $opsi = $request->opsi;
 
-        $pdf = PDF::loadview('invoice.rekapPembelianPerBulan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadview('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
 
