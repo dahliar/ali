@@ -284,13 +284,13 @@ class EmployeeController extends Controller
             'bidangPendidikan'      => ['required', 'string'],
             'isactive'              => ['required']
         ]);
-
         DB::beginTransaction();
-
         try {
-            $this->employee->userUpdate($request->role, $request->email, $request->userid);
-            $this->employee->employeeUpdate($request->phone, $request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
-            $this->employeeIsNotActive($request->employeeId);
+            $userUpdate = $this->employee->userUpdate($request->role, $request->email, $request->userid);
+            $employeeUpdate = $this->employee->employeeUpdate($request->phone, $request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
+            if($request->isactive != $request->isActiveCurrent){
+                $setActive = $this->setEmployeeActiveness($request->employeeId, $request->isactive);
+            }
             DB::commit();
             return redirect('employeeList')
             ->with('status','Data Karyawan berhasil diubah.');
@@ -302,10 +302,18 @@ class EmployeeController extends Controller
 
     }
 
-    public function employeeIsNotActive($employeeId){
-        DB::table('employeeorgstructuremapping')
+    public function setEmployeeActiveness($employeeId, $isActive){
+        $ideosm = DB::table('employeeorgstructuremapping')
+        ->select('id')
         ->where('idemp', $employeeId)
-        ->update(['isActive' => 0]);
+        ->orderBy('id', 'desc')
+        ->first()->id;
+
+        $affected = DB::table('employeeorgstructuremapping')
+        ->where('id', $ideosm)
+        ->where('idemp', $employeeId)
+        ->update(['isActive' => $isActive]);
+        return $affected;
     }
 
 

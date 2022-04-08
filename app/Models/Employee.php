@@ -30,12 +30,13 @@ class Employee extends Model
         $affected = DB::table('users')
         ->where('id', $id)
         ->update(['role' => $role, 'email' => $email]);
+        return $affected;
     }
     public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender){
         $affected = DB::table('employees')
         ->where('id', $id)
         ->update([
-            'phone'           => $phone, 
+            'phone'             => $phone, 
             'address'           => $address, 
             'employmentStatus'  => $employmentStatus, 
             'isActive'          => $isActive,
@@ -47,6 +48,7 @@ class Employee extends Model
             'bankid'            => $bankid,
             
         ]);
+        return $affected;
     }
     public function orgStructureStore($data){
         $id = DB::table('employeeorgstructuremapping')->insertGetId($data);

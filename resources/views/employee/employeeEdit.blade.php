@@ -254,7 +254,9 @@
                                     <option value="0" @if($employee->isActive == 0) selected @endif>Non Aktif</option>
                                     <option value="1" @if($employee->isActive == 1) selected @endif>Aktif</option>
                                 </select>
+                                <input id="isActiveCurrent" name="isActiveCurrent" type="hidden" value="{{$employee->isActive}}">
                                 @else
+                                <input id="isActiveCurrent" name="isActiveCurrent" type="hidden" value="{{$employee->isActive}}">
                                 <input id="isactive" name="isactive" type="hidden" value="{{$employee->isActive}}">
                                 <input class="form-control" value="@if ($employee->isActive==0) Non Aktif @else Aktif @endif" disabled>
                                 @endif                                
