@@ -249,12 +249,14 @@
                                 </tbody>
                                 <tfoot>
                                     <tr style="font-size:12px">
-                                        @if(empty($opsi))
+                                        @if(!empty($opsi))
+                                        @if($opsi==1)
                                         <td colspan="5" style="text-align: center;">
                                         </td>
                                         @else
                                         <td colspan="3" style="text-align: center;">
                                         </td>
+                                        @endif
                                         @endif
                                         <td style="text-align: right;">
                                             Rp. {{number_format($totalAmount, 2, ',', '.')}}
