@@ -23,6 +23,7 @@ use App\Http\Controllers\BoronganController;
 use App\Http\Controllers\HonorariumController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserPageMappingController;
+use App\Http\Controllers\GoodController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -420,5 +421,29 @@ Route::get('getPageList/{applicationId}', [UserPageMappingController::class, 'ge
 
 Route::post('pageStore', [UserPageMappingController::class, 'pageStore'])->middleware('auth');
 Route::post('applicationMappingStore', [UserPageMappingController::class, 'store'])->middleware('auth');
+
+
+/*
+GOODS
+*/
+
+
+Route::get('goodList',[GoodController::class, 'index'])->middleware(['auth', 'authorized']);
+Route::GET('goodAdd',[GoodController::class, 'create'])->middleware('auth', 'authorized');
+Route::GET('goodEdit/{good}',[GoodController::class, 'edit'])->middleware('auth', 'authorized');
+Route::GET('goodUbahTambah/{good}',[GoodController::class, 'ubahTambah'])->middleware('auth', 'authorized');
+Route::GET('goodUbahKurang/{good}',[GoodController::class, 'ubahKurang'])->middleware('auth', 'authorized');
+
+Route::post('goodStore',[GoodController::class, 'store'])->middleware('auth');
+Route::post('goodUpdate',[GoodController::class, 'update'])->middleware('auth');
+Route::post('goodUbahTambah',[GoodController::class, 'storeTambah'])->middleware('auth');
+Route::post('goodUbahKurang',[GoodController::class, 'storeKurang'])->middleware('auth');
+
+
+
+Route::get('getGoods', [GoodController::class, 'getGoods'])->middleware('auth');
+
+
+
 
 require __DIR__.'/auth.php';

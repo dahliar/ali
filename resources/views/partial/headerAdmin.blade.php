@@ -153,6 +153,9 @@
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li><a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-fish"></i>Stock per-Spesies</a></li>
 				<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-fish"></i>Stock per-Barang</a></li>
+				<li>
+					<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i> Barang Produksi</a>
+				</li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">
