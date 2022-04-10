@@ -484,6 +484,39 @@ class DashboardController extends Controller
     select 'honorarium',    h.keterangan,   h.employeeId,   null,           null,           null,               h.jumlah,           h.tanggalKerja      from honorariums h where h.tanggalKerja='2022-04-03'
     */
     public function getPayrollByDateRange(Request $request){
+        /*
+        $start=$request->start;
+        $end=$request->end;
+
+        $first = DB::table('dailysalaries as ds')
+        ->select(
+            DB::raw('"harian" as keterangan'), 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal'
+        )
+        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->where('')
+        ->whereBetween('ds.presenceDate', [$start, $end]);
+
+        $second = DB::table('borongans as b')
+        ->join('detail_borongans as db', 'db.boronganId', 'b.id')
+        ->join('employees as e', 'e.id', '=', 'db.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->select(
+            'b.name as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
+        )
+        ->whereBetween('b.tanggalKerja', [$start, $end]);
+
+        $third = DB::table('honorariums as h')
+        ->join('employees as e', 'e.id', '=', 'h.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->select(
+            'h.keterangan as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
+        )
+        ->whereBetween('h.tanggalKerja', [$start, $end])
+        ->union($first)
+        ->union($second)
+        ->get();
+        */
 
         $start=$request->start;
         $end=$request->end;
@@ -508,16 +541,14 @@ class DashboardController extends Controller
         $third = DB::table('honorariums as h')
         ->join('employees as e', 'e.id', '=', 'h.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-
         ->select(
             'h.keterangan as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
         )
         ->whereBetween('h.tanggalKerja', [$start, $end])
         ->union($first)
         ->union($second)
+        ->groupBy('e.id')
         ->get();
-
-        //dd($third);
 
         return view('salary.checkPayrollByDateRange', compact('start','end','third'));  
     }
