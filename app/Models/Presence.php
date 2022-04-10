@@ -60,9 +60,6 @@ class Presence extends Model
         $masuk=null;
         $shift=0;
 
-
-
-
         if ($start->lte(Carbon::parse($dateAcuan." 08:15:00"))){
             $masuk=Carbon::parse($dateAcuan." 08:00:00");
             $shift=1;
@@ -144,7 +141,12 @@ class Presence extends Model
             if ($selisihMenitSisa > 30){
                 $jamKerja+=1;
             }
+            /*
             if ((Carbon::parse($dateAcuan." 12:00:00")->between($start,$end)) and (Carbon::parse($dateAcuan." 13:00:00")->between($start,$end))) {
+                $jamKerja-=1;
+            }
+            */
+            if ($start->lte(Carbon::parse($dateAcuan." 12:00:00")) and $end->gte(Carbon::parse($dateAcuan." 13:00:00"))) {
                 $jamKerja-=1;
             }
         }
@@ -208,7 +210,11 @@ class Presence extends Model
             }
 
         //mengurangi jam istirahat
+            /*
             if ((Carbon::parse($dateAcuan." 12:00:00")->between($start,$end)) and (Carbon::parse($dateAcuan." 13:00:00")->between($start,$end))) {
+                $jamKerja-=1;
+            }*/
+            if ($start->lte(Carbon::parse($dateAcuan." 12:00:00")) and $end->gte(Carbon::parse($dateAcuan." 13:00:00"))) {
                 $jamKerja-=1;
             }
         }
