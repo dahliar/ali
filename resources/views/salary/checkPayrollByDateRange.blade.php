@@ -95,7 +95,7 @@
                     @foreach($third as $paymonth)
                     @php
                     $totalHarian+=$paymonth->uh;
-                    $totalHarian+=$paymonth->ul;
+                    $totalLembur+=$paymonth->ul;
                     $totalBorongan+=(int)$paymonth->borongan;
                     $totalHonorarium+=(int)$paymonth->honorarium;
                     $total+=($paymonth->uh + $paymonth->ul + (int)$paymonth->borongan + (int)$paymonth->honorarium);
