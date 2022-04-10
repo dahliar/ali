@@ -523,9 +523,10 @@ class DashboardController extends Controller
         ->get();
         */
 
-        
+        //dd($request);
         $start=$request->start;
         $end=$request->end;
+        $opsi=$request->opsi;
 
         $harian = DB::table('dailysalaries as ds')
         ->select('e.id as empid', 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal')
@@ -556,25 +557,41 @@ class DashboardController extends Controller
         ->union($harian)
         ->union($borongan);
 
+        if ($opsi==1){
+            $third = DB::table($honorarium)
+            ->select(
+                'name',
+                'empid', 
+                DB::raw('sum(uh) as uh'), 
+                DB::raw('sum(ul) as ul'), 
+                DB::raw('sum(borongan) as borongan'), 
+                DB::raw('sum(honorarium) as honorarium'),
+                DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total'),
+                'tanggal'
+            )
+            ->groupBy('empid')
+            ->groupBy('tanggal')
+            ->having(DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium))'), '>', 0)
+            ->orderBy('name')
+            ->orderBy('tanggal')
+            ->get();
+        } else{
+            $third = DB::table($honorarium)
+            ->select(
+                'name',
+                'empid', 
+                DB::raw('sum(uh) as uh'), 
+                DB::raw('sum(ul) as ul'), 
+                DB::raw('sum(borongan) as borongan'), 
+                DB::raw('sum(honorarium) as honorarium'),
+                DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total')
+            )
+            ->groupBy('empid')
+            ->having(DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium))'), '>', 0)
+            ->orderBy('name')
+            ->get();
+        }
 
-        $third = DB::table($honorarium)
-        ->select(
-            'name',
-            'empid', 
-            DB::raw('sum(uh) as uh'), 
-            DB::raw('sum(ul) as ul'), 
-            DB::raw('sum(borongan) as borongan'), 
-            DB::raw('sum(honorarium) as honorarium'),
-            DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total'),
-            'tanggal'
-        )
-        ->groupBy('empid')
-        ->groupBy('tanggal')
-        ->having(DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium))'), '>', 0)
-        ->orderBy('name')
-        ->orderBy('tanggal')
-        ->get();
-
-        return view('salary.checkPayrollByDateRange', compact('start','end','third'));  
+        return view('salary.checkPayrollByDateRange', compact('opsi','start','end','third'));  
     }
 }

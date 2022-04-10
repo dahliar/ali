@@ -39,31 +39,37 @@
             <div class="modal-body">
                 <form action="{{url('getPayrollByDateRange')}}" method="post">
                     {{ csrf_field() }}
-                    @if(!empty($start))
                     <div class="row form-inline">
+                        @if(!empty($start))
                         <div class="col-md-2">
                             <input type="date" id="start" name="start" class="form-control text-end" value="{{ $start }}" > 
                         </div>
                         <div class="col-md-2">
                             <input type="date" id="end" name="end" class="form-control text-end" value="{{ $end }}" >
                         </div>                       
-                        <div class="col-md-2">
-                            <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
-                        </div>
-                    </div>
-                    @else
-                    <div class="row form-inline">
+                        @else
                         <div class="col-md-2">
                             <input type="date" id="start" name="start" class="form-control text-end" value="{{ date('Y-m-d') }}" > 
                         </div>
                         <div class="col-md-2">
                             <input type="date" id="end" name="end" class="form-control text-end" value="{{ date('Y-m-d') }}" >
                         </div>                       
+                        @endif
+                        <div class="col-md-2">
+                            <select id="opsi" name="opsi" class="form-select" >
+                                @if(empty($opsi))
+                                <option value="1" selected>Detil per tanggal</option>
+                                <option value="2">Rekap</option>
+                                @else
+                                <option value="1" @if($opsi == 1) selected @endif>Detil per tanggal</option>
+                                <option value="2" @if($opsi == 2) selected @endif>Rekap</option>
+                                @endif
+                            </select>
+                        </div>
                         <div class="col-md-2">
                             <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
                         </div>
                     </div>
-                    @endif
                 </form>
             </div>
             <div class="modal-body">
@@ -73,7 +79,11 @@
                         <tr>
                             <th style="width: 5%;">No</th>
                             <th style="width: 15%;">Nama</th>
+                            @if (!empty($opsi))
+                            @if ($opsi==1)
                             <th style="width: 10%;">Tanggal</th>
+                            @endif
+                            @endif
                             <th style="width: 10%;">Harian</th>
                             <th style="width: 10%;">Lembur</th>
                             <th style="width: 10%;">Borongan</th>
@@ -105,7 +115,14 @@
                             <td style="text-align: left;">
                                 {{$paymonth->name}}
                             </td>
+
+                            @if (!empty($opsi))
+                            @if ($opsi==1)
                             <td style="text-align: left;">{{$paymonth->tanggal}}</td>
+                            @endif
+                            @endif
+
+
                             <td style="text-align: right;">Rp. {{number_format($paymonth->uh, 2, ',', '.')}}
                             </td>
                             <td style="text-align: right;">Rp. {{number_format($paymonth->ul, 2, ',', '.')}}
@@ -119,8 +136,14 @@
                     </tbody>
                     <tfooter>
                         <tr>
-                            <td style="text-align: center;" colspan="3">
-                            </td>
+                            @if (!empty($opsi))
+                            @if ($opsi==1)
+                            <td style="text-align: center;" colspan="3"></td>
+                            @else
+                            <td style="text-align: center;" colspan="2"></td>
+                            @endif
+                            @endif
+
                             <td style="text-align: right;">
                                 Rp. {{number_format($totalHarian, 2, ',', '.')}}
                             </td>
