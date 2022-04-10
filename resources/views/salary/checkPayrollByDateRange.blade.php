@@ -126,17 +126,16 @@
                     </tfooter>
                 </table>
                 <div class="row form-inline">
-                    <div class="col-md-2">
-                        Total
+                    <div class="col-md-8 text-end">
+                        <h2>Total</h2>
                     </div>
-                    <div class="col-md-2">
-
-                    </div>
-                    <div class="col-md-2">
-                        @php
-                        $total = $totalHarian+$totalLembur+$totalBorongan+$totalHonorarium;
-                        @endphp
-                        Rp. {{number_format($total, 2, ',', '.')}}
+                    <div class="col-md-4 text-end">
+                        <h2>
+                            @php
+                            $total = $totalHarian+$totalLembur+$totalBorongan+$totalHonorarium;
+                            @endphp
+                            Rp. {{number_format($total, 2, ',', '.')}}
+                        </h2>
                     </div>
                 </div>
                 @endif
