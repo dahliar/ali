@@ -258,6 +258,10 @@
             </form>
         </div>
     </div>
-</div>
+    Laman ini akan menampilkan data 
+    <ol>
+        <li>Dalam rentang tanggal terpilih</li>
+        <li>Data gaji yang dihitung melihat proses generate gaji</li>
+    </ol>
 </body>
 @endsection
