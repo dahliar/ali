@@ -163,7 +163,12 @@
                     </tfooter>
                 </table>
                 @endif
-            </div>    
+            </div>  
+            Laman ini akan menampilkan data 
+            <ol>
+                <li>Dalam rentang tanggal terpilih</li>
+                <li>Data gaji yang dihitung <b>tidak</b> memperhatikan proses generate gaji</li>
+            </ol>
         </div>
     </div>
 </body>

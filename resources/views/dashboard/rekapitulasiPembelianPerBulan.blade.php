@@ -187,10 +187,10 @@
                         </div>
                         <div class="card-body">
                             <div class="row form-group">
-                               @if(!empty($payroll))
-                               <input type="hidden" name="payroll" id="payroll" value="{{$payroll}}">
+                             @if(!empty($payroll))
+                             <input type="hidden" name="payroll" id="payroll" value="{{$payroll}}">
 
-                               <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
+                             <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
                                 <thead style="text-align: center;">
                                     <tr>
                                         <th style="width: 5%;">No</th>
@@ -277,5 +277,10 @@
         </div>
     </div>
 </div>
+Laman ini akan menampilkan data 
+<ol>
+    <li>Dalam rentang tanggal terpilih</li>
+    <li>Data gaji yang dihitung melihat proses generate gaji</li>
+</ol>
 </body>
 @endsection
