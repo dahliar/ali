@@ -565,6 +565,7 @@ class DashboardController extends Controller
             DB::raw('sum(ul) as ul'), 
             DB::raw('sum(borongan) as borongan'), 
             DB::raw('sum(honorarium) as honorarium'),
+            DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total'),
             'tanggal'
         )
         ->groupBy('empid')

@@ -78,6 +78,7 @@
                             <th style="width: 10%;">Lembur</th>
                             <th style="width: 10%;">Borongan</th>
                             <th style="width: 10%;">Honorarium</th>
+                            <th style="width: 10%;">Total</th>
                         </tr>
                     </thead>
                     <tbody style="font-size:14px">
@@ -111,6 +112,7 @@
                             </td>
                             <td style="text-align: right;">Rp. {{number_format($paymonth->borongan, 2, ',', '.')}}</td>
                             <td style="text-align: right;">Rp. {{number_format($paymonth->honorarium, 2, ',', '.')}}</td>
+                            <td style="text-align: right;">Rp. {{number_format($paymonth->total, 2, ',', '.')}}</td>
                             @php $no+=1;    @endphp                                    
                         </tr>
                         @endforeach
@@ -131,22 +133,12 @@
                             <td style="text-align: right;">
                                 Rp. {{number_format($totalHonorarium, 2, ',', '.')}}
                             </td>
+                            <td style="text-align: right;">
+                                Rp. {{number_format($total, 2, ',', '.')}}
+                            </td>
                         </tr>
                     </tfooter>
                 </table>
-                <div class="row form-inline">
-                    <div class="col-md-8 text-end">
-                        <h2>Total</h2>
-                    </div>
-                    <div class="col-md-4 text-end">
-                        <h2>
-                            @php
-                            $total = $totalHarian+$totalLembur+$totalBorongan+$totalHonorarium;
-                            @endphp
-                            Rp. {{number_format($total, 2, ',', '.')}}
-                        </h2>
-                    </div>
-                </div>
                 @endif
             </div>    
         </div>
