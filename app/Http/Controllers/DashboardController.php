@@ -548,6 +548,7 @@ class DashboardController extends Controller
         ->union($first)
         ->union($second)
         ->groupBy('e.id')
+        ->orderBy('name')
         ->get();
 
         return view('salary.checkPayrollByDateRange', compact('start','end','third'));  
