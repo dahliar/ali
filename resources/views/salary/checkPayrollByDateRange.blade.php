@@ -39,18 +39,31 @@
             <div class="modal-body">
                 <form action="{{url('getPayrollByDateRange')}}" method="post">
                     {{ csrf_field() }}
-
+                    @if(!empty($start))
                     <div class="row form-inline">
                         <div class="col-md-2">
-                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d'))}}" > 
+                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ $start }}" > 
                         </div>
                         <div class="col-md-2">
-                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
+                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ $start }}" >
                         </div>                       
                         <div class="col-md-2">
                             <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
                         </div>
                     </div>
+                    @else
+                    <div class="row form-inline">
+                        <div class="col-md-2">
+                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ date('Y-m-d') }}" > 
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ date('Y-m-d') }}" >
+                        </div>                       
+                        <div class="col-md-2">
+                            <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
+                        </div>
+                    </div>
+                    @endif
                 </form>
             </div>
             <div class="modal-body">
