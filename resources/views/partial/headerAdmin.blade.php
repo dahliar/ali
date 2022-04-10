@@ -174,6 +174,10 @@
 					</a>
 					<a class="dropdown-item" href="{{ url('rekapitulasiPembelianPerBulan')}}"><i class="fas fa-store"></i> Rekapitulasi Pembelian Per-bulan
 					</a>
+					<a class="dropdown-item" href="{{ url('checkPayrollByDateRange')}}"><i class="fas fa-store"></i> Lihat penggajian rentang tanggal
+					</a>
+
+
 				</li>
 			</ul>
 		</li>

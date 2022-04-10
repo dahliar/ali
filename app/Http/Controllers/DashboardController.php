@@ -12,7 +12,6 @@ use PDF;
 
 class DashboardController extends Controller
 {
-
     public function getServerDate(){
         return Carbon::now()->toDateString();
     }
@@ -470,10 +469,57 @@ class DashboardController extends Controller
         $pdf = PDF::loadview('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap pembelian '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
+    }
 
-
+    public function checkPayrollByDateRange(){
+        return view ('salary.checkPayrollByDateRange');
 
     }
 
+    /*
+    SELECT 'harian',        null,           ds.employeeId,  ds.uangHarian,  ds.uangLembur,  null as borongan,   null as honorarium, ds.presenceDate     from dailysalaries as ds where ds.presenceDate='2022-04-03'
+    union
+    select 'borongan',      b.name,         db.employeeId,  null,           null,           db.netPayment,      null,               b.tanggalKerja      from borongans b join detail_borongans db on b.id=db.boronganId where b.tanggalKerja='2022-04-03'
+    UNION
+    select 'honorarium',    h.keterangan,   h.employeeId,   null,           null,           null,               h.jumlah,           h.tanggalKerja      from honorariums h where h.tanggalKerja='2022-04-03'
+    */
+    public function getPayrollByDateRange(Request $request){
 
+        $start=$request->start;
+        $end=$request->end;
+
+        $first = DB::table('dailysalaries as ds')
+        ->select(
+            DB::raw('"harian" as keterangan'), 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal'
+        )
+        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->whereIn('employmentStatus',[2,3])
+        ->whereBetween('ds.presenceDate', [$start, $end]);
+
+        $second = DB::table('borongans as b')
+        ->join('detail_borongans as db', 'db.boronganId', 'b.id')
+        ->join('employees as e', 'e.id', '=', 'db.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->select(
+            'b.name as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
+        )
+        ->whereBetween('b.tanggalKerja', [$start, $end]);
+
+        $third = DB::table('honorariums as h')
+        ->join('employees as e', 'e.id', '=', 'h.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+
+        ->select(
+            'h.keterangan as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
+        )
+        ->whereBetween('h.tanggalKerja', [$start, $end])
+        ->union($first)
+        ->union($second)
+        ->get();
+
+        //dd($third);
+
+        return view('salary.checkPayrollByDateRange', compact('start','end','third'));  
+    }
 }

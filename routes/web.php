@@ -404,6 +404,10 @@ Route::get('rekapitulasiPembelianPerBulan',[DashboardController::class, 'rekapit
 Route::post('getRekapitulasiPembelianPerBulan', [DashboardController::class, 'getRekapitulasiPembelianPerBulan'])->middleware(['auth']);
 Route::post('cetakRekapPembelianPerBulan', [DashboardController::class, 'cetakRekapPembelianPerBulan'])->middleware(['auth', 'authorized']);
 
+Route::get('checkPayrollByDateRange',[DashboardController::class, 'checkPayrollByDateRange'])->middleware(['auth', 'authorized']);
+Route::post('getPayrollByDateRange', [DashboardController::class, 'getPayrollByDateRange'])->middleware(['auth']);
+
+
 /*
 USER PAGE MAPPING
 */
