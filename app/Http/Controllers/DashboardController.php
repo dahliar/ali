@@ -494,7 +494,6 @@ class DashboardController extends Controller
         )
         ->join('employees as e', 'e.id', '=', 'ds.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->whereIn('employmentStatus',[2,3])
         ->whereBetween('ds.presenceDate', [$start, $end]);
 
         $second = DB::table('borongans as b')
