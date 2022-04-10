@@ -490,27 +490,32 @@ class DashboardController extends Controller
 
         $first = DB::table('dailysalaries as ds')
         ->select(
-            DB::raw('"harian" as keterangan'), 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal'
+            DB::raw('"harian" as keterangan'), 'e.id as empid', 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal'
         )
         ->join('employees as e', 'e.id', '=', 'ds.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->where('')
+        ->orderBy('u.name')
+        ->orderBy('ds.presenceDate')
         ->whereBetween('ds.presenceDate', [$start, $end]);
 
         $second = DB::table('borongans as b')
         ->join('detail_borongans as db', 'db.boronganId', 'b.id')
         ->join('employees as e', 'e.id', '=', 'db.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('b.tanggalKerja')
         ->select(
-            'b.name as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
+            'b.name as keterangan', 'e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
         )
         ->whereBetween('b.tanggalKerja', [$start, $end]);
 
         $third = DB::table('honorariums as h')
         ->join('employees as e', 'e.id', '=', 'h.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('h.tanggalKerja')
         ->select(
-            'h.keterangan as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
+            'h.keterangan as keterangan', 'e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
         )
         ->whereBetween('h.tanggalKerja', [$start, $end])
         ->union($first)
@@ -518,37 +523,55 @@ class DashboardController extends Controller
         ->get();
         */
 
+        
         $start=$request->start;
         $end=$request->end;
 
-        $first = DB::table('dailysalaries as ds')
-        ->select(
-            DB::raw('"harian" as keterangan'), 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal'
-        )
+        $harian = DB::table('dailysalaries as ds')
+        ->select('e.id as empid', 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal')
         ->join('employees as e', 'e.id', '=', 'ds.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('ds.presenceDate')
         ->whereBetween('ds.presenceDate', [$start, $end]);
 
-        $second = DB::table('borongans as b')
+        $borongan = DB::table('borongans as b')
         ->join('detail_borongans as db', 'db.boronganId', 'b.id')
         ->join('employees as e', 'e.id', '=', 'db.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->select(
-            'b.name as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
-        )
+        ->orderBy('u.name')
+        ->orderBy('b.tanggalKerja')
+        ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
+    )
         ->whereBetween('b.tanggalKerja', [$start, $end]);
 
-        $third = DB::table('honorariums as h')
+        $honorarium = DB::table('honorariums as h')
         ->join('employees as e', 'e.id', '=', 'h.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->select(
-            'h.keterangan as keterangan', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
-        )
+        ->orderBy('u.name')
+        ->orderBy('h.tanggalKerja')
+        ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
+    )
         ->whereBetween('h.tanggalKerja', [$start, $end])
-        ->union($first)
-        ->union($second)
-        ->groupBy('e.id')
+        ->union($harian)
+        ->union($borongan);
+
+
+        $third = DB::table($honorarium)
+        ->select(
+            'name',
+            'empid', 
+            DB::raw('sum(uh) as uh'), 
+            DB::raw('sum(ul) as ul'), 
+            DB::raw('sum(borongan) as borongan'), 
+            DB::raw('sum(honorarium) as honorarium'),
+            'tanggal'
+        )
+        ->groupBy('empid')
+        ->groupBy('tanggal')
+        ->having(DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium))'), '>', 0)
         ->orderBy('name')
+        ->orderBy('tanggal')
         ->get();
 
         return view('salary.checkPayrollByDateRange', compact('start','end','third'));  

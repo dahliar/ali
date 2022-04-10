@@ -45,7 +45,7 @@
                             <input type="date" id="start" name="start" class="form-control text-end" value="{{ $start }}" > 
                         </div>
                         <div class="col-md-2">
-                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ $start }}" >
+                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ $end }}" >
                         </div>                       
                         <div class="col-md-2">
                             <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
@@ -73,7 +73,6 @@
                         <tr>
                             <th style="width: 5%;">No</th>
                             <th style="width: 15%;">Nama</th>
-                            <th style="width: 30%;">Keterangan</th>
                             <th style="width: 10%;">Tanggal</th>
                             <th style="width: 10%;">Harian</th>
                             <th style="width: 10%;">Lembur</th>
@@ -105,9 +104,6 @@
                             <td style="text-align: left;">
                                 {{$paymonth->name}}
                             </td>
-                            <td style="text-align: left;">
-                                {{$paymonth->keterangan}}
-                            </td>
                             <td style="text-align: left;">{{$paymonth->tanggal}}</td>
                             <td style="text-align: right;">Rp. {{number_format($paymonth->uh, 2, ',', '.')}}
                             </td>
@@ -121,7 +117,7 @@
                     </tbody>
                     <tfooter>
                         <tr>
-                            <td style="text-align: center;" colspan="4">
+                            <td style="text-align: center;" colspan="3">
                             </td>
                             <td style="text-align: right;">
                                 Rp. {{number_format($totalHarian, 2, ',', '.')}}
