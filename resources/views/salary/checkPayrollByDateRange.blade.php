@@ -41,12 +41,21 @@
                     {{ csrf_field() }}
 
                     <div class="row form-inline">
+                        @if(!empty($start))
+                        <div class="col-md-2">
+                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ $start }}" > 
+                        </div>
+                        <div class="col-md-2">
+                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ $end }}" >
+                        </div>
+                        @else
                         <div class="col-md-2">
                             <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d'))}}" > 
                         </div>
                         <div class="col-md-2">
                             <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
-                        </div>
+                        </div>                       
+                        @endif
                         <div class="col-md-2">
                             <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
                         </div>
@@ -120,23 +129,32 @@
                             Rp. {{number_format($totalHarian, 2, ',', '.')}}
                         </td>
                         <td style="text-align: right;">
+                            Rp. {{number_format($totalLembur, 2, ',', '.')}}
+                        </td>
+                        <td style="text-align: right;">
                             Rp. {{number_format($totalBorongan, 2, ',', '.')}}
                         </td>
                         <td style="text-align: right;">
                             Rp. {{number_format($totalHonorarium, 2, ',', '.')}}
                         </td>
-                        <td style="text-align: right;">
-                            Rp. {{number_format($total, 2, ',', '.')}}
-                        </td>
                     </tr>
                 </tfooter>
             </table>
-
-
             @endif
+            <div class="row form-inline">
+                <div class="col-md-2">
+                    Total
+                </div>
+                <div class="col-md-2">
 
-
-
+                </div>
+                <div class="col-md-2">
+                    @php
+                    $total = $totalHarian+$totalLembur+$totalBorongan+$totalHonorarium;
+                    @endphp
+                    {{$total}}
+                </div>
+            </div>
         </div>    
     </div>
 </div>
