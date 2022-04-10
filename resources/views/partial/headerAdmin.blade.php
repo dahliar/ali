@@ -168,16 +168,14 @@
 					</a>
 					<a class="dropdown-item" href="{{ url('hppList')}}"><i class="fas fa-store"></i> Harga Pokok Produksi
 					</a>
-					<a class="dropdown-item" href="{{ url('rekapitulasiGaji')}}"><i class="fas fa-store"></i> Rekapitulasi Gaji
+					<a class="dropdown-item" href="{{ url('rekapitulasiGaji')}}"><i class="fas fa-store"></i> Rekapitulasi gaji per tahun
 					</a>
-					<a class="dropdown-item" href="{{ url('rekapitulasiGajiPerBulan')}}"><i class="fas fa-store"></i> Rekapitulasi Gaji Per-bulan
+					<a class="dropdown-item" href="{{ url('rekapitulasiGajiPerBulan')}}"><i class="fas fa-store"></i> Rekapitulasi gaji berdasar payroll
+					</a>
+					<a class="dropdown-item" href="{{ url('checkPayrollByDateRange')}}"><i class="fas fa-store"></i> Rekapitulasi gaji berdasar tanggal
 					</a>
 					<a class="dropdown-item" href="{{ url('rekapitulasiPembelianPerBulan')}}"><i class="fas fa-store"></i> Rekapitulasi Pembelian Per-bulan
 					</a>
-					<a class="dropdown-item" href="{{ url('checkPayrollByDateRange')}}"><i class="fas fa-store"></i> Lihat penggajian rentang tanggal
-					</a>
-
-
 				</li>
 			</ul>
 		</li>
