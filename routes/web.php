@@ -407,6 +407,9 @@ Route::post('cetakRekapPembelianPerBulan', [DashboardController::class, 'cetakRe
 Route::get('checkPayrollByDateRange',[DashboardController::class, 'checkPayrollByDateRange'])->middleware(['auth', 'authorized']);
 Route::post('getPayrollByDateRange', [DashboardController::class, 'getPayrollByDateRange'])->middleware(['auth']);
 
+Route::get('rekapitulasiPresensi',[DashboardController::class, 'rekapitulasiPresensi'])->name('rekapitulasiPresensi')->middleware(['auth', 'authorized']);
+Route::get('getRekapitulasiPresensi/{start}/{end}/{opsi}', [DashboardController::class, 'getRekapitulasiPresensi'])->middleware(['auth']);
+
 
 /*
 USER PAGE MAPPING

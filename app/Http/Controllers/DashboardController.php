@@ -484,45 +484,6 @@ class DashboardController extends Controller
     select 'honorarium',    h.keterangan,   h.employeeId,   null,           null,           null,               h.jumlah,           h.tanggalKerja      from honorariums h where h.tanggalKerja='2022-04-03'
     */
     public function getPayrollByDateRange(Request $request){
-        /*
-        $start=$request->start;
-        $end=$request->end;
-
-        $first = DB::table('dailysalaries as ds')
-        ->select(
-            DB::raw('"harian" as keterangan'), 'e.id as empid', 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal'
-        )
-        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
-        ->join('users as u', 'u.id', '=', 'e.userid')
-        ->orderBy('u.name')
-        ->orderBy('ds.presenceDate')
-        ->whereBetween('ds.presenceDate', [$start, $end]);
-
-        $second = DB::table('borongans as b')
-        ->join('detail_borongans as db', 'db.boronganId', 'b.id')
-        ->join('employees as e', 'e.id', '=', 'db.employeeId')
-        ->join('users as u', 'u.id', '=', 'e.userid')
-        ->orderBy('u.name')
-        ->orderBy('b.tanggalKerja')
-        ->select(
-            'b.name as keterangan', 'e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
-        )
-        ->whereBetween('b.tanggalKerja', [$start, $end]);
-
-        $third = DB::table('honorariums as h')
-        ->join('employees as e', 'e.id', '=', 'h.employeeId')
-        ->join('users as u', 'u.id', '=', 'e.userid')
-        ->orderBy('u.name')
-        ->orderBy('h.tanggalKerja')
-        ->select(
-            'h.keterangan as keterangan', 'e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
-        )
-        ->whereBetween('h.tanggalKerja', [$start, $end])
-        ->union($first)
-        ->union($second)
-        ->get();
-        */
-
         //dd($request);
         $start=$request->start;
         $end=$request->end;
@@ -593,5 +554,58 @@ class DashboardController extends Controller
         }
 
         return view('salary.checkPayrollByDateRange', compact('opsi','start','end','third'));  
+    }
+
+
+    public function rekapitulasiPresensi(){
+        return view('dashboard.rekapitulasiPresensi');
+    }
+    public function getRekapitulasiPresensi($start, $end, $opsi){
+        $start=Carbon::parse($start);
+        $end=Carbon::parse($end);
+        $query = DB::table('presences as p')
+        ->select(
+            'e.id as empid', 
+            'u.name as name', 
+            'os.name as jabatan',
+            DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenis'),
+            'wp.name as bagian',
+            DB::raw('sum(p.jamKerja) as jamKerja'), 
+            DB::raw('sum(p.jamlembur) as jamLembur'),
+            DB::raw('sum(p.jamKerja + p.jamlembur) as totalJam'),
+            DB::raw('count(p.id) as hari')
+        )
+        ->whereBetween('p.start', [$start->startOfDay(), $end->endOfDay()])
+        ->join('employees as e', 'e.id', '=', 'p.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->where('mapping.isactive','=','1')
+        ->orderBy('totalJam', 'desc')
+        ->groupBy('p.employeeId');
+
+        switch ($opsi){
+            case "1" :
+            $query=$query->where('e.employmentStatus', '=', '1');
+            break;
+            case "2" :
+            $query=$query->where('e.employmentStatus', '=', '2');
+            break;
+            case "3" :
+            $query=$query->where('e.employmentStatus', '=', '3');
+            break;
+        }
+
+        $query = $query->get();
+        return datatables()->of($query) 
+        ->addColumn('action', function ($row) {
+            $html='<button  data-rowid="'.$row->empid.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Ubah Presensi" onclick="employeePresenceHarianHistory('."'".$row->empid."'".')">
+            <i class="fa fa-edit" style="font-size:20px"></i>
+            </button>';
+            return $html;
+        })       
+        ->addIndexColumn()->toJson();      
     }
 }
