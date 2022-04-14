@@ -43,12 +43,12 @@
                             </a>
                             <div class="collapse innermost" id="penjualan-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="link-dark rounded">Export</a></li>
-                                    <li><a href="#" class="link-dark rounded">Lokal</a></li>
+                                    <li><a href="{{ url('transactionList')}}" class="link-dark rounded">Export</a></li>
+                                    <li><a href="{{ url('localTransactionList')}}" class="link-dark rounded">Lokal</a></li>
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="#" class="link-dark rounded innermost">Pembelian</a></li>
+                        <li><a href="{{ url('purchaseList')}}" class="link-dark rounded innermost">Pembelian</a></li>
                     </ul>
                 </div>
             </li>
@@ -59,7 +59,10 @@
                 <div class="collapse" id="hr-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
                         <li>
-                            <a href="{{ url('employeeList2')}}" class="link-dark rounded innermost">Karyawan</a>
+                            <a href="{{ url('employeeList')}}" class="link-dark rounded innermost">Karyawan</a>
+                        </li>
+                        <li>
+                            <a href="{{ url('employeeList2')}}" class="link-dark rounded innermost">Karyawan - new Menu</a>
                         </li>
                         <li>
                             <a class="link-dark rounded collapsed btn-toggle" data-bs-toggle="collapse" data-bs-target="#presensi-collapse" aria-expanded="false">
@@ -67,11 +70,11 @@
                             </a>
                             <div class="collapse innermost" id="presensi-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="link-dark rounded">Harian</a></li>
-                                    <li><a href="#" class="link-dark rounded">Borongan</a></li>
-                                    <li><a href="#" class="link-dark rounded">Honorarium</a></li>
+                                    <li><a href="{{ url('presenceHarianList')}}" class="link-dark rounded">Harian</a></li>
+                                    <li><a href="{{ url('boronganList')}}" class="link-dark rounded">Borongan</a></li>
+                                    <li><a href="{{ url('honorariumList')}}" class="link-dark rounded">Honorarium</a></li>
                                     <li><hr class="innermost dropdown-divider"></li>
-                                    <li><a href="#" class="link-dark rounded">Arsip Presensi</a></li>
+                                    <li><a href="{{ url('presenceHarianHistory')}}" class="link-dark rounded">Arsip Presensi</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -87,8 +90,8 @@
                                         </a>
                                         <div class="collapse innermost" id="generate-collapse">
                                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                <li><a href="#" class="link-dark rounded">Generate Bulanan</a></li>
-                                                <li><a href="#" class="link-dark rounded">Generate Harian Borongan Honorarium</a></li>
+                                                <li><a href="{{ url('generateGajiBulanan')}}" class="link-dark rounded">Generate Bulanan</a></li>
+                                                <li><a href="{{ url('generateGaji')}}" class="link-dark rounded">Generate Harian Borongan Honorarium</a></li>
                                             </ul>
                                         </div>
                                     </li>
@@ -98,8 +101,8 @@
                                         </a>
                                         <div class="collapse innermost" id="pr-collapse">
                                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                                <li><a href="#" class="link-dark rounded">Payroll Bulanan</a></li>
-                                                <li><a href="#" class="link-dark rounded">Payroll Harian Borongan Honorarium</a></li>
+                                                <li><a href="{{ url('payrollListBulanan')}}" class="link-dark rounded">Payroll Bulanan</a></li>
+                                                <li><a href="{{ url('payrollList')}}" class="link-dark rounded">Payroll Harian Borongan Honorarium</a></li>
                                             </ul>
                                         </div>
                                     </li>
@@ -115,9 +118,9 @@
                 </button>
                 <div class="collapse" id="stok-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
-                        <li><a href="#" class="link-dark rounded innermost">Produk-Spesies</a></li>
-                        <li><a href="#" class="link-dark rounded innermost">Produk-Barang</a></li>
-                        <li><a href="#" class="link-dark rounded innermost">Alat produksi</a></li>
+                        <li><a href="{{ url('speciesStockList')}}" class="link-dark rounded innermost">Produk-Spesies</a></li>
+                        <li><a href="{{ url('itemStockList')}}" class="link-dark rounded innermost">Produk-Barang</a></li>
+                        <li><a href="{{ url('goodList')}}" class="link-dark rounded innermost">Alat produksi</a></li>
                     </ul>
                 </div>
             </li>
@@ -170,14 +173,14 @@
                             </a>
                             <div class="collapse innermost" id="organization-collapse">
                                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="link-dark rounded">Struktur Organisasi</a></li>
-                                    <li><a href="#" class="link-dark rounded">Jabatan</a></li>
-                                    <li><a href="#" class="link-dark rounded">Bagian</a></li>
+                                    <li><a href="{{ url('organizationStructureList')}}" class="link-dark rounded">Struktur Organisasi</a></li>
+                                    <li><a href="{{ url('structuralPositionList') }}" class="link-dark rounded">Jabatan</a></li>
+                                    <li><a href="{{ url('workPositionList')}}" class="link-dark rounded">Bagian</a></li>
                                 </ul>
                             </div>
                         </li>
-                        <li><a href="" class="link-dark rounded">Spesies</a></li>
-                        <li><a href="#" class="link-dark rounded">Perusahaan</a></li>
+                        <li><a href="{{ url('speciesList')}}" class="link-dark rounded">Spesies</a></li>
+                        <li><a href="{{ url('companyList')}}" class="link-dark rounded">Perusahaan</a></li>
                     </ul>
 
                 </div>
@@ -189,8 +192,8 @@
                 </button>
                 <div class="collapse" id="admin-collapse">
                     <ul class="btn-toggle-nav list-unstyled fw-normal pb-1">
-                        <li><a href="#" class="link-dark rounded innermost">Daftar Aplikasi</a></li>
-                        <li><a href="#" class="link-dark rounded innermost">Pemetaan User-Aplikasi</a></li>
+                        <li><a href="{{ url('applicationList')}}" class="link-dark rounded innermost">Daftar Aplikasi</a></li>
+                        <li><a href="{{ url('userMappingList')}}" class="link-dark rounded innermost">Pemetaan User-Aplikasi</a></li>
                     </ul>
                 </div>
             </li>    
