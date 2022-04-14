@@ -40,8 +40,6 @@ $pageId = -1;
 			</button>
 			<div class="collapse navbar-collapse" id="navbarSupportedContent">
 				@include('partial.headerAdmin')
-				
-
 				<ul class="d-flex navbar-nav mb-s">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

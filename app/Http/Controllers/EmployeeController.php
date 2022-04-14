@@ -33,6 +33,10 @@ class EmployeeController extends Controller
     {
         return view('employee.employeeList');
     }
+    public function index2()
+    {
+        return view('employee.employeeList2');
+    }
 
     /**
      * Show the form for creating a new resource.
