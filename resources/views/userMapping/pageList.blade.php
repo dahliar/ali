@@ -20,6 +20,10 @@
     function tambahPage(id){
         window.open(('{{ url("pageAdd") }}'+"/"+id), '_self');        
     }
+    function pemetaanPage(id){
+        window.open(('{{ url("pageMapping") }}'+"/"+id), '_self');        
+    }
+
     function editAplikasi($id){
         alert("ke laman edit page dengan id : "+$id);
     }

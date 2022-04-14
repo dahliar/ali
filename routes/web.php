@@ -420,6 +420,7 @@ Route::get('pageList/{applicationId}', [UserPageMappingController::class, 'pageI
 Route::get('pageAdd/{applicationId}', [UserPageMappingController::class, 'pageAdd'])->middleware('auth', 'authorized');
 Route::get('userMappingList', [UserPageMappingController::class, 'userMappingIndex'])->middleware('auth', 'authorized');
 Route::post('userMapping', [UserPageMappingController::class, 'mapping'])->middleware('auth', 'authorized');
+Route::get('pageMapping/{page}', [UserPageMappingController::class, 'pageMapping'])->middleware('auth', 'authorized');
 
 
 Route::get('getEmployeesMappingList', [UserPageMappingController::class, 'getEmployeesMappingList'])->middleware('auth');
@@ -429,6 +430,7 @@ Route::get('getPageList/{applicationId}', [UserPageMappingController::class, 'ge
 
 Route::post('pageStore', [UserPageMappingController::class, 'pageStore'])->middleware('auth');
 Route::post('applicationMappingStore', [UserPageMappingController::class, 'store'])->middleware('auth');
+Route::post('pageMappingStore', [UserPageMappingController::class, 'pageMappingStore'])->middleware('auth');
 
 
 /*
