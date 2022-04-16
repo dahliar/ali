@@ -132,7 +132,7 @@ Route::get('itemStockList',[ItemController::class, 'index'])->middleware(['auth'
 Route::GET('getAllStockItem/{speciesId}', [ItemController::class, 'getAllStockItem'])->middleware(['auth']);
 Route::get('itemStockView/{itemId}',[ItemController::class, 'show'])->middleware(['auth', 'authorized']);
 Route::get('itemStockViewUnpacked/{itemId}',[ItemController::class, 'showUnpacked'])->middleware(['auth', 'authorized']);
-Route::GET('getItemHistory/{speciesId}', [StoreController::class, 'getItemStoreHistory'])->middleware(['auth']);
+Route::GET('getItemHistory/{speciesId}/{start}/{end}/{opsi}', [StoreController::class, 'getItemStoreHistory'])->middleware(['auth']);
 Route::GET('getUnpackedHistory/{speciesId}', [ItemController::class, 'getUnpackedItemHistory'])->middleware(['auth']);
 Route::get('editUnpacked/{itemId}',[StoreController::class, 'editUnpacked'])->middleware(['auth', 'authorized'])->name('editUnpacked');
 Route::POST('unpackedUpdate',[StoreController::class, 'unpackedUpdate'])->middleware(['auth'])->name('unpackedUpdate');
@@ -151,6 +151,7 @@ Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->mid
 Route::get('itemStockApproval',[StoreController::class, 'indexApproval'])->middleware(['auth', 'authorized'])->name('itemStockApproval');
 Route::post('getStoresRecord',[StoreController::class, 'getStoresRecord'])->middleware(['auth']);
 Route::post('approveStockChange',[StoreController::class, 'stockChange'])->middleware(['auth']);
+Route::post('deleteStockChange',[StoreController::class, 'stockChangeDelete'])->middleware(['auth']);
 
 
 

@@ -191,7 +191,10 @@ class StoreController extends Controller
         ->with('status','Item '.$teks1.' berhasil diubah.');
     }
 
-    public function getItemStoreHistory($itemId){
+    public function getItemStoreHistory($itemId, $start, $end, $opsi){
+        $start= Carbon::parse($start);
+        $end= Carbon::parse($end);
+
         $query = DB::table('stores as str')
         ->select('str.id', 
             'i.name as item', 
@@ -224,12 +227,22 @@ class StoreController extends Controller
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        ->whereBetween('str.datePackage', [$start->startOfDay(), $end->endOfDay()])
         ->where('i.isActive','=', 1)
         ->where('i.id','=', $itemId)
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->orderByRaw('s.name+0', 'asc')
-        ->get();  
+        ->orderByRaw('s.name+0', 'asc');
+
+        if($opsi == 0){
+            $query = $query->where('isApproved', '=', '0');
+        } else if($opsi == 1){
+            $query = $query->where('isApproved', '=', '1');
+        } else if($opsi == 2){
+            $query = $query->where('isApproved', '=', '2');
+        }
+
+        $query = $query->get();  
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
@@ -248,12 +261,16 @@ class StoreController extends Controller
             $html='';
             if ($row->stat != 1){
                 $html .= '
-
-                <button class="btn btn-xs btn-light" type="button" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit penyimpanan" onclick="editStoreDetail('."'".$row->id."'".')" data-bs-target="#exampleModal"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-xs btn-light" type="button" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit penyimpanan" onclick="editStoreDetail('."'".$row->id."'".')"><i class="fa fa-edit"></i></button>              
                 ';
             }
+            if ($row->stat == 0){
+                $html .= '
+                <button class="btn btn-xs btn-light" type="button" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus penyimpanan" onclick="deleteStoreDetail('."'".$row->id."'".')"><i class="fa fa-trash"></i></button>                
+                ';
+            }
+
             return $html;
-            
         })
         ->addIndexColumn()->toJson();    
     }
@@ -308,6 +325,8 @@ class StoreController extends Controller
             $query = $query->where('isApproved', '=', '0');
         } else if($request->opsi == 1){
             $query = $query->where('isApproved', '=', '1');
+        } else if($request->opsi == 2){
+            $query = $query->where('isApproved', '=', '2');
         }
 
         if($request->speciesId != 0){
@@ -402,5 +421,11 @@ class StoreController extends Controller
             return "data berhasil ditolak";
         }
     }
-
+    public function stockChangeDelete(Request $request)
+    {
+        $approved = DB::table('stores')
+        ->where('id', $request->storeId)
+        ->delete();
+        return "data berhasil dihapus";
+    }
 }
