@@ -132,10 +132,10 @@ Route::get('itemStockList',[ItemController::class, 'index'])->middleware(['auth'
 Route::GET('getAllStockItem/{speciesId}', [ItemController::class, 'getAllStockItem'])->middleware(['auth']);
 Route::get('itemStockView/{itemId}',[ItemController::class, 'show'])->middleware(['auth', 'authorized']);
 Route::get('itemStockViewUnpacked/{itemId}',[ItemController::class, 'showUnpacked'])->middleware(['auth', 'authorized']);
-Route::GET('getItemHistory/{speciesId}', [ItemController::class, 'getItemHistory'])->middleware(['auth']);
+Route::GET('getItemHistory/{speciesId}', [StoreController::class, 'getItemStoreHistory'])->middleware(['auth']);
 Route::GET('getUnpackedHistory/{speciesId}', [ItemController::class, 'getUnpackedItemHistory'])->middleware(['auth']);
 Route::get('editUnpacked/{itemId}',[StoreController::class, 'editUnpacked'])->middleware(['auth', 'authorized'])->name('editUnpacked');
-Route::get('unpackedUpdate',[StoreController::class, 'unpackedUpdate'])->middleware(['auth', 'authorized'])->name('unpackedUpdate');
+Route::POST('unpackedUpdate',[StoreController::class, 'unpackedUpdate'])->middleware(['auth'])->name('unpackedUpdate');
 Route::get('itemStockAdd/{itemId}',[StoreController::class, 'create'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
 Route::get('itemStockEdit/{store}',[StoreController::class, 'edit'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
 Route::get('itemStoreDetail/{storeId}',[StoreController::class, 'itemStoreDetail'])->middleware(['auth', 'authorized']);
@@ -145,6 +145,12 @@ Route::get('storeUpdate',[StoreController::class, 'update'])->middleware(['auth'
 //ITEM STOCKS
 Route::get('speciesStockList',[ItemController::class, 'indexStockSpecies'])->middleware(['auth', 'authorized']);
 Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->middleware(['auth']);
+
+
+//Approval
+Route::get('itemStockApproval',[StoreController::class, 'indexApproval'])->middleware(['auth', 'authorized'])->name('itemStockApproval');
+Route::post('getStoresRecord',[StoreController::class, 'getStoresRecord'])->middleware(['auth']);
+Route::post('approveStockChange',[StoreController::class, 'stockChange'])->middleware(['auth']);
 
 
 

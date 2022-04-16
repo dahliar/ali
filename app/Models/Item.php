@@ -83,9 +83,6 @@ class Item extends Model
                 <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Stock History">
                 <i class="far fa-list-alt"></i>
                 </button>';
-                $html .= '
-                <button onclick="unpackedHistory('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Unpacked Stock History"><i class="fas fa-list-alt"></i>
-                </button>';
             }
 
             return $html;
@@ -128,45 +125,6 @@ class Item extends Model
             return number_format(($row->jumlahOnLoading), 2);
         })
         ->addIndexColumn()->toJson();
-    }
-
-
-    public function getItemHistory($itemId){
-        $query = DB::table('stores as str')
-        ->select('str.id', 
-            'i.name as item', 
-            's.name as size',
-            'g.name as grade',
-            'p.name as packing',
-            'f.name as freezing',
-            'str.datePackage as datePackage',
-            'str.dateProcess as dateProcess',
-            'str.dateInsert as dateInsert',
-            'us.name as username',
-            'str.amountPacked as amountPacked',
-            'str.amountUnpacked as amountUnpacked',
-            'i.weightbase'
-        )
-        ->join('users as us', 'us.id', '=', 'str.userId')
-        ->join('items as i', 'i.id', '=', 'str.itemId')
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        ->where('i.isActive','=', 1)
-        ->where('i.id','=', $itemId);
-        $query->get();  
-
-        return datatables()->of($query)
-            /*
-            ->addColumn('action', function ($row) {
-            $html = '<button type="button"  data-toggle="tooltip" data-placement="top" data-container="body" title="Detail & edit penyimpanan" class="btn btn-primary" onclick="editStoreDetail('."'".$row->id."'".')" data-bs-target="#exampleModal"><i class="fa fa-edit" style="font-size:20px"></i></button>';
-            return $html;
-            
-        })
-        */
-        ->addIndexColumn()->toJson();    
     }
 
     public function getUnpackedItemHistory($itemId){
@@ -262,17 +220,18 @@ class Item extends Model
         $query = DB::table('items as i')
         ->select(
             'i.id as itemId', 
-            'i.name as itemName', 
-            'sp.name as speciesName', 
-            's.name as sizeName',
-            'g.name as gradeName',
-            'p.name as packingName',
-            'p.shortname as packingShortname',
-            'f.name as freezingName',
+            DB::raw('concat(
+                sp.name," ",
+                g.name," ",
+                s.name," ",
+                p.name," ",
+                f.name," ",
+                weightbase," Kg/", p.shortname) as itemName'), 
             'amount',
             'amountUnpacked',
             'baseprice',
-            'weightbase'
+            'weightbase as wb',
+            'p.shortname as packingShortname'
         )
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')

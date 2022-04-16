@@ -27,16 +27,7 @@
 </style>
 
 <body>
-	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-users"></i> Karyawan
-			</a>
-			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li><a class="dropdown-item" href="{{ url('employeeList')}}"><i class="fas fa-address-card"></i> Daftar Karyawan</a></li>
-				<li><a class="dropdown-item" href="{{ url('employeeList2')}}"><i class="fas fa-address-card"></i> Daftar Karyawan - New Menu</a></li>
-			</ul>
-		</li>		
+	<ul class="navbar-nav me-auto mb-2 mb-lg-0">		
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 				<i class="fas fa-file-contract"></i> Transaksi
@@ -69,9 +60,19 @@
 
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-layer-group"></i> Sumber Daya
+				<i class="fas fa-layer-group"></i> Human Resources
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+				<li>
+					<a class="dropdown-item" href="#">
+						<i class="fas fa-users" onclick=""></i> Karyawan &raquo;
+					</a>
+					<ul class="dropdown-menu dropdown-submenu">
+						<li><a class="dropdown-item" href="{{ url('employeeList')}}"><i class="fas fa-address-card"></i> Daftar Karyawan</a></li>
+						<li><a class="dropdown-item" href="{{ url('employeeList2')}}"><i class="fas fa-address-card"></i> Daftar Karyawan - New Menu</a></li>
+					</ul>
+				</li>
+
 				<li>
 					<a class="dropdown-item" href="#">
 						<i class="fas fa-tasks" onclick=""></i> Presensi &raquo;
@@ -96,6 +97,7 @@
 						</li>
 					</ul>
 				</li>
+
 				<li>
 					<a class="dropdown-item" href="#">
 						<i class="fas fa-file-invoice-dollar"></i> Penggajian &raquo;
@@ -111,28 +113,30 @@
 								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Harian/Borongan/Honorarium
 							</a>
 						</li>
-						<li><hr class="dropdown-divider"></li>
-						<li>
-							<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
-								<i class="fas fa-file-invoice-dollar"></i> Penggajian Harian
-							</a>
-						</li>
-						<li>
-							<a class="dropdown-item" href="{{ url('salaryBoronganList')}}"><i class="fas fa-file-invoice-dollar"></i> Penggajian Borongan
-							</a>
-						</li>
 							<!--
+							<li><hr class="dropdown-divider"></li>
 							<li>
-							<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
-								<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
-							</a>
+								<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
+									<i class="fas fa-file-invoice-dollar"></i> Penggajian Harian
+								</a>
+							</li>
+							<li>
+								<a class="dropdown-item" href="{{ url('salaryBoronganList')}}"><i class="fas fa-file-invoice-dollar"></i> Penggajian Borongan
+								</a>
+							</li>
+								
+								<li>
+								<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
+									<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
+								</a>
+								</li>
+							
+							<li>
+								<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
+									<i class="fas fa-file-invoice-dollar"></i> Honorarirum
+								</a>
 							</li>
 						-->
-						<li>
-							<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
-								<i class="fas fa-file-invoice-dollar"></i> Honorarirum
-							</a>
-						</li>
 						<li><hr class="dropdown-divider"></li>
 						<li>
 							<a class="dropdown-item" href="{{ url('payrollList')}}">
@@ -152,11 +156,15 @@
 				<i class="fas fa-warehouse"></i> Stok
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li><a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-fish"></i>Stock per-Spesies</a></li>
-				<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-fish"></i>Stock per-Barang</a></li>
+				<li><a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-fish"></i> Stock per-Spesies</a></li>
+				<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-fish"></i> Stock per-Barang</a></li>
 				<li>
 					<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i> Barang Produksi</a>
 				</li>
+				<li>
+					<a class="dropdown-item" href="{{ url('itemStockApproval')}}"><i class="fas fa-box"></i> Approval Penambahan</a>
+				</li>
+
 			</ul>
 		</li>
 		<li class="nav-item dropdown">
@@ -212,7 +220,7 @@
 		@if (auth()->user()->accessLevel <= 1)
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-database"></i> Apps Admin
+				<i class="fas fa-database"></i> Admin Area
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<li>

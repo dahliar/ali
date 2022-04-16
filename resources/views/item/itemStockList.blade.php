@@ -24,10 +24,7 @@
         window.open(('{{ url("editUnpacked") }}' + "/"+ id), '_self');
     }
     function historyStockItem(id){
-        window.open(('{{ url("itemStockView") }}' + "/"+ id), '_blank');
-    }
-    function unpackedHistory(id){
-        window.open(('{{ url("itemStockViewUnpacked") }}' + "/"+ id), '_blank');
+        window.open(('{{ url("itemStockView") }}' + "/"+ id), '_self');
     }
 
     function myFunction(speciesId){
@@ -46,7 +43,7 @@
             {   "width": "10%", "targets":  [4], "className": "text-end" },
             {   "width": "10%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "20%", "targets":  [7], "className": "text-center" }
+            {   "width": "10%", "targets":  [7], "className": "text-center" }
             ], 
 
             columns: [

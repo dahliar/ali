@@ -20,12 +20,6 @@
         var unpackedLama = parseFloat(document.getElementById("unpackedLama").value);
         var unpackedTambah = parseFloat(document.getElementById("unpackedTambah").value);
         document.getElementById("unpackedTotal").value = new Number(unpackedTambah + unpackedLama);
-
-        var wb=parseFloat(document.getElementById("wb").value);
-        var ap   = packedLama + packedTambah + ((unpackedLama+unpackedTambah)/wb);
-        var am   = ((packedLama + packedTambah)*wb) + unpackedLama+unpackedTambah;
-        document.getElementById("amountPacking").value = new Number(Math.round(ap*100)) / 100;
-        document.getElementById("amountMetric").value = new Number(Math.round(am*100)) / 100;
     }
 </script>
 @if (session('success'))
@@ -82,51 +76,14 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
-                                <span class="label">Nama Item</span>
+                                <span class="label">Barang</span>
                             </div>
-                            <div class="col-md-6 row">
+                            <div class="col-md-9 row">
                                 <div class="col-md-4">
-                                    <input id="itemName" name="itemName" type="text" class="form-control text-end" value="{{$oneItem->itemName}}" disabled="true">
+                                    <input id="itemName" name="itemName" type="text" class="form-control text-left" value="{{$oneItem->itemName}}" disabled="true">
                                 </div>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-end">
-                                <span class="label">Spesies</span>
-                            </div>
-                            <div class="col-md-6 row">
-                                <div class="col-md-4">
-                                    <input id="speciesName" name="speciesName" type="text" class="form-control text-end" value="{{$oneItem->speciesName}}" readonly>
-                                </div>
-                                <div class="col-md-4">
-                                    <input id="sizeName" name="sizeName" type="text" class="form-control text-end" value="{{$oneItem->sizeName}}" readonly>
-                                </div>
-                                <div class="col-md-4">
-                                    <input id="gradeName" name="gradeName" type="text" class="form-control text-end" value="{{$oneItem->gradeName}}" readonly>
-                                </div>
-                            </div>
-                        </div>                      
-                        <div class="row form-group">
-
-                            <div class="col-md-3 text-end">
-                                <span class="label">Pack</span>
-                            </div>
-                            <div class="col-md-6 row">
-                                <div class="col-md-4">
-                                    <input id="packingName" name="packingName" type="text" class="form-control text-end" value="{{$oneItem->packingName}}" readonly="">
-                                </div>
-                                <div class="col-md-4">
-                                    <input id="frozenName" name="frozenName" type="text" class="form-control text-end" value="{{$oneItem->freezingName}}"  disabled="true">
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <input id="wb" name="wb" type="number" class="form-control text-end" value="{{$oneItem->weightbase}}" disabled="true">
-                                        <span class="input-group-text col-3">Kg</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>  
-                        
                         <br>
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
@@ -218,42 +175,6 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <input oninput="totalAmount()" id="unpackedTotal" name="unpackedTotal" value="{{ old('unpackedTotal',$oneItem->amountUnpacked) }}" type="number" class="form-control text-end" disabled="true">
-                                    <span class="input-group-text col-3">Kg</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <br>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-end">
-                            </div>
-                            <div class="col-md-6">
-                                <table width="100%">
-                                    <tr>
-                                        <td><hr /></td>
-                                        <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h4>Total</h4></td>
-                                        <td><hr /></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="row form-group">
-                            <div class="col-md-3 text-end">
-                                <span class="label">Total*</span>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group">
-                                    <input id="amountPacking" name="amountPacking" type="number" value="{{ old('amountPacking',($oneItem->amount+round(($oneItem->amountUnpacked/$oneItem->weightbase),2))) }}" class="form-control text-end" disabled="true">
-                                    <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-1" style="display: flex; justify-content: center; align-items: center;">
-                                <h2>/</h2>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="input-group">
-                                    <input id="amountMetric" name="amountMetric" type="number" value="{{ old('amountMetric',(($oneItem->amount*$oneItem->weightbase)+$oneItem->amountUnpacked)) }}" class="form-control text-end" disabled="true">
                                     <span class="input-group-text col-3">Kg</span>
                                 </div>
                             </div>

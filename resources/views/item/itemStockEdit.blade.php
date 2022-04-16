@@ -78,7 +78,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="input-group">
-                                    <input type="text" id="tanggalProses" name="tanggalProses" class="form-control" value="{{ $store->dateProcess }}" readonly>
+                                    <input type="text" id="tanggalProses" name="tanggalProses" class="form-control text-end" value="{{ $store->dateProcess }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -145,20 +145,6 @@
                                 </table>
                             </div>
                         </div>
-                        <!--
-                            <div class="row form-group">
-                                <div class="col-md-3 text-end">
-                                    <span class="label">Current</span>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <input id="jumlahLama" name="jumlahLama" type="number" class="form-control text-end" value="{{$data->amount-($store->amountPacked+$store->amountUnpacked)}}" disabled="true">
-                                        <span class="input-group-text col-3">MC or Bag</span>
-                                    </div>
-                                </div>
-                            </div> 
-                        -->
-
                         <div class="row form-group">
                             <div class="col-md-3 text-end">
                                 <span class="label">Packed Add*</span>
@@ -204,7 +190,7 @@
                             <div class="col-md-4">
                                 <div class="input-group">
                                     <span class="input-group-text col-3">Before : </span>
-                                    <input id="pastAmount" name="pastAmount" value="{{($store->amount) }}" type="number" class="form-control text-end" readonly>
+                                    <input id="pastAmount" name="pastAmount" value="{{ old('pastAmount',($store->amountPacked+$store->amountUnpacked)) }}" type="number" class="form-control text-end" readonly>
                                     <span class="input-group-text col-3">MC or Bag</span>
                                 </div>
                             </div>
@@ -216,22 +202,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--
-                            <div class="row form-group">
-                                <div class="col-md-3 text-end">
-                                    <span class="label">Total*</span>
-                                </div>
-                                <div class="col-md-4">
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <input id="jumlahTotal" name="jumlahTotal" type="number" value="{{$data->amount}}" class="form-control text-end" disabled="true">
-                                        <span class="input-group-text col-3">MC or Bag</span>
-                                    </div>
-                                </div>
-                            </div>
-                        -->
-
                         <br>
                         <div class="row form-group">
                             <div class="col-md-3 text-end">

@@ -18,7 +18,7 @@
     });
     
     function editStoreDetail(id){
-        window.open(('{{ url("itemStockEdit") }}' + "/"+ id), '_blank');
+        window.open(('{{ url("itemStockEdit") }}' + "/"+ id), '_self');
     }
     
     function myFunction(itemId){
@@ -30,26 +30,27 @@
             deferRender: true,
             type: 'GET',
             destroy:true,
-            data : {},
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
             {   "width": "30%", "targets":  [1], "className": "text-left"   },
             {   "width": "10%",  "targets": [2], "className": "text-center" },
-            {   "width": "10%", "targets":  [3], "className": "text-center" },
-            {   "width": "10%", "targets":  [4], "className": "text-center" },
-            {   "width": "15%", "targets":  [5], "className": "text-left" },
+            {   "width": "15%", "targets":  [3], "className": "text-left" },
+            {   "width": "10%", "targets":  [4], "className": "text-end" },
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" }
+            {   "width": "10%", "targets":  [7], "className": "text-end" },
+            {   "width": "10%", "targets":  [8], "className": "text-end" }
             ], 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-            {data: 'item', name: 'item'},
+            {data: 'itemName', name: 'itemName'},
             {data: 'datePackage', name: 'datePackage'},
-            {data: 'dateProcess', name: 'dateProcess'},
-            {data: 'dateInsert', name: 'dateInsert'},
-            {data: 'username', name: 'username'},
-            {data: 'amountPacked', name: 'amountUnpacked'},
-            {data: 'amountPacked', name: 'amountPacked'}
+            {data: 'userInputName', name: 'userInputName'},
+            {data: 'userApproveName', name: 'userApproveName'},
+            {data: 'isApproved', name: 'isApproved'},
+            {data: 'amountPacked', name: 'amountPacked'},
+            {data: 'amountUnpacked', name: 'amountUnpacked'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
     }
@@ -82,11 +83,12 @@
                                             <th>No</th>
                                             <th>Name</th>
                                             <th>Tanggal Package</th>
-                                            <th>Tanggal Proses</th>
-                                            <th>Tanggal Input</th>
-                                            <th>Employee</th>
+                                            <th>Input</th>
+                                            <th>Approve</th>
+                                            <th>Status</th>
                                             <th>Packed</th>
                                             <th>Unpacked</th>
+                                            <th>Act</th>
                                         </tr>
                                     </thead>
                                     <tbody>
