@@ -126,7 +126,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="input-group">
-                                <input id="unpackedAkhir" name="unpackedAkhir" type="number" class="form-control text-end" value="{{old('unpackedAkhir', $oneItem->amountUnpacked)}}">
+                                <input id="unpackedAkhir" name="unpackedAkhir" type="number" class="form-control text-end" value="{{old('unpackedAkhir', $oneItem->amountUnpacked)}}" readonly>
                                 <span class="input-group-text col-3">Kg</span>
                             </div>
                         </div>
