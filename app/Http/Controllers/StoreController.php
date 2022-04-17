@@ -338,22 +338,22 @@ class StoreController extends Controller
         ->get();
 
 
-
+//{{number_format($totalGrossWeight, 2, ',', '.').' Kg'}}
 
         return datatables()->of($query)
         ->editColumn('amountPacked', function ($row) {
             if ($row->stat == 0){
-                $name = $row->currentAmount." + ".$row->amountPacked." ".$row->pShortname;
+                $name = number_format($row->currentAmount, 1, ',', '.')." + ".number_format($row->amountPacked, 1, ',', '.')." ".$row->pShortname;
             } else{
-                $name = $row->amountPacked." ".$row->pShortname;
+                $name = number_format($row->amountPacked, 1, ',', '.')." ".$row->pShortname;
             }
             return $name;
         })
         ->editColumn('amountUnpacked', function ($row) {
             if ($row->stat == 0){
-                $name = $row->currentAmountUnpacked." + ".$row->amountUnpacked." Kg";
+                $name = number_format($row->currentAmountUnpacked, 1, ',', '.')." + ".number_format($row->amountUnpacked, 1, ',', '.')." ".$row->pShortname;
             } else{
-                $name = $row->amountUnpacked." Kg";
+                $name = number_format($row->amountUnpacked, 1, ',', '.')." ".$row->pShortname;
             }
             return $name;
         })
