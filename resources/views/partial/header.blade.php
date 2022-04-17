@@ -10,27 +10,6 @@ $pageId = -1;
 	<meta name="description" content="AliSeafood Stocks Information Systems">
 	<meta name="author" content="ALISeafood">
 </head>
-
-
-<style type="text/css">
-	.dropdown-menu li {
-		position: relative;
-	}
-	.dropdown-menu .dropdown-submenu {
-		display: none;
-		position: absolute;
-		left: 100%;
-		top: -7px;
-	}
-	.dropdown-menu .dropdown-submenu-left {
-		right: 100%;
-		left: auto;
-	}
-	.dropdown-menu > li:hover > .dropdown-submenu {
-		display: block;
-	}
-</style>
-
 <body>	
 	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
 		<div class="container-fluid">

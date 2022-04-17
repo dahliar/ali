@@ -6,14 +6,12 @@
 	<meta name="author" content="ALISeafood">
 </head>
 
-
 <style type="text/css">
 	.dropdown-menu li {
 		position: relative;
 	}
 	.dropdown-menu .dropdown-submenu {
-		display: none;
-		position: absolute;
+		position: relative;
 		left: 100%;
 		top: -7px;
 	}
@@ -21,22 +19,26 @@
 		right: 100%;
 		left: auto;
 	}
-	.dropdown-menu > li:hover > .dropdown-submenu {
-		display: block;
+</style>
+
+<style type="text/css">
+	/*
+	.navbar-nav li:hover > ul.dropdown-menu {
+		display: inline-block;
 	}
+	*/
 </style>
 
 <body>
 	<ul class="navbar-nav me-auto mb-2 mb-lg-0">		
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 				<i class="fas fa-file-contract"></i> Transaksi
 			</a>
 			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li>
-					<a class="dropdown-item"><i class="fas fa-file-invoice-dollar"></i> Penjualan &raquo;
-					</a>
-					<ul class="dropdown-menu dropdown-submenu">
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-file-invoice-dollar"></i> Penjualan</a>
+					<ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
 						<li>
 							<a class="dropdown-item" href="{{ url('transactionList')}}"><i class="fas fa-ship"></i> Export
 							</a>
@@ -47,6 +49,7 @@
 						</li>
 					</ul>
 				</li>
+
 				<li>
 					<a class="dropdown-item" href="{{ url('purchaseList')}}"><i class="fas fa-shopping-cart"></i> Pembelian
 					</a>
@@ -59,25 +62,25 @@
 		</li>
 
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarHr" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 				<i class="fas fa-layer-group"></i> Human Resources
 			</a>
-			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li>
-					<a class="dropdown-item" href="#">
-						<i class="fas fa-users" onclick=""></i> Karyawan &raquo;
+			<ul class="dropdown-menu" aria-labelledby="navbarHr">
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarKaryawan" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-users" onclick=""></i> Karyawan
 					</a>
-					<ul class="dropdown-menu dropdown-submenu">
+					<ul class="dropdown-menu" aria-labelledby="navbarKaryawan">
 						<li><a class="dropdown-item" href="{{ url('employeeList')}}"><i class="fas fa-address-card"></i> Daftar Karyawan</a></li>
 						<li><a class="dropdown-item" href="{{ url('employeeList2')}}"><i class="fas fa-address-card"></i> Daftar Karyawan - New Menu</a></li>
 					</ul>
 				</li>
 
-				<li>
-					<a class="dropdown-item" href="#">
-						<i class="fas fa-tasks" onclick=""></i> Presensi &raquo;
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarPresensi" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-tasks" onclick=""></i> Presensi
 					</a>
-					<ul class="dropdown-menu dropdown-submenu">
+					<ul class="dropdown-menu" aria-labelledby="navbarPresensi">
 						<li>
 							<a class="dropdown-item" href="{{ url('presenceHarianList')}}"><i class="fas fa-tasks"></i> Presensi Harian
 							</a>
@@ -98,11 +101,11 @@
 					</ul>
 				</li>
 
-				<li>
-					<a class="dropdown-item" href="#">
-						<i class="fas fa-file-invoice-dollar"></i> Penggajian &raquo;
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarPenggajian" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-file-invoice-dollar"></i> Penggajian
 					</a>
-					<ul class="dropdown-menu dropdown-submenu" onclick="">
+					<ul class="dropdown-menu" aria-labelledby="navbarPenggajian">
 						<li>
 							<a class="dropdown-item" href="{{ url('generateGajiBulanan')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Generate Gaji Bulanan
@@ -114,30 +117,32 @@
 							</a>
 						</li>
 							<!--
-							<li><hr class="dropdown-divider"></li>
-							<li>
-								<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
-									<i class="fas fa-file-invoice-dollar"></i> Penggajian Harian
-								</a>
-							</li>
-							<li>
-								<a class="dropdown-item" href="{{ url('salaryBoronganList')}}"><i class="fas fa-file-invoice-dollar"></i> Penggajian Borongan
-								</a>
-							</li>
-								
+								<li><hr class="dropdown-divider"></li>
 								<li>
-								<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
-									<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
-								</a>
+									<a class="dropdown-item" href="{{ url('salaryHarianList')}}">
+										<i class="fas fa-file-invoice-dollar"></i> Penggajian Harian
+									</a>
 								</li>
-							
+								<li>
+									<a class="dropdown-item" href="{{ url('salaryBoronganList')}}"><i class="fas fa-file-invoice-dollar"></i> Penggajian Borongan
+									</a>
+								</li>
+
+								<li>
+									<a class="dropdown-item" href="{{ url('lemburBulananList')}}">
+										<i class="fas fa-file-invoice-dollar"></i> Lembur Bulanan
+									</a>
+								</li>
+
+								<li>
+									<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
+										<i class="fas fa-file-invoice-dollar"></i> Honorarirum
+									</a>
+								</li>
 							<li>
-								<a class="dropdown-item" href="{{ url('salaryHonorariumList')}}">
-									<i class="fas fa-file-invoice-dollar"></i> Honorarirum
-								</a>
-							</li>
-						-->
-						<li><hr class="dropdown-divider"></li>
+							-->
+							<hr class="dropdown-divider">
+						</li>
 						<li>
 							<a class="dropdown-item" href="{{ url('payrollList')}}">
 								<i class="fas fa-file-invoice-dollar"></i> Daftar Gaji Pegawai Harian/Borongan
@@ -192,18 +197,18 @@
 			</ul>
 		</li>
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-database"></i> Master Data
+			<a class="nav-link dropdown-toggle" href="#" id="navbarMasterData" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+				<i class="fas fa-layer-group"></i> Master Data
 			</a>
-			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li>
+			<ul class="dropdown-menu" aria-labelledby="navbarMasterData">
+				<li class="dropdown dropend">
 					<a class="dropdown-item" href="{{ url('speciesList')}}"><i class="fas fa-fish"></i> Species</a>
 				</li>
-				<li>
-					<a class="dropdown-item" href="#">
-						<i class="fas fa-sitemap"></i> Organisasi &raquo;
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarPenggajian" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-sitemap"></i> Organisasi
 					</a>
-					<ul class="dropdown-menu dropdown-submenu">
+					<ul class="dropdown-menu" aria-labelledby="navbarPenggajian">
 						<li>
 							<a class="dropdown-item" href="{{ url('organizationStructureList')}}"><i class="fas fa-sitemap"></i> Struktur Organisasi</a>
 						</li>
