@@ -69,7 +69,7 @@ class EmployeeController extends Controller
             'name'                  => ['required', 'string', 'max:255'],
             'username'              => ['required', 'string', 'max:255', 'unique:users'],
             'password'              => ['required', 'confirmed', Rules\Password::defaults()],
-            'accessLevel'           => ['required', 'gt:0'],
+            'accessLevel'           => ['required', 'gte:0'],
             'phone'                 => ['required'],
             'email'                 => ['email'],
             'nik'                   => ['required', 'string', 'max:20', 'unique:employees'],
@@ -271,7 +271,7 @@ class EmployeeController extends Controller
         $request->validate([
             'email'                 => ['email'],
             'phone'                 => ['required'],
-            'accessLevel'           => ['required', 'gt:0'],
+            'accessLevel'           => ['required', 'gte:0'],
             'address'               => ['required', 'string'],
             'gender'                => ['required', 'integer', 'gt:0'],
             'employmentStatus'      => ['required', 'gt:0'],
