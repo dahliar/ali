@@ -249,10 +249,10 @@
                                 <select id="bankid" name="bankid" class="form-select" >
                                     <option value="-1">--Choose First--</option>
                                     @foreach ($banks as $bank)
-                                    @if ( old('bankid', $bank->id) == $employee->bankid)
-                                    <option value="{{ old('bankid',$bank->id) }}" selected>{{ $bank->shortname }} - {{$bank->name}}</option>
+                                    @if ( old('bankid', $employee->bankid) == $bank->id)
+                                    <option value="{{ $bank->id }}" selected>{{ $bank->shortname }} - {{$bank->name}}</option>
                                     @else
-                                    <option value="{{ old('bankid',$bank->id) }}">{{ $bank->shortname }} - {{$bank->name}}</option>
+                                    <option value="{{ $bank->id }}">{{ $bank->shortname }} - {{$bank->name}}</option>
                                     @endif
                                     @endforeach
                                 </select>
