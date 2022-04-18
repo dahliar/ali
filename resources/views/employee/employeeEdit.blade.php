@@ -238,7 +238,7 @@
                                 <span class="label">No Rekening</span>
                             </div>
                             <div class="col-md-4">
-                                <input id="noRekening" value="{{$employee->noRekening}}" name="noRekening" type="text" class="form-control" autocomplete="none">
+                                <input id="noRekening" value="{{ old('noRekening',$employee->noRekening) }}" name="noRekening" type="text" class="form-control" autocomplete="none">
                             </div>
                         </div>
                         <div class="row form-group">
