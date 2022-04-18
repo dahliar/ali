@@ -54,13 +54,6 @@ class EmployeeController extends Controller
         return view('employee.employeeAdd', compact('structpos', 'workpos', 'banks'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
     public function orgStructureList(Request $request)
     {
         $orgstructure = DB::table("organization_structures")
@@ -76,7 +69,7 @@ class EmployeeController extends Controller
             'name'                  => ['required', 'string', 'max:255'],
             'username'              => ['required', 'string', 'max:255', 'unique:users'],
             'password'              => ['required', 'confirmed', Rules\Password::defaults()],
-            'role'                  => ['required', 'gt:0'],
+            'accessLevel'           => ['required', 'gt:0'],
             'phone'                 => ['required'],
             'email'                 => ['email'],
             'nik'                   => ['required', 'string', 'max:20', 'unique:employees'],
@@ -107,7 +100,7 @@ class EmployeeController extends Controller
         
         $user = User::create([
             'name' => $request->name,
-            'role' => $request->role,
+            'accessLevel' => $request->accessLevel,
             'email' => $request->email,
             'username' => $request->username,
             'password' => Hash::make($request->password),
@@ -278,7 +271,7 @@ class EmployeeController extends Controller
         $request->validate([
             'email'                 => ['email'],
             'phone'                 => ['required'],
-            'role'                  => ['required', 'gt:0'],
+            'accessLevel'           => ['required', 'gt:0'],
             'address'               => ['required', 'string'],
             'gender'                => ['required', 'integer', 'gt:0'],
             'employmentStatus'      => ['required', 'gt:0'],
@@ -290,7 +283,7 @@ class EmployeeController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $userUpdate = $this->employee->userUpdate($request->role, $request->email, $request->userid);
+            $userUpdate = $this->employee->userUpdate($request->accessLevel, $request->email, $request->userid);
             $employeeUpdate = $this->employee->employeeUpdate($request->phone, $request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
             if($request->isactive != $request->isActiveCurrent){
                 $setActive = $this->setEmployeeActiveness($request->employeeId, $request->isactive);
@@ -406,72 +399,14 @@ class EmployeeController extends Controller
             </button>            
             ';            
 
-            if (Auth::user()->isAdmin()){
+            if (Auth::user()->accessLevel <= 30){
                 $html .= '
                 <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Password" onclick="editPassword('."'".$row->id."'".')">
                 <i class="fa fa-key"></i>
                 </button>            
                 ';                            
             }
-            if (Auth::user()->isAdmin() or Auth::user()->isHumanResources()){
-                /*
-                $html .= '
-                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="History Presensi" onclick="employeePresenceHistory('."'".$row->id."'".')">
-                <i class="fa fa-history"></i>
-                </button>
-                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Slip Gaji Pegawai" onclick="slipGajiPegawai('."'".$row->id."'".')">
-                <i class="fas fa-file-invoice-dollar"></i>
-                </button>
-                ';                 
-                */           
-            }
-
-
-
             return $html;
         })->addIndexColumn()->toJson();
     }
-
-    /*
-    public function getEmployeesBulanan(){
-        $query = DB::table('employees as e')
-        ->select(
-            'e.id as id', 
-            'u.name as name', 
-            'e.nip as nip', 
-            'os.name as osname',
-            'wp.name as wsname',
-            DB::raw('
-                (CASE WHEN e.gender="1" THEN "L" WHEN e.gender="2" THEN "P" END) AS gender
-                '),
-            'e.startDate as startDate',
-            DB::raw('concat(
-                TIMESTAMPDIFF(YEAR, startDate, curdate()), 
-                " Y + ",
-                (TIMESTAMPDIFF(MONTH, startDate, curdate()) - (TIMESTAMPDIFF(YEAR, startDate, curdate()) * 12)), 
-                " M") as lamaKerja')
-        )
-        ->join('users as u', 'u.id', '=', 'e.userid')
-        ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
-        ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
-        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
-        ->where('eosm.isactive', 1)
-        ->where('e.employmentStatus', '=', 1)
-        ->where('e.isActive', '=', 1)
-        ->orderBy('u.name');
-        $query->get();
-
-        return datatables()->of($query)
-        ->addColumn('action', function ($row) {
-            $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Set gaji bulanan Pegawai">
-            <i class="fa fa-check"></i>
-            </button>
-            ';            
-            return $html;
-        })
-        ->addIndexColumn()->toJson();
-    }
-    */
-
 }

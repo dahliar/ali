@@ -23,7 +23,6 @@ class User extends Authenticatable
         'name',
         'username',
         'accessLevel',
-        'role',
         'email',
         'password',
     ];
@@ -47,30 +46,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function isMarketing(){
-        if (Auth::check() and (Auth::user()->role == 3)){
-            return true;
-        }
-        return false;
-    }
-    public function isAdmin(){
-        if (Auth::check() and (Auth::user()->role == 1)){
-            return true;
-        }
-        return false;
-    }
-    public function isProduction(){
-        if (Auth::check() and (Auth::user()->role == 2)){
-            return true;
-        }
-        return false;
-    }
-    public function isHumanResources(){
-        if (Auth::check() and (Auth::user()->role == 4)){
-            return true;
-        }
-        return false;
-    }
     public function isAuthenticatedUserSameAsUserIdChoosen($userId){
         if (Auth::check() and (Auth::user()->id == $userId)){
             return true;

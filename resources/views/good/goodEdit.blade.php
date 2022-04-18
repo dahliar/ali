@@ -134,7 +134,7 @@
                                 <span class="label">Status Barang</span>
                             </div>
                             <div class="col-md-5">
-                                @if (Auth::user()->isAdmin())
+                                @if (Auth::user()->accessLevel<-30)
                                 <select id="isactive" name="isactive" class="form-select" >
                                     <option value="0" @if($good->isActive == 0) selected @endif>Non Aktif</option>
                                     <option value="1" @if($good->isActive == 1) selected @endif>Aktif</option>

@@ -70,7 +70,7 @@ class Item extends Model
         })
         ->addColumn('action', function ($row) {
             $html="";
-            if (Auth::user()->isAdmin() or Auth::user()->isProduction()){
+            if (Auth::user()->accessLevel <=40){
                 $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang">
                 <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i>
                 </button>';

@@ -138,15 +138,18 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <label class="form-label">Role</label>
+                                <label class="form-label">Level Akses</label>
                             </div>
                             <div class="col-md-4">
-                                <select id="role" name="role" class="form-select"  disabled="true">
-                                    <option value="-1" @if($choosenUser->role == -1) selected @endif>--Choose First--</option>
-                                    <option value="1" @if($choosenUser->role == 1) selected @endif>Admin</option>
-                                    <option value="2" @if($choosenUser->role == 2) selected @endif>Production</option>
-                                    <option value="3" @if($choosenUser->role == 3) selected @endif>Marketing</option>
-                                    <option value="4" @if($choosenUser->role == 4) selected @endif>General Staff</option>
+                                <select id="accessLevel" name="accessLevel" class="form-control"  disabled="true">
+                                    <option value="-1" @if($choosenUser->accessLevel == -1) selected @endif>--Choose First--</option>
+                                    <option value="0" @if($choosenUser->accessLevel == 0) selected @endif>Superadmin</option>
+                                    <option value="1" @if($choosenUser->accessLevel == 1) selected @endif>Admin</option>
+                                    <option value="10" @if($choosenUser->accessLevel == 10) selected @endif>Lite admin</option>
+                                    <option value="20" @if($choosenUser->accessLevel == 20) selected @endif>Superuser</option>
+                                    <option value="30" @if($choosenUser->accessLevel == 30) selected @endif>Advanced user</option>
+                                    <option value="40" @if($choosenUser->accessLevel == 40) selected @endif>User</option>
+                                    <option value="99" @if($choosenUser->accessLevel == 99) selected @endif>Tamu</option>
                                 </select>
                             </div>
                         </div>
@@ -296,30 +299,32 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Uang Makan</span>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp. </span>
-                                    <input id="uangMakan" name="uangMakan" value="{{old('uangMakan',0)}}" type="text" class="form-control text-end"  disabled="true" autocomplete="none">
-                                    <span class="input-group-text col-3">per hari</span>
+                            <!--
+                            <div class="row form-group">
+                                <div class="col-md-2 text-end">
+                                    <span class="label">Uang Makan</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp. </span>
+                                        <input id="uangMakan" name="uangMakan" value="{{old('uangMakan',0)}}" type="text" class="form-control text-end"  disabled="true" autocomplete="none">
+                                        <span class="input-group-text col-3">per hari</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Uang Lembur*</span>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <span class="input-group-text">Rp. </span>
-                                    <input id="uangLembur" name="uangLembur" type="text" value="{{old('uangLembur',0)}}" class="form-control text-end"  disabled="true" autocomplete="none">
-                                    <span class="input-group-text col-3">per jam</span>
+                            <div class="row form-group">
+                                <div class="col-md-2 text-end">
+                                    <span class="label">Uang Lembur*</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp. </span>
+                                        <input id="uangLembur" name="uangLembur" type="text" value="{{old('uangLembur',0)}}" class="form-control text-end"  disabled="true" autocomplete="none">
+                                        <span class="input-group-text col-3">per jam</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        -->
 
                         <div class="row form-group">
                             <div class="col-md-2 text-end">

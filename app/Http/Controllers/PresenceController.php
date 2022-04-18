@@ -146,7 +146,7 @@ class PresenceController extends Controller
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
             $html='';
-            if (Auth::user()->isAdmin()){
+            if (Auth::user()->accessLevel <= 40){
                 $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Ubah Presensi" onclick="editPresence('."'".$row->pid."'".')">
                 <i class="fa fa-edit" style="font-size:20px"></i>
                 </button>';

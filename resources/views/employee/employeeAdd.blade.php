@@ -149,14 +149,30 @@
                     </div>                    
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
-                            <label class="form-label">Peran</label>
+                            <label class="form-label">Level Akses</label>
                         </div>
                         <div class="col-md-4">
-                            <select id="role" name="role" class="form-select" required>
-                                <option value="-1" @if(old('role') == -1) selected @endif>--Choose First--</option>
-                                <option value="2" @if(old('role') == 2) selected @endif>Production</option>
-                                <option value="3" @if(old('role') == 3) selected @endif>Marketing</option>
-                                <option value="4" @if(old('role') == 4) selected @endif>General Staff</option>
+                            <select id="accessLevel" name="accessLevel" class="form-select" required>
+                                @switch(Auth::user()->accessLevel)
+                                @case (0)
+                                <option value="0" @if(old('accessLevel',99) == 0) selected @endif>00 - Superadmin</option>
+
+                                @case (1)
+                                <option value="1" @if(old('accessLevel',99) == 1) selected @endif>01 - Admin</option>
+
+                                @case (10)
+                                <option value="10" @if(old('accessLevel',99) == 10) selected @endif>10 - Lite Admin</option>
+
+                                @case (20)
+                                <option value="20" @if(old('accessLevel',99) == 20) selected @endif>20 - Superuser</option>
+
+                                @default
+                                <option value="30" @if(old('accessLevel',99) == 30) selected @endif>30 - Advanced User</option>
+
+                                <option value="40" @if(old('accessLevel',99) == 40) selected @endif>40 - User</option>
+
+                                <option value="99" @if(old('accessLevel',99) == 99) selected @endif>99 - Tamu</option>
+                                @endswitch
                             </select>
                         </div>
                     </div>

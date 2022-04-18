@@ -26,10 +26,10 @@ class Employee extends Model
     }
 
 
-    public function userUpdate($role, $email, $id){
+    public function userUpdate($accessLevel, $email, $id){
         $affected = DB::table('users')
         ->where('id', $id)
-        ->update(['role' => $role, 'email' => $email]);
+        ->update(['accessLevel' => $accessLevel, 'email' => $email]);
         return $affected;
     }
     public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender){

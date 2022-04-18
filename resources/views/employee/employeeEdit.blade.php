@@ -82,31 +82,46 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <label class="form-label">Role</label>
+                                <label class="form-label">Level akses</label>
                             </div>
                             <div class="col-md-4">
-                                @if (Auth::user()->isAdmin())
-                                <select id="role" name="role" class="form-select" required>
-                                    <option value="-1" @if(old('role',$choosenUser->role) == -1) selected @endif >--Pilih dahulu--</option>
-                                    <option value="1" @if(old('role',$choosenUser->role) == 1) selected @endif >Admin</option>
-                                    <option value="2" @if(old('role',$choosenUser->role) == 2) selected @endif >Production</option>
-                                    <option value="3" @if(old('role',$choosenUser->role) == 3) selected @endif >Marketing</option>
-                                    <option value="4" @if(old('role',$choosenUser->role) == 4) selected @endif >General Staf</option>
+                                @if (Auth::user()->accessLevel<=1)
+                                <select id="accessLevel" name="accessLevel" class="form-select" required>
+                                    @switch(Auth::user()->accessLevel)
+                                    @case (0)
+                                    <option value="0" @if(old('accessLevel',$choosenUser->accessLevel) == 0) selected @endif>00 - Superadmin</option>
+                                    @case (1)
+                                    <option value="1" @if(old('accessLevel',$choosenUser->accessLevel) == 1) selected @endif>01 - Admin</option>
+                                    <option value="10" @if(old('accessLevel',$choosenUser->accessLevel) == 10) selected @endif>10 - Lite Admin</option>
+                                    <option value="20" @if(old('accessLevel',$choosenUser->accessLevel) == 20) selected @endif>20 - Superuser</option>
+                                    <option value="30" @if(old('accessLevel',$choosenUser->accessLevel) == 30) selected @endif>30 - Advanced User</option>
+                                    <option value="40" @if(old('accessLevel',$choosenUser->accessLevel) == 40) selected @endif>40 - User</option>
+                                    <option value="99" @if(old('accessLevel',$choosenUser->accessLevel) == 99) selected @endif>99 - Tamu</option>
+                                    @endswitch
                                 </select>
                                 @else
-                                <input id="role" name="role" type="hidden" value="{{$choosenUser->role}}">
-                                @switch($choosenUser->role)
+                                <input id="OldAccessLevel" name="OldAccessLevel" type="hidden" value="{{$choosenUser->accessLevel}}">
+                                @switch($choosenUser->accessLevel)
+                                @case(0)
+                                <input class="form-control" value="Superadmin" disabled>
+                                @break
                                 @case(1)
                                 <input class="form-control" value="Admin" disabled>
                                 @break
-                                @case(2)
-                                <input class="form-control" value="Production" disabled>
+                                @case(10)
+                                <input class="form-control" value="Lite Admin" disabled>
                                 @break
-                                @case(3)
-                                <input class="form-control" value="Marketing" disabled>
+                                @case(20)
+                                <input class="form-control" value="Superuser" disabled>
                                 @break
-                                @case(4)
-                                <input class="form-control" value="General Staff" disabled>
+                                @case(30)
+                                <input class="form-control" value="Advanced User" disabled>
+                                @break
+                                @case(40)
+                                <input class="form-control" value="User" disabled>
+                                @break
+                                @case(99)
+                                <input class="form-control" value="Tamu" disabled>
                                 @break
                                 @endswitch
                                 @endif
@@ -198,7 +213,7 @@
                                 <span class="label">Jenis Karyawan*</span>
                             </div>
                             <div class="col-md-4">
-                                @if (Auth::user()->isAdmin())
+                                @if (Auth::user()->accessLevel<=40)
                                 <select id="employmentStatus" name="employmentStatus" class="form-select" >
                                     <option value="-1" @if(old('employmentStatus',$employee->employmentStatus) == -1) selected @endif >--Choose First--</option>
                                     <option value="1" @if(old('employmentStatus',$employee->employmentStatus) == 1) selected @endif >Bulanan</option>
@@ -249,7 +264,7 @@
                                 <span class="label">Status bekerja</span>
                             </div>
                             <div class="col-md-3">
-                                @if (Auth::user()->isAdmin())
+                                @if (Auth::user()->accessLevel<=40)
                                 <select id="isactive" name="isactive" class="form-select" >
                                     <option value="0" @if($employee->isActive == 0) selected @endif>Non Aktif</option>
                                     <option value="1" @if($employee->isActive == 1) selected @endif>Aktif</option>
