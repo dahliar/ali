@@ -36,12 +36,12 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
+            {   "width": "3%",  "targets":  [0], "className": "text-center" },
             {   "width": "20%", "targets":  [1], "className": "text-left"   },
             {   "width": "8%", "targets":  [2], "className": "text-end" },
             {   "width": "10%", "targets":  [3], "className": "text-end" },
             {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
+            {   "width": "12%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
             {   "width": "12%", "targets":  [7], "className": "text-center" }
             ], 
@@ -128,27 +128,29 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Name</th>
+                                        <th>Packaging</th>
+                                        <th>Packed</th>
+                                        <th>Unpacked</th>
+                                        <th>Stock gudang</th>
+                                        <th>Sailing</th>
+                                        <th>Act</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="font-size: 14px;">
+                                </tbody>
+                            </table>                
+                        </div>
                     </div>
-                </div>
+                </div>    
             </div>
         </div>
     </div>
-    <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>Packaging</th>
-                <th>Packed</th>
-                <th>Unpacked</th>
-                <th>Stock gudang</th>
-                <th>Sailing</th>
-                <th>Act</th>
-            </tr>
-        </thead>
-        <tbody style="font-size: 14px;">
-        </tbody>
-    </table>                
 </body>
 <ol>
     <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
