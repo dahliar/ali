@@ -145,6 +145,12 @@
                                     </tbody>
                                 </table>                
                             </div>
+                            <div class="card-footer">
+                                <ol>
+                                    <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
+                                    <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
+                                </ol>
+                            </div>
                         </div>
                     </div>    
                 </div>
@@ -152,8 +158,4 @@
         </div>
     </div>
 </body>
-<ol>
-    <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
-    <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
-</ol>
 @endsection
