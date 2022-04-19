@@ -554,7 +554,7 @@ class TransactionController extends Controller
             ->where('id', $itemDetail->itemId)
             ->increment('amount', $itemDetail->amount);
 
-            $this->stockChangeLog(1, "Transaction ID ".$transactionId." dari Sailing/Finished ke batal", $itemDetail->itemId, $itemDetail->amount);
+            $this->stockChangeLog(2, "Transaction ID ".$transactionId." dari Sailing/Finished ke batal", $itemDetail->itemId, $itemDetail->amount);
         }
     }
 

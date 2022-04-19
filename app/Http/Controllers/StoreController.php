@@ -683,7 +683,7 @@ class StoreController extends Controller
                 ->update([
                     'amount' => DB::raw('amount - '.$stock_subtract->amountSubtract)
                 ]);
-                $this->transaction->stockChangeLog(1, "Approval pengurangan stock tanggal ".$stock_subtract->tanggal, $stock_subtract->itemId, $stock_subtract->amountSubtract);
+                $this->transaction->stockChangeLog(2, "Approval pengurangan stock tanggal ".$stock_subtract->tanggal, $stock_subtract->itemId, $stock_subtract->amountSubtract);
                 DB::commit();
                 return "Data pengurangan berhasil diupdate";
             }
