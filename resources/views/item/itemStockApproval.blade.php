@@ -113,7 +113,6 @@
                     speciesId : speciesId
                 }
             },
-            //ajax:'{{ url("getStoresRecord") }}' + "/"+ start+ "/"+ end+ "/"+ opsi+ "/"+ speciesId,
             serverSide: false,
             processing: true,
             deferRender: true,
