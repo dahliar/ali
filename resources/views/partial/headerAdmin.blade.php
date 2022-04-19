@@ -155,21 +155,33 @@
 				</li>
 			</ul>
 		</li>
-
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				<i class="fas fa-warehouse"></i> Stok
+			<a class="nav-link dropdown-toggle" href="#" id="navbarBarang" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+				<i class="fas fa-warehouse"></i> Inventory
 			</a>
-			<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<li><a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-fish"></i> Stock per-Spesies</a></li>
-				<li><a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-fish"></i> Stock per-Barang</a></li>
-				<li>
-					<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i> Barang Produksi</a>
+			<ul class="dropdown-menu" aria-labelledby="navbarBarang">
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarStok" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-fish"></i> Produk
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarStok">
+						<li>
+							<a class="dropdown-item" href="{{ url('speciesStockList')}}"><i class="fas fa-fish"></i> Stock per-Spesies</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('itemStockList')}}"><i class="fas fa-fish"></i> Stock per-Barang</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('itemStockApprovalPenambahan')}}"><i class="fas fa-box"></i> Approval Penambahan</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('itemStockApprovalPengurangan')}}"><i class="fas fa-box"></i> Approval Pengurangan</a>
+						</li>
+					</ul>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{ url('itemStockApproval')}}"><i class="fas fa-box"></i> Approval Penambahan</a>
+					<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i> Barang Pendukung Produksi</a>
 				</li>
-
 			</ul>
 		</li>
 		<li class="nav-item dropdown">

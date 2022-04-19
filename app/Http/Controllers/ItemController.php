@@ -60,12 +60,14 @@ class ItemController extends Controller
      */
     public function show($itemId)
     {
-        //
         return view('item.itemStockView', compact('itemId'));
     }
     public function showUnpacked($itemId)
     {
-        //
         return view('item.itemStockViewUnpacked', compact('itemId'));
+    }
+    public function showKurangi($itemId)
+    {
+        return view('item.itemStockSubtractView', compact('itemId'));
     }
 }

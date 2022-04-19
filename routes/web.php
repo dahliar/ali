@@ -132,14 +132,25 @@ Route::get('itemStockList',[ItemController::class, 'index'])->middleware(['auth'
 Route::GET('getAllStockItem/{speciesId}', [ItemController::class, 'getAllStockItem'])->middleware(['auth']);
 Route::get('itemStockView/{itemId}',[ItemController::class, 'show'])->middleware(['auth', 'authorized']);
 Route::get('itemStockViewUnpacked/{itemId}',[ItemController::class, 'showUnpacked'])->middleware(['auth', 'authorized']);
+Route::get('itemStockSubtractView/{itemId}',[ItemController::class, 'showKurangi'])->middleware(['auth', 'authorized']);
+
+
+
 Route::GET('getItemHistory/{speciesId}/{start}/{end}/{opsi}', [StoreController::class, 'getItemStoreHistory'])->middleware(['auth']);
+Route::GET('getItemSubtractHistory/{speciesId}/{start}/{end}/{opsi}', [StoreController::class, 'getItemSubtractHistory'])->middleware(['auth']);
+
+
 Route::GET('getUnpackedHistory/{speciesId}', [ItemController::class, 'getUnpackedItemHistory'])->middleware(['auth']);
 Route::get('editUnpacked/{itemId}',[StoreController::class, 'editUnpacked'])->middleware(['auth', 'authorized'])->name('editUnpacked');
 Route::POST('unpackedUpdate',[StoreController::class, 'unpackedUpdate'])->middleware(['auth'])->name('unpackedUpdate');
 Route::get('itemStockAdd/{itemId}',[StoreController::class, 'create'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
+Route::get('itemStockSubtract/{itemId}',[StoreController::class, 'subtract'])->middleware(['auth', 'authorized']);
+
+
 Route::get('itemStockEdit/{store}',[StoreController::class, 'edit'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
 Route::get('itemStoreDetail/{storeId}',[StoreController::class, 'itemStoreDetail'])->middleware(['auth', 'authorized']);
 Route::get('storeAdd',[StoreController::class, 'store'])->middleware(['auth'])->name('storeAdd');
+Route::post('storeSubtract',[StoreController::class, 'storeSubtract'])->middleware(['auth'])->name('storeAdd');
 Route::get('storeUpdate',[StoreController::class, 'update'])->middleware(['auth'])->name('storeUpdate');
 
 //ITEM STOCKS
@@ -148,14 +159,19 @@ Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->mid
 
 
 //Approval
-Route::get('itemStockApproval',[StoreController::class, 'indexApproval'])->middleware(['auth', 'authorized'])->name('itemStockApproval');
+Route::get('itemStockApprovalPenambahan',[StoreController::class, 'indexApprovalPenambahan'])->middleware(['auth', 'authorized']);
+Route::get('itemStockApprovalPengurangan',[StoreController::class, 'indexApprovalPengurangan'])->middleware(['auth', 'authorized']);
 Route::post('getStoresRecord',[StoreController::class, 'getStoresRecord'])->middleware(['auth']);
 Route::post('approveStockChange',[StoreController::class, 'stockChange'])->middleware(['auth']);
 Route::post('deleteStockChange',[StoreController::class, 'stockChangeDelete'])->middleware(['auth']);
+Route::post('deleteStockSubtractChange',[StoreController::class, 'deleteStockSubtractChange'])->middleware(['auth']);
 
 
 
-
+Route::get('itemStockSubtractEdit/{stockSubtract}',[StoreController::class, 'subtractEdit'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
+Route::post('stockSubtractUpdate',[StoreController::class, 'subtractUpdate'])->middleware(['auth'])->name('storeUpdate');
+Route::post('getStorekSubtractRecord',[StoreController::class, 'getStorekSubtractRecord'])->middleware(['auth']);
+Route::post('approveStockSubtractChange',[StoreController::class, 'stockSubtractChange'])->middleware(['auth']);
 
 
 

@@ -20,12 +20,19 @@
     function tambahStockItem(id){
         window.open(('{{ url("itemStockAdd") }}' + "/"+ id), '_self');
     }
+    function kurangiStockItem(id){
+        window.open(('{{ url("itemStockSubtract") }}' + "/"+ id), '_self');
+    }
     function UpdateStockUnpacked(id){
         window.open(('{{ url("editUnpacked") }}' + "/"+ id), '_self');
     }
     function historyStockItem(id){
         window.open(('{{ url("itemStockView") }}' + "/"+ id), '_self');
     }
+    function historyStockKurang(id){
+        window.open(('{{ url("itemStockSubtractView") }}' + "/"+ id), '_self');
+    }
+
 
     function myFunction(speciesId){
         $('#datatable').DataTable({
@@ -43,7 +50,7 @@
             {   "width": "10%", "targets":  [4], "className": "text-end" },
             {   "width": "12%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "12%", "targets":  [7], "className": "text-center" }
+            {   "width": "15%", "targets":  [7], "className": "text-center" }
             ], 
 
             columns: [

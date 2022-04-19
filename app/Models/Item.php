@@ -17,7 +17,7 @@ class Item extends Model
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
-            'sp.name as speciesName', 
+            'sp.nameBahasa as speciesName', 
             'i.amount as jumlahPacked',
             'amountUnpacked as jumlahUnpacked',
             'p.shortname as packingShortname',
@@ -71,18 +71,12 @@ class Item extends Model
         ->addColumn('action', function ($row) {
             $html="";
             if (Auth::user()->accessLevel <=40){
-                $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang">
-                <i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i>
-                </button>';
-                $html .= '
-                <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update jumlah unpacked">
-                <i class="fa fa-box-open"></i>
-                </button>
-                ';
-                $html .= '
-                <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="Stock History">
-                <i class="far fa-list-alt"></i>
-                </button>';
+                $html = '
+                <button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang"><i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i></button>
+                <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="History tambah stock"><i class="far fa-list-alt"></i></button>
+                <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update jumlah unpacked"><i class="fa fa-box-open"></i></button>
+                <button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Kurangi stok barang"><i onclick="kurangiStockItem('."'".$row->id."'".')" class="fa fa-minus"></i></button>
+                <button onclick="historyStockKurang('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="History kurangi stock"><i class="far fa-list-alt"></i></button>';
             }
 
             return $html;
@@ -221,7 +215,7 @@ class Item extends Model
         ->select(
             'i.id as itemId', 
             DB::raw('concat(
-                sp.name," ",
+                sp.nameBahasa," ",
                 g.name," ",
                 s.name," ",
                 p.name," ",

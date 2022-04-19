@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Store;
 use App\Models\Item;
 use App\Models\Species;
+use App\Models\StockSubtract;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -42,21 +43,26 @@ class StoreController extends Controller
     {
         //
     }
-    public function indexApproval()
+    public function indexApprovalPenambahan()
     {
         $speciesList = Species::orderBy('nameBahasa')->get();
         return view('item.itemStockApproval', compact('speciesList'));
     }
+    public function indexApprovalPengurangan()
+    {
+        $speciesList = Species::orderBy('nameBahasa')->get();
+        return view('item.itemStockSubtractApproval', compact('speciesList'));
+    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create($speciesId)
     {
         $oneItem = $this->item->getOneItem($speciesId);
         return view('item.itemStockAdd', compact('oneItem'));
+    }
+    public function subtract($itemId)
+    {
+        $oneItem = $this->item->getOneItem($itemId);
+        return view('item.itemStockSubtract', compact('oneItem'));
     }
     
     public function editUnpacked($speciesId)
@@ -118,6 +124,33 @@ class StoreController extends Controller
         return redirect('itemStockList')
         ->with('status','Stock item '.$teks1.' berhasil ditambahkan, menunggu approval.');
     }
+    public function storeSubtract(Request $request)
+    {
+        $request->validate([
+            'packedKurang' => 'required|gt:0', 
+            'tanggal' => 'required|date|before_or_equal:today',
+            'alasan' => 'required|string|min:20|max:255'
+        ],
+        [
+            'packedKurang.*'=> 'Jumlah pengurangan harus lebih besar dari 0',
+            'tanggal.*'=> 'Tanggal harus sebelum hari ini',
+            'alasan.*'=> 'Alasan harus antara 30-300 karakter'
+        ]);
+
+        $data = [
+            'itemId' => $request->itemId,
+            'amountSubtract' =>  $request->packedKurang,
+            'alasan' =>  $request->alasan,
+            'tanggal' =>  $request->tanggal,
+            'userId' =>  auth()->user()->id,
+            'isApproved' => 0
+        ];
+        DB::table('stock_subtracts')->insert($data);
+        
+        return redirect('itemStockList')
+        ->with('status','Stock item '.$request->itemName.' berhasil diinput, menunggu approval.');
+    }
+
 
     /**
      * Display the specified resource.
@@ -160,17 +193,37 @@ class StoreController extends Controller
 
         return view('item.itemStockEdit', compact('store', 'data'));
     }
+    public function subtractEdit(StockSubtract $stockSubtract)
+    {
+        //
+        $data = DB::table('items as i')
+        ->select(
+            'i.name as itemName', 
+            'f.name as freezingName', 
+            'g.name as gradeName', 
+            'p.name as packingName', 
+            'p.shortname as pShortname', 
+            's.name as sizeName',
+            'sp.nameBahasa as speciesName',
+            'i.amount as amount',
+            'i.weightbase as weightbase'
+        )
+        ->join('freezings as f', 'i.freezingid', '=', 'f.id')
+        ->join('grades as g', 'i.gradeid', '=', 'g.id')
+        ->join('packings as p', 'i.packingid', '=', 'p.id')
+        ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->where('i.id','=', $stockSubtract->itemId)
+        ->first();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Store  $store
-     * @return \Illuminate\Http\Response
-     */
+        return view('item.itemStockSubtractEdit', compact('stockSubtract', 'data'));
+    }
+
+
+
+
     public function update(Request $request)
     {
-        //dd($request);
         $request->validate([
             'amountPacked' => 'required|gte:0', 
             'amountUnpacked' => 'required|gte:0',
@@ -189,6 +242,29 @@ class StoreController extends Controller
         $teks1 = $request->speciesName." ".$request->sizeName." ".$request->gradeName;
         return redirect('itemStockView/'.$request->itemId)
         ->with('status','Item '.$teks1.' berhasil diubah.');
+    }
+
+    public function subtractUpdate(Request $request)
+    {
+        $request->validate([
+            'amountSubtract' => 'required|gt:0|different:oldAmountsubtract', 
+            'tanggal' => 'required|date|after_or_equal:today'
+        ],[
+            'amountSubtract.different' => 'Jumlah lama dan baru harus berbeda', 
+
+        ]);
+
+        $affected = DB::table('stock_subtracts')
+        ->where('id', $request->stockSubtractId)
+        ->update([
+            'amountSubtract'    => $request->amountSubtract,
+            'tanggal'           => $request->tanggal,    
+            'isApproved'        => '0'
+        ]);
+
+
+        return redirect('itemStockSubtractView/'.$request->itemId)
+        ->with('status','Perubahan pengurangan stok item '.$request->item.' berhasil dilakukan, menunggu approval.');
     }
 
     public function getItemStoreHistory($itemId, $start, $end, $opsi){
@@ -276,7 +352,84 @@ class StoreController extends Controller
     }
 
 
+    public function getItemSubtractHistory($itemId, $start, $end, $opsi){
+        $start= Carbon::parse($start);
+        $end= Carbon::parse($end);
 
+        $query = DB::table('stock_subtracts as str')
+        ->select('str.id', 
+            'i.name as item', 
+            's.name as size',
+            'g.name as grade',
+            'sp.nameBahasa as species',
+            'p.name as packing',
+            'f.name as freezing',
+            'p.shortname as pShortname', 
+            'str.isApproved as stat',
+            'i.amount as currentAmount',
+            'i.amountUnpacked as currentAmountUnpacked',
+            'str.tanggal as tanggal',
+            'ui.name as userInputName',
+            'ua.name as userApproveName',
+            'str.amountSubtract as amountSubtract',
+            'i.weightbase as wb',
+            DB::raw('(CASE 
+                WHEN str.isApproved="0" THEN "Belum" 
+                WHEN str.isApproved="1" THEN "Setuju" 
+                WHEN str.isApproved="2" THEN "Tolak" 
+                END) AS isApproved')
+        )
+        ->join('users as ui', 'ui.id', '=', 'str.userId')
+        ->leftjoin('users as ua', 'ua.id', '=', 'str.approvedBy')
+        ->join('items as i', 'i.id', '=', 'str.itemId')
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+        ->whereBetween('str.tanggal', [$start->startOfDay(), $end->endOfDay()])
+        ->where('i.isActive','=', 1)
+        ->where('i.id','=', $itemId)
+        ->orderBy('sp.name', 'desc')
+        ->orderBy('g.name', 'asc')
+        ->orderByRaw('s.name+0', 'asc');
+
+        if($opsi == 0){
+            $query = $query->where('isApproved', '=', '0');
+        } else if($opsi == 1){
+            $query = $query->where('isApproved', '=', '1');
+        } else if($opsi == 2){
+            $query = $query->where('isApproved', '=', '2');
+        }
+
+        $query = $query->get();  
+
+        return datatables()->of($query)
+        ->editColumn('itemName', function ($row) {
+            $name = $row->species." ".$row->grade. " ".$row->size. " ".$row->packing. " ".$row->freezing." ".$row->wb." Kg";
+            return $name;
+        })
+        ->editColumn('amountSubtract', function ($row) {
+            $name = $row->amountSubtract." ".$row->pShortname;
+            return $name;
+        })
+        ->addColumn('action', function ($row) {
+            $html='';
+            if ($row->stat != 1){
+                $html .= '
+                <button class="btn btn-xs btn-light" type="button" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit penyimpanan" onclick="editStoreDetail('."'".$row->id."'".')"><i class="fa fa-edit"></i></button>              
+                ';
+            }
+            if ($row->stat == 0){
+                $html .= '
+                <button class="btn btn-xs btn-light" type="button" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus penyimpanan" onclick="deleteStoreDetail('."'".$row->id."'".')"><i class="fa fa-trash"></i></button>                
+                ';
+            }
+
+            return $html;
+        })
+        ->addIndexColumn()->toJson();    
+    }
 
     public function getStoresRecord(Request $request)
     {
@@ -337,9 +490,6 @@ class StoreController extends Controller
         ->orderByRaw('si.name+0', 'asc')
         ->get();
 
-
-//{{number_format($totalGrossWeight, 2, ',', '.').' Kg'}}
-
         return datatables()->of($query)
         ->editColumn('amountPacked', function ($row) {
             if ($row->stat == 0){
@@ -378,6 +528,96 @@ class StoreController extends Controller
         ->addIndexColumn()
         ->toJson();
     }
+
+    public function getStorekSubtractRecord(Request $request)
+    {
+        //dd($request);
+        $start= Carbon::parse($request->start);
+        $end= Carbon::parse($request->end);
+
+        $query = DB::table('stock_subtracts as s')
+        ->select(
+            'i.name as itemName', 
+            'f.name as fName', 
+            'g.name as gName', 
+            'p.name as pName', 
+            's.alasan as alasan',
+            'p.shortname as pShortname', 
+            'i.weightbase as wb',
+            'si.name as sName',
+            'sp.nameBahasa as spName',
+            's.id as id',
+            's.itemId as itemId',
+            's.isApproved as stat',
+            'i.amount as currentAmount',
+            's.amountSubtract as amountSubtract',
+            's.tanggal as tanggal',
+            'ui.name as userInputName',
+            'ua.name as userApproveName',
+            's.approvedDate as approvedDate',
+            DB::raw('(CASE 
+                WHEN s.isApproved="0" THEN "Belum" 
+                WHEN s.isApproved="1" THEN "Setuju" 
+                WHEN s.isApproved="2" THEN "Tolak" 
+                END) AS isApproved')
+        )
+        ->join('users as ui', 'ui.id', '=', 's.userId')
+        ->leftjoin('users as ua', 'ua.id', '=', 's.approvedBy')
+        ->join('items as i', 'i.id', '=', 's.itemId')
+        ->join('freezings as f', 'i.freezingid', '=', 'f.id')
+        ->join('grades as g', 'i.gradeid', '=', 'g.id')
+        ->join('packings as p', 'i.packingid', '=', 'p.id')
+        ->join('sizes as si', 'i.sizeid', '=', 'si.id')
+        ->join('species as sp', 'si.speciesId', '=', 'sp.id')
+        ->whereBetween('s.tanggal', [$start->startOfDay(), $end->endOfDay()]);
+
+        if($request->opsi == 0){
+            $query = $query->where('isApproved', '=', '0');
+        } else if($request->opsi == 1){
+            $query = $query->where('isApproved', '=', '1');
+        } else if($request->opsi == 2){
+            $query = $query->where('isApproved', '=', '2');
+        }
+
+        if($request->speciesId != 0){
+            $query = $query->where('sp.id', '=', $request->speciesId);
+        }
+        $query = $query->orderBy('sp.name', 'desc')
+        ->orderBy('g.name', 'asc')
+        ->orderByRaw('si.name+0', 'asc')
+        ->get();
+
+        return datatables()->of($query)
+        ->editColumn('amountSubtract', function ($row) {
+            if ($row->stat == 0){
+                $name = number_format($row->currentAmount, 1, ',', '.')." - ".number_format($row->amountSubtract, 1, ',', '.')." ".$row->pShortname;
+            } else{
+                $name = number_format($row->amountSubtract, 1, ',', '.')." ".$row->pShortname;
+            }
+            return $name;
+        })
+        ->editColumn('itemName', function ($row) {
+            $name = $row->spName." ".$row->gName. " ".$row->sName. " ".$row->fName." ".$row->wb." Kg";
+            return $name;
+        })
+        ->addColumn('action', function ($row) {
+            $html='';
+            if ($row->stat==0){
+                $html .= '
+                <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Setujui perubahan" onclick="approveStockSubtract('."'".$row->id."',".')">
+                <i class="fa fa-check"></i>
+                </button>
+                <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tolak perubahan" onclick="tolakStockSubtract('."'".$row->id."',".')">
+                <i class="fa fa-times"></i>
+                </button>
+                ';
+            }
+            return $html;
+        })
+        ->addIndexColumn()
+        ->toJson();
+    }
+
 
     public function stockChange(Request $request)
     {
@@ -421,6 +661,48 @@ class StoreController extends Controller
             return "data berhasil ditolak";
         }
     }
+    public function stockSubtractChange(Request $request)
+    {
+        if($request->approveStockSubtract == 1){
+            try{
+                DB::beginTransaction();
+                $approved = DB::table('stock_subtracts')
+                ->where('id', $request->stockSubtractId)
+                ->update([
+                    'isApproved' => 1,
+                    'approvedBy' => auth()->user()->id,
+                    'approvedDate' => date('Y-m-d')
+                ]);
+
+                $stock_subtract = DB::table('stock_subtracts')
+                ->where('id', $request->stockSubtractId)
+                ->first();
+
+                $affected = DB::table('items')
+                ->where('id', $stock_subtract->itemId)
+                ->update([
+                    'amount' => DB::raw('amount - '.$stock_subtract->amountSubtract)
+                ]);
+                $this->transaction->stockChangeLog(1, "Approval pengurangan stock tanggal ".$stock_subtract->tanggal, $stock_subtract->itemId, $stock_subtract->amountSubtract);
+                DB::commit();
+                return "Data pengurangan berhasil diupdate";
+            }
+            catch(\Exception $e){
+                DB::rollBack();
+                return "Gagal Update, kontak administrator";
+            }
+        } else if($request->approveStockSubtract == 2){
+            $approved = DB::table('stock_subtracts')
+            ->where('id', $request->stockSubtractId)
+            ->update([
+                'isApproved' => 2,
+                'approvedBy' => auth()->user()->id,
+                'approvedDate' => date('Y-m-d')
+            ]);
+            return "data pengurangan ditolak";
+        }
+    }
+
     public function stockChangeDelete(Request $request)
     {
         $approved = DB::table('stores')
@@ -428,4 +710,12 @@ class StoreController extends Controller
         ->delete();
         return "data berhasil dihapus";
     }
+    public function deleteStockSubtractChange(Request $request)
+    {
+        $approved = DB::table('stock_subtracts')
+        ->where('id', $request->subtractId)
+        ->delete();
+        return "data berhasil dihapus";
+    }
+
 }
