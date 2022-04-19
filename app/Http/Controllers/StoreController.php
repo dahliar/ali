@@ -365,7 +365,7 @@ class StoreController extends Controller
             $html='';
             if ($row->stat==0){
                 $html .= '
-                <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Setujui" onclick="approveStore('."'".$row->id."',".')">
+                <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Setujui perubahan" onclick="approveStore('."'".$row->id."',".')">
                 <i class="fa fa-check"></i>
                 </button>
                 <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tolak perubahan" onclick="tolakStore('."'".$row->id."',".')">
