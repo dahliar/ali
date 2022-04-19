@@ -128,29 +128,27 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Name</th>
-                                        <th>Packaging</th>
-                                        <th>Packed</th>
-                                        <th>Unpacked</th>
-                                        <th>Stock gudang</th>
-                                        <th>Sailing</th>
-                                        <th>Act</th>
-                                    </tr>
-                                </thead>
-                                <tbody style="font-size: 14px;">
-                                </tbody>
-                            </table>                
-                        </div>
                     </div>
-                </div>    
+                </div>
             </div>
         </div>
     </div>
+    <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Packaging</th>
+                <th>Packed</th>
+                <th>Unpacked</th>
+                <th>Stock gudang</th>
+                <th>Sailing</th>
+                <th>Act</th>
+            </tr>
+        </thead>
+        <tbody style="font-size: 14px;">
+        </tbody>
+    </table>                
 </body>
 <ol>
     <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
