@@ -108,7 +108,7 @@
                 <div class="row form-inline">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-header">
                                 <div class="row form-group">
                                     <div class="col-2 my-auto text-md-right">
                                         <span class="label" id="statTran">Jenis Spesies</span>
