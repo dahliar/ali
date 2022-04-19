@@ -351,9 +351,9 @@ class StoreController extends Controller
         })
         ->editColumn('amountUnpacked', function ($row) {
             if ($row->stat == 0){
-                $name = number_format($row->currentAmountUnpacked, 1, ',', '.')." + ".number_format($row->amountUnpacked, 1, ',', '.')." ".$row->pShortname;
+                $name = number_format($row->currentAmountUnpacked, 1, ',', '.')." + ".number_format($row->amountUnpacked, 1, ',', '.')." Kg";
             } else{
-                $name = number_format($row->amountUnpacked, 1, ',', '.')." ".$row->pShortname;
+                $name = number_format($row->amountUnpacked, 1, ',', '.')." Kg";
             }
             return $name;
         })

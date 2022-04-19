@@ -119,14 +119,14 @@
             deferRender: true,
             destroy:true,
             columnDefs: [
-            {   "width": "25%",  "targets":  [0], "className": "text-left" },
-            {   "width": "8%", "targets":  [1], "className": "text-end" },
-            {   "width": "8%", "targets":  [2], "className": "text-end" },
+            {   "width": "20%",  "targets":  [0], "className": "text-left" },
+            {   "width": "12%", "targets":  [1], "className": "text-end" },
+            {   "width": "12%", "targets":  [2], "className": "text-end" },
             {   "width": "10%", "targets":  [3], "className": "text-center" },
             {   "width": "15%", "targets":  [4], "className": "text-left" },
             {   "width": "8%", "targets":  [5], "className": "text-center" },
             {   "width": "15%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-center" }
+            {   "width": "8%", "targets":  [7], "className": "text-center" }
             ], 
             columns: [
             {data: 'itemName', name: 'itemName'},
@@ -227,14 +227,14 @@
                                         <th>Barang</th>
                                         <th>Packed</th>
                                         <th>Unpacked</th>
-                                        <th>Tanggal Packing</th>
+                                        <th>Packing</th>
                                         <th>Input</th>
                                         <th>Approved</th>
                                         <th>Oleh</th>
                                         <th>Act</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody style="font-size: 14px;">
                                 </tbody>
                             </table>                
                         </div>
