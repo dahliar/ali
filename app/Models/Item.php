@@ -68,19 +68,26 @@ class Item extends Model
         ->addColumn('loading', function ($row) {
             return number_format(($row->jumlahOnLoading*$row->weightbase), 2).' Kg';
         })
-        ->addColumn('action', function ($row) {
+        ->addColumn('action1', function ($row) {
             $html="";
             if (Auth::user()->accessLevel <=40){
                 $html = '
                 <button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang"><i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i></button>
                 <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="History tambah stock"><i class="far fa-list-alt"></i></button>
-                <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update jumlah unpacked"><i class="fa fa-box-open"></i></button>
-                <button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Kurangi stok barang"><i onclick="kurangiStockItem('."'".$row->id."'".')" class="fa fa-minus"></i></button>
-                <button onclick="historyStockKurang('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="History kurangi stock"><i class="far fa-list-alt"></i></button>';
+                <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update jumlah unpacked"><i class="fa fa-box-open"></i></button>';
             }
-
             return $html;
-        })->addIndexColumn()->toJson();
+        })
+        ->addColumn('action2', function ($row) {
+            $html="";
+            if (Auth::user()->accessLevel <=40){
+                $html = '
+                <button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Kurangi stok barang"><i onclick="kurangiStockItem('."'".$row->id."'".')" class="fa fa-minus"></i></button>
+                <button onclick="historyStockKurang('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="History kurangi stock"><i class="fas fa-clipboard-list"></i></button>';
+            }
+            return $html;
+        })
+        ->rawColumns(['action1', 'action2'])->addIndexColumn()->toJson();
     }
 
     public function getSpeciesStock(){

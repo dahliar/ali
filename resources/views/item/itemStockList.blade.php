@@ -44,13 +44,14 @@
             destroy:true,
             columnDefs: [
             {   "width": "3%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "8%", "targets":  [2], "className": "text-end" },
+            {   "width": "23%", "targets":  [1], "className": "text-left"   },
+            {   "width": "10%", "targets":   [2], "className": "text-end" },
             {   "width": "10%", "targets":  [3], "className": "text-end" },
             {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "12%", "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
             {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "15%", "targets":  [7], "className": "text-center" }
+            {   "width": "12%", "targets":  [7], "className": "text-center" },
+            {   "width": "12%", "targets":   [8], "className": "text-center" }
             ], 
 
             columns: [
@@ -61,7 +62,8 @@
             {data: 'amountUnpacked', name: 'amountUnpacked'},
             {data: 'stockOnHand', name: 'stockOnHand'},
             {data: 'loading', name: 'loading'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
+            {data: 'action1', name: 'action1', orderable: false, searchable: false},
+            {data: 'action2', name: 'action2', orderable: false, searchable: false}
             ]
         });
     }
@@ -100,67 +102,60 @@
 <body onload="myFunction(0)">
     {{ csrf_field() }}
     <div class="container-fluid">
-        <div class="modal-content">
-            <div class="modal-header">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb primary-color my-auto">
-                        <li class="breadcrumb-item">
-                            <a class="white-text" href="{{ url('/home') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active">Stock per-Barang</li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="modal-body">
-                <div class="row form-inline">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row form-group">
-                                    <div class="col-2 my-auto text-md-right">
-                                        <span class="label" id="statTran">Jenis Spesies</span>
-                                    </div>
-                                    <div class="col-6">
-                                        <select class="form-control w-100" id="selectSpecies">
-                                            <option value="-1">--Choose One--</option>
-                                            @foreach ($speciesList as $species)
-                                            <option value="{{ $species->id }}">{{ $species->name }}</option>
-                                            @endforeach
-                                            <option value="0" selected>All</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-2 my-auto">
-                                        <span class="label" id="errSpan"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Name</th>
-                                            <th>Packaging</th>
-                                            <th>Packed</th>
-                                            <th>Unpacked</th>
-                                            <th>Stock gudang</th>
-                                            <th>Sailing</th>
-                                            <th>Act</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody style="font-size: 14px;">
-                                    </tbody>
-                                </table>                
-                            </div>
-                            <div class="card-footer">
-                                <ol>
-                                    <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
-                                    <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>    
+        <div class="card card-body">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb primary-color my-auto">
+                    <li class="breadcrumb-item">
+                        <a class="white-text" href="{{ url('/home') }}">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">Stock per-Barang</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="card card-header">
+            <div class="row form-group">
+                <div class="col-2 my-auto text-md-right">
+                    <span class="label" id="statTran">Jenis Spesies</span>
                 </div>
+                <div class="col-6">
+                    <select class="form-control w-100" id="selectSpecies">
+                        <option value="-1">--Choose One--</option>
+                        @foreach ($speciesList as $species)
+                        <option value="{{ $species->id }}">{{ $species->name }}</option>
+                        @endforeach
+                        <option value="0" selected>All</option>
+                    </select>
+                </div>
+                <div class="col-2 my-auto">
+                    <span class="label" id="errSpan"></span>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Packaging</th>
+                            <th>Packed</th>
+                            <th>Unpacked</th>
+                            <th>Stock gudang</th>
+                            <th>Sailing</th>
+                            <th>Tambah Stock</th>
+                            <th>Kurang Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size: 14px;">
+                    </tbody>
+                </table>                
+            </div>
+            <div class="card-footer">
+                <ol>
+                    <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
+                    <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
+                </ol>
             </div>
         </div>
     </div>
