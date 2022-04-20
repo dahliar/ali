@@ -18,6 +18,7 @@
     });
 
     function editAplikasi($id){
+        alert("Akses langsung");
     }
     function kelolaPages($id){
         window.open(('{{ url("pageList") }}'+"/"+$id), '_self');

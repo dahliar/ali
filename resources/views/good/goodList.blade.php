@@ -40,13 +40,13 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "35%",  "targets": [1], "className": "text-left" },
+            {   "width": "30%",  "targets": [1], "className": "text-left" },
             {   "width": "10%", "targets":  [2], "className": "text-end" },
             {   "width": "10%", "targets":  [3], "className": "text-end" },
             {   "width": "10%", "targets":  [4], "className": "text-center" },
             {   "width": "10%", "targets":  [5], "className": "text-center" },
             {   "width": "10%", "targets":  [6], "className": "text-center" },
-            {   "width": "10%", "targets":  [7], "className": "text-center" }
+            {   "width": "15%", "targets":  [7], "className": "text-center" }
             ], 
 
             columns: [
@@ -89,7 +89,7 @@
                         <li class="breadcrumb-item active">Barang-Barang Produksi</li>
                     </ol>
                 </nav>
-                <button onclick="tambahBarang()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Barang"><i class="fa fa-plus" style="font-size:20px"></i>
+                <button onclick="tambahBarang()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Barang"><i class="fa fa-plus"></i>
                 </button>
             </div>
             <div class="modal-body">

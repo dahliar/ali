@@ -67,34 +67,34 @@ class Transaction extends Model
         ->addColumn('number', function ($row) {
             $html = '
             <div class="row form-group">
-            <span class="col-2">PI</span>
-            <span class="col-10 text-end">'.$row->pinum.'</span>
+            <span class="col-4">PI</span>
+            <span class="col-8 text-end">'.$row->pinum.'</span>
             </div>
             <div class="row form-group">
-            <span class="col-2">INV</span>
-            <span class="col-10 text-end">'.$row->invnum.'</span>
+            <span class="col-4">INV</span>
+            <span class="col-8 text-end">'.$row->invnum.'</span>
             </div>';
             return $html;
         })
         ->addColumn('tanggal', function ($row) {
             $html = '
             <div class="row form-group">
-            <span class="col-4">Transaksi</span>
-            <span class="col-8 text-end">'.$row->td.'</span>
+            <span class="col-5">Transaksi</span>
+            <span class="col-7 text-end">'.$row->td.'</span>
             </div>
 
             <div class="row form-group">
-            <span class="col-4">Loading</span>
-            <span class="col-8 text-end">'.$row->ld.'</span>
+            <span class="col-5">Loading</span>
+            <span class="col-7 text-end">'.$row->ld.'</span>
             </div>
             <div class="row form-group">
-            <span class="col-4">Departure</span>
-            <span class="col-8 text-end">'.$row->etd.'</span>
+            <span class="col-5">Departure</span>
+            <span class="col-7 text-end">'.$row->etd.'</span>
             </div>
 
             <div class="row form-group">
-            <span class="col-4">Arrival</span>
-            <span class="col-8 text-end">'.$row->eta.'</span>
+            <span class="col-5">Arrival</span>
+            <span class="col-7 text-end">'.$row->eta.'</span>
             </div>';
 
             return $html;

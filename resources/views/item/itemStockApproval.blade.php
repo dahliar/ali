@@ -181,65 +181,57 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Stock per-Barang</li>
+                        <li class="breadcrumb-item active">Approval penambahan stock</li>
                     </ol>
                 </nav>
             </div>
-            <div class="modal-body">
-                <div class="row form-inline">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row form-group">
-                                    <div class="col-md-2">
-                                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ date('Y-m-d', strtotime('-1 week')) }}" > 
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="date" id="end" name="end" class="form-control text-end" value="{{ date('Y-m-d') }}" >
-                                    </div>
-                                    <div class="col-2">
-                                        <select class="form-select w-100" id="species">
-                                            @foreach ($speciesList as $species)
-                                            <option value="{{ $species->id }}">{{ $species->nameBahasa }}</option>
-                                            @endforeach
-                                            <option value="0" selected>All</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <select id="opsi" name="opsi" class="form-select" >
-                                            <option value="-1">Semua Status</option>
-                                            <option value="1">Approved</option>
-                                            <option value="0">Unapproved</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="button" id="hitButton" class="form-control btn-primary" onclick="myFunction()">Cari</button>
-                                    </div>
+        </div>
+        <div class="card card-header">
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <input type="date" id="start" name="start" class="form-control text-end" value="{{ date('Y-m-d', strtotime('-1 week')) }}" > 
+                </div>
+                <div class="col-md-2">
+                    <input type="date" id="end" name="end" class="form-control text-end" value="{{ date('Y-m-d') }}" >
+                </div>
+                <div class="col-2">
+                    <select class="form-select w-100" id="species">
+                        @foreach ($speciesList as $species)
+                        <option value="{{ $species->id }}">{{ $species->nameBahasa }}</option>
+                        @endforeach
+                        <option value="0" selected>All</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id="opsi" name="opsi" class="form-select" >
+                        <option value="-1">Semua Status</option>
+                        <option value="1">Approved</option>
+                        <option value="0">Unapproved</option>
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" id="hitButton" class="form-control btn-primary" onclick="myFunction()"><i class="fas fa-search"></i></button>
+                </div>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th>Barang</th>
-                                        <th>Packed</th>
-                                        <th>Unpacked</th>
-                                        <th>Packing</th>
-                                        <th>Input</th>
-                                        <th>Approved</th>
-                                        <th>Oleh</th>
-                                        <th>Act</th>
-                                    </tr>
-                                </thead>
-                                <tbody style="font-size: 14px;">
-                                </tbody>
-                            </table>                
-                        </div>
-                    </div>
-                </div>    
             </div>
+        </div>
+        <div class="card card-body">
+            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                <thead>
+                    <tr>
+                        <th>Barang</th>
+                        <th>Packed</th>
+                        <th>Unpacked</th>
+                        <th>Packing</th>
+                        <th>Input</th>
+                        <th>Approved</th>
+                        <th>Oleh</th>
+                        <th>Act</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 14px;">
+                </tbody>
+            </table>                
         </div>
     </div>
 </body>

@@ -34,9 +34,9 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "60%", "targets":  [1], "className": "text-left"   },
-            {   "width": "25%",  "targets": [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-center" }
+            {   "width": "55%", "targets":  [1], "className": "text-left"   },
+            {   "width": "20%",  "targets": [2], "className": "text-left" },
+            {   "width": "20%", "targets":  [3], "className": "text-center" }
             ], 
 
             columns: [
@@ -79,11 +79,6 @@
 </div>
 @endif
 
-
-
-
-
-
 <body onload="myFunction(0)">
     {{ csrf_field() }}
     <div class="container-fluid">
@@ -98,47 +93,41 @@
                     </ol>
                 </nav>
             </div>
-            <div class="modal-body">
-                <div class="row form-inline">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row form-group">
-                                    <div class="col-2 my-auto text-md-right">
-                                        <span class="label" id="statTran">Jenis Family</span>
-                                    </div>
-                                    <div class="col-6">
-                                        <select class="form-control w-100" id="selectFamily">
-                                            <option value="-1">--Choose One--</option>
-                                            <option value="0" selected>All</option>
-                                            @foreach ($families as $family)
-                                            <option value="{{ $family->id }}">{{ $family->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-2 my-auto">
-                                        <span class="label" id="errSpan"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Name</th>
-                                        <th>Family</th>
-                                        <th>Act</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>                
-                        </div>
+        </div>
+        <div class="card card-header">
+            <div class="row form-inline">
+                <div class="row form-group">
+                    <div class="col-2 my-auto text-md-right">
+                        <span class="label" id="statTran">Jenis Family</span>
                     </div>
-                </div>    
+                    <div class="col-6">
+                        <select class="form-control w-100" id="selectFamily">
+                            <option value="-1">--Choose One--</option>
+                            <option value="0" selected>All</option>
+                            @foreach ($families as $family)
+                            <option value="{{ $family->id }}">{{ $family->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-2 my-auto">
+                        <span class="label" id="errSpan"></span>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="card card-body">
+            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Family</th>
+                        <th>Act</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>                
         </div>
     </div>
 </body>

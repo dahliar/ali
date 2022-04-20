@@ -80,52 +80,44 @@
                     </ol>
                 </nav>
             </div>
-            <div class="modal-body">
-                <div class="row form-inline">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row form-group">
-                                    <div class="col-3">
-                                        <select class="form-select w-100" id="selectSpecies">
-                                            <option value="-1">----</option>
-                                            @foreach ($speciesList as $species)
-                                            <option value="{{ $species->id }}">{{ $species->name }}</option>
-                                            @endforeach
-                                            <option value="0" selected>All Species</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 year')))}}" > 
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="button" id="hitButton" name="end" class="form-control btn-primary" onclick="myFunction()">Cari</button>
-                                    </div>
+        </div>
+        <div class="card card-header">
+            <div class="row form-group">
+                <div class="col-3">
+                    <select class="form-select w-100" id="selectSpecies">
+                        <option value="-1">----</option>
+                        @foreach ($speciesList as $species)
+                        <option value="{{ $species->id }}">{{ $species->name }}</option>
+                        @endforeach
+                        <option value="0" selected>All Species</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 year')))}}" > 
+                </div>
+                <div class="col-md-2">
+                    <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
+                </div>
+                <div class="col-md-2">
+                    <button type="button" id="hitButton" name="end" class="form-control btn-primary" onclick="myFunction()">Cari</button>
+                </div>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Name</th>
-                                        <th>Minimal (Rp/Kg)</th>
-                                        <th>Rata-rata (Rp/Kg)</th>
-                                        <th>Maksimal (Rp/Kg)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>                
-                        </div>
-                    </div>
-                </div>    
             </div>
+        </div>
+        <div class="card card-body">
+            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Minimal (Rp/Kg)</th>
+                        <th>Rata-rata (Rp/Kg)</th>
+                        <th>Maksimal (Rp/Kg)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>                
         </div>
     </div>
 </body>

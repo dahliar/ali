@@ -114,56 +114,48 @@
                     </ol>
                 </nav>
             </div>
-            <div class="modal-body">
-                <div class="row form-inline">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="row form-group">
-                                    <input type="hidden" id="itemId" name="itemId" class="form-control text-end" value="{{ $itemId }}" >
+        </div>
+        <div class="card card-header">
+            <div class="row form-group">
+                <input type="hidden" id="itemId" name="itemId" class="form-control text-end" value="{{ $itemId }}" >
 
-                                    <div class="col-md-2">
-                                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ date('Y-m-d', strtotime('-1 week')) }}" > 
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="date" id="end" name="end" class="form-control text-end" value="{{ date('Y-m-d') }}" >
-                                    </div>
-                                    <div class="col-md-2">
-                                        <select id="opsi" name="opsi" class="form-select" >
-                                            <option value="-1">Semua Status</option>
-                                            <option value="1">Approved</option>
-                                            <option value="0">Unapproved</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <button type="button" id="hitButton" class="form-control btn-primary" onclick="myFunction()">Cari</button>
-                                    </div>
+                <div class="col-md-2">
+                    <input type="date" id="start" name="start" class="form-control text-end" value="{{ date('Y-m-d', strtotime('-1 week')) }}" > 
+                </div>
+                <div class="col-md-2">
+                    <input type="date" id="end" name="end" class="form-control text-end" value="{{ date('Y-m-d') }}" >
+                </div>
+                <div class="col-md-2">
+                    <select id="opsi" name="opsi" class="form-select" >
+                        <option value="-1">Semua Status</option>
+                        <option value="1">Approved</option>
+                        <option value="0">Unapproved</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" id="hitButton" class="form-control btn-primary" onclick="myFunction()"><i class="fas fa-search"></i></button>
+                </div>
 
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Name</th>
-                                            <th>Pack</th>
-                                            <th>Input</th>
-                                            <th>Approve</th>
-                                            <th>Status</th>
-                                            <th>Packed</th>
-                                            <th>Unpacked</th>
-                                            <th>Act</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody style="font-size: 12px;">
-                                    </tbody>
-                                </table>                
-                            </div>
-                        </div>
-                    </div>
-                </div>    
             </div>
+        </div>
+        <div class="card card-body">
+            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Pack</th>
+                        <th>Input</th>
+                        <th>Approve</th>
+                        <th>Status</th>
+                        <th>Packed</th>
+                        <th>Unpacked</th>
+                        <th>Act</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 12px;">
+                </tbody>
+            </table>                
         </div>
     </div>
 </body>

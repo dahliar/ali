@@ -128,76 +128,76 @@
                     </ol>
                 </nav>
                 <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Transaksi">
-                    <i class="fa fa-plus" style="font-size:20px"></i> Transaksi
+                    <i class="fa fa-plus"></i> Transaksi
                 </button>
             </div>
-            <br>
-            <div class="row form-inline">
-                <div class="row form-group">
-                    <div class="col-md-3">
-                        <select class="form-select" id="negara" name="negara">
-                            <option value="-1">--Semua Negara--</option>
-                            @foreach ($nations as $nation)
-                            @if ( $nation->id == old('negara') )
-                            <option value="{{ $nation->id }}" selected>{{ $nation->name }} - {{ $nation->registration }}</option>
-                            @else
-                            <option value="{{ $nation->id }}">{{ $nation->name }} - {{ $nation->registration }}</option>
-                            @endif
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <select class="form-select" id="jenis" name="jenis" >
-                            <option value="-1" selected>--Semua Jenis--</option>
-                            <option value="1" @if(old('jenis') == 1) selected @endif>Internal</option>
-                            <option value="2" @if(old('jenis') == 2) selected @endif>Undername</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
-                            <option value="-1" selected>--Semua Status--</option>
-                            <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
-                            <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Finished</option>
-                            <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Canceled</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="input-group">
-                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 year')))}}" > 
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="input-group">
-                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
-                        </div>
-                    </div>
-                    <div class="col-md-1">
-                        <button onclick="myFunction()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-search-plus">Search</i>
-                        </button>
-                    </div>
-                </div> 
-            </div>
-            <div class="row form-inline">
-                <div class="card-body">
-                    <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                        <thead>
-                            <tr style="font-size: 12px;">
-                                <th>Perusahaan</th>
-                                <th>Negara</th>
-                                <th>No Surat</th>
-                                <th>Tanggal</th>
-                                <th>Jenis</th>
-                                <th>Status</th>
-                                <th>Act</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>                
+        </div>
+        <div class="card card-header">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <select class="form-select" id="negara" name="negara">
+                        <option value="-1">--Semua Negara--</option>
+                        @foreach ($nations as $nation)
+                        @if ( $nation->id == old('negara') )
+                        <option value="{{ $nation->id }}" selected>{{ $nation->name }} - {{ $nation->registration }}</option>
+                        @else
+                        <option value="{{ $nation->id }}">{{ $nation->name }} - {{ $nation->registration }}</option>
+                        @endif
+                        @endforeach
+                    </select>
                 </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="jenis" name="jenis" >
+                        <option value="-1" selected>--Semua Jenis--</option>
+                        <option value="1" @if(old('jenis') == 1) selected @endif>Internal</option>
+                        <option value="2" @if(old('jenis') == 2) selected @endif>Undername</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
+                        <option value="-1" selected>--Semua Status--</option>
+                        <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
+                        <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Finished</option>
+                        <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Canceled</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 year')))}}" > 
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <button onclick="myFunction()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div> 
+        </div>
+        <div class="card card-body">
+            <div class="row form-inline">
+                <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th>Perusahaan</th>
+                            <th>Negara</th>
+                            <th>No Surat</th>
+                            <th>Tanggal</th>
+                            <th>Jenis</th>
+                            <th>Status</th>
+                            <th>Act</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:14px">
+                    </tbody>
+                </table>                
             </div>
-        </div>    
-    </div>
+        </div>
+    </div>    
+</div>
 </div>
 </div>
 </body>

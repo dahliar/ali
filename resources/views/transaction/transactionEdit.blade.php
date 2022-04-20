@@ -140,397 +140,396 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-10">
-                <form id="TransactionForm" action="{{route('transactionUpdate')}}"  method="POST" name="TransactionForm">
-                    @csrf
-                    <div class="d-grid gap-1">
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">Transaction Number*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="transactionNum" name="transactionNum"  class="form-control"  value="{{ $transaction->transactionNum}}" readonly>
-                                <input id="isEdit" name="isEdit"  class="form-control"  value="isEdit" type="hidden" readonly>
-                                <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
-                            </div>
-                        </div>                   
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">PI Number*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="pinum" name="pinum"  class="form-control"  value="{{ $transaction->pinum}}" readonly>
-                                <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
-                            </div>
-                        </div>                   
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">Shipper*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="shipper" name="shipper"  class="form-control" value="{{ $transaction->shipper}}">
+        <div class="card card-body">
+            <form id="TransactionForm" action="{{route('transactionUpdate')}}"  method="POST" name="TransactionForm">
+                @csrf
+                <div class="d-grid gap-1">
+                    <input id="isEdit" name="isEdit"  class="form-control"  value="isEdit" type="hidden" readonly>
+                    <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
+
+                    <div class="row form-inline">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanLabel">Transaction Number*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="transactionNum" name="transactionNum"  class="form-control"  value="{{ $transaction->transactionNum}}" readonly>
+                        </div>
+                    </div>                   
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanLabel">PI Number*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="pinum" name="pinum"  class="form-control"  value="{{ $transaction->pinum}}" readonly>
+                            <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
+                        </div>
+                    </div>                   
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanLabel">Shipper*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="shipper" name="shipper"  class="form-control" value="{{ $transaction->shipper}}">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanLabel">Shipper Address*</span>
+                        </div>
+                        <div class="col-8">
+                            <textarea id="shipperAddress" name="shipperAddress" rows="4"  class="form-control" style="min-width: 100%">{{ $transaction->shipperAddress}}</textarea>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanBank">Bank*</span>
+                        </div>
+                        <div class="col-8">
+                            <select class="form-select w-100" id="rekening" name="rekening">
+                                <option value="-1">--Choose One--</option>
+                                @foreach ($rekenings as $rekening)
+                                @if ( $rekening->id == $transaction->rekeningid)
+                                <option value="{{ $rekening->id }}" selected>{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }} </option>
+                                @else
+                                <option value="{{ $rekening->id }}">{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>                    
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanBank">Registration Number*</span>
+                        </div>
+                        <div class="col-8">
+                            <select class="form-select w-100" id="countryId" name="countryId">
+                                <option value="-1">--Choose One--</option>
+                                @foreach ($countryRegister as $register)
+                                @if ( $register->id == $transaction->countryId )
+                                <option value="{{ $register->id }}" selected>{{ $register->name }} - {{ $register->registration }}</option>
+                                @else
+                                <option value="{{ $register->id }}">{{ $register->name }} - {{ $register->registration }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-text">Swiftcode</span>
+                                <input id="swiftcode" name="swiftcode" class="form-control" value="{{ $transaction->swiftcode}}" readonly>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">Shipper Address*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <textarea id="shipperAddress" name="shipperAddress" rows="4"  class="form-control" style="min-width: 100%">{{ $transaction->shipperAddress}}</textarea>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span class="input-group-text col-3 text-end">Valuta</span>
+                                <input id="valuta" name="valuta" rows="4"  class="form-control" value="{{ $transaction->valuta}}" readonly>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanBank">Bank*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <select class="form-select w-100" id="rekening" name="rekening">
-                                    <option value="-1">--Choose One--</option>
-                                    @foreach ($rekenings as $rekening)
-                                    @if ( $rekening->id == $transaction->rekeningid)
-                                    <option value="{{ $rekening->id }}" selected>{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }} </option>
-                                    @else
-                                    <option value="{{ $rekening->id }}">{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>                    
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label">Company*</span>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanBank">Registration Number*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-select w-100" id="countryId" name="countryId">
-                                    <option value="-1">--Choose One--</option>
-                                    @foreach ($countryRegister as $register)
-                                    @if ( $register->id == $transaction->countryId )
-                                    <option value="{{ $register->id }}" selected>{{ $register->name }} - {{ $register->registration }}</option>
-                                    @else
-                                    <option value="{{ $register->id }}">{{ $register->name }} - {{ $register->registration }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="col-8">
+                            <select id="company" name="company" class="form-select">
+                                <option value="-1" selected>--Choose One--</option>
+                                @foreach ($companies as $company)
+                                @if ( $company->id == $transaction->companyId)
+                                <option value="{{ $company->id }}" selected>{{ $company->name }}</option>
+                                @else
+                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                @endif
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span class="input-group-text">Swiftcode</span>
-                                    <input id="swiftcode" name="swiftcode" class="form-control" value="{{ $transaction->swiftcode}}" readonly>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span class="input-group-text col-3">Valuta</span>
-                                    <input id="valuta" name="valuta" rows="4"  class="form-control" value="{{ $transaction->valuta}}" readonly>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanConsignee">Consignee Details*</span>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label">Company*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <select id="company" name="company" class="form-select">
-                                    <option value="-1" selected>--Choose One--</option>
-                                    @foreach ($companies as $company)
-                                    @if ( $company->id == $transaction->companyId)
-                                    <option value="{{ $company->id }}" selected>{{ $company->name }}</option>
-                                    @else
-                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanConsignee">Consignee Details*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <textarea id="companydetail" name="companydetail" rows="4"  class="form-control" style="min-width: 100%">{{ $transaction->companydetail}}</textarea>
-                            </div>  
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Packer*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="packer" value="{{ $transaction->packer}}" name="packer" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLoading">Port of Loading*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="loadingPort" value="{{ $transaction->loadingport}}" name="loadingPort" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanDestination">Port of Destination*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="destinationPort" name="destinationPort" type="text" value="{{ $transaction->destinationport}}" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label">Order Type*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <select id="orderType" name="orderType" class="form-select" >
-                                    <option value="-1" selected>--Choose One--</option>
-                                    <option value="1" @if($transaction->orderType == 1) selected @endif>FOB</option>
-                                    <option value="2" @if($transaction->orderType == 2) selected @endif>CNF</option>
-                                    <option value="3" @if($transaction->orderType == 3) selected @endif>CFO</option>
-                                </select>
-                            </div>
+                        <div class="col-8">
+                            <textarea id="companydetail" name="companydetail" rows="4"  class="form-control" style="min-width: 100%">{{ $transaction->companydetail}}</textarea>
                         </div>  
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPacker">Packer*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="packer" value="{{ $transaction->packer}}" name="packer" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanLoading">Port of Loading*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="loadingPort" value="{{ $transaction->loadingport}}" name="loadingPort" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanDestination">Port of Destination*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="destinationPort" name="destinationPort" type="text" value="{{ $transaction->destinationport}}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label">Order Type*</span>
+                        </div>
+                        <div class="col-8">
+                            <select id="orderType" name="orderType" class="form-select" >
+                                <option value="-1" selected>--Choose One--</option>
+                                <option value="1" @if($transaction->orderType == 1) selected @endif>FOB</option>
+                                <option value="2" @if($transaction->orderType == 2) selected @endif>CNF</option>
+                                <option value="3" @if($transaction->orderType == 3) selected @endif>CFO</option>
+                            </select>
+                        </div>
+                    </div>  
 
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanParty">Party*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="containerParty" name="containerParty" type="text" value="{{ $transaction->containerParty}}" class="form-control">
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanParty">Party*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="containerParty" name="containerParty" type="text" value="{{ $transaction->containerParty}}" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end my-auto">
+                            <span class="label">Created at</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="date" id="creationDate" name="creationDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->creationDate)) }}" readonly >
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">Created at</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="creationDate" name="creationDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->creationDate)) }}" readonly >
-                                </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end my-auto">
+                            <span class="label">Tanggal Transaksi*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="date" id="transactionDate" name="transactionDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->transactionDate)) }}" >
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">Tanggal Transaksi*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="transactionDate" name="transactionDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->transactionDate)) }}" >
-                                </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end my-auto">
+                            <span class="label">Tanggal Loading*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="date" id="loadingDate" name="loadingDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->loadingDate)) }}" >
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">Tanggal Loading*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="loadingDate" name="loadingDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->loadingDate)) }}" >
-                                </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end my-auto">
+                            <span class="label">ETD*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="date" id="departureDate" name="departureDate" value="{{ date('Y-m-d', strtotime($transaction->departureDate)) }}" class="form-control text-end">
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">ETD*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="departureDate" name="departureDate" value="{{ date('Y-m-d', strtotime($transaction->departureDate)) }}" class="form-control text-end">
-                                </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end my-auto">
+                            <span class="label">ETA*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="date" id="arrivalDate" name="arrivalDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->arrivaldate)) }}" >
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">ETA*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="arrivalDate" name="arrivalDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->arrivaldate)) }}" >
-                                </div>
-                            </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPacker">Container Number*</span>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Container Number*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <input id="containerNumber" value="{{ $transaction->containerNumber }}" name="containerNumber" type="text" class="form-control" placeholder="Container number">
-                            </div>
+                        <div class="col-8">
+                            <input id="containerNumber" value="{{ $transaction->containerNumber }}" name="containerNumber" type="text" class="form-control" placeholder="Container number">
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Seal Number*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <input id="containerSeal" value="{{ $transaction->containerSeal }}" name="containerSeal" type="text" class="form-control" placeholder="Seal number">
-                            </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPacker">Seal Number*</span>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Vessel*</span>
-                            </div>
-                            <div class="col-md-8">
-                                <input id="containerVessel" value="{{ $transaction->containerVessel }}" name="containerVessel" type="text" class="form-control" placeholder="Vessel name & number">
-                            </div>
+                        <div class="col-8">
+                            <input id="containerSeal" value="{{ $transaction->containerSeal }}" name="containerSeal" type="text" class="form-control" placeholder="Seal number">
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Container Type*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="containerType" name="containerType" class="form-select" >
-                                    <option value="-1" selected>--Choose One--</option>
-                                    <option value="1" @if($transaction->containerType) == 1) selected @endif>Dry</option>
-                                    <option value="2" @if($transaction->containerType == 2) selected @endif>Reefer</option>
-                                </select>
-                            </div>                    
-                        </div>                           
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Payment Valuta*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="valutaType" name="valutaType" class="form-select" >
-                                    <option value="-1" selected>--Choose One--</option>
-                                    <option value="1" @if($transaction->valutaType == 1) selected @endif>Rupiah</option>
-                                    <option value="2" @if($transaction->valutaType == 2) selected @endif>US Dollar</option>
-                                    <option value="3" @if($transaction->valutaType == 3) selected @endif>Renminbi</option>
-                                </select>
-                            </div>                    
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPacker">Vessel*</span>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Payment Amount*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span name="spanAm" id="spanAm" class="input-group-text">-</span>
+                        <div class="col-8">
+                            <input id="containerVessel" value="{{ $transaction->containerVessel }}" name="containerVessel" type="text" class="form-control" placeholder="Vessel name & number">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPayment">Container Type*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="containerType" name="containerType" class="form-select" >
+                                <option value="-1" selected>--Choose One--</option>
+                                <option value="1" @if($transaction->containerType) == 1) selected @endif>Dry</option>
+                                <option value="2" @if($transaction->containerType == 2) selected @endif>Reefer</option>
+                            </select>
+                        </div>                    
+                    </div>                           
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPayment">Payment Valuta*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="valutaType" name="valutaType" class="form-select" >
+                                <option value="-1" selected>--Choose One--</option>
+                                <option value="1" @if($transaction->valutaType == 1) selected @endif>Rupiah</option>
+                                <option value="2" @if($transaction->valutaType == 2) selected @endif>US Dollar</option>
+                                <option value="3" @if($transaction->valutaType == 3) selected @endif>Renminbi</option>
+                            </select>
+                        </div>                    
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPayment">Payment Amount*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span name="spanAm" id="spanAm" class="input-group-text">-</span>
 
-                                    <input id="payment" name="payment" type="number" step="0.01" value="{{ $transaction->payment }}" class="form-control text-end" placeholder="use commas">
-                                </div>
+                                <input id="payment" name="payment" type="number" step="0.01" value="{{ $transaction->payment }}" class="form-control text-end" placeholder="use commas">
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Advance*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span name="spanAd" id="spanAd" class="input-group-text">-</span>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPayment">Advance*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <span name="spanAd" id="spanAd" class="input-group-text">-</span>
 
-                                    <input id="advance" name="advance" type="number" step="0.01" value="{{ $transaction->advance }}" class="form-control text-end" placeholder="use commas">
-                                </div>
+                                <input id="advance" name="advance" type="number" step="0.01" value="{{ $transaction->advance }}" class="form-control text-end" placeholder="use commas">
                             </div>
                         </div>
+                    </div>
 
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="forwarderName">Forwarder*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="forwarder" name="forwarder" class="form-select" >
-                                    <option value="-1">--Choose One--</option>
-                                    @foreach ($forwarders as $forwarder)
-                                    @if ( $forwarder->id == old('forwarder', $transaction->forwarderid))
-                                    <option value="{{ $forwarder->id }}" selected>{{ $forwarder->name }}</option>
-                                    @else
-                                    <option value="{{ $forwarder->id }}">{{ $forwarder->name }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="forwarderName">Forwarder*</span>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanundername">Undername*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="undername" name="undername" class="form-select" >
-                                    <option value="-1" selected>--Choose One--</option>
-                                    <option value="1" @if(old('undername', $transaction->isundername) == 1) selected @endif>Internal</option>
-                                    <option value="2" @if(old('undername', $transaction->isundername) == 2) selected @endif>Undername</option>
-                                </select>
-                            </div>                    
-                        </div> 
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label">Status</span>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="currentStatus" name="currentStatus" type="hidden" value="{{ $transaction->status }}">
-                                @if ($transaction->status == 1)
-                                <select id="status" name="status" class="form-select" >
-                                    <option value="-1">--Choose One--</option>
-                                    <option value="1" @if($transaction->status == 1) selected @endif>Penawaran</option>
-                                    <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
-                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
-                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
-                                </select>
+                        <div class="col-md-3">
+                            <select id="forwarder" name="forwarder" class="form-select" >
+                                <option value="-1">--Choose One--</option>
+                                @foreach ($forwarders as $forwarder)
+                                @if ( $forwarder->id == old('forwarder', $transaction->forwarderid))
+                                <option value="{{ $forwarder->id }}" selected>{{ $forwarder->name }}</option>
+                                @else
+                                <option value="{{ $forwarder->id }}">{{ $forwarder->name }}</option>
                                 @endif
-                                @if (($transaction->status == 2) or ($transaction->status == 3))
-                                <select id="status" name="status" class="form-select" disabled>
-                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
-                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
-                                </select>
-                                @endif
-                                @if($transaction->status == 4)
-                                <select id="status" name="status" class="form-select">
-                                    <option value="-1">--Choose One--</option>
-                                    <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
-                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
-                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
-                                </select>
-                                @endif
-                            </div>
-                        </div> 
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanundername">Undername*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="undername" name="undername" class="form-select" >
+                                <option value="-1" selected>--Choose One--</option>
+                                <option value="1" @if(old('undername', $transaction->isundername) == 1) selected @endif>Internal</option>
+                                <option value="2" @if(old('undername', $transaction->isundername) == 2) selected @endif>Undername</option>
+                            </select>
+                        </div>                    
+                    </div> 
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label">Status</span>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="currentStatus" name="currentStatus" type="hidden" value="{{ $transaction->status }}">
+                            @if ($transaction->status == 1)
+                            <select id="status" name="status" class="form-select" >
+                                <option value="-1">--Choose One--</option>
+                                <option value="1" @if($transaction->status == 1) selected @endif>Penawaran</option>
+                                <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
+                                <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
+                                <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                            </select>
+                            @endif
+                            @if (($transaction->status == 2) or ($transaction->status == 3))
+                            <select id="status" name="status" class="form-select" disabled>
+                                <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
+                                <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                            </select>
+                            @endif
+                            @if($transaction->status == 4)
+                            <select id="status" name="status" class="form-select">
+                                <option value="-1">--Choose One--</option>
+                                <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
+                                <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
+                                <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                            </select>
+                            @endif
+                        </div>
+                    </div> 
 
-                        <table width="100%">
-                            <tr>
-                                <td><hr /></td>
-                                <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h3>Proforma invoce additional data</h3></td>
-                                <td><hr /></td>
-                            </tr>
-                        </table>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Shipped Date Plan*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="shippedDatePlan" value="{{ $transaction->shippedDatePlan }}" name="shippedDatePlan" type="text" class="form-control" placeholder="such as latest shipment">
+                    <table width="100%">
+                        <tr>
+                            <td><hr /></td>
+                            <td style="width:1px; padding: 0 10px; white-space: nowrap;"><h3>Proforma invoce additional data</h3></td>
+                            <td><hr /></td>
+                        </tr>
+                    </table>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPacker">Shipped Date Plan*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="shippedDatePlan" value="{{ $transaction->shippedDatePlan }}" name="shippedDatePlan" type="text" class="form-control" placeholder="such as latest shipment">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPacker">Payment Plan*</span>
+                        </div>
+                        <div class="col-8">
+                            <input id="paymentPlan" value="{{ $transaction->paymentPlan }}" name="paymentPlan" type="text" class="form-control" placeholder="payment terms such as LC or direct transfers">
+                        </div>
+                    </div>                
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
+                            <span class="label" id="spanPayment">PI Notes</span>
+                        </div>
+                        <div class="col-8">
+                            <span class="label">Used to describe terms and condition for the next transaction</span>
+                            <button style="width:100%" type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Add PI Notes</button>
+                            <br>
+                            <div class="table-responsive">  
+                                <table class="table" id="dynamic_field">
+                                    <td class="col-md-12">
+                                    </td>  
+                                </table>   
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPacker">Payment Plan*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="paymentPlan" value="{{ $transaction->paymentPlan }}" name="paymentPlan" type="text" class="form-control" placeholder="payment terms such as LC or direct transfers">
-                            </div>
-                        </div>                
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">PI Notes</span>
-                            </div>
-                            <div class="col-md-9">
-                                <span class="label">Used to describe terms and condition for the next transaction</span>
-                                <button style="width:100%" type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Add PI Notes</button>
-                                <br>
-                                <div class="table-responsive">  
-                                    <table class="table" id="dynamic_field">
-                                      <td class="col-md-12">
-                                      </td>  
-                                  </table>   
-                              </div>
-                          </div>
-                      </div>                        
-                      @if(($transaction->status == 1) or ($transaction->status == 4))
-                      <div class="row form-group">
-                        <div class="col-md-3 text-end">
+                    </div>                        
+                    @if(($transaction->status == 1) or ($transaction->status == 4))
+                    <div class="row form-group">
+                        <div class="col-3 text-end">
                         </div>
-                        <div class="col-md-8 text-center">
+                        <div class="col-8 text-center">
                             <button type="submit" class="btn btn-primary">Save</button>
                             <input type="reset" value="Reset" class="btn btn-secondary">
                         </div>
@@ -539,9 +538,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-1"></div>
     </div>
-</div>
 </body>
 
 @if (!empty($pinotes))

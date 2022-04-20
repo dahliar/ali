@@ -52,14 +52,14 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "4%",  "targets":  [0], "className": "text-center" },
-            {   "width": "16%", "targets":  [1], "className": "text-left"   },
-            {   "width": "7%", "targets":  [2], "className": "text-left" },
-            {   "width": "15%", "targets":  [3], "className": "text-left" },
-            {   "width": "7%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "8%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-left" }
+            {   "width": "3%",  "targets":  [0], "className": "text-center" },
+            {   "width": "20%", "targets":  [1], "className": "text-left"   },
+            {   "width": "10%", "targets":  [2], "className": "text-left" },
+            {   "width": "20%", "targets":  [3], "className": "text-left" },
+            {   "width": "8%",  "targets":  [4], "className": "text-end" },
+            {   "width": "12%", "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [6], "className": "text-left" },
+            {   "width": "15%", "targets":  [7], "className": "text-left" }
             ], 
 
             columns: [
@@ -107,64 +107,60 @@
                     <i class="fa fa-plus" style="font-size:20px"></i> Pembelian
                 </button>
             </div>
+        </div>
 
-            <div class="modal-body">
-                <div class="row">
-                    <div class="row form-group">
-                        <div class="col-md-4">
-                            <select class="form-select" id="negara" name="negara">
-                                <option value="-1">--Semua Negara--</option>
-                                @foreach ($nations as $nation)
-                                @if ( $nation->id == old('negara') )
-                                <option value="{{ $nation->id }}" selected>{{ $nation->name }} - {{ $nation->registration }}</option>
-                                @else
-                                <option value="{{ $nation->id }}">{{ $nation->name }} - {{ $nation->registration }}</option>
-                                @endif
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
-                                <option value="-1" selected>--Semua Status Transaksi--</option>
-                                <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
-                                <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Selesai</option>
-                                <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Batal</option>
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 week')))}}" > 
-                        </div>
-                        <div class="col-md-2">
-                            <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
-                        </div>
-                        <div class="col-md-1">
-                            <button onclick="myFunction()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter">Cari
-                            </button>
-                        </div>
-                    </div>
+        <div class="card card-header">
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <select class="form-select" id="negara" name="negara">
+                        <option value="-1">--Semua Negara--</option>
+                        @foreach ($nations as $nation)
+                        @if ( $nation->id == old('negara') )
+                        <option value="{{ $nation->id }}" selected>{{ $nation->name }} - {{ $nation->registration }}</option>
+                        @else
+                        <option value="{{ $nation->id }}">{{ $nation->name }} - {{ $nation->registration }}</option>
+                        @endif
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
+                        <option value="-1" selected>--Semua Status Transaksi--</option>
+                        <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
+                        <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Selesai</option>
+                        <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Batal</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 week')))}}" > 
+                </div>
+                <div class="col-md-2">
+                    <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}" >
+                </div>
+                <div class="col-md-1">
+                    <button onclick="myFunction()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fa fa-search"></i>
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="row form-inline">
-            <div class="card-body">
-                <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Perusahaan</th>
-                            <th>Negara</th>
-                            <th>No Surat</th>
-                            <th>Datang</th>
-                            <th>Bayar</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>                
-            </div>
+        <div class="card card-body">
+            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Perusahaan</th>
+                        <th>Negara</th>
+                        <th>No Surat</th>
+                        <th>Datang</th>
+                        <th>Bayar</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size:14px">
+                </tbody>
+            </table>                
         </div>
-    </div>    
+    </div>
 </body>
 @endsection

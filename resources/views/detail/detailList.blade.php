@@ -128,30 +128,25 @@
                 </button>
                 @endif
             </div>
-            <div class="modal-body">
-                <div class="row form-inline">
-                    <div class="card-body">
-                        <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama Barang</th>
-                                    <th>Packing</th>
-                                    <th>Harga</th>
-                                    <th>Jumlah Pack</th>
-                                    <th>Berat</th>
-                                    <th>Total</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody style="font-size: 14px;">
-                            </tbody>
-                        </table>                
-                    </div>
-                </div>
-            </div>    
+        </div>
+        <div class="card card-body">
+            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Barang</th>
+                        <th>Packing</th>
+                        <th>Harga</th>
+                        <th>Jumlah Pack</th>
+                        <th>Berat</th>
+                        <th>Total</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody style="font-size: 14px;">
+                </tbody>
+            </table>                
         </div>
     </div>
-</div>
 </body>
 @endsection

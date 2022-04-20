@@ -39,114 +39,116 @@
 </div>
 @endif
 
-
-<div class="container-fluid">
-    <div class="row">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb primary-color">
-                <li class="breadcrumb-item">
-                    <a class="white-text" href="{{ url('/home') }}">Home</a>
-                </li>
-                <li class="breadcrumb-item active">
-                    <a class="white-text" href="{{ url('companyList')}}">Perusahaan</a>
-                </li>
-                <li class="breadcrumb-item active">Tambah</li>
-            </ol>
-        </nav>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12">
-        <form id="CompanyForm" action="{{route('companyUpdate')}}"  method="get" name="CompanyForm">
-            @csrf
-            <div class="d-grid gap-1">
-                <div class="row form-group">
-                    <div class="col-md-2 text-end">
-                        <span class="label" id="spanBank">Nama</span>
-                    </div>
-                    <div class="col-md-4">
-                        <input id="name" name="name" class="form-control" value="{{$company->name}}" readonly>
-                        <input id="companyId" name="companyId" class="form-control" value="{{$company->id}}" type="hidden" readonly>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2 text-end">
-                        <span class="label" id="spanBank">Alamat</span>
-                    </div>
-                    <div class="col-md-7">
-                        <textarea id="address" name="address" rows="4"  class="form-control">{{ old('address', $company->address) }}</textarea>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2 text-end">
-                        <span class="label" id="spanBank">Negara</span>
-                    </div>
-                    <div class="col-md-4">
-                        <select class="form-select w-100" id="countryId" name="countryId">
-                            <option value="-1">--Choose One--</option>
-                            @foreach ($countries as $country)
-                            @if ( $country->id == old('countryId', $company->nation) )
-                            <option value="{{ $country->id }}" selected>{{ $country->name }}</option>
-                            @else
-                            <option value="{{ $country->id }}">{{ $country->name }}</option>
-                            @endif
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2 text-end">
-                        <span class="label" id="npwp">NPWP</span>
-                    </div>
-                    <div class="col-md-4">
-                        <input id="npwpnum" name="npwpnum" class="form-control" value="{{ old('npwpnum', $company->npwp) }}" placeholder="NPWP Number">
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2 text-end">
-                        <span class="label" id="spanBank">Pajak terhitung</span>
-                    </div>
-                    <div class="col-md-4">
-                        <select class="form-select w-100" id="taxIncluded" name="taxIncluded">
-                            <option value="-1" @if(old('taxIncluded', $company->taxIncluded) == -1) selected @endif>--Pilih dahulu--</option>
-                            <option value="0" @if(old('taxIncluded', $company->taxIncluded) == 0) selected @endif>NO</option>
-                            <option value="1" @if(old('taxIncluded', $company->taxIncluded) == 1) selected @endif>YES</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2 text-end">
-                        <span class="label" id="spanBank">Kontak person</span>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Kontak</button>
-                    </div>
-                </div>
-
-
-                <div class="row form-group">
-                    <div class="col-md-2 text-end"></div>
-                    <div class="col-md-10">
-                        <div class="table-responsive">  
-                            <table class="table table-striped table-hover table-bordered" id="dynamic_field">
-                            </table> 
-                        </div>  
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-md-2 text-end">
-                    </div>
-                    <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        <input type="reset" value="Reset" class="btn btn-secondary">
-                    </div>
-                </div>
+<body>
+    <div class="container-fluid">
+        <div class="modal-content">
+            <div class="modal-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb primary-color">
+                        <li class="breadcrumb-item">
+                            <a class="white-text" href="{{ url('/home') }}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a class="white-text" href="{{ url('companyList')}}">Perusahaan</a>
+                        </li>
+                        <li class="breadcrumb-item active">Tambah</li>
+                    </ol>
+                </nav>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
 
+        <div class="card card-body">
+            <div class="col-12">
+                <form id="CompanyForm" action="{{route('companyUpdate')}}"  method="get" name="CompanyForm">
+                    @csrf
+                    <div class="d-grid gap-1">
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="spanBank">Nama</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="name" name="name" class="form-control" value="{{$company->name}}" readonly>
+                                <input id="companyId" name="companyId" class="form-control" value="{{$company->id}}" type="hidden" readonly>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="spanBank">Alamat</span>
+                            </div>
+                            <div class="col-md-7">
+                                <textarea id="address" name="address" rows="4"  class="form-control">{{ old('address', $company->address) }}</textarea>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="spanBank">Negara</span>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select w-100" id="countryId" name="countryId">
+                                    <option value="-1">--Choose One--</option>
+                                    @foreach ($countries as $country)
+                                    @if ( $country->id == old('countryId', $company->nation) )
+                                    <option value="{{ $country->id }}" selected>{{ $country->name }}</option>
+                                    @else
+                                    <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="npwp">NPWP</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="npwpnum" name="npwpnum" class="form-control" value="{{ old('npwpnum', $company->npwp) }}" placeholder="NPWP Number">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="spanBank">Pajak terhitung</span>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select w-100" id="taxIncluded" name="taxIncluded">
+                                    <option value="-1" @if(old('taxIncluded', $company->taxIncluded) == -1) selected @endif>--Pilih dahulu--</option>
+                                    <option value="0" @if(old('taxIncluded', $company->taxIncluded) == 0) selected @endif>NO</option>
+                                    <option value="1" @if(old('taxIncluded', $company->taxIncluded) == 1) selected @endif>YES</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="spanBank">Kontak person</span>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Kontak</button>
+                            </div>
+                        </div>
+
+
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end"></div>
+                            <div class="col-md-10">
+                                <div class="table-responsive">  
+                                    <table class="table table-striped table-hover table-bordered" id="dynamic_field">
+                                    </table> 
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <input type="reset" value="Reset" class="btn btn-secondary">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
 
 @if ($errors->any())
 @if (!empty(old('contactName')) or !empty(old('phone')) or !empty(old('email')))

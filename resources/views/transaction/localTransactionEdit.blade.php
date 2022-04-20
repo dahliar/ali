@@ -131,185 +131,187 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-1"></div>
-            <div class="col-10">
-                <form id="TransactionForm" action="{{url('localTransactionUpdate')}}"  method="POST" name="TransactionForm">
-                    @csrf
-                    <div class="d-grid gap-1">
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLabel">Nomor Transaksi*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="transactionNum" name="transactionNum"  class="form-control"  value="{{ $transaction->transactionNum}}" readonly>
-                                <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="companyName">Pembeli*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="company" value="{{ $transaction->companyId}}" name="company" type="hidden" class="form-control" readonly>
-                                <input id="companyName" value="{{ $companyName}}" name="companyName" type="text" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanConsignee">Detil Pembeli*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <textarea id="companydetail" name="companydetail" rows="4"  class="form-control" style="min-width: 100%">{{ $transaction->companydetail}}</textarea>
-                            </div>  
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanLoading">Alamat loading*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="loadingPort" value="{{ $transaction->loadingport}}" name="loadingPort" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanDestination">Alamat pengiriman*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="destinationPort" name="destinationPort" type="text" value="{{ $transaction->destinationport}}" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanParty">Alat Pengiriman*</span>
-                            </div>
-                            <div class="col-md-9">
-                                <input id="containerParty" name="containerParty" type="text" value="{{ $transaction->containerParty}}" class="form-control">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">Tanggal Transaksi*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="transactionDate" name="transactionDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->transactionDate)) }}" >
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-10">
+                    <form id="TransactionForm" action="{{url('localTransactionUpdate')}}"  method="POST" name="TransactionForm">
+                        @csrf
+                        <div class="d-grid gap-1">
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanLabel">Nomor Transaksi*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="transactionNum" name="transactionNum"  class="form-control"  value="{{ $transaction->transactionNum}}" readonly>
+                                    <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 my-auto">
-                                <span class="label">Tanggal Loading*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input type="date" id="loadingDate" name="loadingDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->loadingDate)) }}" >
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="companyName">Pembeli*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="company" value="{{ $transaction->companyId}}" name="company" type="hidden" class="form-control" readonly>
+                                    <input id="companyName" value="{{ $companyName}}" name="companyName" type="text" class="form-control" readonly>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanBank">Bank*</span>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanConsignee">Detil Pembeli*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    <textarea id="companydetail" name="companydetail" rows="4"  class="form-control" style="min-width: 100%">{{ $transaction->companydetail}}</textarea>
+                                </div>  
                             </div>
-                            <div class="col-md-5">
-                                <select class="form-select w-100" id="rekening" name="rekening">
-                                    <option value="-1">--Choose One--</option>
-                                    @foreach ($rekenings as $rekening)
-                                    @if ( $rekening->id == $transaction->rekeningid)
-                                    <option value="{{ $rekening->id }}" selected>{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }} </option>
-                                    @else
-                                    <option value="{{ $rekening->id }}">{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>                    
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanLoading">Alamat loading*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="loadingPort" value="{{ $transaction->loadingport}}" name="loadingPort" type="text" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanDestination">Alamat pengiriman*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="destinationPort" name="destinationPort" type="text" value="{{ $transaction->destinationport}}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanParty">Alat Pengiriman*</span>
+                                </div>
+                                <div class="col-md-9">
+                                    <input id="containerParty" name="containerParty" type="text" value="{{ $transaction->containerParty}}" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 my-auto">
+                                    <span class="label">Tanggal Transaksi*</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <input type="date" id="transactionDate" name="transactionDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->transactionDate)) }}" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 my-auto">
+                                    <span class="label">Tanggal Loading*</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <input type="date" id="loadingDate" name="loadingDate" class="form-control text-end" value="{{ date('Y-m-d', strtotime($transaction->loadingDate)) }}" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanBank">Bank*</span>
+                                </div>
+                                <div class="col-md-6">
+                                    <select class="form-select w-100" id="rekening" name="rekening">
+                                        <option value="-1">--Choose One--</option>
+                                        @foreach ($rekenings as $rekening)
+                                        @if ( $rekening->id == $transaction->rekeningid)
+                                        <option value="{{ $rekening->id }}" selected>{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }} </option>
+                                        @else
+                                        <option value="{{ $rekening->id }}">{{ $rekening->bank }} - {{ $rekening->rekening }} - {{ $rekening->valuta }}</option>                    
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-text col-4">Valuta</span>
+                                        <input id="valuta" name="valuta" rows="4"  class="form-control" value="{{ $transaction->valuta}}" readonly>
+                                    </div>
+                                </div>
+                            </div>                       
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanPayment">Valuta bayar*</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="valutaType" name="valutaType" class="form-select" >
+                                        <option value="-1" selected>--Choose One--</option>
+                                        <option value="1" @if($transaction->valutaType == 1) selected @endif>Rupiah</option>
+                                        <option value="2" @if($transaction->valutaType == 2) selected @endif>US Dollar</option>
+                                        <option value="3" @if($transaction->valutaType == 3) selected @endif>Renminbi</option>
+                                    </select>
+                                </div>                    
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanPayment">Jumlah total*</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span name="spanAm" id="spanAm" class="input-group-text">-</span>
+
+                                        <input id="payment" name="payment" type="number" step="0.01" value="{{ $transaction->payment }}" class="form-control text-end" placeholder="use commas">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanPayment">Uang Muka*</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <span name="spanAd" id="spanAd" class="input-group-text">-</span>
+
+                                        <input id="advance" name="advance" type="number" step="0.01" value="{{ $transaction->advance }}" class="form-control text-end" placeholder="use commas">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label">Status</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <input id="currentStatus" name="currentStatus" type="hidden" value="{{ $transaction->status }}">
+                                    @if ($transaction->status == 1)
+                                    <select id="status" name="status" class="form-select" >
+                                        <option value="-1">--Choose One--</option>
+                                        <option value="1" @if($transaction->status == 1) selected @endif>Transaksi baru</option>
+                                        <option value="4" @if($transaction->status == 4) selected @endif>Dalam perjalanan</option>
+                                        <option value="2" @if($transaction->status == 2) selected @endif>Selesai</option>
+                                        <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                                    </select>
                                     @endif
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="input-group">
-                                    <span class="input-group-text col-3">Valuta</span>
-                                    <input id="valuta" name="valuta" rows="4"  class="form-control" value="{{ $transaction->valuta}}" readonly>
+                                    @if (($transaction->status == 2) or ($transaction->status == 3))
+                                    <select id="status" name="status" class="form-select" disabled>
+                                        <option value="2" @if($transaction->status == 2) selected @endif>Selesai</option>
+                                        <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                                    </select>
+                                    @endif
+                                    @if($transaction->status == 4)
+                                    <select id="status" name="status" class="form-select">
+                                        <option value="4" @if($transaction->status == 4) selected @endif>Dalam Perjalanan</option>
+                                        <option value="2" @if($transaction->status == 2) selected @endif>Selesai</option>
+                                        <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                                    </select>
+                                    @endif    
                                 </div>
-                            </div>
-                        </div>                       
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Valuta bayar*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="valutaType" name="valutaType" class="form-select" >
-                                    <option value="-1" selected>--Choose One--</option>
-                                    <option value="1" @if($transaction->valutaType == 1) selected @endif>Rupiah</option>
-                                    <option value="2" @if($transaction->valutaType == 2) selected @endif>US Dollar</option>
-                                    <option value="3" @if($transaction->valutaType == 3) selected @endif>Renminbi</option>
-                                </select>
-                            </div>                    
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Jumlah total*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span name="spanAm" id="spanAm" class="input-group-text">-</span>
+                            </div>        
 
-                                    <input id="payment" name="payment" type="number" step="0.01" value="{{ $transaction->payment }}" class="form-control text-end" placeholder="use commas">
+                            @if(($transaction->status == 1) or ($transaction->status == 4))
+                            <div class="row form-group">
+                                <div class="col-md-3 text-end">
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label" id="spanPayment">Uang Muka*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <span name="spanAd" id="spanAd" class="input-group-text">-</span>
-
-                                    <input id="advance" name="advance" type="number" step="0.01" value="{{ $transaction->advance }}" class="form-control text-end" placeholder="use commas">
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <input type="reset" value="Reset" class="btn btn-secondary">
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-right">
-                                <span class="label">Status</span>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="currentStatus" name="currentStatus" type="hidden" value="{{ $transaction->status }}">
-                                @if ($transaction->status == 1)
-                                <select id="status" name="status" class="form-select" >
-                                    <option value="-1">--Choose One--</option>
-                                    <option value="1" @if($transaction->status == 1) selected @endif>Transaksi baru</option>
-                                    <option value="4" @if($transaction->status == 4) selected @endif>Dalam perjalanan</option>
-                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai</option>
-                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
-                                </select>
                                 @endif
-                                @if (($transaction->status == 2) or ($transaction->status == 3))
-                                <select id="status" name="status" class="form-select" disabled>
-                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai</option>
-                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
-                                </select>
-                                @endif
-                                @if($transaction->status == 4)
-                                <select id="status" name="status" class="form-select">
-                                    <option value="4" @if($transaction->status == 4) selected @endif>Dalam Perjalanan</option>
-                                    <option value="2" @if($transaction->status == 2) selected @endif>Selesai</option>
-                                    <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
-                                </select>
-                                @endif    
                             </div>
-                        </div>        
-
-                        @if(($transaction->status == 1) or ($transaction->status == 4))
-                        <div class="row form-group">
-                            <div class="col-md-3 text-end">
-                            </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                <input type="reset" value="Reset" class="btn btn-secondary">
-                            </div>
-                            @endif
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
