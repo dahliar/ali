@@ -150,7 +150,7 @@ Route::get('itemStockSubtract/{itemId}',[StoreController::class, 'subtract'])->m
 Route::get('itemStockEdit/{store}',[StoreController::class, 'edit'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
 Route::get('itemStoreDetail/{storeId}',[StoreController::class, 'itemStoreDetail'])->middleware(['auth', 'authorized']);
 Route::get('storeAdd',[StoreController::class, 'store'])->middleware(['auth'])->name('storeAdd');
-Route::post('storeSubtract',[StoreController::class, 'storeSubtract'])->middleware(['auth'])->name('storeAdd');
+Route::post('storeSubtract',[StoreController::class, 'storeSubtract'])->middleware(['auth'])->name('storeSubtract');
 Route::get('storeUpdate',[StoreController::class, 'update'])->middleware(['auth'])->name('storeUpdate');
 
 //ITEM STOCKS
