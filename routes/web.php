@@ -270,6 +270,9 @@ Route::post('storePresenceHonorariumEmployee',[HonorariumController::class, 'sto
 Route::GET('presenceHonorariumHistory',[HonorariumController::class, 'presenceHonorariumHistory'])->middleware('auth', 'authorized');
 Route::get('getPresenceHonorariumHistory/{start}/{end}', [HonorariumController::class, 'getPresenceHonorariumHistory'])->middleware('auth');
 
+Route::GET('presenceHonorariumImport',[HonorariumController::class, 'createImportHonorarium'])->middleware('auth', 'authorized');
+Route::get('getHonorariumImportList/{presenceDate}', [HonorariumController::class, 'excelHonorariumFileGenerator']);
+Route::post('honorariumImportStore',[HonorariumController::class, 'honorariumImport'])->middleware(['auth']);
 
 
 

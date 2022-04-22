@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Honorarium;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Exports\EmployeeHonorariumExport;
+use App\Imports\EmployeeHonorariumImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Collection;
+
+
 
 use DB;
 
@@ -19,6 +25,15 @@ class HonorariumController extends Controller
     public function index()
     {
         return view('presence.presenceHonorariumList');
+    }
+
+    public function createImportHonorarium()
+    {
+        return view('presence.presenceHonorariumImport');
+    }
+    public function excelHonorariumFileGenerator($presenceDate)
+    {
+        return Excel::download(new EmployeeHonorariumExport($presenceDate), 'Honorarium tanggal '.$presenceDate.'.xlsx');
     }
     //Untuk datatable di halaman presensi satuan
     public function getPresenceHonorariumEmployees(){
@@ -57,11 +72,6 @@ class HonorariumController extends Controller
                 </button>
                 ';
             }
-            /*
-            $html.='<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="'.$row->name.' Presence History" onclick="employeePresenceHonorariumHistory('."'".$row->id."'".')">
-            <i class="fa fa-history" style="font-size:20px"></i>
-            </button>';
-            */
             return $html;
         })->addIndexColumn()->toJson();
     }
@@ -69,38 +79,12 @@ class HonorariumController extends Controller
     {
         $retValue="";
 
-        $salariesPaidExist=DB::table('salaries')
-        ->select(
-            DB::raw('count(id) as jumlah'),
-            'id as salaryId'
-        )
-        ->where('enddate', '=', $request->tanggalKerja)
-        ->where('jenis', '=', 4)
-        ->where('isPaid', '=', null)
-        ->first();
-
-        /*
-        $salaryId="";
-        if($salariesPaidExist->jumlah > 0){
-            $salaryId = $salariesPaidExist->salaryId;
-        } else{
-            $data = [
-                'endDate'           => $request->tanggalKerja,
-                'userIdGenerator'   => auth()->user()->id,
-                'jenis'             => 4,
-                'isPaid'            => null
-            ];
-            $salaryId = DB::table('salaries')->insertGetId($data);
-        }
-        */
-
         $dataHonorarium = [
             'employeeId'        => $request->empid,
             'tanggalKerja'      => $request->tanggalKerja,
             'jumlah'            => $request->jumlah,
             'keterangan'        => $request->keterangan,
-            'isGenerated'       => 0,
-            //'salaryId'          => $salaryId
+            'isGenerated'       => 0
         ];
 
         $affected = DB::table('honorariums')->insert($dataHonorarium);
@@ -140,7 +124,8 @@ class HonorariumController extends Controller
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->whereBetween('p.tanggalKerja', [$start." 00:00:00", $end." 23:59:59"])
-        ->where('mapping.isActive', '1');
+        ->where('mapping.isActive', '1')
+        ->orderBy('u.name');
         $query->get();
 
         return datatables()->of($query)
@@ -156,5 +141,11 @@ class HonorariumController extends Controller
             return $html;
         })
         ->addIndexColumn()->toJson();
-    }    
+    }  
+    function honorariumImport(Request $request){
+        $import = new EmployeeHonorariumImport();
+        Excel::import($import, $request->presenceFile);
+        $message = $import->getImportResult();
+        return redirect('presenceHonorariumHistory')->with('status', $message);
+    }  
 }

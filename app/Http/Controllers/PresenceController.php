@@ -35,8 +35,6 @@ class PresenceController extends Controller
         return view('presence.presenceHarianImport');
     }
 
-
-
     public function presenceHarianHistory()
     {
         return view('presence.presenceHarianHistory');
@@ -307,4 +305,7 @@ class PresenceController extends Controller
         $message = $import->getImportResult();
         return redirect('presenceHarianHistory')->with('status', $message);
     }
+
+
+    
 }

@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use DB;
 
 
-class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormatting, ShouldAutoSize
+class EmployeeHonorariumExport implements FromQuery, WithHeadings, WithStyles, WithColumnFormatting, ShouldAutoSize
 {
     use Exportable;
     protected $presenceDate;
@@ -40,10 +40,9 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
             'sp.name as jabatan',
             'wp.name as bagian',
             DB::raw("STR_TO_DATE('".$x."','%Y-%m-%d') as tanggalMasuk"),
-            DB::raw("'08:00' as jamMasuk"),
-            DB::raw("STR_TO_DATE('".$x."','%Y-%m-%d') as tanggalKeluar"),
-            DB::raw("'16:00' as jamKeluar"),
-            DB::raw("'1' as statusMasuk")
+            DB::raw("'0' as statusMasuk"),
+            DB::raw("'0' as jumlah"),
+            DB::raw("'Keterangan honorarium' as informasi")
         )
         ->leftJoin('presences as p', function($join) use ($x){
             $join->on('e.id', '=', 'p.employeeId')
@@ -56,10 +55,7 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->where('e.isActive', '1')
         ->where('mapping.isActive', '1')
-        ->where('e.employmentStatus', '!=', '3')
         ->wherenull('p.start')
-        ->orderBy('wp.name')
-        ->orderBy('sp.name')
         ->orderBy('u.name');
 
         $this->rowCount = $query->count() + 1;
@@ -69,7 +65,7 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
     public function styles(Worksheet $sheet)
     {
         $sheet->getProtection()->setSheet(true);
-        $sheet->getStyle('I2:L'.$this->rowCount)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle('I2:K'.$this->rowCount)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
         $styleArrayEditable = [
             'font' => [
                 'bold' => true,
@@ -99,7 +95,7 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
             ],
         ];
 
-        $sheet->getStyle('I2:L'.$this->rowCount)->applyFromArray($styleArrayEditable);
+        $sheet->getStyle('I2:K'.$this->rowCount)->applyFromArray($styleArrayEditable);
         $sheet->getStyle('A1:H'.$this->rowCount)->applyFromArray($styleArrayNonEditable);
 
         return [
@@ -124,11 +120,10 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
             'Posisi',
             'Jabatan',
             'Bagian',
-            'Tanggal Masuk',
-            'Jam Masuk',
-            'Tanggal Keluar',
-            'Jam Keluar',
-            'Presensi'
+            'Tanggal Honorarium',
+            'Status',
+            'Jumlah',
+            'Keterangan'
         ];
     }
 
@@ -139,8 +134,8 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
             'D' => NumberFormat::FORMAT_TEXT,
             'H' => 'yyyy-mm-dd',
             'I' => NumberFormat::FORMAT_TEXT,
-            'J' => 'yyyy-mm-dd',
-            'K' => NumberFormat::FORMAT_TEXT,
+            'J' => NumberFormat::FORMAT_NUMBER,
+            'J' => NumberFormat::FORMAT_TEXT,
         ];
     }
 }

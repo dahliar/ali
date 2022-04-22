@@ -18,10 +18,10 @@
         }
     });
 
-    function getPresenceList(){
+    function getHonorariumList(){
         var presenceDate = document.getElementById("presenceDate").value;
         Swal.fire({
-          title: 'Presensi tanggal '+presenceDate,
+          title: 'Honorarium tanggal '+presenceDate,
           text: 'Generate file import data?',
           icon: 'warning',
           showCancelButton: true,
@@ -31,7 +31,7 @@
           cancelButtonText: 'Tidak, batalkan saja'
       }).then((result) => {
           if (result.isConfirmed) {
-            window.open('{{ url("getPresenceHarianImportList")}}'+"/"+presenceDate, '_blank');
+            window.open('{{ url("getHonorariumImportList")}}'+"/"+presenceDate, '_blank');
         }
     })
 
@@ -68,18 +68,18 @@
                     <li class="breadcrumb-item active">
                         <a class="white-text" href="{{ ('presenceHarianList')}}">Presensi</a>
                     </li>
-                    <li class="breadcrumb-item active">Import Presensi Pegawai Harian/Bulanan</li>
+                    <li class="breadcrumb-item active">Import Honorarium Pegawai</li>
                 </ol>
             </nav>
         </div>
         <div class="modal-body">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form id="presenceFileStore" action="{{url('presenceFileStore')}}" method="POST" name="presenceFileStore" autocomplete="off">
+                    <form id="presenceFileStore" action="" method="POST" name="presenceFileStore" autocomplete="off">
                         @csrf
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Tanggal Presensi</span>
+                                <span class="label">Tanggal Honorarium</span>
                             </div>
                             <div class="col-md-8">
                                 <input type="date" id="presenceDate" name="presenceDate" class="form-control text-end" value="{{ old('presenceDate', date('Y-m-d'))}}">
@@ -89,7 +89,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-4">
-                                <button type="button" class="btn btn-primary" onclick="getPresenceList()">Download daftar presensi</button>
+                                <button type="button" class="btn btn-primary" onclick="getHonorariumList()">Download daftar honorarium</button>
                             </div>
                         </div>
                     </form>
@@ -99,7 +99,7 @@
         <div class="modal-body">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form id="presenceFileStore" action="{{url('presenceHarianImportStore')}}" method="POST" name="presenceFileStore" autocomplete="off" enctype="multipart/form-data">
+                    <form id="presenceFileStore" action="{{url('honorariumImportStore')}}" method="POST" name="presenceFileStore" autocomplete="off" enctype="multipart/form-data">
                         @csrf
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
@@ -113,19 +113,9 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Lembur</span>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="form-check form-switch">
-                                    <input id="isLembur" type="checkbox" class="form-check-input" name="isLembur" checked>
-                                </div>
-                            </div>
-                        </div> 
-                        <div class="row form-group">
-                            <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary">Upload dan Simpan Presensi</button>
+                                <button type="submit" class="btn btn-primary">Upload dan simpan honorarium</button>
                             </div>
                         </div>
                     </form>
@@ -138,20 +128,20 @@
                     <ol>
                         <li>Hanya untuk digunakan untuk presensi pegawai <b>Non Borongan</b></li>
                         <li>Pilih tanggal Presensi</li>
-                        <li>Klik tombol "Download daftar presensi"</li>
-                        <li>Edit file yang telah didownload, hanya diperbolehkan untuk mengedit 4 kolom saja</li>
+                        <li>Klik tombol "Download daftar honorarium"</li>
+                        <li>Edit file yang telah didownload, hanya diperbolehkan untuk mengedit 3 kolom saja</li>
                         <ol>
-                            <li>Jam Masuk. Gunakan format Jam dan Menit, dengan dipisahkan simbol ":". Contoh 08:00</li>
-                            <li>Jam Keluar. Gunakan format Jam dan Menit, dengan dipisahkan simbol ":". Contoh 16:45</li>
                             <li>Status Masuk</li>
                             <ol>
-                                <li>Nilai 1 : Masuk</li>
-                                <li>Nilai 0 : Tidak Masuk</li>
+                                <li>Nilai 1 : Dapat Honor</li>
+                                <li>Nilai 0 : Tidak Dapat Honor</li>
                             </ol>
+                            <li>Jumlah Honor dalam bentuk angka</li>
+                            <li>Keterangan honorarium</li>
                             <li>Simpan File tersebut</li>
                         </ol>
                         <li>Klik "Choose File", dan pilih file yang telah diedit</li>
-                        <li>Klik "Upload dan simpan presensi"</li>
+                        <li>Klik "Upload dan simpan honorarium"</li>
                     </ol>
                 </div>
             </div>

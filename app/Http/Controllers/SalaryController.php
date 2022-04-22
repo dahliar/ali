@@ -210,7 +210,6 @@ class SalaryController extends Controller
                 ['salaryId', 'jumlah']
             );
         }
-
         $moveGeneratedData = DB::table('monthly_salaries as ms')
         ->select(
             'ms.employeeId as empid',

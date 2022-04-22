@@ -20,10 +20,10 @@ class Presence extends Model
         $text = "";
         foreach ($collection as $row) 
         {
-            if($row[10]==1){
+            if($row[11]==1){
                 try{ 
                     $start = \Carbon\Carbon::parse($row[7].' '.$row[8].'.00');
-                    $end = \Carbon\Carbon::parse($row[7].' '.$row[9].'.00');
+                    $end = \Carbon\Carbon::parse($row[9].' '.$row[10].'.00');
                     if($end->gte($start)){
                         $this->simpanPresenceTunggal($row[0], $start, $end, $isLembur);
                     }
@@ -33,6 +33,7 @@ class Presence extends Model
                 }
             }
         }
+
         return $text;
     }
     function storePresenceHarianEmployee($empid, $start, $end, $isLembur){

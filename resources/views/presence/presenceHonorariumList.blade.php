@@ -114,6 +114,8 @@
                     </nav>
                 </div>
                 <div class="col-md-3 text-end">
+                    <a href="{{url('presenceHonorariumImport')}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Import Honorarium Pegawai"><i class="fa fa-upload" style="font-size:20px"></i>
+                    </a>
                     <a href="{{url('presenceHonorariumHistory')}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Arsip Honorarium"><i class="fa fa-history" style="font-size:20px"></i>
                     </a>
                 </div>
