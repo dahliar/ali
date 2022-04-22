@@ -126,7 +126,6 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <ol>
-                        <li>Hanya untuk digunakan untuk presensi pegawai <b>Non Borongan</b></li>
                         <li>Pilih tanggal Presensi</li>
                         <li>Klik tombol "Download daftar honorarium"</li>
                         <li>Edit file yang telah didownload, hanya diperbolehkan untuk mengedit 3 kolom saja</li>
