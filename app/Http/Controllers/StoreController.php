@@ -597,7 +597,7 @@ class StoreController extends Controller
             return $name;
         })
         ->editColumn('itemName', function ($row) {
-            $name = $row->spName." ".$row->gName. " ".$row->sName. " ".$row->fName." ".$row->wb." Kg";
+            $name = $row->spName." ".$row->gName. " ".$row->sName. " ".$row->fName." ".$row->wb." Kg"." - ".$row->itemName;
             return $name;
         })
         ->addColumn('action', function ($row) {
