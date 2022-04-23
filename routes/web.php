@@ -166,15 +166,10 @@ Route::post('approveStockChange',[StoreController::class, 'stockChange'])->middl
 Route::post('deleteStockChange',[StoreController::class, 'stockChangeDelete'])->middleware(['auth']);
 Route::post('deleteStockSubtractChange',[StoreController::class, 'deleteStockSubtractChange'])->middleware(['auth']);
 
-
-
 Route::get('itemStockSubtractEdit/{stockSubtract}',[StoreController::class, 'subtractEdit'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
 Route::post('stockSubtractUpdate',[StoreController::class, 'subtractUpdate'])->middleware(['auth'])->name('storeUpdate');
 Route::post('getStorekSubtractRecord',[StoreController::class, 'getStorekSubtractRecord'])->middleware(['auth']);
 Route::post('approveStockSubtractChange',[StoreController::class, 'stockSubtractChange'])->middleware(['auth']);
-
-
-
 
 //SPECIES
 Route::get('speciesList',[SpeciesController::class, 'index'])->middleware(['auth', 'authorized'])->name('speciesList');

@@ -45,19 +45,17 @@
             columnDefs: [
             {   "width": "3%",  "targets":  [0], "className": "text-center" },
             {   "width": "23%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%", "targets":   [2], "className": "text-end" },
+            {   "width": "10%", "targets":  [2], "className": "text-end" },
             {   "width": "10%", "targets":  [3], "className": "text-end" },
             {   "width": "10%", "targets":  [4], "className": "text-end" },
             {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "12%", "targets":  [7], "className": "text-center" },
-            {   "width": "12%", "targets":   [8], "className": "text-center" }
+            {   "width": "12%", "targets":  [6], "className": "text-center" },
+            {   "width": "12%", "targets":  [7], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'itemName', name: 'itemName'},
-            {data: 'wb', name: 'wb'},
             {data: 'amountPacked', name: 'amountPacked'},
             {data: 'amountUnpacked', name: 'amountUnpacked'},
             {data: 'stockOnHand', name: 'stockOnHand'},
@@ -138,7 +136,6 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <th>Packaging</th>
                             <th>Packed</th>
                             <th>Unpacked</th>
                             <th>Stock gudang</th>

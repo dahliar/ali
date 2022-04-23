@@ -115,9 +115,11 @@ class DetailPurchaseController extends Controller
             'i.name as itemName', 
             'f.name as freezingName', 
             'g.name as gradeName', 
-            'p.name as packingName', 
+            'p.name as packingName',
+            'p.shortname as pShortname',
             's.name as sizeName', 
             'pur.status as status',
+            'i.weightbase as wb',
             DB::raw('(CASE   WHEN pur.valutaType="1" THEN "Rp. " 
                 WHEN pur.valutaType="2" THEN "USD. " 
                 WHEN pur.valutaType="3" THEN "Rmb. " 
@@ -144,7 +146,8 @@ class DetailPurchaseController extends Controller
 
         return datatables()->of($query)
         ->addColumn('itemName', function ($row) {
-            return ($row->speciesName.' '.$row->gradeName.' '.$row->sizeName.' '.$row->freezingName.' '.$row->packingName.' ['.$row->itemName.']');
+            $name = $row->speciesName." ".$row->gradeName. " ".$row->sizeName. " ".$row->freezingName." ".$row->wb." Kg/".$row->pShortname." - ".$row->itemName;
+            return $name;
         })
         ->editColumn('amount', function ($row) {
             $html = number_format($row->amount, 2, ',', '.').' Kg';

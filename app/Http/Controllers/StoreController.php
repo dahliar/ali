@@ -322,7 +322,7 @@ class StoreController extends Controller
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
-            $name = $row->species." ".$row->grade. " ".$row->size. " ".$row->packing. " ".$row->freezing." ".$row->wb." Kg";
+            $name = $row->species." ".$row->grade. " ".$row->size. " ".$row->freezing." ".$row->wb." Kg/".$row->pShortname." - ".$row->item;
             return $name;
         })
         ->editColumn('amountPacked', function ($row) {
@@ -406,7 +406,7 @@ class StoreController extends Controller
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
-            $name = $row->species." ".$row->grade. " ".$row->size. " ".$row->packing. " ".$row->freezing." ".$row->wb." Kg";
+            $name = $row->species." ".$row->grade. " ".$row->size. " ".$row->freezing." ".$row->wb." Kg/".$row->pShortname." - ".$row->item;
             return $name;
         })
         ->editColumn('amountSubtract', function ($row) {
@@ -508,7 +508,7 @@ class StoreController extends Controller
             return $name;
         })
         ->editColumn('itemName', function ($row) {
-            $name = $row->spName." ".$row->gName. " ".$row->sName. " ".$row->fName." ".$row->wb." Kg";
+            $name = $row->spName." ".$row->gName. " ".$row->sName. " ".$row->fName." ".$row->wb." Kg/".$row->pShortname." - ".$row->itemName;
             return $name;
         })
         ->addColumn('action', function ($row) {
@@ -597,7 +597,7 @@ class StoreController extends Controller
             return $name;
         })
         ->editColumn('itemName', function ($row) {
-            $name = $row->spName." ".$row->gName. " ".$row->sName. " ".$row->fName." ".$row->wb." Kg"." - ".$row->itemName;
+            $name = $row->spName." ".$row->gName. " ".$row->sName. " ".$row->fName." ".$row->wb." Kg/".$row->pShortname." - ".$row->itemName;
             return $name;
         })
         ->addColumn('action', function ($row) {

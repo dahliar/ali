@@ -57,7 +57,8 @@ class DetailTransaction extends Model
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
-            return ($row->speciesName.' '.$row->gradeName.' '.$row->sizeName.' '.$row->freezingName.' '.$row->packingName.' ['.$row->itemName.']');
+            $name = $row->speciesName." ".$row->gradeName. " ".$row->sizeName. " ".$row->freezingName." ".$row->wb." Kg/".$row->pshortname." - ".$row->itemName;
+            return $name;
         })
         ->addColumn('weight', function ($row) {
             $html = number_format(($row->amount * $row->wb), 2, ',', '.').' Kg';

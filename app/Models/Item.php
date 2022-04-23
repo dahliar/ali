@@ -48,15 +48,12 @@ class Item extends Model
         $query->get();  
 
         return datatables()->of($query)
-        ->addColumn('wb', function ($row) {
-            return number_format($row->weightbase, 1). " Kg/". $row->packingShortname;
-        })
         ->addColumn('stockOnHand', function ($row) {
             $jumlah = number_format(((($row->jumlahPacked) * $row->weightbase) + $row->jumlahUnpacked), 2).' Kg';
             return $jumlah;
         })
         ->addColumn('itemName', function ($row) {
-            $name = $row->speciesName." ".$row->gname. " ".$row->sname. " ".$row->fname." ".$row->iname;
+            $name = $row->speciesName." ".$row->gname. " ".$row->sname. " ".$row->fname." ".$row->weightbase." Kg/".$row->packingShortname." - ".$row->iname;
             return $name;
         })
         ->addColumn('amountPacked', function ($row) {
