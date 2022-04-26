@@ -18,7 +18,7 @@ class DashboardController extends Controller
     public function index()
     {   
         //Data pegawai aktif
-        $empStatuses = DB::table('employees as e')
+        $employees = DB::table('employees as e')
         ->select(
             DB::raw('
                 (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
@@ -29,10 +29,6 @@ class DashboardController extends Controller
         ->where('mapping.isActive', '1')
         ->groupBy('employmentStatus')
         ->get();
-        foreach ($empStatuses as $key => $value) {
-            $arrEmployeeStatus[] = [$value->empStatus , $value->status];
-        }
-        //dd($subjectData);
 
         $transactions = DB::table('transactions as t')
         ->select(
@@ -44,9 +40,6 @@ class DashboardController extends Controller
         ->whereIn('t.status', [1,2,4])
         ->groupBy('t.jenis')
         ->get();
-        foreach ($transactions as $key => $value) {
-            $arrTransaction[] = [$value->jenis , $value->jumlahJenis];
-        }
 
         $stocks = DB::table('items as i')
         ->select(
@@ -59,7 +52,7 @@ class DashboardController extends Controller
         ->groupBy('sp.id')
         ->get();
 
-        return view('home', compact('arrEmployeeStatus','arrTransaction','stocks'));
+        return view('home', compact('employees','transactions','stocks'));
     }
     public function indexHome2()
     {

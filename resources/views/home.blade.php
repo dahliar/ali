@@ -25,8 +25,8 @@
 	}
 </style>
 <script type="text/javascript">
-	var employeeStatus = @json($arrEmployeeStatus);
-	var transaction = @json($arrTransaction);
+	var employees= @json($employees);
+	var transactions = @json($transactions);
 	var stocks = @json($stocks);
 
 	window.onload = function() {
@@ -47,10 +47,17 @@
 		
 	};
 	function drawEmployees() {
-		var data = new google.visualization.DataTable();
-		data.addColumn('string', 'Pegawai');
-		data.addColumn('number', 'Jumlah');
-		data.addRows(employeeStatus);
+		var data = [];
+		var header=["Pegawai", "Jumlah"];
+		data.push(header);
+		for (var i = 0; i < employees.length; i++) {
+			var temp=[];
+			temp.push(employees[i].empStatus);
+			temp.push(employees[i].status);
+			data.push(temp);
+		}
+		var chartdata = new google.visualization.arrayToDataTable(data);
+		var view = new google.visualization.DataView(chartdata);
 
 		var options = {
 			pieHole: 0.4,
@@ -58,21 +65,27 @@
 		};
 
 		var chart = new google.visualization.PieChart(document.getElementById('chartPegawaiAktif'));
-		chart.draw(data, options);
+		chart.draw(view, options);
 	}
 	function drawTransactions() {
-		var data = new google.visualization.DataTable();
-		data.addColumn('string', 'Transaksi');
-		data.addColumn('number', 'Jumlah');
-		data.addRows(transaction);
-
+		var data = [];
+		var header=["Transaksi", "Jumlah"];
+		data.push(header);
+		for (var i = 0; i < transactions.length; i++) {
+			var temp=[];
+			temp.push(transactions[i].jenis);
+			temp.push(transactions[i].jumlahJenis);
+			data.push(temp);
+		}
+		var chartdata = new google.visualization.arrayToDataTable(data);
+		var view = new google.visualization.DataView(chartdata);
 		var options = {
 			pieHole: 0.4,
 			title: 'Jumlah transaksi tahun 2002',
 		};
 
 		var chart = new google.visualization.PieChart(document.getElementById('chartTransaksi'));
-		chart.draw(data, options);
+		chart.draw(view, options);
 	}
 	function drawStocks() {
 		var data = [];
