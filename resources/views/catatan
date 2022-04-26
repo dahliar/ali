@@ -7,16 +7,9 @@ truncate table detail_payrolls;
 truncate table salaries;
 truncate table payrolls;
 
-select 
-sp.id as id, 
-sp.name as name, 
-(select (sum(dt.amount * i2.weightbase)) 
- 	from transactions t join detail_transactions as dt on dt.transactionId=t.id 
- 	join items as i2 on i2.id=dt.itemId 
- 	join sizes as s2 on s2.id=i2.sizeId 
- 	join species as sp2 on sp2.id=s2.speciesId 
- 	where t.status=4 and sp2.id=sp.id group by sp2.id) 
-from items as i join sizes as s on i.sizeId =s.id join species as sp on s.speciesId = sp.id where i.isActive = 1 and s.isActive = 1
+$name = $row->species." ".$row->grade. " ".$row->size. " ".$row->freezing." ".$row->wb." Kg/".$row->pShortname." - ".$row->item;
+
+$name = $row->species." ".$row->grade. " ".$row->size. " ".$row->freezing." ".$row->wb." Kg/".$row->pShortname." - ".$row->item;
 
 
 

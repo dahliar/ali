@@ -16,96 +16,50 @@ class DashboardController extends Controller
         return Carbon::now()->toDateString();
     }
     public function index()
-    {
-        //BELUM GENERATE
-        /*
-        $lembur = DB::table('dailysalaries as ds')
+    {   
+        //Data pegawai aktif
+        $empStatuses = DB::table('employees as e')
         ->select(
-            DB::raw('count(distinct(ds.employeeId)) as jumlah')
+            DB::raw('
+                (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
+                '),
+            DB::raw('count(e.id) as status')
         )
-        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
-        ->where('e.employmentStatus', '=', '1')
-        ->where('ds.isGenerated', '=', '0')
-        ->where('ds.uangLembur', '>', 0)
-        ->first();
-        
-        $harian = DB::table('dailysalaries as ds')
-        ->select(
-            DB::raw('count(distinct(ds.employeeId)) as jumlah')
-        )
-        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
-        ->where('e.employmentStatus', '=', '2')
-        ->where('ds.isGenerated', '=', '0')
-        ->where('ds.isPaid', '=', null)
-        ->first();        
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->where('mapping.isActive', '1')
+        ->groupBy('employmentStatus')
+        ->get();
+        foreach ($empStatuses as $key => $value) {
+            $arrEmployeeStatus[] = [$value->empStatus , $value->status];
+        }
+        //dd($subjectData);
 
-        $borongan = DB::table('detail_borongans as db')
-        ->join('borongans as b', 'b.id', '=', 'db.boronganId')
+        $transactions = DB::table('transactions as t')
         ->select(
-            DB::raw('count(distinct(db.employeeId)) as jumlah')
+            DB::raw('
+                (CASE WHEN t.jenis="1" THEN "Ekspor" WHEN t.jenis="2" THEN "Lokal" END) AS jenis
+                '),
+            DB::raw('count(t.id) as jumlahJenis')
         )
-        ->join('employees as e', 'e.id', '=', 'db.employeeId')
-        ->where('b.status', '=', '1')
-        ->where('e.employmentStatus', '=', '3')
-        ->where('db.isPaid', '=', null)
-        ->first();
+        ->whereIn('t.status', [1,2,4])
+        ->groupBy('t.jenis')
+        ->get();
+        foreach ($transactions as $key => $value) {
+            $arrTransaction[] = [$value->jenis , $value->jumlahJenis];
+        }
 
-        $honorarium = DB::table('honorariums as h')
+        $stocks = DB::table('items as i')
         ->select(
-            DB::raw('count(distinct(h.employeeId)) as jumlah')
+            'sp.nameBahasa as name',
+            DB::raw('sum(i.amount) as jumlahSpecies'),
+            DB::raw('"blue" as kedua')
         )
-        ->join('employees as e', 'e.id', '=', 'h.employeeId')
-        ->where('h.isGenerated', '=', '0')
-        ->where('h.isPaid', '=', null)
-        ->first();
-        */
-        $ungenerate=[0, 0, 0, 0];
-        /*
-        //Sudah GENERATE tapi BELUM BAYAR
-        $lembur = DB::table('dailysalaries as ds')
-        ->select(
-            DB::raw('count(distinct(ds.employeeId)) as jumlah')
-        )
-        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
-        ->where('e.employmentStatus', '=', '1')
-        ->where('ds.uangLembur', '>', '0')
-        ->where('ds.isGenerated', '=', '1')
-        ->where('ds.isPaid', '=', null)
-        ->first();
+        ->join('sizes as s', 's.id', '=', 'i.sizeId')
+        ->join('species as sp', 'sp.id', '=', 's.speciesId')
+        ->groupBy('sp.id')
+        ->get();
 
-        $harian = DB::table('dailysalaries as ds')
-        ->select(
-            DB::raw('count(distinct(ds.employeeId)) as jumlah')
-        )
-        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
-        ->join('salaries as s', 's.id', '=', 'ds.salaryId')
-        ->where('s.jenis', '=', 2)
-        ->where('e.employmentStatus', '=', 2)
-        ->where('ds.isGenerated', '=', 1)
-        ->where('ds.isPaid', '=', null)
-        ->first();        
-
-        $borongan = DB::table('detail_borongans as db')
-        ->join('borongans as b', 'b.id', '=', 'db.boronganId')
-        ->select(
-            DB::raw('count(distinct(db.employeeId)) as jumlah')
-        )
-        ->join('employees as e', 'e.id', '=', 'db.employeeId')
-        ->where('e.employmentStatus', '=', '3')
-        ->where('db.isPaid', '=', null)
-        ->first();
-
-        $honorarium = DB::table('honorariums as h')
-        ->select(
-            DB::raw('count(distinct(h.employeeId)) as jumlah')
-        )
-        ->join('employees as e', 'e.id', '=', 'h.employeeId')
-        ->where('h.isGenerated', '=', '1')
-        ->where('h.isPaid', '=', null)
-        ->first();*/
-
-        $unpaid=[0,0,0,0];
-        return view('home', compact('unpaid', 'ungenerate'));
+        return view('home', compact('arrEmployeeStatus','arrTransaction','stocks'));
     }
     public function indexHome2()
     {
