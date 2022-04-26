@@ -31,6 +31,8 @@
 	var employeesGender = @json($employeesGender);
 	var transactionRupiah = @json($transactionRupiah);
 	var transactionUSD = @json($transactionUSD);
+	var purchases = @json($purchases);
+
 	
 
 
@@ -39,6 +41,7 @@
 		google.charts.setOnLoadCallback(drawEmployees);
 		google.charts.setOnLoadCallback(drawEmployeesGender);
 		google.charts.setOnLoadCallback(drawTransactions);
+		google.charts.setOnLoadCallback(drawPurchases);
 		google.charts.setOnLoadCallback(drawStocks);
 		google.charts.setOnLoadCallback(drawTransactionsRupiah);
 		google.charts.setOnLoadCallback(drawTransactionsUSD);
@@ -126,6 +129,26 @@
 		};
 
 		var chart = new google.visualization.PieChart(document.getElementById('chartTransaksiRupiah'));
+		chart.draw(view, options);
+	}
+	function drawPurchases() {
+		var data = [];
+		var header=["Pembelian", "Jumlah"];
+		data.push(header);
+		for (var i = 0; i < purchases.length; i++) {
+			var temp=[];
+			temp.push(purchases[i].name);
+			temp.push(parseInt(purchases[i].amount));
+			data.push(temp);
+		}
+		var chartdata = new google.visualization.arrayToDataTable(data);
+		var view = new google.visualization.DataView(chartdata);
+		var options = {
+			pieHole: 0.4,
+			title: 'Transaksi beli dalam Rupiah',
+		};
+
+		var chart = new google.visualization.PieChart(document.getElementById('chartPurchases'));
 		chart.draw(view, options);
 	}
 	function drawTransactionsUSD() {
@@ -217,18 +240,10 @@
 						<tbody style="font-size: 14px;">
 							@foreach($goods as $good)
 							<tr>
-								<td>
-									{{$no}}
-								</td>
-								<td>
-									{{$good->name}}
-								</td>
-								<td>
-									{{$good->amount}}
-								</td>
-								<td>
-									{{$good->minimal}}
-								</td>
+								<td>{{$no}}</td>
+								<td>{{$good->name}}</td>
+								<td>{{$good->amount}}</td>
+								<td>{{$good->minimal}}</td>
 							</tr>
 							@php
 							$no++;
@@ -241,7 +256,7 @@
 			</div>
 		</div>
 		<div class="card card-body">
-			<span class="white-text"><h2>Transaksi Penjualan</h2></span>
+			<span class="white-text"><h2>Transaksi Penjualan - 1 tahun terakhir</h2></span>
 			<div class="row">
 				<div class="col-md-4">
 					<div id="chartTransaksi" class="chart"></div>
@@ -251,6 +266,46 @@
 				</div>
 				<div class="col-md-4">
 					<div id="chartTransaksiUSD" class="chart"></div>
+				</div>
+			</div>
+		</div>
+		<div class="card card-body">
+			<span class="white-text"><h2>Transaksi Pembelian - 1 tahun terakhir</h2></span>
+			<div class="row">
+				<div class="col-md-4">
+					<div id="chartPurchases" class="chart"></div>
+				</div>
+				<div class="col-md-6">
+					<h4><b>Top 10 Supplier</b></h4>
+					<table class="table table-striped table-hover table-bordered data-table" id="datatable">
+						<thead>
+							<tr>
+								<th style="width: 10%;text-align: center;">No</th>
+								<th style="width: 30%;text-align: center;">Nama Supplier</th>
+								<th style="width: 30%;text-align: center;">Jumlah</th>
+							</tr>
+						</thead>
+						@php
+						$no=1;
+						@endphp
+						<tbody style="font-size: 14px;">
+							@foreach($purchases as $good)
+
+							<tr>
+								<td style="text-align: center;">{{$no}}</td>
+								<td>{{$good->name}}</td>
+								<td style="width: 30%;text-align: right;">Rp. {{number_format($good->amount, 2, ',', '.')}}</td>
+							</tr>
+							@php
+							$no++;
+							@endphp
+							@if ($no>10)
+							@break
+							@endif
+							@endforeach
+						</tbody>
+					</table> 
+
 				</div>
 			</div>
 		</div>

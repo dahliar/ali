@@ -51,6 +51,7 @@ class DashboardController extends Controller
         )
         ->whereIn('t.status', [2,4])
         ->groupBy('t.jenis')
+        ->whereDate('transactionDate', '>', date('Y-m-d', strtotime("-1 year")))
         ->get();
 
         $stocks = DB::table('items as i')
@@ -72,6 +73,7 @@ class DashboardController extends Controller
         )
         ->join('companies as c', 'c.id', '=', 't.companyId')
         ->where('t.valutaType', '=', '1')
+        ->whereDate('transactionDate', '>', date('Y-m-d', strtotime("-1 year")))
         ->groupBy('c.id')
         ->orderBy('c.name')
         ->get();
@@ -84,7 +86,8 @@ class DashboardController extends Controller
         ->join('companies as c', 'c.id', '=', 't.companyId')
         ->where('t.valutaType', '=', '2')
         ->groupBy('c.id')
-        ->orderBy('c.name')
+        ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+        ->whereDate('transactionDate', '>', date('Y-m-d', strtotime("-1 year")))
         ->get();
 
         $goods = DB::table('goods as g')
@@ -98,7 +101,18 @@ class DashboardController extends Controller
         ->get();
         //dd($goods);
 
-        return view('home', compact('transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods'));
+        $purchases = DB::table('purchases as p')
+        ->select(
+            'c.name as name',
+            DB::raw('sum(p.paymentAmount) as amount')
+        )
+        ->join('companies as c', 'c.id', '=', 'p.companyId')
+        ->groupBy('c.id')
+        ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
+        ->whereDate('purchaseDate', '>', date('Y-m-d', strtotime("-1 year")))
+        ->get();
+
+        return view('home', compact('purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods'));
     }
     public function indexHome2()
     {
