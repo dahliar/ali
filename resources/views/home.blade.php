@@ -31,7 +31,7 @@
 
 	window.onload = function() {
 		google.charts.load('current', {packages: ['corechart']});
-		google.charts.setOnLoadCallback(drawEmployees);
+		//google.charts.setOnLoadCallback(drawEmployees);
 		//google.charts.setOnLoadCallback(drawTransactions);
 		//google.charts.setOnLoadCallback(drawStocks);
 		
