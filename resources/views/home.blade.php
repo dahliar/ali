@@ -28,12 +28,15 @@
 	var employees= @json($employees);
 	var transactions = @json($transactions);
 	var stocks = @json($stocks);
+	var employeesGender = @json($employeesGender);
 
 	window.onload = function() {
 		google.charts.load('current', {packages: ['corechart']});
 		google.charts.setOnLoadCallback(drawEmployees);
+		google.charts.setOnLoadCallback(drawEmployeesGender);
 		google.charts.setOnLoadCallback(drawTransactions);
 		google.charts.setOnLoadCallback(drawStocks);
+
 		
 	};
 	function drawEmployees() {
@@ -51,10 +54,31 @@
 
 		var options = {
 			pieHole: 0.4,
-			title: 'Daftar pegawai status aktif',
+			title: 'Status Kepegawaian',
 		};
 
 		var chart = new google.visualization.PieChart(document.getElementById('chartPegawaiAktif'));
+		chart.draw(view, options);
+	}
+	function drawEmployeesGender() {
+		var data = [];
+		var header=["Pegawai", "Jumlah"];
+		data.push(header);
+		for (var i = 0; i < employeesGender.length; i++) {
+			var temp=[];
+			temp.push(employeesGender[i].gender);
+			temp.push(parseInt(employeesGender[i].jumlahGender));
+			data.push(temp);
+		}
+		var chartdata = new google.visualization.arrayToDataTable(data);
+		var view = new google.visualization.DataView(chartdata);
+
+		var options = {
+			pieHole: 0.4,
+			title: 'Jenis kelamin pegawai',
+		};
+
+		var chart = new google.visualization.PieChart(document.getElementById('chartGender'));
 		chart.draw(view, options);
 	}
 	function drawTransactions() {
@@ -71,7 +95,7 @@
 		var view = new google.visualization.DataView(chartdata);
 		var options = {
 			pieHole: 0.4,
-			title: 'Jumlah transaksi tahun 2002',
+			title: 'Transaksi jual tahun 2002',
 		};
 
 		var chart = new google.visualization.PieChart(document.getElementById('chartTransaksi'));
@@ -97,7 +121,7 @@
 			role: "annotation" }]);
 
 		var options = {
-			title: 'Data informasi stock barang (Kg)',
+			title: 'Stock barang (Kg)',
 			height: 500,
 			bar: {groupWidth: "95%"},
 			legend: { position: "none" },
@@ -127,10 +151,13 @@
 					<div id="chartStock"></div>
 				</div>
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div id="chartPegawaiAktif" class="chart"></div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
+						<div id="chartGender" class="chart"></div>
+					</div>
+					<div class="col-md-4">
 						<div id="chartTransaksi" class="chart"></div>
 					</div>
 				</div>

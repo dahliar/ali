@@ -30,6 +30,18 @@ class DashboardController extends Controller
         ->groupBy('employmentStatus')
         ->get();
 
+        $employeesGender = DB::table('employees as e')
+        ->select(
+            DB::raw('
+                (CASE WHEN e.gender="1" THEN "Laki-laki" WHEN e.gender="2" THEN "Perempuan" END) AS gender
+                '),
+            DB::raw('count(e.id) as jumlahGender')
+        )
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->where('mapping.isActive', '1')
+        ->groupBy('e.gender')
+        ->get();
+
         $transactions = DB::table('transactions as t')
         ->select(
             DB::raw('
@@ -37,22 +49,23 @@ class DashboardController extends Controller
                 '),
             DB::raw('count(t.id) as jumlahJenis')
         )
-        ->whereIn('t.status', [1,2,4])
+        ->whereIn('t.status', [2,4])
         ->groupBy('t.jenis')
         ->get();
 
         $stocks = DB::table('items as i')
         ->select(
-            'sp.nameBahasa as name',
+            'sp.name as name',
             DB::raw('sum(i.amount) as jumlahSpecies'),
             DB::raw('"blue" as kedua')
         )
         ->join('sizes as s', 's.id', '=', 'i.sizeId')
         ->join('species as sp', 'sp.id', '=', 's.speciesId')
         ->groupBy('sp.id')
+        ->orderBy('sp.name')
         ->get();
 
-        return view('home', compact('employees','transactions','stocks'));
+        return view('home', compact('employees','transactions','stocks','employeesGender'));
     }
     public function indexHome2()
     {
