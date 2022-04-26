@@ -272,7 +272,7 @@
 		<div class="card card-body">
 			<span class="white-text"><h2>Transaksi Pembelian - 1 tahun terakhir</h2></span>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div id="chartPurchases" class="chart"></div>
 				</div>
 				<div class="col-md-6">
