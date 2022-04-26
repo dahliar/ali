@@ -43,7 +43,7 @@
 		for (var i = 0; i < employees.length; i++) {
 			var temp=[];
 			temp.push(employees[i].empStatus);
-			temp.push(employees[i].status);
+			temp.push(parseInt(employees[i].status));
 			data.push(temp);
 		}
 		var chartdata = new google.visualization.arrayToDataTable(data);
@@ -64,7 +64,7 @@
 		for (var i = 0; i < transactions.length; i++) {
 			var temp=[];
 			temp.push(transactions[i].jenis);
-			temp.push(transactions[i].jumlahJenis);
+			temp.push(parseInt(transactions[i].jumlahJenis));
 			data.push(temp);
 		}
 		var chartdata = new google.visualization.arrayToDataTable(data);
