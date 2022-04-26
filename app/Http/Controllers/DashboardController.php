@@ -65,7 +65,29 @@ class DashboardController extends Controller
         ->orderBy('sp.name')
         ->get();
 
-        return view('home', compact('employees','transactions','stocks','employeesGender'));
+        $transactionRupiah = DB::table('transactions as t')
+        ->select(
+            'c.name as name',
+            DB::raw('sum(t.payment) as amount')
+        )
+        ->join('companies as c', 'c.id', '=', 't.companyId')
+        ->where('t.valutaType', '=', '1')
+        ->groupBy('c.id')
+        ->orderBy('c.name')
+        ->get();
+
+        $transactionUSD = DB::table('transactions as t')
+        ->select(
+            'c.name as name',
+            DB::raw('sum(t.payment) as amount')
+        )
+        ->join('companies as c', 'c.id', '=', 't.companyId')
+        ->where('t.valutaType', '=', '2')
+        ->groupBy('c.id')
+        ->orderBy('c.name')
+        ->get();
+
+        return view('home', compact('transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender'));
     }
     public function indexHome2()
     {

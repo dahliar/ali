@@ -29,6 +29,10 @@
 	var transactions = @json($transactions);
 	var stocks = @json($stocks);
 	var employeesGender = @json($employeesGender);
+	var transactionRupiah = @json($transactionRupiah);
+	var transactionUSD = @json($transactionUSD);
+	
+
 
 	window.onload = function() {
 		google.charts.load('current', {packages: ['corechart']});
@@ -36,6 +40,9 @@
 		google.charts.setOnLoadCallback(drawEmployeesGender);
 		google.charts.setOnLoadCallback(drawTransactions);
 		google.charts.setOnLoadCallback(drawStocks);
+		google.charts.setOnLoadCallback(drawTransactionsRupiah);
+		google.charts.setOnLoadCallback(drawTransactionsUSD);
+
 
 		
 	};
@@ -101,6 +108,46 @@
 		var chart = new google.visualization.PieChart(document.getElementById('chartTransaksi'));
 		chart.draw(view, options);
 	}
+	function drawTransactionsRupiah() {
+		var data = [];
+		var header=["Transaksi", "Jumlah"];
+		data.push(header);
+		for (var i = 0; i < transactionRupiah.length; i++) {
+			var temp=[];
+			temp.push(transactionRupiah[i].name);
+			temp.push(parseInt(transactionRupiah[i].amount));
+			data.push(temp);
+		}
+		var chartdata = new google.visualization.arrayToDataTable(data);
+		var view = new google.visualization.DataView(chartdata);
+		var options = {
+			pieHole: 0.4,
+			title: 'Transaksi Jual dalam Rupiah',
+		};
+
+		var chart = new google.visualization.PieChart(document.getElementById('chartTransaksiRupiah'));
+		chart.draw(view, options);
+	}
+	function drawTransactionsUSD() {
+		var data = [];
+		var header=["Transaksi", "Jumlah"];
+		data.push(header);
+		for (var i = 0; i < transactionUSD.length; i++) {
+			var temp=[];
+			temp.push(transactionUSD[i].name);
+			temp.push(parseInt(transactionUSD[i].amount));
+			data.push(temp);
+		}
+		var chartdata = new google.visualization.arrayToDataTable(data);
+		var view = new google.visualization.DataView(chartdata);
+		var options = {
+			pieHole: 0.4,
+			title: 'Transaksi Jual dalam USD',
+		};
+
+		var chart = new google.visualization.PieChart(document.getElementById('chartTransaksiUSD'));
+		chart.draw(view, options);
+	}
 	function drawStocks() {
 		var data = [];
 		var header=["Barang", "Jumlah", { role: "style" } ];
@@ -145,21 +192,34 @@
 			</div>
 		</div>
 
-		<div class="modal-content">
-			<div class="modal-body">
-				<div class="row">
-					<div id="chartStock"></div>
+		<div class="card card-body">
+			<div class="row">
+				<span class="white-text"><h2>Stok Barang</h2></span>
+				<div id="chartStock"></div>
+			</div>
+		</div>
+		<div class="card card-body">
+			<span class="white-text"><h2>Transaksi</h2></span>
+			<div class="row">
+				<div class="col-md-4">
+					<div id="chartTransaksi" class="chart"></div>
 				</div>
-				<div class="row">
-					<div class="col-md-4">
-						<div id="chartPegawaiAktif" class="chart"></div>
-					</div>
-					<div class="col-md-4">
-						<div id="chartGender" class="chart"></div>
-					</div>
-					<div class="col-md-4">
-						<div id="chartTransaksi" class="chart"></div>
-					</div>
+				<div class="col-md-4">
+					<div id="chartTransaksiRupiah" class="chart"></div>
+				</div>
+				<div class="col-md-4">
+					<div id="chartTransaksiUSD" class="chart"></div>
+				</div>
+			</div>
+		</div>
+		<div class="card card-body">
+			<span class="white-text"><h2>Kepegawaian</h2></span>
+			<div class="row">
+				<div class="col-md-4">
+					<div id="chartPegawaiAktif" class="chart"></div>
+				</div>
+				<div class="col-md-4">
+					<div id="chartGender" class="chart"></div>
 				</div>
 			</div>
 		</div>
