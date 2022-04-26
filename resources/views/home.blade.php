@@ -84,7 +84,7 @@
 		for (var i = 0; i < stocks.length; i++) {
 			var temp=[];
 			temp.push(stocks[i].name);
-			temp.push(stocks[i].jumlahSpecies);
+			temp.push(parseInt(stocks[i].jumlahSpecies));
 			temp.push(stocks[i].kedua);
 			data.push(temp);
 		}
