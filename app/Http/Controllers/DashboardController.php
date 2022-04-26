@@ -87,7 +87,18 @@ class DashboardController extends Controller
         ->orderBy('c.name')
         ->get();
 
-        return view('home', compact('transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender'));
+        $goods = DB::table('goods as g')
+        ->select(
+            'g.name as name',
+            'g.amount as amount',
+            'g.minimalAmount as minimal'
+        )
+        ->whereRaw('g.amount <= g.minimalAmount')
+        ->orderBy('g.name')
+        ->get();
+        //dd($goods);
+
+        return view('home', compact('transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods'));
     }
     public function indexHome2()
     {
