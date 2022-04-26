@@ -55,7 +55,7 @@ class DashboardController extends Controller
 
         $stocks = DB::table('items as i')
         ->select(
-            'sp.name as name',
+            'sp.nameBahasa as name',
             DB::raw('sum(i.amount) as jumlahSpecies'),
             DB::raw('"blue" as kedua')
         )
