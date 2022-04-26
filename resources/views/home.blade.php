@@ -86,8 +86,7 @@
 			{ calc: "stringify",
 			sourceColumn: 1,
 			type: "string",
-			role: "annotation" },
-			2]);
+			role: "annotation" }]);
 
 		var options = {
 			title: 'Data informasi stock barang (Kg)',
