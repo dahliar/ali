@@ -40,7 +40,7 @@
 			callback: 'drawTransactions'
 		});
 		*/
-		google.charts.load('current', {packages: ['corechart', 'bar']});
+		google.charts.load('current', {packages: ['corechart']});
 		google.charts.setOnLoadCallback(drawStocks);
 		
 	};
