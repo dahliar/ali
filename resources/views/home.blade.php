@@ -30,18 +30,19 @@
 	var stocks = @json($stocks);
 
 	window.onload = function() {
+		/*
 		google.load("visualization", "current", {
 			packages: ["corechart"],
 			callback: 'drawEmployees'
 		});
-		/*
 		google.load("visualization", "current", {
 			packages: ["corechart"],
 			callback: 'drawTransactions'
 		});
+		*/
 		google.charts.load('current', {packages: ['corechart', 'bar']});
 		google.charts.setOnLoadCallback(drawStocks);
-		*/
+		
 	};
 	function drawEmployees() {
 		var data = new google.visualization.DataTable();
