@@ -30,20 +30,10 @@
 	var stocks = @json($stocks);
 
 	window.onload = function() {
-		/*
-		google.load("visualization", "current", {
-			packages: ["corechart"],
-			callback: 'drawEmployees'
-		});
-		google.load("visualization", "current", {
-			packages: ["corechart"],
-			callback: 'drawTransactions'
-		});
-		*/
 		google.charts.load('current', {packages: ['corechart']});
 		google.charts.setOnLoadCallback(drawEmployees);
-		google.charts.setOnLoadCallback(drawTransactions);
-		google.charts.setOnLoadCallback(drawStocks);
+		//google.charts.setOnLoadCallback(drawTransactions);
+		//google.charts.setOnLoadCallback(drawStocks);
 		
 	};
 	function drawEmployees() {
