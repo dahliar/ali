@@ -15,147 +15,154 @@ class DashboardController extends Controller
     public function getServerDate(){
         return Carbon::now()->toDateString();
     }
-    public function index()
+    public function index(Request $request)
     {   
-        //Data pegawai aktif
-        $employees = DB::table('employees as e')
-        ->select(
-            DB::raw('
-                (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
-                '),
-            DB::raw('count(e.id) as status')
-        )
-        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-        ->where('mapping.isActive', '1')
-        ->groupBy('employmentStatus')
-        ->get();
+        if ($request->has('tahun')){
+            $request->validate([
+                'tahun' => 'required|numeric|gt:0',
+            ],[
+                'tahun.*'=> 'Pilih tahun dulu'
+            ]);
+            $tahun = $request->tahun;
 
-        $employeesGender = DB::table('employees as e')
-        ->select(
-            DB::raw('
-                (CASE WHEN e.gender="1" THEN "Laki-laki" WHEN e.gender="2" THEN "Perempuan" END) AS gender
-                '),
-            DB::raw('count(e.id) as jumlahGender')
-        )
-        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-        ->where('mapping.isActive', '1')
-        ->groupBy('e.gender')
-        ->get();
+            $employees = DB::table('employees as e')
+            ->select(
+                DB::raw('
+                    (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
+                    '),
+                DB::raw('count(e.id) as status')
+            )
+            ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+            ->where('mapping.isActive', '1')
+            ->groupBy('employmentStatus')
+            ->get();
 
-        $transactions = DB::table('transactions as t')
-        ->select(
-            DB::raw('
-                (CASE WHEN t.jenis="1" THEN "Ekspor" WHEN t.jenis="2" THEN "Lokal" END) AS jenis
-                '),
-            DB::raw('count(t.id) as jumlahJenis')
-        )
-        ->whereIn('t.status', [2,4])
-        ->groupBy('t.jenis')
-        ->whereYear('t.transactionDate', '2022')
-        ->get();
+            $employeesGender = DB::table('employees as e')
+            ->select(
+                DB::raw('
+                    (CASE WHEN e.gender="1" THEN "Laki-laki" WHEN e.gender="2" THEN "Perempuan" END) AS gender
+                    '),
+                DB::raw('count(e.id) as jumlahGender')
+            )
+            ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+            ->where('mapping.isActive', '1')
+            ->groupBy('e.gender')
+            ->get();
 
-        $stocks = DB::table('items as i')
-        ->select(
-            'sp.nameBahasa as name',
-            DB::raw('sum(i.amount) as jumlahSpecies'),
-            DB::raw('"blue" as kedua')
-        )
-        ->join('sizes as s', 's.id', '=', 'i.sizeId')
-        ->join('species as sp', 'sp.id', '=', 's.speciesId')
-        ->groupBy('sp.id')
-        ->orderBy('sp.name')
-        ->get();
+            $transactions = DB::table('transactions as t')
+            ->select(
+                DB::raw('
+                    (CASE WHEN t.jenis="1" THEN "Ekspor" WHEN t.jenis="2" THEN "Lokal" END) AS jenis
+                    '),
+                DB::raw('count(t.id) as jumlahJenis')
+            )
+            ->whereIn('t.status', [2,4])
+            ->groupBy('t.jenis')
+            ->whereYear('t.transactionDate', $tahun)
+            ->get();
 
-        $transactionRupiah = DB::table('transactions as t')
-        ->select(
-            'c.name as name',
-            DB::raw('sum(t.payment) as amount')
-        )
-        ->join('companies as c', 'c.id', '=', 't.companyId')
-        ->where('t.valutaType', '=', '1')
-        ->whereYear('t.transactionDate', '2022')
-        ->groupBy('c.id')
-        ->orderBy('c.name')
-        ->get();
+            $stocks = DB::table('items as i')
+            ->select(
+                'sp.nameBahasa as name',
+                DB::raw('sum(i.amount) as jumlahSpecies'),
+                DB::raw('"blue" as kedua')
+            )
+            ->join('sizes as s', 's.id', '=', 'i.sizeId')
+            ->join('species as sp', 'sp.id', '=', 's.speciesId')
+            ->groupBy('sp.id')
+            ->orderBy('sp.name')
+            ->get();
 
-        $transactionUSD = DB::table('transactions as t')
-        ->select(
-            'c.name as name',
-            DB::raw('sum(t.payment) as amount')
-        )
-        ->join('companies as c', 'c.id', '=', 't.companyId')
-        ->where('t.valutaType', '=', '2')
-        ->groupBy('c.id')
-        ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-        ->whereYear('t.transactionDate', '2022')
-        ->get();
+            $transactionRupiah = DB::table('transactions as t')
+            ->select(
+                'c.name as name',
+                DB::raw('sum(t.payment) as amount')
+            )
+            ->join('companies as c', 'c.id', '=', 't.companyId')
+            ->where('t.valutaType', '=', '1')
+            ->whereYear('t.transactionDate', $tahun)
+            ->groupBy('c.id')
+            ->orderBy('c.name')
+            ->get();
 
-
-
-        $transactionUSDLine = DB::table('transactions as t')
-        ->select(
-            DB::raw('MONTH(t.transactionDate) as bulan'),
-            DB::raw('sum(t.payment) as amount')
-        )
-        ->where('t.valutaType', '=', '2')
-        ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-        ->whereYear('t.transactionDate', '2022')
-        ->groupBy(DB::raw('MONTH(t.transactionDate)'))
-        ->get();
-        $transactionRupiahLine = DB::table('transactions as t')
-        ->select(
-            DB::raw('MONTH(t.transactionDate) as bulan'),
-            DB::raw('sum(t.payment) as amount')
-        )
-        ->where('t.valutaType', '=', '1')
-        ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-        ->whereYear('t.transactionDate', '2022')
-        ->groupBy(DB::raw('MONTH(t.transactionDate)'))
-        ->get();
+            $transactionUSD = DB::table('transactions as t')
+            ->select(
+                'c.name as name',
+                DB::raw('sum(t.payment) as amount')
+            )
+            ->join('companies as c', 'c.id', '=', 't.companyId')
+            ->where('t.valutaType', '=', '2')
+            ->groupBy('c.id')
+            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+            ->whereYear('t.transactionDate', $tahun)
+            ->get();
 
 
 
+            $transactionUSDLine = DB::table('transactions as t')
+            ->select(
+                DB::raw('MONTH(t.transactionDate) as bulan'),
+                DB::raw('sum(t.payment) as amount')
+            )
+            ->where('t.valutaType', '=', '2')
+            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+            ->whereYear('t.transactionDate', $tahun)
+            ->groupBy(DB::raw('MONTH(t.transactionDate)'))
+            ->get();
+            $transactionRupiahLine = DB::table('transactions as t')
+            ->select(
+                DB::raw('MONTH(t.transactionDate) as bulan'),
+                DB::raw('sum(t.payment) as amount')
+            )
+            ->where('t.valutaType', '=', '1')
+            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+            ->whereYear('t.transactionDate', $tahun)
+            ->groupBy(DB::raw('MONTH(t.transactionDate)'))
+            ->get();
 
-        $goods = DB::table('goods as g')
-        ->select(
-            'g.name as name',
-            'g.amount as amount',
-            'g.minimalAmount as minimal'
-        )
-        ->whereRaw('g.amount <= g.minimalAmount')
-        ->orderBy('g.name')
-        ->get();
+
+
+
+            $goods = DB::table('goods as g')
+            ->select(
+                'g.name as name',
+                'g.amount as amount',
+                'g.minimalAmount as minimal'
+            )
+            ->whereRaw('g.amount <= g.minimalAmount')
+            ->orderBy('g.name')
+            ->get();
         //dd($goods);
 
-        $purchases = DB::table('purchases as p')
-        ->select(
-            'c.name as name',
-            DB::raw('sum(p.paymentAmount) as amount')
-        )
-        ->join('companies as c', 'c.id', '=', 'p.companyId')
-        ->groupBy('c.id')
-        ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
-        ->whereYear('p.purchaseDate', '2022')
-        ->get();
+            $purchases = DB::table('purchases as p')
+            ->select(
+                'c.name as name',
+                DB::raw('sum(p.paymentAmount) as amount')
+            )
+            ->join('companies as c', 'c.id', '=', 'p.companyId')
+            ->groupBy('c.id')
+            ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
+            ->whereYear('p.purchaseDate', $tahun)
+            ->get();
 
 
-        $purchaseRupiahLine = DB::table('purchases as p')
-        ->select(
-            DB::raw('MONTH(p.purchaseDate) as bulan'),
-            DB::raw('sum(p.paymentAmount) as amount')
-        )
-        ->where('p.valutaType', '=', '1')
-        ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
-        ->whereYear('p.purchaseDate', '2022')
-        ->groupBy(DB::raw('MONTH(p.purchaseDate)'))
-        ->get();
+            $purchaseRupiahLine = DB::table('purchases as p')
+            ->select(
+                DB::raw('MONTH(p.purchaseDate) as bulan'),
+                DB::raw('sum(p.paymentAmount) as amount')
+            )
+            ->where('p.valutaType', '=', '1')
+            ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
+            ->whereYear('p.purchaseDate', $tahun)
+            ->groupBy(DB::raw('MONTH(p.purchaseDate)'))
+            ->get();
 
-        return view('home', compact('purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods'));
+            return view('home', compact('purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));          
+        }
+        else{
+            return view('home');
+        }
     }
-
-
-
-
 
     public function indexHome2()
     {

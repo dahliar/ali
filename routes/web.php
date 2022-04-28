@@ -50,7 +50,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('home',[DashboardController::class, 'index'])->middleware(['auth']);
+Route::get('home',[DashboardController::class, 'index'])->middleware(['auth','authorized']);
 Route::get('home2',[DashboardController::class, 'indexHome2'])->middleware(['auth']);
 Route::GET('employeeList2',[EmployeeController::class, 'index2'])->name('employeeList')->middleware('auth', 'authorized');
 
