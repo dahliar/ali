@@ -252,19 +252,85 @@ class DashboardController extends Controller
     }
     public function getRekapitulasiGaji(Request $request){
         $dt = Carbon::create($request->tahun, 5, 2, 12, 0, 0);
-        $payroll = DB::table('detail_payrolls as dp')
+        $tahun = $request->tahun;
+
+        $payrollBulanan = DB::table('detail_payrolls as dp')
         ->select(DB::raw('MONTH(p.payDate) as bulan'),
-            DB::raw('sum(dp.bulanan) as bulanan'),
-            DB::raw('sum(dp.harian) as harian'),
-            DB::raw('sum(dp.borongan) as borongan'),
-            DB::raw('sum(dp.honorarium) as honorarium')
+            DB::raw('(sum(dp.bulanan) + sum(dp.harian) + sum(dp.borongan) +sum(dp.honorarium)) as bulanan'),
+            DB::raw('0 as harian'),
+            DB::raw('0 as borongan')
         )
         ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
+        ->join('employees as e', 'e.id', '=', 'dp.employeeId')
+        ->where('e.employmentStatus', '=', '1')
         ->whereYear('p.payDate', $request->tahun)
         ->groupBy(DB::raw('MONTH(p.payDate)'))
+        ->groupBy('e.employmentStatus')
         ->get();
-        $tahun = $request->tahun;
-        return view('dashboard.rekapitulasiGaji', compact('tahun', 'payroll'));        
+        $payrollHarian = DB::table('detail_payrolls as dp')
+        ->select(DB::raw('MONTH(p.payDate) as bulan'),
+            DB::raw('0 as bulanan'),
+            DB::raw('(sum(dp.bulanan) + sum(dp.harian) + sum(dp.borongan) +sum(dp.honorarium)) as harian'),
+            DB::raw('0 as borongan')
+        )
+        ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
+        ->join('employees as e', 'e.id', '=', 'dp.employeeId')
+        ->where('e.employmentStatus', '=', '2')
+        ->whereYear('p.payDate', $request->tahun)
+        ->groupBy(DB::raw('MONTH(p.payDate)'))
+        ->groupBy('e.employmentStatus')
+        ->get();
+
+        $payrollBorongan = DB::table('detail_payrolls as dp')
+        ->select(DB::raw('MONTH(p.payDate) as bulan'),
+            DB::raw('0 as bulanan'),
+            DB::raw('0 as harian'),
+            DB::raw('(sum(dp.bulanan) + sum(dp.harian) + sum(dp.borongan) +sum(dp.honorarium)) as borongan')
+        )
+        ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
+        ->join('employees as e', 'e.id', '=', 'dp.employeeId')
+        ->where('e.employmentStatus', '=', '3')
+        ->whereYear('p.payDate', $request->tahun)
+        ->groupBy(DB::raw('MONTH(p.payDate)'))
+        ->groupBy('e.employmentStatus')
+        ->get();
+
+        $total=$payrollHarian->merge($payrollBulanan)->merge($payrollBorongan);
+        $payroll = [ 
+            ["Januari ".$tahun,0,0,0],
+            ["Februari ".$tahun,0,0,0],
+            ["Maret ".$tahun,0,0,0],
+            ["April ".$tahun,0,0,0],
+            ["Mei ".$tahun,0,0,0],
+            ["Juni ".$tahun,0,0,0],
+            ["Juli ".$tahun,0,0,0],
+            ["Agustus ".$tahun,0,0,0],
+            ["September ".$tahun,0,0,0],
+            ["Oktober ".$tahun,0,0,0],
+            ["November ".$tahun,0,0,0],
+            ["Desember ".$tahun,0,0,0],
+        ];
+        foreach($total as $p){
+            $payroll[$p->bulan-1][1] +=$p->bulanan; 
+            $payroll[$p->bulan-1][2] +=$p->harian; 
+            $payroll[$p->bulan-1][3] +=$p->borongan; 
+        }
+
+        $payrollChart = DB::table('detail_payrolls as dp')
+        ->select(
+            DB::raw('MONTH(p.payDate) as bulan'),
+            'e.employmentStatus as status',
+            DB::raw('(sum(dp.bulanan) + sum(dp.harian) + sum(dp.borongan) +sum(dp.honorarium)) as total')
+        )
+        ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
+        ->join('employees as e', 'e.id', '=', 'dp.employeeId')
+        ->whereYear('p.payDate', "2022")
+        ->groupBy(DB::raw('MONTH(p.payDate)'))
+        ->whereYear('p.payDate', $request->tahun)
+        ->groupBy('e.employmentStatus')
+        ->get();
+
+        return view('dashboard.rekapitulasiGaji', compact('payrollChart','tahun', 'payroll'));        
     }
     public function rekapitulasiGajiPerBulan(){
         return view('dashboard.rekapitulasiGajiPerBulan');

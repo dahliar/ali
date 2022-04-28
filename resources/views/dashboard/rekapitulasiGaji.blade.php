@@ -22,6 +22,60 @@
     </div>
 </div>
 @endif
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+@isset ($payrollChart)
+<script type="text/javascript">
+    var payroll = @json($payrollChart);
+    window.onload = function() {
+        google.charts.load('current', {'packages':['line']});
+        google.charts.setOnLoadCallback(drawPayroll);
+    };
+    function drawPayroll() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Bulan');
+        data.addColumn('number', 'Bulanan');
+        data.addColumn('number', 'Harian');
+        data.addColumn('number', 'Borongan');
+        var arrValue = [ 
+        ["Januari",0,0,0],
+        ["Februari",0,0,0],
+        ["Maret",0,0,0],
+        ["April",0,0,0],
+        ["Mei",0,0,0],
+        ["Juni",0,0,0],
+        ["Juli",0,0,0],
+        ["Agustus",0,0,0],
+        ["September",0,0,0],
+        ["Oktober",0,0,0],
+        ["November",0,0,0],
+        ["Desember",0,0,0],
+        ];
+
+        for (var i = 0; i < payroll.length; i++) {
+            arrValue[payroll[i].bulan-1][payroll[i].status] = Number(payroll[i].total);
+        }
+        for (var i = 0; i < 12; i++) {
+            //document.write(new Array(arrValue[i]));
+            data.addRows(new Array(arrValue[i]));
+        }
+        var options = {
+            chart: {
+                title: 'Payroll tahun 2022',
+                subtitle: 'dalam satuan Juta Rupiah'
+            },
+            height: 500,
+            axes: {
+                x: {
+                    0: {side: 'top'}
+                }
+            }
+        };
+
+        var chart = new google.charts.Line(document.getElementById('chartPayroll'));
+        chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+</script>
+@endisset
 
 <body>
     <div class="container-fluid">
@@ -63,16 +117,20 @@
             </form>
         </div>
         <div class="card card-body">
+            <div class="row">
+                <div id="chartPayroll"></div>
+            </div>
+        </div>
+        <div class="card card-body">
             <div class="row form-group">
-               @if(!empty($payroll))
-               <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
+             @if(!empty($payroll))
+             <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
                 <thead style="text-align: center;">
                     <tr>
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 15%;">Bulanan</th>
-                        <th style="width: 15%;">Harian</th>
-                        <th style="width: 10%;">Borongan</th>
-                        <th style="width: 15%;">Honorarium</th>
+                        <th style="width: 20%;">Bulan</th>
+                        <th style="width: 20%;">Pegawai Bulanan</th>
+                        <th style="width: 20%;">Pegawai Harian</th>
+                        <th style="width: 20%;">Pegawai Borongan</th>
                         <th style="width: 20%;">Total</th>
                     </tr>
                 </thead>
@@ -82,36 +140,33 @@
                     $totalBulanan=0;
                     $totalHarian=0;
                     $totalBorongan=0;
-                    $totalHonorarium=0;
                     $total=0;
                     @endphp
                     @foreach($payroll as $paymonth)
                     @php
-                    $totalBulanan+=$paymonth->bulanan;
-                    $totalHarian+=$paymonth->harian;
-                    $totalBorongan+=$paymonth->borongan;
-                    $totalHonorarium+=$paymonth->honorarium;
-                    $totalBulan=($paymonth->bulanan+$paymonth->harian+$paymonth->borongan+$paymonth->honorarium);
+                    $totalBulanan+=$paymonth[1];
+                    $totalHarian+=$paymonth[2];
+                    $totalBorongan+=$paymonth[3];
+                    $totalBulan=($paymonth[1]+$paymonth[2]+$paymonth[3]);
                     $total+=$totalBulan;
                     @endphp
                     <tr>
-                        <td style="text-align: center;">
-                            {{$paymonth->bulan}}-{{$tahun}}
+                        <td style="text-align: left;">
+                            {{$paymonth[0]}}
                         </td>
-                        <td style="text-align: right;">Rp. {{number_format($paymonth->bulanan, 2, ',', '.')}}
+                        <td style="text-align: right;">Rp. {{number_format($paymonth[1], 2, ',', '.')}}
                         </td>
-                        <td style="text-align: right;">Rp. {{number_format($paymonth->harian, 2, ',', '.')}}
+                        <td style="text-align: right;">Rp. {{number_format($paymonth[2], 2, ',', '.')}}
                         </td>
-                        <td style="text-align: right;">Rp. {{number_format($paymonth->borongan, 2, ',', '.')}}</td>
-                        <td style="text-align: right;">Rp. {{number_format($paymonth->honorarium, 2, ',', '.')}}</td>
-                        <td style="text-align: right;">{{number_format($totalBulan, 2, ',', '.')}}</td>
+                        <td style="text-align: right;">Rp. {{number_format($paymonth[3], 2, ',', '.')}}</td>
+                        <td style="text-align: right;">Rp. {{number_format($totalBulan, 2, ',', '.')}}</td>
                         @php $no+=1;    @endphp                                    
                     </tr>
                     @endforeach
                 </tbody>
                 <tfooter>
                     <tr>
-                        <td style="text-align: center;">
+                        <td style="text-align: left;">
                         </td>
                         <td style="text-align: right;">
                             Rp. {{number_format($totalBulanan, 2, ',', '.')}}
@@ -121,9 +176,6 @@
                         </td>
                         <td style="text-align: right;">
                             Rp. {{number_format($totalBorongan, 2, ',', '.')}}
-                        </td>
-                        <td style="text-align: right;">
-                            Rp. {{number_format($totalHonorarium, 2, ',', '.')}}
                         </td>
                         <td style="text-align: right;">
                             Rp. {{number_format($total, 2, ',', '.')}}

@@ -44,10 +44,7 @@
 		google.charts.setOnLoadCallback(drawPurchases);
 		google.charts.setOnLoadCallback(drawStocks);
 		google.charts.setOnLoadCallback(drawTransactionsRupiah);
-		google.charts.setOnLoadCallback(drawTransactionsUSD);
-
-
-		
+		google.charts.setOnLoadCallback(drawTransactionsUSD);		
 	};
 	function drawEmployees() {
 		var data = [];
@@ -193,7 +190,7 @@
 		var options = {
 			title: 'Stock barang (Kg)',
 			height: 500,
-			bar: {groupWidth: "95%"},
+			bar: {groupWidth: "100%"},
 			legend: { position: "none" },
 		};
 
@@ -203,6 +200,7 @@
 </script>
 <body>
 	<div class="container-fluid">
+		<!--
 		<div class="modal-content">
 			<div class="modal-header">
 				<nav aria-label="breadcrumb">
@@ -214,113 +212,114 @@
 				</nav>
 			</div>
 		</div>
+	-->
 
-		<div class="card card-body">
-			<div class="row">
-				<span class="white-text"><h2>Stok Barang</h2></span>
-				<div class="col-md-8">
-					<div id="chartStock"></div>
-				</div>
-				<div class="col-md-4">
-					<br>
-					<br>
-					<h4><b>Barang pendukung produksi dibawah angka minimal</b></h4>
-					<table class="table table-striped table-hover table-bordered data-table" id="datatable">
-						<thead>
-							<tr>
-								<th>No</th>
-								<th>Nama Barang</th>
-								<th>Jumlah</th>
-								<th>Minimal</th>
-							</tr>
-						</thead>
+	<div class="card card-body">
+		<div class="row">
+			<span class="white-text"><h4>Stok Barang</h4></span>
+			<div class="col-md-8">
+				<div id="chartStock"></div>
+			</div>
+			<div class="col-md-4">
+				<br>
+				<br>
+				<h5><b>Jumlah minimal barang produksi</b></h5>
+				<table class="table table-striped table-hover table-bordered data-table" id="datatable">
+					<thead>
+						<tr>
+							<th>No</th>
+							<th>Nama Barang</th>
+							<th>Jumlah</th>
+							<th>Minimal</th>
+						</tr>
+					</thead>
+					@php
+					$no=1;
+					@endphp
+					<tbody style="font-size: 14px;">
+						@foreach($goods as $good)
+						<tr>
+							<td>{{$no}}</td>
+							<td>{{$good->name}}</td>
+							<td>{{$good->amount}}</td>
+							<td>{{$good->minimal}}</td>
+						</tr>
 						@php
-						$no=1;
+						$no++;
 						@endphp
-						<tbody style="font-size: 14px;">
-							@foreach($goods as $good)
-							<tr>
-								<td>{{$no}}</td>
-								<td>{{$good->name}}</td>
-								<td>{{$good->amount}}</td>
-								<td>{{$good->minimal}}</td>
-							</tr>
-							@php
-							$no++;
-							@endphp
-							@endforeach
-						</tbody>
-					</table> 
+						@endforeach
+					</tbody>
+				</table> 
 
-				</div>
-			</div>
-		</div>
-		<div class="card card-body">
-			<span class="white-text"><h2>Transaksi Penjualan - 1 tahun terakhir</h2></span>
-			<div class="row">
-				<div class="col-md-4">
-					<div id="chartTransaksi" class="chart"></div>
-				</div>
-				<div class="col-md-4">
-					<div id="chartTransaksiRupiah" class="chart"></div>
-				</div>
-				<div class="col-md-4">
-					<div id="chartTransaksiUSD" class="chart"></div>
-				</div>
-			</div>
-		</div>
-		<div class="card card-body">
-			<span class="white-text"><h2>Transaksi Pembelian - 1 tahun terakhir</h2></span>
-			<div class="row">
-				<div class="col-md-6">
-					<div id="chartPurchases" class="chart"></div>
-				</div>
-				<div class="col-md-6">
-					<h4><b>Top 10 Supplier</b></h4>
-					<table class="table table-striped table-hover table-bordered data-table" id="datatable">
-						<thead>
-							<tr>
-								<th style="width: 10%;text-align: center;">No</th>
-								<th style="width: 30%;text-align: center;">Nama Supplier</th>
-								<th style="width: 30%;text-align: center;">Jumlah</th>
-							</tr>
-						</thead>
-						@php
-						$no=1;
-						@endphp
-						<tbody style="font-size: 14px;">
-							@foreach($purchases as $good)
-
-							<tr>
-								<td style="text-align: center;">{{$no}}</td>
-								<td>{{$good->name}}</td>
-								<td style="width: 30%;text-align: right;">Rp. {{number_format($good->amount, 2, ',', '.')}}</td>
-							</tr>
-							@php
-							$no++;
-							@endphp
-							@if ($no>10)
-							@break
-							@endif
-							@endforeach
-						</tbody>
-					</table> 
-
-				</div>
-			</div>
-		</div>
-		<div class="card card-body">
-			<span class="white-text"><h2>Kepegawaian</h2></span>
-			<div class="row">
-				<div class="col-md-4">
-					<div id="chartPegawaiAktif" class="chart"></div>
-				</div>
-				<div class="col-md-4">
-					<div id="chartGender" class="chart"></div>
-				</div>
 			</div>
 		</div>
 	</div>
+	<div class="card card-body">
+		<span class="white-text"><h2>Transaksi Penjualan - 1 tahun terakhir</h2></span>
+		<div class="row">
+			<div class="col-md-4">
+				<div id="chartTransaksi" class="chart"></div>
+			</div>
+			<div class="col-md-4">
+				<div id="chartTransaksiRupiah" class="chart"></div>
+			</div>
+			<div class="col-md-4">
+				<div id="chartTransaksiUSD" class="chart"></div>
+			</div>
+		</div>
+	</div>
+	<div class="card card-body">
+		<span class="white-text"><h2>Transaksi Pembelian - 1 tahun terakhir</h2></span>
+		<div class="row">
+			<div class="col-md-6">
+				<div id="chartPurchases" class="chart"></div>
+			</div>
+			<div class="col-md-6">
+				<h4><b>Top 10 Supplier</b></h4>
+				<table class="table table-striped table-hover table-bordered data-table" id="datatable">
+					<thead>
+						<tr>
+							<th style="width: 10%;text-align: center;">No</th>
+							<th style="width: 30%;text-align: center;">Nama Supplier</th>
+							<th style="width: 30%;text-align: center;">Jumlah</th>
+						</tr>
+					</thead>
+					@php
+					$no=1;
+					@endphp
+					<tbody style="font-size: 14px;">
+						@foreach($purchases as $good)
+
+						<tr>
+							<td style="text-align: center;">{{$no}}</td>
+							<td>{{$good->name}}</td>
+							<td style="width: 30%;text-align: right;">Rp. {{number_format($good->amount, 2, ',', '.')}}</td>
+						</tr>
+						@php
+						$no++;
+						@endphp
+						@if ($no>10)
+						@break
+						@endif
+						@endforeach
+					</tbody>
+				</table> 
+
+			</div>
+		</div>
+	</div>
+	<div class="card card-body">
+		<span class="white-text"><h2>Kepegawaian</h2></span>
+		<div class="row">
+			<div class="col-md-4">
+				<div id="chartPegawaiAktif" class="chart"></div>
+			</div>
+			<div class="col-md-4">
+				<div id="chartGender" class="chart"></div>
+			</div>
+		</div>
+	</div>
+</div>
 </body>
 @else
 @include('partial.noAccess')
