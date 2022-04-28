@@ -32,19 +32,26 @@
 	var transactionRupiah = @json($transactionRupiah);
 	var transactionUSD = @json($transactionUSD);
 	var purchases = @json($purchases);
-
-	
+	var transactionUSDLine = @json($transactionUSDLine);	
+	var transactionRupiahLine = @json($transactionRupiahLine);	
+	var purchaseRupiahLine = @json($purchaseRupiahLine);	
 
 
 	window.onload = function() {
-		google.charts.load('current', {packages: ['corechart']});
+		google.charts.load('current', {packages: ['corechart'], 'language': 'id'});
 		google.charts.setOnLoadCallback(drawEmployees);
 		google.charts.setOnLoadCallback(drawEmployeesGender);
 		google.charts.setOnLoadCallback(drawTransactions);
 		google.charts.setOnLoadCallback(drawPurchases);
 		google.charts.setOnLoadCallback(drawStocks);
 		google.charts.setOnLoadCallback(drawTransactionsRupiah);
-		google.charts.setOnLoadCallback(drawTransactionsUSD);		
+		google.charts.setOnLoadCallback(drawTransactionsUSD);
+
+		google.charts.load('current', {'packages':['line'], 'language': 'id'});
+		google.charts.setOnLoadCallback(drawTransactionUSDLine);		
+		google.charts.setOnLoadCallback(drawTransactionRupiahLine);	
+		google.charts.setOnLoadCallback(drawPurchaseRupiahLine);	
+
 	};
 	function drawEmployees() {
 		var data = [];
@@ -197,6 +204,130 @@
 		var chart = new google.visualization.ColumnChart(document.getElementById('chartStock'));
 		chart.draw(view, options);
 	}
+
+	function drawTransactionUSDLine() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Bulan');
+		data.addColumn('number', 'USD');
+		var arrValue = [ 
+		["Januari",0],
+		["Februari",0],
+		["Maret",0],
+		["April",0],
+		["Mei",0],
+		["Juni",0],
+		["Juli",0],
+		["Agustus",0],
+		["September",0],
+		["Oktober",0],
+		["November",0],
+		["Desember",0],
+		];
+
+		for (var i = 0; i < transactionUSDLine.length; i++) {
+			arrValue[transactionUSDLine[i].bulan-1][1] = Number(transactionUSDLine[i].amount);
+		}
+		for (var i = 0; i < 12; i++) {
+			data.addRows(new Array(arrValue[i]));
+		}
+		var options = {
+			chart: {
+				title: 'Transaksi Penjualan tahun 2022',
+				subtitle: 'transaksi satuan USD'
+			},
+			height: 500,
+			axes: {
+				x: {
+					0: {side: 'top'}
+				}
+			}
+		};
+
+		var chart = new google.charts.Line(document.getElementById('chartTransactionUSDLine'));
+		chart.draw(data, google.charts.Line.convertOptions(options));
+	}
+	function drawTransactionRupiahLine() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Bulan');
+		data.addColumn('number', 'Rupiah');
+		var arrValue = [ 
+		["Januari",0],
+		["Februari",0],
+		["Maret",0],
+		["April",0],
+		["Mei",0],
+		["Juni",0],
+		["Juli",0],
+		["Agustus",0],
+		["September",0],
+		["Oktober",0],
+		["November",0],
+		["Desember",0],
+		];
+
+		for (var i = 0; i < transactionRupiahLine.length; i++) {
+			arrValue[transactionRupiahLine[i].bulan-1][1] = Number(transactionRupiahLine[i].amount);
+		}
+		for (var i = 0; i < 12; i++) {
+			data.addRows(new Array(arrValue[i]));
+		}
+		var options = {
+			chart: {
+				title: 'Transaksi Penjualan tahun 2022',
+				subtitle: 'transaksi satuan Rupiah'
+			},
+			height: 500,
+			axes: {
+				x: {
+					0: {side: 'top'}
+				}
+			}
+		};
+
+		var chart = new google.charts.Line(document.getElementById('chartTransactionRupiahLine'));
+		chart.draw(data, google.charts.Line.convertOptions(options));
+	}
+	function drawPurchaseRupiahLine() {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Bulan');
+		data.addColumn('number', 'Rupiah');
+		var arrValue = [ 
+		["Januari",0],
+		["Februari",0],
+		["Maret",0],
+		["April",0],
+		["Mei",0],
+		["Juni",0],
+		["Juli",0],
+		["Agustus",0],
+		["September",0],
+		["Oktober",0],
+		["November",0],
+		["Desember",0],
+		];
+
+		for (var i = 0; i < purchaseRupiahLine.length; i++) {
+			arrValue[purchaseRupiahLine[i].bulan-1][1] = Number(purchaseRupiahLine[i].amount);
+		}
+		for (var i = 0; i < 12; i++) {
+			data.addRows(new Array(arrValue[i]));
+		}
+		var options = {
+			chart: {
+				title: 'Transaksi Pembelian tahun 2022',
+				subtitle: 'transaksi satuan Rupiah'
+			},
+			height: 500,
+			axes: {
+				x: {
+					0: {side: 'top'}
+				}
+			}
+		};
+
+		var chart = new google.charts.Line(document.getElementById('drawPurchaseRupiahLine'));
+		chart.draw(data, google.charts.Line.convertOptions(options));
+	}
 </script>
 <body>
 	<div class="container-fluid">
@@ -255,7 +386,15 @@
 		</div>
 	</div>
 	<div class="card card-body">
-		<span class="white-text"><h2>Transaksi Penjualan - 1 tahun terakhir</h2></span>
+		<span class="white-text"><h2>Transaksi Penjualan tahun 2022</h2></span>
+		<div class="row">
+			<div class="col-md-6">
+				<div id="chartTransactionUSDLine"></div>
+			</div>
+			<div class="col-md-6">
+				<div id="chartTransactionRupiahLine"></div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-4">
 				<div id="chartTransaksi" class="chart"></div>
@@ -269,7 +408,12 @@
 		</div>
 	</div>
 	<div class="card card-body">
-		<span class="white-text"><h2>Transaksi Pembelian - 1 tahun terakhir</h2></span>
+		<span class="white-text"><h2>Transaksi Pembelian tahun 2022</h2></span>
+		<div class="row">
+			<div class="col-md-6">
+				<div id="drawPurchaseRupiahLine"></div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-6">
 				<div id="chartPurchases" class="chart"></div>

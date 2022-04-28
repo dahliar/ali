@@ -130,7 +130,7 @@
             </div>
         </div>
         <div class="card card-body">
-            <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+            <table class="table table-striped table-hover table-bordered data-table" id="datatable">
                 <thead>
                     <tr>
                         <th>No</th>

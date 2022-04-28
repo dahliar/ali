@@ -51,7 +51,7 @@ class DashboardController extends Controller
         )
         ->whereIn('t.status', [2,4])
         ->groupBy('t.jenis')
-        ->whereDate('transactionDate', '>', date('Y-m-d', strtotime("-1 year")))
+        ->whereYear('t.transactionDate', '2022')
         ->get();
 
         $stocks = DB::table('items as i')
@@ -73,7 +73,7 @@ class DashboardController extends Controller
         )
         ->join('companies as c', 'c.id', '=', 't.companyId')
         ->where('t.valutaType', '=', '1')
-        ->whereDate('transactionDate', '>', date('Y-m-d', strtotime("-1 year")))
+        ->whereYear('t.transactionDate', '2022')
         ->groupBy('c.id')
         ->orderBy('c.name')
         ->get();
@@ -87,8 +87,34 @@ class DashboardController extends Controller
         ->where('t.valutaType', '=', '2')
         ->groupBy('c.id')
         ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-        ->whereDate('transactionDate', '>', date('Y-m-d', strtotime("-1 year")))
+        ->whereYear('t.transactionDate', '2022')
         ->get();
+
+
+
+        $transactionUSDLine = DB::table('transactions as t')
+        ->select(
+            DB::raw('MONTH(t.transactionDate) as bulan'),
+            DB::raw('sum(t.payment) as amount')
+        )
+        ->where('t.valutaType', '=', '2')
+        ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+        ->whereYear('t.transactionDate', '2022')
+        ->groupBy(DB::raw('MONTH(t.transactionDate)'))
+        ->get();
+        $transactionRupiahLine = DB::table('transactions as t')
+        ->select(
+            DB::raw('MONTH(t.transactionDate) as bulan'),
+            DB::raw('sum(t.payment) as amount')
+        )
+        ->where('t.valutaType', '=', '1')
+        ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+        ->whereYear('t.transactionDate', '2022')
+        ->groupBy(DB::raw('MONTH(t.transactionDate)'))
+        ->get();
+
+
+
 
         $goods = DB::table('goods as g')
         ->select(
@@ -109,11 +135,28 @@ class DashboardController extends Controller
         ->join('companies as c', 'c.id', '=', 'p.companyId')
         ->groupBy('c.id')
         ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
-        ->whereDate('purchaseDate', '>', date('Y-m-d', strtotime("-1 year")))
+        ->whereYear('p.purchaseDate', '2022')
         ->get();
 
-        return view('home', compact('purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods'));
+
+        $purchaseRupiahLine = DB::table('purchases as p')
+        ->select(
+            DB::raw('MONTH(p.purchaseDate) as bulan'),
+            DB::raw('sum(p.paymentAmount) as amount')
+        )
+        ->where('p.valutaType', '=', '1')
+        ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
+        ->whereYear('p.purchaseDate', '2022')
+        ->groupBy(DB::raw('MONTH(p.purchaseDate)'))
+        ->get();
+
+        return view('home', compact('purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods'));
     }
+
+
+
+
+
     public function indexHome2()
     {
         return view('home2');
@@ -255,7 +298,8 @@ class DashboardController extends Controller
         $tahun = $request->tahun;
 
         $payrollBulanan = DB::table('detail_payrolls as dp')
-        ->select(DB::raw('MONTH(p.payDate) as bulan'),
+        ->select(
+            DB::raw('MONTH(p.payDate) as bulan'),
             DB::raw('(sum(dp.bulanan) + sum(dp.harian) + sum(dp.borongan) +sum(dp.honorarium)) as bulanan'),
             DB::raw('0 as harian'),
             DB::raw('0 as borongan')

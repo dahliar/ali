@@ -27,7 +27,7 @@
 <script type="text/javascript">
     var payroll = @json($payrollChart);
     window.onload = function() {
-        google.charts.load('current', {'packages':['line']});
+        google.charts.load('current', {'packages':['line'], 'language': 'id'});
         google.charts.setOnLoadCallback(drawPayroll);
     };
     function drawPayroll() {
