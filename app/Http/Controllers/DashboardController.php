@@ -170,7 +170,11 @@ class DashboardController extends Controller
             ->orderBy(DB::raw('DAY(e.birthdate)'))
             ->get();
 
-            return view('home', compact('birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));          
+            $date = Carbon::parse(now())->locale('id');
+            $date->settings(['formatFunction' => 'translatedFormat']);
+            $month=$date->format('F');
+
+            return view('home', compact('month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));          
         }
         else{
             return view('home');
@@ -247,7 +251,7 @@ class DashboardController extends Controller
             'total' => $harian->total,
             'orang' => $harian->jumlahOrang
         ];
-        
+
         $borongan = DB::table('borongans as b')
         ->select(
             DB::raw('sum(db.netPayment) as total'),
@@ -468,7 +472,7 @@ class DashboardController extends Controller
         ->orderBy('u.name')
         ->groupBy('dp.employeeId')
         ->get();
-        
+
 
         $monthYear = $bulan.' '.$request->tahun;
 

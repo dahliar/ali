@@ -10,6 +10,7 @@
 
 @section('content')
 @if ($errors->any())
+setlocale(LC_TIME, 'id_ID');
 <div class="alert alert-success">
 	<div class="row form-inline" onclick='$(this).parent().remove();'>
 		<div class="col-11">
@@ -483,7 +484,7 @@
 					<div id="chartGender" class="chart"></div>
 				</div>
 				<div class="col-md-4">
-					<h4><b>Ulang tahun bulan {{now()->format('F') }}</b></h4>
+					<h4><b>Ulang tahun bulan {{$month }}</b></h4>
 					<table class="table table-striped table-hover table-bordered data-table" id="datatable">
 						<thead>
 							<tr>
