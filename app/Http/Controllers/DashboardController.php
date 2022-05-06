@@ -157,7 +157,20 @@ class DashboardController extends Controller
             ->groupBy(DB::raw('MONTH(p.purchaseDate)'))
             ->get();
 
-            return view('home', compact('purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));          
+            $birthday = DB::table('employees as e')
+            ->select(
+                'u.name as name',
+                'e.birthdate as birthdate',
+                DB::raw('concat(
+                    TIMESTAMPDIFF(YEAR, e.birthdate, curdate()), 
+                    " Y") as usia')
+            )
+            ->join('users as u', 'u.id', '=', 'e.userid')
+            ->whereMonth('e.birthdate', date('m'))
+            ->orderBy(DB::raw('DAY(e.birthdate)'))
+            ->get();
+
+            return view('home', compact('birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));          
         }
         else{
             return view('home');

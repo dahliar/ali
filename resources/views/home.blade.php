@@ -482,6 +482,36 @@
 				<div class="col-md-4">
 					<div id="chartGender" class="chart"></div>
 				</div>
+				<div class="col-md-4">
+					<h4><b>Ulang tahun bulan {{now()->format('F') }}</b></h4>
+					<table class="table table-striped table-hover table-bordered data-table" id="datatable">
+						<thead>
+							<tr>
+								<th style="width: 10%;text-align: center;">No</th>
+								<th style="width: 30%;text-align: center;">Nama</th>
+								<th style="width: 30%;text-align: center;">Tanggal lahir</th>
+								<th style="width: 30%;text-align: center;">Usia</th>
+							</tr>
+						</thead>
+						@php
+						$no=1;
+						@endphp
+						<tbody style="font-size: 14px;">
+							@foreach($birthday as $good)
+							<tr>
+								<td style="text-align: center;">{{$no}}</td>
+								<td>{{$good->name}}</td>
+								<td>{{$good->birthdate}}</td>
+								<td>{{$good->usia}}</td>
+							</tr>
+							@php
+							$no++;
+							@endphp
+							@endforeach
+						</tbody>
+					</table> 
+
+				</div>
 			</div>
 		</div>
 		@endisset
