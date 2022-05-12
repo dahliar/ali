@@ -79,8 +79,6 @@
     }
 </script>
 
-
-
 @if (session('status'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>

@@ -669,27 +669,35 @@ class TransactionController extends Controller
 
     public function localUpdate(Request $request, Transaction $transaction)
     {
-        $request->validate([
-            'companydetail' => 'required',
-            'loadingPort' => 'required',
-            'destinationPort' => 'required',
-            'containerParty' => 'required',
-            'transactionDate' => 'required|date|before_or_equal:today',
-            'loadingDate' => 'required|date',
-            'rekening' => 'required|gt:0',
-            'valuta' => 'required',
-            'valutaType' => 'required|gt:0',
-            'payment' => 'required|gt:0',
-            'advance' => 'required|gt:0',
-            'status' => 'required|gt:0'
-        ],[
-            'rekening.gt'=> 'Pilih salah satu rekening',
-            'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
-            'status.gt'=> 'Pilih salah satu jenis status',
-        ]);
+        if (($request->currentStatus!=2)) {
+            $request->validate([
+                'companydetail' => 'required',
+                'loadingPort' => 'required',
+                'destinationPort' => 'required',
+                'containerParty' => 'required',
+                'transactionDate' => 'required|date|before_or_equal:today',
+                'loadingDate' => 'required|date',
+                'rekening' => 'required|gt:0',
+                'valuta' => 'required',
+                'valutaType' => 'required|gt:0',
+                'payment' => 'required|gt:0',
+                'advance' => 'required|gt:0',
+                'status' => 'required|gt:0'
+            ],[
+                'rekening.gt'=> 'Pilih salah satu rekening',
+                'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
+                'status.gt'=> 'Pilih salah satu jenis status',
+            ]);
+        } else{
+            $request->validate([
+                'status' => 'required|gt:0'
+            ],[
+                'status.gt'=> 'Pilih salah satu jenis status',
+            ]);
+        }
 
 
-        if (($request->currentStatus==1)){
+        if (($request->currentStatus==1)) {
             if ($request->status == 1){
                 //dari penawaran ke penawaran
                 $data = [
@@ -816,6 +824,19 @@ class TransactionController extends Controller
                 ->update($data);
                 return redirect('localTransactionList')
                 ->with('status','Update Berhasil: Transaksi penjualan berhasil selesai.');
+            }
+        } else if (($request->currentStatus==2)){
+            if ($request->status == 3){
+                $affected = DB::table('transactions')
+                ->where('id', $request->transactionId)
+                ->update(['status' => 3]);
+                $this->transactionCanceled($request->transactionId);
+                return redirect('localTransactionList')
+                ->with('status', 'Update berhasil: Transaksi dibatalkan, data stok dikembalikan');
+
+            } else{
+                return redirect('localTransactionList')
+                ->with('status', 'Batal update: Transaksi finished hanya bisa dibatalkan');
             }
         }
     }

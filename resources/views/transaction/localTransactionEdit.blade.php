@@ -16,23 +16,21 @@
 
     function disableForm() {        
         @if(($transaction->status == 2) or ($transaction->status == 3))
-        var inputs = document.getElementsByTagName("input");
-        for (var i = 0; i < inputs.length; i++) {
-            inputs[i].disabled = true;
-        }
-        var selects = document.getElementsByTagName("select");
-        for (var i = 0; i < selects.length; i++) {
-            selects[i].disabled = true;
-        }
-        var textareas = document.getElementsByTagName("textarea");
-        for (var i = 0; i < textareas.length; i++) {
-            textareas[i].disabled = true;
-        }
-        var textareas = document.getElementsByTagName("button");
-        for (var i = 0; i < textareas.length; i++) {
-            textareas[i].disabled = true;
-        }
+
+        document.getElementById("companydetail").readOnly=true;
+        document.getElementById("loadingPort").readOnly=true;
+        document.getElementById("destinationPort").readOnly=true;
+        document.getElementById("containerParty").readOnly=true;
+        document.getElementById("transactionDate").readOnly=true;
+        document.getElementById("loadingDate").readOnly=true;
+        document.getElementById("rekening").disabled=true;
+        document.getElementById("valutaType").disabled=true;
+        document.getElementById("payment").readOnly=true;
+        document.getElementById("advance").readOnly=true;
+        document.getElementById("currentStatus").readOnly=true;
+
         @endif
+
     }
 
     $(document).ready(function() {
@@ -244,6 +242,7 @@
                                     </select>
                                 </div>                    
                             </div>
+
                             <div class="row form-group">
                                 <div class="col-md-3 text-md-right">
                                     <span class="label" id="spanPayment">Jumlah total*</span>
@@ -274,6 +273,14 @@
                                 </div>
                                 <div class="col-md-3">
                                     <input id="currentStatus" name="currentStatus" type="hidden" value="{{ $transaction->status }}">
+                                    @if(Auth::user()->accessLevel <= 1)
+                                    <select id="status" name="status" class="form-select">
+                                        <option value="1" @if($transaction->status == 1) selected @endif>Transaksi baru</option>
+                                        <option value="4" @if($transaction->status == 4) selected @endif>Dalam perjalanan</option>
+                                        <option value="2" @if($transaction->status == 2) selected @endif>Selesai</option>
+                                        <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
+                                    </select>
+                                    @else
                                     @if ($transaction->status == 1)
                                     <select id="status" name="status" class="form-select" >
                                         <option value="-1">--Choose One--</option>
@@ -295,17 +302,19 @@
                                         <option value="2" @if($transaction->status == 2) selected @endif>Selesai</option>
                                         <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>
                                     </select>
-                                    @endif    
+                                    @endif
+                                    @endif
+
                                 </div>
                             </div>        
 
-                            @if(($transaction->status == 1) or ($transaction->status == 4))
+                            @if( $transaction->status == 1 or $transaction->status == 4 or Auth::user()->accessLevel <= 1)
                             <div class="row form-group">
                                 <div class="col-md-3 text-end">
                                 </div>
                                 <div class="col-md-4">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <input type="reset" value="Reset" class="btn btn-secondary">
+                                    <button type="submit" id="buttSubmit" class="btn btn-primary">Simpan</button>
+                                    <input type="reset" id="buttReset" value="Reset" class="btn btn-secondary">
                                 </div>
                                 @endif
                             </div>
