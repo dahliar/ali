@@ -365,9 +365,11 @@ class InvoiceController extends Controller
                     'ms.jumlah as jumlah'
                 )
                 ->where('ms.salaryId', '=', $sal->id)
+                ->where('ms.salaryId', '=', $sal->id)
                 ->where('ms.employeeId', '=', $detail_payroll->employeeId)
                 ->first();
-                
+                break;
+                case('2') :
                 $harian = DB::table('dailysalaries as ds')
                 ->select(
                     'p.start as start', 
@@ -381,6 +383,8 @@ class InvoiceController extends Controller
                     DB::raw('concat(date(p.start),p.employeeId)'), 
                     '=', 
                     DB::raw('concat(date(ds.presenceDate),ds.employeeId)'))
+                ->join('salaries as s', 's.id', '=', 'ds.salaryId')
+                ->where('s.jenis', '=', '2')
                 ->where('ds.salaryId', '=', $sal->id)
                 ->where('ds.employeeId', '=', $detail_payroll->employeeId)
                 ->get();
