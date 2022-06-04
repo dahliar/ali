@@ -432,6 +432,12 @@ Route::post('getPayrollByDateRange', [DashboardController::class, 'getPayrollByD
 Route::get('rekapitulasiPresensi',[DashboardController::class, 'rekapitulasiPresensi'])->name('rekapitulasiPresensi')->middleware(['auth', 'authorized']);
 Route::get('getRekapitulasiPresensi/{start}/{end}/{opsi}', [DashboardController::class, 'getRekapitulasiPresensi'])->middleware(['auth']);
 
+Route::get('historyDetailPenjualan',[DashboardController::class, 'historyDetailPenjualan'])->middleware(['auth', 'authorized']);
+Route::get('getDetailTransactionListHistory/{species}/{start}/{end}', [DashboardController::class, 'getDetailTransactionListHistory'])->middleware(['auth']);
+
+
+
+
 
 /*
 USER PAGE MAPPING

@@ -158,6 +158,11 @@
                             <a class="link-dark rounded" href="{{ url('rekapitulasiPresensi')}}"> Rekapitulasi Kehadiran
                             </a>
                         </li>
+                        <li>
+                            <a class="link-dark rounded" href="{{ url('historyDetailPenjualan')}}"> History Detail Penjualan Barang
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </li>

@@ -204,7 +204,9 @@
 					</a>
 					<a class="dropdown-item" href="{{ url('rekapitulasiPresensi')}}"><i class="fas fa-store"></i> Rekapitulasi Kehadiran
 					</a>
-
+					<a class="dropdown-item" href="{{ url('historyDetailPenjualan')}}"><i class="fas fa-history"></i> History Detail Penjualan Barang
+					</a>
+					
 				</li>
 			</ul>
 		</li>

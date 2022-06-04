@@ -193,9 +193,14 @@ class DashboardController extends Controller
         return view('dashboard.priceList', compact('speciesList'));
     }
     public function getPriceList($species, $start, $end){
+        //DB::enableQueryLog();
+        $startStr=$start." 00:00:00";
+        $endStr=$end." 23:59:59";
+        //dd($species);
+
         $query = DB::table('items as i')
         ->select(
-            DB::raw('concat(sp.name," ",g.name, " ", s.name, " ", f.name) as itemName'),
+            DB::raw('concat(sp.name," ",g.name," ",s.name," ",f.name) as itemName'),
             DB::raw('ifnull(min(dp.price),0) as minPrice'),
             DB::raw('ifnull(avg(dp.price),0) as avgPrice'),
             DB::raw('ifnull(max(dp.price),0) as maxPrice')
@@ -208,17 +213,20 @@ class DashboardController extends Controller
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->where('i.isActive','=', 1)
-        ->whereBetween('pur.purchaseDate', [$start." 00:00:00", $end." 23:59:59"])
+        ->whereBetween('pur.purchaseDate', [$startStr, $endStr])
         ->groupBy('i.id')
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->orderByRaw('s.name+0', 'asc');
+        ->orderBy('s.name', 'asc');
 
         if ($species>0){
             $query->where('sp.id','=', $species);
         }
 
+        
+
         return datatables()->of($query)
+
         ->editColumn('minPrice', function ($row) {
             return number_format($row->minPrice, 2);
         })
@@ -749,4 +757,80 @@ class DashboardController extends Controller
         })       
         ->addIndexColumn()->toJson();      
     }
+
+    public function historyDetailPenjualan()
+    {
+        $speciesList = Species::orderBy('name')->get();
+
+        return view('dashboard.historyTransaksiPenjualanBarang', compact('speciesList'));
+    }
+
+    public function getDetailTransactionListHistory($species, $start, $end){
+        $query = DB::table('detail_transactions as dt')
+        ->select(
+            'dt.id as id', 
+            'dt.transactionId as transactionId', 
+            'i.name as itemName', 
+            'f.name as freezingName', 
+            'g.name as gradeName', 
+            'p.name as packingName', 
+            'p.shortname as pshortname',
+            's.name as sizeName', 
+            'sp.name as speciesName', 
+            't.status as status', 
+            't.loadingDate as loadingDate',
+            'c.name as company',
+            DB::raw('(CASE   WHEN t.valutaType="1" THEN "Rp. " 
+                WHEN t.valutaType="2" THEN "USD. " 
+                WHEN t.valutaType="3" THEN "Rmb. " 
+                END) as valuta'
+            ), 
+            'dt.amount as amount',
+            'i.weightbase as wb',
+            'dt.price as price',
+        )
+        ->join('transactions as t', 't.id', '=', 'dt.transactionId')
+        ->join('companies as c', 'c.id','=', 't.companyId')
+        ->join('items as i', 'i.id', '=', 'dt.itemId')
+        ->join('freezings as f', 'i.freezingid', '=', 'f.id')
+        ->join('grades as g', 'i.gradeid', '=', 'g.id')
+        ->join('packings as p', 'i.packingid', '=', 'p.id')
+        ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->whereBetween('t.transactionDate', [$start." 00:00:00", $end." 23:59:59"])
+        ->whereIn('t.status', [2,4])
+        ->orderBy('t.transactionDate', 'desc')
+        ->orderBy('sp.name')
+        ->orderBy('g.name', 'desc')
+        ->orderByRaw('s.name+0 asc')
+        ->orderBy('f.name');
+        if ($species>0){
+            $query->where('sp.id','=', $species);
+        }
+
+
+        return datatables()->of($query)
+        ->editColumn('itemName', function ($row) {
+            $name = $row->speciesName." ".$row->gradeName. " ".$row->sizeName. " ".$row->freezingName." ".$row->wb." Kg/".$row->pshortname." - ".$row->itemName;
+            return $name;
+        })
+        ->addColumn('weight', function ($row) {
+            $html = number_format(($row->amount * $row->wb), 2, ',', '.').' Kg';
+            return $html;
+        })
+        ->editColumn('amount', function ($row) {
+            $html = number_format($row->amount, 2, ',', '.').' '.$row->pshortname;
+            return $html;
+        })
+        ->editColumn('price', function ($row) {
+            $html = $row->valuta.' '.number_format($row->price, 2, ',', '.').' /Kg';
+            return $html;
+        })
+        ->editColumn('harga', function ($row) {
+            $html = $row->valuta.' '.number_format(($row->price * $row->amount * $row->wb), 2, ',', '.');
+            return $html;
+        })
+        ->addIndexColumn()->toJson();    
+    }
+
 }
