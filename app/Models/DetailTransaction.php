@@ -29,6 +29,7 @@ class DetailTransaction extends Model
             'p.shortname as pshortname',
             's.name as sizeName', 
             'sp.name as speciesName', 
+            'sh.name as shapeName', 
             't.status as status', 
             DB::raw('(CASE   WHEN t.valutaType="1" THEN "Rp. " 
                 WHEN t.valutaType="2" THEN "USD. " 
@@ -45,11 +46,12 @@ class DetailTransaction extends Model
         ->join('grades as g', 'i.gradeid', '=', 'g.id')
         ->join('packings as p', 'i.packingid', '=', 'p.id')
         ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('shapes as sh', 'i.shapeid', '=', 'sh.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->where('t.id','=', $transactionId)
         ->orderBy('sp.name')
         ->orderBy('g.name', 'desc')
-        ->orderByRaw('s.name+0 asc')
+        ->orderBy('s.name')
         ->orderBy('f.name');
 
         $query->get();  
@@ -57,7 +59,7 @@ class DetailTransaction extends Model
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
-            $name = $row->speciesName." ".$row->gradeName. " ".$row->sizeName. " ".$row->freezingName." ".$row->wb." Kg/".$row->pshortname." - ".$row->itemName;
+            $name = $row->speciesName." ".$row->gradeName. " ".$row->shapeName. " ".$row->sizeName. " ".$row->freezingName." ".$row->wb." Kg/".$row->pshortname." - ".$row->itemName;
             return $name;
         })
         ->addColumn('weight', function ($row) {

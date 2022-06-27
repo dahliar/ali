@@ -79,7 +79,7 @@
                                         <th>Packed (Kg)</th>
                                         <th>Unpacked (Kg)</th>
                                         <th>Stock in hand (Kg)</th>
-                                        <th>On Progress (Kg)</th>
+                                        <th>Sailing (Kg)</th>
                                     </tr>
                                 </thead>
                                 <tbody>

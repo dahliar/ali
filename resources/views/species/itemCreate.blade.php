@@ -18,6 +18,9 @@
         var e = document.getElementById("size");
         var $size = e.options[e.selectedIndex].value;
 
+        e = document.getElementById("shape");
+        $shape = e.options[e.selectedIndex].value;
+
         e = document.getElementById("grade");
         var $grade = e.options[e.selectedIndex].value;
 
@@ -29,12 +32,13 @@
 
         var $weightbase = document.getElementById("weightbase").value;
 
-        if (  ($size!=-1) && ($grade!=-1) && ($packing!=-1) && ($freezing!=-1) && ($weightbase)  && ($name) ) {
+        if (  ($size!=-1) && ($shape!=-1) && ($grade!=-1) && ($packing!=-1) && ($freezing!=-1) && ($weightbase)  && ($name) ) {
             $.ajax({
                 url: '{{ url("getIsItemAlreadyExist") }}',
                 type: "POST",
                 data: {
                     "_token":"{{ csrf_token() }}",
+                    shape: $shape,
                     name: $name,
                     size: $size,
                     grade: $grade,
@@ -162,20 +166,38 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>                      
+                        </div>
                         <div class="row form-group">
                             <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Packing Type*</span>
                             </div>
                             <div class="col-md-5">
-                                <select class="form-select w-100" id="packing" name="packing">
+                                <select onchange="editChecker()" class="form-select w-100" id="packing" name="packing">
                                     <option value="-1">--Choose One--</option>
                                     @foreach ($packings as $packing)
                                     @if ( $packing->id == old('packing') )
                                     <option value="{{ $packing->id }}" selected>{{ $packing->name }}</option>
                                     @else
                                     <option value="{{ $packing->id }}">{{ $packing->name }}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
+                                <span class="label">Bentuk Olahan*</span>
+                            </div>
+                            <div class="col-md-5">
+                                <select onchange="editChecker()" class="form-select w-100" id="shape" name="shape">
+                                    <option value="-1">--Choose One--</option>
+                                    @foreach ($shapes as $shape)
+                                    @if ( $shape->id == old('shape') )
+                                    <option value="{{ $shape->id }}" selected>{{ $shape->name }}</option>
+                                    @else
+                                    <option value="{{ $shape->id }}">{{ $shape->name }}</option>
                                     @endif
                                     @endforeach
                                 </select>

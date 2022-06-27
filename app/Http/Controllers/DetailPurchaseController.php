@@ -139,7 +139,7 @@ class DetailPurchaseController extends Controller
         ->where('pur.id','=', $purchaseId)
         ->orderBy('sp.name')
         ->orderBy('g.name', 'desc')
-        ->orderByRaw('s.name+0 asc')
+        ->orderBy('s.name', 'asc')
         ->orderBy('f.name');
         $query->get();  
 

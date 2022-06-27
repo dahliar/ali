@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Family;
 use App\Models\Species;
+use App\Models\Shape;
 use App\Models\Packing;
 use App\Models\Freezing;
 use App\Models\Size;
@@ -96,13 +97,14 @@ class SpeciesController extends Controller
         ->where('isActive', 1)
         ->first();
         $grades=Grade::where('isActive', 1)->get();
+        $shapes=Shape::where('isActive', 1)->orderBy('name')->get();
         $packings=Packing::where('isActive', 1)->get();
         $freezings=Freezing::where('isActive', 1)->get();
         $sizes=DB::table('sizes')
         ->where('isActive', 1)
         ->where('speciesId', $speciesId)
         ->get();
-        return view('species.itemCreate', compact('species', 'sizes','packings','freezings','grades'));
+        return view('species.itemCreate', compact('shapes', 'species', 'sizes','packings','freezings','grades'));
     }
     public function createSize($speciesId)
     {
@@ -139,6 +141,7 @@ class SpeciesController extends Controller
     public function getIsItemAlreadyExist(Request $request){
         $query = DB::table('items')
         ->where("name", $request->name)
+        ->where("shapeId", $request->shape)
         ->where("sizeId", $request->size)
         ->where("gradeId", $request->grade)
         ->where("packingId", $request->packing)
@@ -159,6 +162,7 @@ class SpeciesController extends Controller
         $validated = $request->validate(
             [
                 'name' => 'required|unique:items',
+                'shape' => 'required|gt:0',
                 'grade' => 'required|gt:0',
                 'packing' => 'required|gt:0',
                 'freezing' => 'required|gt:0',
@@ -174,7 +178,7 @@ class SpeciesController extends Controller
         $filename="";
         if($request->hasFile('imageurl')){
             $file = $request->imageurl;
-            $filename = $request->name.$request->size.$request->grade.$request->packing.$request->freezing.$request->weightbase.".".$file->getClientOriginalExtension();
+            $filename = $request->name.$request->shape.$request->size.$request->grade.$request->packing.$request->freezing.$request->weightbase.".".$file->getClientOriginalExtension();
 
             $file->move(base_path("/public/images/items/"), $filename);
         }
@@ -182,6 +186,7 @@ class SpeciesController extends Controller
         $data = [
             'name' => $request->name,
             'sizeId' => $request->size,
+            'shapeId' => $request->shape,
             'gradeId' =>  $request->grade,
             'packingId' => $request->packing,
             'freezingId' => $request->freezing,

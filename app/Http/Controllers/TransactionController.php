@@ -501,7 +501,7 @@ class TransactionController extends Controller
         ->where('transactionId', $transactionId)
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->orderByRaw('s.name+0', 'asc')
+        ->orderBy('s.name', 'asc')
         ->groupBy('i.id')
         ->get();
 

@@ -24,12 +24,14 @@ class Item extends Model
             DB::raw('(select sum(dt.amount) from detail_transactions as dt join transactions t on dt.transactionId=t.id where t.status=4 and dt.itemId=i.id) as jumlahOnLoading'),
             'i.name as iname',
             's.name as sname',
+            'sh.name as shname',
             'f.name as fname',
             'g.name as gname',
             'baseprice',
             'weightbase'
         )
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
@@ -39,7 +41,7 @@ class Item extends Model
         ->groupBy('i.name')
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->orderByRaw('s.name+0', 'asc');
+        ->orderBy('s.name', 'asc');
 
 
         if ($speciesId>0){
@@ -53,7 +55,7 @@ class Item extends Model
             return $jumlah;
         })
         ->addColumn('itemName', function ($row) {
-            $name = $row->speciesName." ".$row->gname. " ".$row->sname. " ".$row->fname." ".$row->weightbase." Kg/".$row->packingShortname." - ".$row->iname;
+            $name = $row->speciesName." ".$row->gname. " ".$row->shname. " ".$row->sname. " ".$row->fname." ".$row->weightbase." Kg/".$row->packingShortname." - ".$row->iname;
             return $name;
         })
         ->addColumn('amountPacked', function ($row) {
@@ -106,7 +108,7 @@ class Item extends Model
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
         ->groupBy('sp.id')
-        ->orderByRaw('s.name+0', 'asc');
+        ->orderBy('s.name', 'asc');
 
         return datatables()->of($query)
         ->addColumn('total', function ($row) {
@@ -172,26 +174,30 @@ class Item extends Model
             'sp.nameBahasa as speciesName', 
             'sp.name as speciesNameEng', 
             's.name as sizeName',
+            'sh.name as shapeName',
             'p.shortname as pshortname',
             'g.name as gradeName',
             'p.name as packingName',
             'f.name as freezingName',
-            'i.amount as amount'
+            'i.amount as amount',
+            'i.weightbase as wb'
         )
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->where('sp.id','=', $speciesId)
         ->where('sp.isActive','=', 1)
+        ->where('sh.isActive','=', 1)
         ->where('s.isActive','=', 1)
         ->where('g.isActive','=', 1)
         ->where('f.isActive','=', 1)
         ->where('p.isActive','=', 1)
         ->where('i.isActive','=', 1)
         ->orderBy('g.name', 'desc')
-        ->orderByRaw('s.name+0 asc')
+        ->orderBy('s.name', 'asc')
         ->orderBy('f.name');
 
         if($transactionId>0){
@@ -220,6 +226,7 @@ class Item extends Model
             'i.id as itemId', 
             DB::raw('concat(
                 sp.nameBahasa," ",
+                sh.name," ",
                 g.name," ",
                 s.name," ",
                 p.name," ",
@@ -232,6 +239,7 @@ class Item extends Model
             'p.shortname as packingShortname'
         )
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')

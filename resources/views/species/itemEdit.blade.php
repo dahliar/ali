@@ -76,7 +76,7 @@
                                 <a class="white-text" href="{{ url('/home') }}">Home</a>
                             </li>
                             <li class="breadcrumb-item active">
-                                <a class="white-text" href="{{ url('itemList')}}">Items</a>
+                                <a class="white-text" href="{{ url()->previous()}}">{{$item->speciesName}} {{$item->itemName}}</a>
                             </li>
                             <li class="breadcrumb-item active">Ubah</li>
                         </ol>
@@ -119,6 +119,16 @@
                             </div>
                             <div class="col-md-5">
                                 <input id="grade" name="grade" type="text" class="form-control text-md-right" value="{{$item->gradeName}}" readonly>
+
+                            </div>
+                        </div>                      
+                        <div class="row form-group">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-3 text-md-right">
+                                <span class="label">Bentuk Olahan</span>
+                            </div>
+                            <div class="col-md-5">
+                                <input id="shape" name="shape" type="text" class="form-control text-md-right" value="{{$item->shapeName}}" readonly>
 
                             </div>
                         </div>                      

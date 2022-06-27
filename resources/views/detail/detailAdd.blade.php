@@ -28,17 +28,23 @@
                             html += '<option value='+data[i].itemId+'>'+
                             data[i].speciesNameEng+
                             " "+data[i].gradeName+
+                            " "+data[i].shapeName+
                             " "+data[i].sizeName+
-                            " "+data[i].pshortname+
+                            " "+data[i].wb+
+                            "Kg/"+data[i].pshortname+
                             " "+data[i].freezingName+
+                            " "+data[i].itemName+
                             '</option>';
                         } else {
                             html += '<option selected value='+data[i].itemId+'>'+
                             data[i].speciesNameEng+
                             " "+data[i].gradeName+
+                            " "+data[i].shapeName+
                             " "+data[i].sizeName+
-                            " "+data[i].pshortname+
+                            " "+data[i].wb+
+                            "Kg/"+data[i].pshortname+
                             " "+data[i].freezingName+
+                            " "+data[i].itemName+
                             '</option>';
                         }
                         $('#item').html(html);

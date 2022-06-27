@@ -524,7 +524,7 @@ class DashboardController extends Controller
             ->join('companies as c', 'p.companyId', '=', 'c.id')
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
-            ->orderByRaw('p.purchasingNum+0', 'asc')
+            ->orderBy('p.purchasingNum', 'asc')
             ->orderBy('p.purchaseDate');
         } else if($request->opsi == '2'){
             $payroll = $payroll->select(
@@ -589,7 +589,7 @@ class DashboardController extends Controller
             ->join('companies as c', 'p.companyId', '=', 'c.id')
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
-            ->orderByRaw('p.purchasingNum+0', 'asc')
+            ->orderBy('p.purchasingNum', 'asc')
             ->orderBy('p.purchaseDate');
         } else if($request->opsi == '2'){
             $payroll = $payroll->select(
@@ -802,7 +802,7 @@ class DashboardController extends Controller
         ->orderBy('t.transactionDate', 'desc')
         ->orderBy('sp.name')
         ->orderBy('g.name', 'desc')
-        ->orderByRaw('s.name+0 asc')
+        ->orderBy('s.name', 'asc')
         ->orderBy('f.name');
         if ($species>0){
             $query->where('sp.id','=', $species);

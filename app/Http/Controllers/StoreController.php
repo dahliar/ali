@@ -275,6 +275,7 @@ class StoreController extends Controller
         ->select('str.id', 
             'i.name as item', 
             's.name as size',
+            'sh.name as shape',
             'g.name as grade',
             'sp.nameBahasa as species',
             'p.name as packing',
@@ -299,6 +300,7 @@ class StoreController extends Controller
         ->leftjoin('users as ua', 'ua.id', '=', 'str.approvedBy')
         ->join('items as i', 'i.id', '=', 'str.itemId')
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
@@ -308,7 +310,7 @@ class StoreController extends Controller
         ->where('i.id','=', $itemId)
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->orderByRaw('s.name+0', 'asc');
+        ->orderBy('s.name', 'asc');
 
         if($opsi == 0){
             $query = $query->where('isApproved', '=', '0');
@@ -322,7 +324,7 @@ class StoreController extends Controller
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
-            $name = $row->species." ".$row->grade. " ".$row->size. " ".$row->freezing." ".$row->wb." Kg/".$row->pShortname." - ".$row->item;
+            $name = $row->species." ".$row->grade. " ".$row->shape. " ".$row->size. " ".$row->freezing." ".$row->wb." Kg/".$row->pShortname." - ".$row->item;
             return $name;
         })
         ->editColumn('amountPacked', function ($row) {
@@ -360,6 +362,7 @@ class StoreController extends Controller
         ->select('str.id', 
             'i.name as item', 
             's.name as size',
+            'sh.name as shape',
             'g.name as grade',
             'sp.nameBahasa as species',
             'p.name as packing',
@@ -382,6 +385,7 @@ class StoreController extends Controller
         ->join('users as ui', 'ui.id', '=', 'str.userId')
         ->leftjoin('users as ua', 'ua.id', '=', 'str.approvedBy')
         ->join('items as i', 'i.id', '=', 'str.itemId')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
@@ -392,7 +396,7 @@ class StoreController extends Controller
         ->where('i.id','=', $itemId)
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->orderByRaw('s.name+0', 'asc');
+        ->orderBy('s.name', 'asc');
 
         if($opsi == 0){
             $query = $query->where('isApproved', '=', '0');
@@ -406,7 +410,7 @@ class StoreController extends Controller
 
         return datatables()->of($query)
         ->editColumn('itemName', function ($row) {
-            $name = $row->species." ".$row->grade. " ".$row->size. " ".$row->freezing." ".$row->wb." Kg/".$row->pShortname." - ".$row->item;
+            $name = $row->species." ".$row->grade. " ".$row->shape. " ".$row->size. " ".$row->freezing." ".$row->wb." Kg/".$row->pShortname." - ".$row->item;
             return $name;
         })
         ->editColumn('amountSubtract', function ($row) {
@@ -487,7 +491,7 @@ class StoreController extends Controller
         }
         $query = $query->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->orderByRaw('si.name+0', 'asc')
+        ->orderBy('si.name', 'asc')
         ->get();
 
         return datatables()->of($query)
@@ -584,7 +588,7 @@ class StoreController extends Controller
         }
         $query = $query->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->orderByRaw('si.name+0', 'asc')
+        ->orderBy('si.name', 'asc')
         ->get();
 
         return datatables()->of($query)

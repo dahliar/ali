@@ -70,6 +70,7 @@ class Species extends Model
             'i.id as id', 
             'i.name as itemName', 
             'sp.name as speciesName', 
+            'sh.name as shapeName', 
             's.name as sizeName',
             'g.name as gradeName',
             'p.name as packingName',
@@ -80,6 +81,7 @@ class Species extends Model
             'i.isActive as isActive'
         )
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
