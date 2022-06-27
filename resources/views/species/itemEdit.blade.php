@@ -128,7 +128,23 @@
                                 <span class="label">Bentuk Olahan</span>
                             </div>
                             <div class="col-md-5">
-                                <input id="shape" name="shape" type="text" class="form-control text-md-right" value="{{$item->shapeName}}" readonly>
+                                    <!--
+                                    <input id="shape" name="shape" type="text" class="form-control text-md-right" value="{{$item->shapeName}}" readonly>
+                                -->
+                                <div class="col-md-5">
+                                    <select class="form-select w-100" id="shape" name="shape">
+                                        <option value="-1">--Choose One--</option>
+                                        @foreach ($shapes as $shape)
+                                        @if ($shape->id == old('shape') )
+                                        <option value="{{ $shape->id }}" selected>{{ $shape->name }}</option>
+                                        @elseif( $shape->id == $item->shid )
+                                        <option value="{{ $shape->id }}" selected>{{ $shape->name }}</option>
+                                        @else
+                                        <option value="{{ $shape->id }}">{{ $shape->name }}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                </div>
 
                             </div>
                         </div>                      

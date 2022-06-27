@@ -42,5 +42,5 @@ di header.blade.php
 
 Catatan ubah basis data
 1. Tambah tabel Shapes
-2. Tambah kolom shapeId di tabel Items
+2. Tx`
 3. Buat relasi Items-Shapes relasi shapeId dan id

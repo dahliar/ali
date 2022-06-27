@@ -71,6 +71,7 @@ class Species extends Model
             'i.name as itemName', 
             'sp.name as speciesName', 
             'sh.name as shapeName', 
+            'sh.id as shid', 
             's.name as sizeName',
             'g.name as gradeName',
             'p.name as packingName',

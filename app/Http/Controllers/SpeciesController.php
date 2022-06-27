@@ -88,7 +88,10 @@ class SpeciesController extends Controller
     public function editSpeciesItem($itemId)
     {
         $item = $this->species->getOneItem($itemId);
-        return view('species.itemEdit', compact('item'));
+        $shapes =DB::table('shapes')
+        ->where('isActive', 1)
+        ->get();
+        return view('species.itemEdit', compact('item', 'shapes'));
     }
     public function createItem($speciesId)
     {
@@ -215,9 +218,25 @@ class SpeciesController extends Controller
 
     public function updateItem(Request $request)
     {   
+        $validated = $request->validate(
+            [
+                'shape' => 'required|gt:0',
+            ],[
+                'shape.*' => 'Pilih bentuk olahan'
+            ]
+        );
+
+
+        DB::table('items')
+        ->where('id', $request->itemId)
+        ->update(['isActive' => $request->isActive, 'shapeId' => $request->shape]);
+
+
+        /*
         DB::table('items')
         ->where('id', $request->itemId)
         ->update(['isActive' => $request->isActive]);
+        */
         
         return redirect()->back()->with('status','Update berhasil dilakukan.');
     }
