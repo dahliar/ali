@@ -490,14 +490,25 @@ class TransactionController extends Controller
         $result = DB::table('detail_transactions as dt')
         ->select(
             'dt.itemId as itemId', 
-            DB::raw('concat(sp.name," ",g.name," ", s.name) as itemName'),
+            DB::raw('concat(
+                sp.name," ",
+                sh.name," ",
+                g.name," ", 
+                s.name," ", 
+                f.name," ",
+                i.weightbase,"Kg/", 
+                p.shortname
+            ) as itemName'),
             DB::raw('sum(dt.amount) as amount'),
             'i.amount as currentAmount'
         )
         ->join('items as i', 'i.id', '=', 'dt.itemId')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('grades as g', 'i.gradeid', '=', 'g.id')
         ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
         ->where('transactionId', $transactionId)
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
