@@ -22,25 +22,21 @@ class DetailTransaction extends Model
         ->select(
             'dt.id as id', 
             'dt.transactionId as transactionId', 
-            'i.name as itemName', 
-            'f.name as freezingName', 
-            'g.name as gradeName', 
-            'p.name as packingName', 
-            'p.shortname as pshortname',
-            's.name as sizeName', 
-            'sp.name as speciesName', 
-            'sh.name as shapeName', 
+            'dt.amount as amount',
+            'dt.price as price',
+            'vid.name as itemName', 
+            'vid.weightbase as wb',
+            'vid.pshortname as pshortname',
             't.status as status', 
             DB::raw('(CASE   WHEN t.valutaType="1" THEN "Rp. " 
                 WHEN t.valutaType="2" THEN "USD. " 
                 WHEN t.valutaType="3" THEN "Rmb. " 
                 END) as valuta'
             ), 
-            'dt.amount as amount',
-            'i.weightbase as wb',
-            'dt.price as price',
         )
         ->join('transactions as t', 't.id', '=', 'dt.transactionId')
+        ->join('view_item_details as vid', 'vid.itemId', '=', 'dt.itemId')
+        /*
         ->join('items as i', 'i.id', '=', 'dt.itemId')
         ->join('freezings as f', 'i.freezingid', '=', 'f.id')
         ->join('grades as g', 'i.gradeid', '=', 'g.id')
@@ -48,20 +44,17 @@ class DetailTransaction extends Model
         ->join('sizes as s', 'i.sizeid', '=', 's.id')
         ->join('shapes as sh', 'i.shapeid', '=', 'sh.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        */
         ->where('t.id','=', $transactionId)
-        ->orderBy('sp.name')
-        ->orderBy('g.name', 'desc')
-        ->orderBy('s.name')
-        ->orderBy('f.name');
-
+        ->orderBy('vid.speciesName')
+        ->orderBy('vid.gradeName', 'desc')
+        ->orderBy('vid.sizeName')
+        ->orderBy('vid.freezingName');
+        
         $query->get();  
 
 
         return datatables()->of($query)
-        ->editColumn('itemName', function ($row) {
-            $name = $row->speciesName." ".$row->gradeName. " ".$row->shapeName. " ".$row->sizeName. " ".$row->freezingName." ".$row->wb." Kg/".$row->pshortname." - ".$row->itemName;
-            return $name;
-        })
         ->addColumn('weight', function ($row) {
             $html = number_format(($row->amount * $row->wb), 2, ',', '.').' Kg';
             return $html;

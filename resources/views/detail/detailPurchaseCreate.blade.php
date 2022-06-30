@@ -26,26 +26,12 @@
                     for(i=0; i<data.length; i++){
                         if (data[i].itemId != itemId){
                             html += '<option value='+data[i].itemId+'>'+
-                            data[i].speciesName+
-                            "\t"+data[i].gradeName+
-                            " "+data[i].shapeName+
-                            " "+data[i].sizeName+
-                            " "+data[i].pshortname+
-                            " "+data[i].wb+
-                            " "+data[i].freezingName+
-                            " "+data[i].itemName+
+                            data[i].itemName+
                             '</option>';
                         }
                         else{
                             html += '<option selected value='+data[i].itemId+'>'+
-                            data[i].speciesName+
-                            "\t"+data[i].gradeName+
-                            " "+data[i].shapeName+
-                            " "+data[i].sizeName+
-                            " "+data[i].pshortname+
-                            " "+data[i].wb+
-                            " "+data[i].freezingName+
-                            " "+data[i].itemName+
+                            data[i].itemName+
                             '</option>';
                         }
                     }

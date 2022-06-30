@@ -109,17 +109,21 @@ class DetailPurchaseController extends Controller
     public function getAllPurchaseItems($purchaseId){
         $query = DB::table('detail_purchases as dp')
         ->select(
+            //'sp.name as speciesName', 
             'dp.id as id', 
-            'sp.name as speciesName', 
             'dp.purchasesId as purchasesId', 
+            'vid.nameBahasa as itemName',
+            /*
             'i.name as itemName', 
             'f.name as freezingName', 
             'g.name as gradeName', 
             'p.name as packingName',
             'p.shortname as pShortname',
             's.name as sizeName', 
+            */
+            'vid.pshortname as packingName',
             'pur.status as status',
-            'i.weightbase as wb',
+            'vid.weightbase as wb',
             DB::raw('(CASE   WHEN pur.valutaType="1" THEN "Rp. " 
                 WHEN pur.valutaType="2" THEN "USD. " 
                 WHEN pur.valutaType="3" THEN "Rmb. " 
@@ -130,25 +134,22 @@ class DetailPurchaseController extends Controller
             'dp.price as price'
         )
         ->join('purchases as pur', 'pur.id', '=', 'dp.purchasesId')
+        ->join('view_item_details as vid', 'vid.itemId', '=', 'dp.itemId')
+        /*
         ->join('items as i', 'i.id', '=', 'dp.itemId')
         ->join('freezings as f', 'i.freezingid', '=', 'f.id')
         ->join('grades as g', 'i.gradeid', '=', 'g.id')
         ->join('packings as p', 'i.packingid', '=', 'p.id')
         ->join('sizes as s', 'i.sizeid', '=', 's.id')
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        */
         ->where('pur.id','=', $purchaseId)
-        ->orderBy('sp.name')
-        ->orderBy('g.name', 'desc')
-        ->orderBy('s.name', 'asc')
-        ->orderBy('f.name');
+        ->orderBy('vid.speciesName')
+        ->orderBy('vid.gradeName', 'desc')
+        ->orderBy('vid.sizeName', 'asc')
+        ->orderBy('vid.freezingName');
         $query->get();  
-
-
         return datatables()->of($query)
-        ->addColumn('itemName', function ($row) {
-            $name = $row->speciesName." ".$row->gradeName. " ".$row->sizeName. " ".$row->freezingName." ".$row->wb." Kg/".$row->pShortname." - ".$row->itemName;
-            return $name;
-        })
         ->editColumn('amount', function ($row) {
             $html = number_format($row->amount, 2, ',', '.').' Kg';
             return $html;

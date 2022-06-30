@@ -11,7 +11,6 @@
 
 @section('content')
 <script type="text/javascript"> 
-
     function selectOptionChange(speciesId, itemId){
         $.ajax({
             url: '{{ url("getItemsForSelectOption") }}/'+'{{ $transactionId }}'+"/0/"+speciesId,
@@ -26,25 +25,11 @@
                     for(i=0; i<data.length; i++){
                         if (data[i].itemId != itemId){
                             html += '<option value='+data[i].itemId+'>'+
-                            data[i].speciesNameEng+
-                            " "+data[i].gradeName+
-                            " "+data[i].shapeName+
-                            " "+data[i].sizeName+
-                            " "+data[i].wb+
-                            "Kg/"+data[i].pshortname+
-                            " "+data[i].freezingName+
-                            " "+data[i].itemName+
+                            data[i].itemName+
                             '</option>';
                         } else {
                             html += '<option selected value='+data[i].itemId+'>'+
-                            data[i].speciesNameEng+
-                            " "+data[i].gradeName+
-                            " "+data[i].shapeName+
-                            " "+data[i].sizeName+
-                            " "+data[i].wb+
-                            "Kg/"+data[i].pshortname+
-                            " "+data[i].freezingName+
-                            " "+data[i].itemName+
+                            data[i].itemName+
                             '</option>';
                         }
                         $('#item').html(html);

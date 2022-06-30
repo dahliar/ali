@@ -167,6 +167,7 @@ class Item extends Model
     }
 
     public function getItemForSelectOption($transactionId, $purchaseId, $speciesId){
+        /*
         $query = DB::table('items as i')
         ->select(
             'i.id as itemId', 
@@ -199,6 +200,13 @@ class Item extends Model
         ->orderBy('g.name', 'desc')
         ->orderBy('s.name', 'asc')
         ->orderBy('f.name');
+        */
+
+        $query = DB::table('view_item_details as vid')
+        ->where('vid.speciesId','=', $speciesId)
+        ->orderBy('vid.gradeName', 'asc')
+        ->orderBy('vid.sizeName', 'asc')
+        ->orderBy('vid.freezingName');
 
         if($transactionId>0){
             $list = DB::table("detail_transactions")
@@ -206,7 +214,11 @@ class Item extends Model
             ->where('transactionId', '=', $transactionId)
             ->get()
             ->pluck('itemId');
-            $query->whereNotIn('i.id', $list);
+            $query->select(
+                'vid.itemId as itemId', 
+                'vid.name as itemName'
+            )
+            ->whereNotIn('vid.itemId', $list);
         }
         if($purchaseId>0){
             $list = DB::table("detail_purchases")
@@ -214,7 +226,11 @@ class Item extends Model
             ->where('purchasesId', '=', $purchaseId)
             ->get()
             ->pluck('itemId');
-            $query->whereNotIn('i.id', $list);
+            $query->select(
+                'vid.itemId as itemId', 
+                'vid.nameBahasa as itemName'
+            )
+            ->whereNotIn('vid.itemId', $list);
         }
 
         return $query->get();  
