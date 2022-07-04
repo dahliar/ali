@@ -8,9 +8,14 @@ use App\Models\Rekening;
 use App\Models\Countries;
 use App\Models\TransactionNote;
 use App\Models\Forwarder;
+use App\Models\Undername;
+use App\Models\Liner;
+use App\Models\Bank;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use DB;
+use Illuminate\Validation\Rule;
 
 
 class TransactionController extends Controller
@@ -28,10 +33,21 @@ class TransactionController extends Controller
         $nations = Countries::where('isActive',1)->get();
         return view('transaction.transactionList', compact('nations'));
     }
+
     public function indexTesting()
     {
         $nations = Countries::where('isActive',1)->get();
         return view('transaction.transactionListTesting', compact('nations'));
+    }
+
+    public function indexUndername()
+    {
+        $nations = Countries::where('isActive',1)->get();
+        return view('undername.undernameList', compact('nations'));
+    }
+
+    public function getAllUndernameTransaction(Request $request){
+        return $this->transaction->getAllUndernameTransactionData($request);
     }
 
     public function getAllExportTransaction(Request $request){
@@ -56,7 +72,18 @@ class TransactionController extends Controller
 
         return view('transaction.transactionAdd', compact('countryRegister', 'companies', 'rekenings', 'forwarders'));
     }
+    public function createUndername()
+    {
+        $companies = Company::all();
+        $banks = Bank::all();
+        $liners = Liner::all();
+        $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
+        $countryRegister = Countries::where('isActive',1)->get();
 
+        //$notes = TransactionNote::where('transactionId',$transaction->id)->get();
+
+        return view('undername.undernameAdd', compact('countryRegister', 'companies', 'banks', 'forwarders', 'liners'));
+    }
 
 
     /**
@@ -96,7 +123,6 @@ class TransactionController extends Controller
                 'payment' => 'required|gt:0',
                 'advance' => 'required|gte:0',
                 'forwarder' => 'required|gt:0',
-                'undername' => 'required|gt:0',
                 'transactionDate' => 'required|date|before_or_equal:today',
                 'loadingDate' => 'required|date',
                 'departureDate' => 'required|date|after_or_equal:loadingDate',
@@ -143,7 +169,7 @@ class TransactionController extends Controller
             'payment' =>  $request->payment,
             'advance' =>  $request->advance,
             'forwarderid' => $request->forwarder,
-            'isundername' => $request->undername,
+            'isundername' => 1,
             'valutaType' =>  $request->valutaType,
             'transactionDate' => $request->transactionDate,
             'departureDate' =>  $request->departureDate,
@@ -183,6 +209,265 @@ class TransactionController extends Controller
         ->with('status','Transaksi pengiriman berhasil ditambahkan.');
     }
 
+    public function undernameStore(Request $request)
+    {   
+        //21 validasi inputan wajib
+        //2 default value dari inputan : swiftcode, valuta
+        //3 inputan default: userId, creationDate, status
+
+        $request->validate(
+            [
+                'shipper' => 'required',
+                'pinum' => 'required|unique:undernames',
+                'transactionNum' => 'required|unique:undernames',
+                'shipperAddress' => 'required',
+                'company' => 'required|gt:0',
+                'companydetail' => 'required',                
+                'countryId' => 'required|gt:0',
+                'packer' => 'required',
+                'loadingPort' => 'required',
+                'orderType' => 'required',                
+                'destinationPort' => 'required',                
+                'containerType' => 'required|gt:0',                
+                'containerParty' => 'required',
+                'forwarder' => 'required|gt:0',
+
+                'containerNumber' => 'required',
+                'containerSeal' => 'required',
+                'containerVessel' => 'required',
+                'liner' => 'required|gt:0',
+                'bl' => 'required',
+
+                'transactionDate' => 'required|date|before_or_equal:today',
+                'loadingDate' => 'required|date',
+                'departureDate' => 'required|date|after_or_equal:loadingDate',
+                'arrivalDate' => 'required|date|after:departureDate',
+
+                'paymentTo' => 'required|gt:0',
+                'bank' => 'required|gt:0',
+                'paymentBankAddress' => 'required',
+                'account' => 'required',
+                'paymentAccountName' => 'required',
+                'swiftcode' => 'required',
+                'valutaType' => 'required|gt:0',
+                'paymentAmount' => 'required|gte:0',
+                'advanceAmount' => 'required|gte:0',
+                'paymentStatus' => 'required|gt:0',
+            ],
+            [
+                'rekening.gt'=> 'Pilih salah satu rekening',
+                'liner.*'=> 'Pilih salah satu Liner',
+                'bl.*'=> 'Nomor BL harus diisi',
+                'company.gt'=> 'Pilih salah satu perusahaan',
+                'containerType.gt'=> 'Pilih salah satu jenis pengiriman',
+                'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
+                'pinum.unique'=> 'Nomor pinum harus unik',
+                'transactionNum.unique'=> 'Nomor transaksi harus unik',
+                'countryId.gt'=>'Pilih salah satu negara',
+                'forwarder.gt'=>'Pilih forwarder',
+                'undernamePayment.*'=>'Pilih status jenis undername',
+                'paymentStatus.*'=>'Pilih status pembayaran',
+                'pinum.*'=> 'Nomor PI harus diisi',
+                'transactionNum.*'=> 'Nomor transaksi harus diisi',
+                'companydetail.*' => 'Detail perusahaan harus diisi',  
+                'packer.*' => 'Nama perusahaan packer harus diisi',
+                'loadingPort.*' => 'Port loading harus diisi',
+                'destinationPort.*' => 'Port tujuan harus diisi',
+                'containerNumber.*' => 'Nomor kontainer harus diisi',
+                'containerSeal.*' => 'Nomor seal harus diisi',
+                'containerVessel.*' => 'Nama vessel harus diisi',
+                'liner.*' => 'Liner harus dipilih',
+                'bl.*' => 'Nomor Bill of Lading harus diisi',
+            ]
+        );
+
+        $data = [
+            'userId' => auth()->user()->id,
+            'jenis' => 1,
+            'shipper' =>  $request->shipper,
+            'shipperAddress' =>  $request->shipperAddress,
+            'companyId' =>  $request->company,
+            'companydetail' =>  $request->companydetail,
+            'transactionNum' => $request->transactionNum,
+            'pinum' => $request->pinum,
+            'status' =>  1,
+            'packer' => $request->packer,
+            'loadingport' =>  $request->loadingPort,
+            'destinationport' =>  $request->destinationPort,
+            'orderType' => $request->orderType,
+            'countryId' => $request->countryId,
+
+
+
+            'packer' =>  $request->packer,
+
+            'containerType' =>  $request->containerType,
+            'containerParty' =>  $request->containerParty,
+
+            'forwarderid' => $request->forwarder,
+            'containerNumber' =>  $request->containerNumber,
+            'containerSeal' =>  $request->containerSeal,
+            'containerVessel' =>  $request->containerVessel,
+
+            'linerId' => $request->liner,
+            'bl' => $request->bl,
+
+            'transactionDate' => $request->transactionDate,
+            'departureDate' =>  $request->departureDate,
+            'loadingDate' =>  $request->loadingDate,
+            'arrivalDate' => $request->arrivalDate,
+            
+            'paymentTo' => $request->paymentTo,
+            'paymentBank' => $request->bank,
+            'paymentBankAddress' => $request->paymentBankAddress,
+            'paymentAccount' => $request->account,
+            'paymentAccountName' => $request->paymentAccountName,
+            'paymentSwiftcode' => $request->swiftcode,
+            'paymentValuta' =>  $request->valutaType,
+            'paymentAmount' =>  $request->paymentAmount,
+            'paymentAdvance' =>  $request->advanceAmount,
+            'paymentStatus' =>  $request->paymentStatus
+        ];
+        
+        $lastTransactionIdStored = DB::table('undernames')->insertGetId($data);
+        
+        //create PI Number
+        //$this->inv = new InvoiceController();
+        //$pinum = $this->inv->createpinum($lastTransactionIdStored);
+        //ketika transaksi adalah undername
+        //if ($request->undername==2){
+        //    $tnum = $this->transaction->whenUndernameIsTrue($lastTransactionIdStored);
+        //}
+        return redirect('undernameList')
+        ->with('status','Transaksi Undername berhasil ditambahkan.');
+    }
+    public function undernameUpdate(Request $request)
+    {   
+        $request->validate(
+            [
+                'shipper' => 'required',
+                'pinum' => ['required', Rule::unique('undernames')->ignore($request->undernameId)],
+                'transactionNum' => ['required', Rule::unique('undernames')->ignore($request->undernameId)],
+                'shipperAddress' => 'required',
+                'company' => 'required|gt:0',
+                'companydetail' => 'required',                
+                'countryId' => 'required|gt:0',
+                'packer' => 'required',
+                'loadingPort' => 'required',
+                'orderType' => 'required',                
+                'destinationPort' => 'required',                
+                'containerType' => 'required|gt:0',                
+                'containerParty' => 'required',
+                'forwarder' => 'required|gt:0',
+
+                'containerNumber' => 'required',
+                'containerSeal' => 'required',
+                'containerVessel' => 'required',
+                'liner' => 'required|gt:0',
+                'bl' => 'required',
+
+                'transactionDate' => 'required|date|before_or_equal:today',
+                'loadingDate' => 'required|date',
+                'departureDate' => 'required|date|after_or_equal:loadingDate',
+                'arrivalDate' => 'required|date|after:departureDate',
+
+                'paymentTo' => 'required|gt:0',
+                'bank' => 'required|gt:0',
+                'account' => 'required',
+                'swiftcode' => 'required',
+                'valutaType' => 'required|gt:0',
+                'paymentAmount' => 'required|gte:0',
+                'advanceAmount' => 'required|gte:0',
+                'paymentStatus' => 'required|gt:0',
+                'status' => 'required|gt:0'
+            ],
+            [
+                'rekening.gt'=> 'Pilih salah satu rekening',
+                'liner.*'=> 'Pilih salah satu Liner',
+                'bl.*'=> 'Nomor BL harus diisi',
+                'company.gt'=> 'Pilih salah satu perusahaan',
+                'containerType.gt'=> 'Pilih salah satu jenis pengiriman',
+                'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
+                'pinum.unique'=> 'Nomor pinum harus unik',
+                'transactionNum.unique'=> 'Nomor transaksi harus unik',
+                'countryId.gt'=>'Pilih salah satu negara',
+                'forwarder.gt'=>'Pilih forwarder',
+                'undernamePayment.*'=>'Pilih status jenis undername',
+                'paymentStatus.*'=>'Pilih status pembayaran',
+                'pinum.*'=> 'Nomor PI harus diisi',
+                'transactionNum.*'=> 'Nomor transaksi harus diisi',
+                'companydetail.*' => 'Detail perusahaan harus diisi',  
+                'packer.*' => 'Nama perusahaan packer harus diisi',
+                'loadingPort.*' => 'Port loading harus diisi',
+                'destinationPort.*' => 'Port tujuan harus diisi',
+                'containerNumber.*' => 'Nomor kontainer harus diisi',
+                'containerSeal.*' => 'Nomor seal harus diisi',
+                'containerVessel.*' => 'Nama vessel harus diisi',
+                'liner.*' => 'Liner harus dipilih',
+                'bl.*' => 'Nomor Bill of Lading harus diisi',
+                'status.*'=>'Pilih status transaksi'
+            ]
+        );
+
+        $data = [
+            'userId' => auth()->user()->id,
+            'jenis' => 1,
+            'shipper' =>  $request->shipper,
+            'shipperAddress' =>  $request->shipperAddress,
+            'companyId' =>  $request->company,
+            'companydetail' =>  $request->companydetail,
+            'transactionNum' => $request->transactionNum,
+            'pinum' => $request->pinum,
+            'status' =>  $request->status,
+            'packer' => $request->packer,
+            'loadingport' =>  $request->loadingPort,
+            'destinationport' =>  $request->destinationPort,
+            'orderType' => $request->orderType,
+            'countryId' => $request->countryId,
+
+
+
+            'packer' =>  $request->packer,
+
+            'containerType' =>  $request->containerType,
+            'containerParty' =>  $request->containerParty,
+
+            'forwarderid' => $request->forwarder,
+            'containerNumber' =>  $request->containerNumber,
+            'containerSeal' =>  $request->containerSeal,
+            'containerVessel' =>  $request->containerVessel,
+
+            'linerId' => $request->liner,
+            'bl' => $request->bl,
+
+            'transactionDate' => $request->transactionDate,
+            'departureDate' =>  $request->departureDate,
+            'loadingDate' =>  $request->loadingDate,
+            'arrivalDate' => $request->arrivalDate,
+
+            'paymentTo' => $request->paymentTo,
+            'paymentBank' => $request->bank,
+            'paymentAccount' => $request->account,
+            'paymentSwiftcode' => $request->swiftcode,
+            'paymentValuta' =>  $request->valutaType,
+            'paymentAmount' =>  $request->paymentAmount,
+            'paymentAdvance' =>  $request->advanceAmount,
+            'paymentStatus' =>  $request->paymentStatus
+        ];
+
+        $action = Undername::where('id', $request->undernameId)
+        ->update($data);
+
+        //create PI Number
+        //$this->inv = new InvoiceController();
+        //$pinum = $this->inv->createpinum($lastTransactionIdStored);
+        //ketika transaksi adalah undername
+        //if ($request->undername==2){
+        //    $tnum = $this->transaction->whenUndernameIsTrue($lastTransactionIdStored);
+        //}
+        return redirect('undernameList')
+        ->with('status','Transaksi Undername berhasil ditambahkan.');
+    }
     /**
      * Display the specified resource.
      *
@@ -211,6 +496,17 @@ class TransactionController extends Controller
         $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
         return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction'));
+    }
+
+    public function undernameEdit(Undername $undername)
+    {
+        $companies = Company::all();
+        $banks = Bank::all();
+        $liners = Liner::all();
+        $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
+        $countryRegister = Countries::where('isActive',1)->get();
+
+        return view('undername.undernameEdit', compact('undername', 'countryRegister', 'companies', 'banks', 'forwarders', 'liners'));
     }
 
     /**
@@ -248,7 +544,6 @@ class TransactionController extends Controller
             'payment' => 'required|gt:0',
             'advance' => 'required|gt:0',
             'forwarder' => 'required|gt:0',
-            'undername' => 'required|gt:0',
 
             'transactionDate' => 'required|date|before_or_equal:today',
             'loadingDate' => 'required|date',
@@ -289,7 +584,7 @@ class TransactionController extends Controller
                     'payment' =>  $request->payment,
                     'advance' =>  $request->advance,
                     'forwarderid' => $request->forwarder,
-                    'isundername' => $request->undername,
+                    'isundername' => 1,
                     'valutaType' =>  $request->valutaType,
                     'transactionDate' => $request->transactionDate,
                     'departureDate' =>  $request->departureDate,
@@ -335,7 +630,7 @@ class TransactionController extends Controller
                         'payment' =>  $request->payment,
                         'advance' =>  $request->advance,
                         'forwarderid' => $request->forwarder,
-                        'isundername' => $request->undername,
+                        'isundername' => 1,
                         'valutaType' =>  $request->valutaType,
                         'transactionDate' => $request->transactionDate,
                         'departureDate' =>  $request->departureDate,
@@ -374,7 +669,7 @@ class TransactionController extends Controller
                         'payment' =>  $request->payment,
                         'advance' =>  $request->advance,
                         'forwarderid' => $request->forwarder,
-                        'isundername' => $request->undername,
+                        'isundername' => 1,
                         'valutaType' =>  $request->valutaType,
                         'transactionDate' => $request->transactionDate,
                         'departureDate' =>  $request->departureDate,
@@ -415,7 +710,7 @@ class TransactionController extends Controller
                     'payment' =>  $request->payment,
                     'advance' =>  $request->advance,
                     'forwarderid' => $request->forwarder,
-                    'isundername' => $request->undername,
+                    'isundername' => 1,
                     'valutaType' =>  $request->valutaType,
                     'transactionDate' => $request->transactionDate,
                     'departureDate' =>  $request->departureDate,
@@ -460,7 +755,7 @@ class TransactionController extends Controller
                     'payment' =>  $request->payment,
                     'advance' =>  $request->advance,
                     'forwarderid' => $request->forwarder,
-                    'isundername' => $request->undername,
+                    'isundername' => 1,
                     'valutaType' =>  $request->valutaType,
                     'transactionDate' => $request->transactionDate,
                     'departureDate' =>  $request->departureDate,

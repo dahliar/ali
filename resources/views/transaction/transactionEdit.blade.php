@@ -442,18 +442,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row form-group">
-                        <div class="col-3 text-end">
-                            <span class="label" id="spanundername">Undername*</span>
-                        </div>
-                        <div class="col-md-3">
-                            <select id="undername" name="undername" class="form-select" >
-                                <option value="-1" selected>--Choose One--</option>
-                                <option value="1" @if(old('undername', $transaction->isundername) == 1) selected @endif>Internal</option>
-                                <option value="2" @if(old('undername', $transaction->isundername) == 2) selected @endif>Undername</option>
-                            </select>
-                        </div>                    
-                    </div> 
+                    
                     <div class="row form-group">
                         <div class="col-3 text-end">
                             <span class="label">Status</span>
@@ -533,8 +522,8 @@
                             <button type="submit" class="btn btn-primary">Save</button>
                             <input type="reset" value="Reset" class="btn btn-secondary">
                         </div>
-                        @endif
                     </div>
+                    @endif
                 </div>
             </form>
         </div>

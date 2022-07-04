@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\DetailTransactionController;
+use App\Http\Controllers\UndernameDetailController;
 use App\Http\Controllers\DetailPurchaseController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SpeciesController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\HonorariumController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserPageMappingController;
 use App\Http\Controllers\GoodController;
+use App\Http\Controllers\UndernameController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -32,8 +34,10 @@ use App\Models\Transaction;
 use App\Models\Purchase; 
 use App\Models\DetailPurchase; 
 use App\Models\DetailTransaction; 
+use App\Models\UndernameDetail; 
 use App\Models\User; 
 use App\Models\Presence; 
+use App\Models\Undername; 
 
 /*
 |--------------------------------------------------------------------------
@@ -482,5 +486,32 @@ Route::get('getGoods', [GoodController::class, 'getGoods'])->middleware('auth');
 
 
 
+
+/*
+*   Route Transaksi Undername
+*
+*/
+Route::get('undernameList',[TransactionController::class, 'indexUndername'])->middleware(['auth', 'authorized']);
+Route::GET('getAllUndernameTransaction', [TransactionController::class, 'getAllUndernameTransaction'])->middleware(['auth']);
+Route::get('undernameAdd',[TransactionController::class, 'createUndername'])->middleware(['auth', 'authorized']);
+Route::POST('undernameStore',[TransactionController::class, 'undernameStore'])->middleware(['auth']);
+Route::get('undernameEdit/{undername}',[TransactionController::class, 'undernameEdit'])->middleware(['auth', 'authorized']);
+Route::POST('undernameUpdate',[TransactionController::class, 'undernameUpdate'])->middleware(['auth'])->name('undernameUpdate');
+Route::get('detailundernameList/{undername}',[UndernameDetailController::class, 'index'])->middleware(['auth', 'authorized'])->name('detailundernameList');
+Route::get('detailundernameAdd/{undername}',[UndernameDetailController::class, 'create'])->middleware(['auth', 'authorized']);
+Route::POST('itemDetailUndernameAdd',[UndernameDetailController::class, 'store'])->middleware(['auth']);
+Route::GET('getUndernameDetails/{transactionId}', [UndernameDetailController::class, 'view'])->middleware(['auth']);
+Route::get('itemDetailUndernameDelete/{undernameDetail}',[UndernameDetailController::class, 'destroy'])->middleware(['auth'])->name('itemDetailUndernameDelete');
+Route::get('/undername/pi/{undername}', [UndernameController::class, 'cetak_pi'])->middleware(['auth', 'authorized']);
+Route::get('/undername/ipl/{undername}', [UndernameController::class, 'cetak_ipl'])->middleware(['auth', 'authorized']);
+
+
+
+/*
+Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth', 'authorized']);
+Route::get('detailtransactionList/{transaction}',[DetailTransactionController::class, 'index'])->middleware(['auth', 'authorized'])->name('detailtransactionList');
+Route::get('detailtransactionAdd/{transaction}',[DetailTransactionController::class, 'create'])->middleware(['auth', 'authorized']);
+Route::get('itemDetailTransactionAdd',[DetailTransactionController::class, 'store'])->middleware(['auth'])->name('itemDetailTransactionAdd');
+*/
 
 require __DIR__.'/auth.php';
