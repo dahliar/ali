@@ -65,12 +65,13 @@ class TransactionController extends Controller
     {
         $companies = Company::all();
         $rekenings = Rekening::all();
+        $liners = Liner::all();
         $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         $countryRegister = Countries::where('isActive',1)->get();
 
         //$notes = TransactionNote::where('transactionId',$transaction->id)->get();
 
-        return view('transaction.transactionAdd', compact('countryRegister', 'companies', 'rekenings', 'forwarders'));
+        return view('transaction.transactionAdd', compact('countryRegister', 'companies', 'rekenings', 'forwarders', 'liners'));
     }
     public function createUndername()
     {
@@ -119,6 +120,8 @@ class TransactionController extends Controller
                 'containerNumber' => 'required',
                 'containerSeal' => 'required',
                 'containerVessel' => 'required',
+                'liner' => 'required|gt:0',
+                'bl' => 'required',
                 'valutaType' => 'required|gt:0',
                 'payment' => 'required|gt:0',
                 'advance' => 'required|gte:0',
@@ -166,6 +169,8 @@ class TransactionController extends Controller
             'containerSeal' =>  $request->containerSeal,
             'orderType' => $request->orderType,
             'containerVessel' =>  $request->containerVessel,
+            'linerId' =>  $request->liner,
+            'bl' =>  $request->bl,
             'payment' =>  $request->payment,
             'advance' =>  $request->advance,
             'forwarderid' => $request->forwarder,
@@ -489,13 +494,14 @@ class TransactionController extends Controller
     public function edit(Transaction $transaction)
     {
         $companies = Company::all();
+        $liners = Liner::all();
         $rekenings = Rekening::all();
         $countryRegister = Countries::where('isActive',1)->get();
         $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         
         $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
-        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction'));
+        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners'));
     }
 
     public function undernameEdit(Undername $undername)
@@ -544,6 +550,9 @@ class TransactionController extends Controller
             'payment' => 'required|gt:0',
             'advance' => 'required|gt:0',
             'forwarder' => 'required|gt:0',
+            'liner' => 'required|gt:0',
+            'bl' => 'required',
+
 
             'transactionDate' => 'required|date|before_or_equal:today',
             'loadingDate' => 'required|date',
@@ -591,7 +600,9 @@ class TransactionController extends Controller
                     'loadingDate' =>  $request->loadingDate,
                     'arrivalDate' => $request->arrivalDate,
                     'shippedDatePlan' => $request->shippedDatePlan,
-                    'paymentPlan' => $request->paymentPlan
+                    'paymentPlan' => $request->paymentPlan,
+                    'linerId' => $request->liner,
+                    'bl' => $request->bl
                 ];
                 $action = Transaction::where('id', $request->transactionId)
                 ->update($data);

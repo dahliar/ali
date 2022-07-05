@@ -334,7 +334,32 @@
                                         <option value="2" @if(old('containerType') == 2) selected @endif>Reefer</option>
                                     </select>
                                 </div>                    
-                            </div>                
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label" id="spanPayment">Liners*</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="liner" name="liner" class="form-select">
+                                        <option value="-1" selected>--Choose One--</option>
+                                        @foreach ($liners as $liner)
+                                        @if ( $liner->id == old('liner'))
+                                        <option value="{{ $liner->id }}" selected>{{ $liner->name }}</option>
+                                        @else
+                                        <option value="{{ $liner->id }}">{{ $liner->name }}</option>
+                                        @endif
+                                        @endforeach
+                                    </select>
+                                </div>                    
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-right">
+                                    <span class="label">Bill of Lading*</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="bl" value="{{ old('bl') }}" name="bl" type="text" class="form-control" placeholder="Bill of Lading number">
+                                </div>                    
+                            </div>               
                             <div class="row form-group">
                                 <div class="col-md-3 text-md-right">
                                     <span class="label" id="spanPayment">Payment Valuta*</span>
