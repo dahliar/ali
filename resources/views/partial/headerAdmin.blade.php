@@ -185,6 +185,9 @@
 				<li>
 					<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i> Barang Pendukung Produksi</a>
 				</li>
+				<li>
+					<a class="dropdown-item" href="{{ url('barcodeGenerator')}}"><i class="fas fa-barcode"></i> Barcode Generator</a>
+				</li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">
