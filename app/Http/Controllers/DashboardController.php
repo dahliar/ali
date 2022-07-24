@@ -47,34 +47,6 @@ class DashboardController extends Controller
             ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
             ->where('mapping.isActive', '1')
             ->groupBy('e.gender')
-            ->get();            
-
-            $employeesGenderByTypes = DB::table('employees as e')
-            ->select(
-                DB::raw('
-                    (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
-                    '),
-                DB::raw('
-                    (
-                    select count(e2.id) from employees e2 
-                    where e2.gender=1
-                    and e2.employmentStatus=e.employmentStatus
-                    and e2.isActive=1
-
-                    ) AS jumlahGenderLaki
-                    '),
-                DB::raw('
-                    (
-                    select count(e2.id) from employees e2 
-                    where e2.gender=2
-                    and e2.employmentStatus=e.employmentStatus
-                    and e2.isActive=1
-                    ) AS jumlahGenderPerempuan
-                    ')
-            )
-            ->where('e.isActive', 1)
-            ->groupBy('e.employmentStatus')
-            ->orderBy('e.employmentStatus')
             ->get();
 
             $transactions = DB::table('transactions as t')
@@ -202,7 +174,7 @@ class DashboardController extends Controller
             $date->settings(['formatFunction' => 'translatedFormat']);
             $month=$date->format('F');
 
-            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));          
+            return view('home', compact('month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));          
         }
         else{
             return view('home');

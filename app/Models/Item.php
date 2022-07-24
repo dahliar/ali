@@ -219,25 +219,20 @@ class Item extends Model
                 'vid.name as itemName'
             )
             ->whereNotIn('vid.itemId', $list);
-            return $query->get();
         }
         if($purchaseId>0){
             $list = DB::table("detail_purchases")
             ->select('itemId')
             ->where('purchasesId', '=', $purchaseId)
+            ->get()
             ->pluck('itemId');
             $query->select(
                 'vid.itemId as itemId', 
                 'vid.nameBahasa as itemName'
             )
             ->whereNotIn('vid.itemId', $list);
-            return $query->get();
         }
 
-        $query->select(
-            'vid.itemId as itemId', 
-            'vid.nameBahasa as itemName'
-        );
         return $query->get();  
     }
 
