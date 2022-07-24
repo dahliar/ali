@@ -36,6 +36,7 @@ class Presence extends Model
 
         return $text;
     }
+
     function storePresenceHarianEmployee($empid, $start, $end, $isLembur){
         $start = \Carbon\Carbon::parse($start);
         $end = \Carbon\Carbon::parse($end);

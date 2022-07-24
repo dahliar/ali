@@ -68,6 +68,7 @@ setlocale(LC_TIME, 'id_ID');
 			var transactions = @json($transactions);
 			var stocks = @json($stocks);
 			var employeesGender = @json($employeesGender);
+			var employeesGenderByTypes = @json($employeesGenderByTypes);
 			var transactionRupiah = @json($transactionRupiah);
 			var transactionUSD = @json($transactionUSD);
 			var purchases = @json($purchases);
@@ -78,8 +79,11 @@ setlocale(LC_TIME, 'id_ID');
 
 			window.onload = function() {
 				google.charts.load('current', {packages: ['corechart'], 'language': 'id'});
+
 				google.charts.setOnLoadCallback(drawEmployees);
 				google.charts.setOnLoadCallback(drawEmployeesGender);
+				google.charts.setOnLoadCallback(drawGenderByEmployeeTypes);
+
 				google.charts.setOnLoadCallback(drawTransactions);
 				google.charts.setOnLoadCallback(drawPurchases);
 				google.charts.setOnLoadCallback(drawStocks);
@@ -91,6 +95,8 @@ setlocale(LC_TIME, 'id_ID');
 				google.charts.setOnLoadCallback(drawTransactionRupiahLine);	
 				google.charts.setOnLoadCallback(drawPurchaseRupiahLine);	
 
+
+
 			};
 			function drawEmployees() {
 				var data = [];
@@ -98,7 +104,7 @@ setlocale(LC_TIME, 'id_ID');
 				data.push(header);
 				for (var i = 0; i < employees.length; i++) {
 					var temp=[];
-					temp.push(employees[i].empStatus);
+					temp.push(employees[i].empStatus+" "+parseInt(employees[i].status));
 					temp.push(parseInt(employees[i].status));
 					data.push(temp);
 				}
@@ -134,6 +140,59 @@ setlocale(LC_TIME, 'id_ID');
 				var chart = new google.visualization.PieChart(document.getElementById('chartGender'));
 				chart.draw(view, options);
 			}
+
+			function drawGenderByEmployeeTypes() {
+				var data = [];
+				var header=["Jenis Kepegawaian", "Perempuan", "Laki-laki"];
+				data.push(header);
+				for (var i = 0; i < employeesGenderByTypes.length; i++) {
+					var temp=[];
+					temp.push(employeesGenderByTypes[i].empStatus);
+					temp.push(parseInt(employeesGenderByTypes[i].jumlahGenderPerempuan));
+					temp.push(parseInt(employeesGenderByTypes[i].jumlahGenderLaki));
+					data.push(temp);
+				}
+
+				var chartdata = new google.visualization.arrayToDataTable(data);
+				var view = new google.visualization.DataView(chartdata);
+				var options = {
+					title: 'Jenis kelamin per jenis karyawan',
+					chartArea: {width: '50%'},
+					hAxis: {
+						title: 'Jenis Kelamin',
+						minValue: 0,
+						textStyle: {
+							bold: true,
+							fontSize: 12,
+							color: '#4d4d4d'
+						},
+						titleTextStyle: {
+							bold: true,
+							fontSize: 18,
+							color: '#4d4d4d'
+						}
+					},
+					vAxis: {
+						title: 'Jumlah',
+						textStyle: {
+							fontSize: 14,
+							bold: true,
+							color: '#848484'
+						},
+						titleTextStyle: {
+							fontSize: 14,
+							bold: true,
+							color: '#848484'
+						}
+					}
+				};
+				var chart = new google.visualization.ColumnChart(document.getElementById('chartGenderByEmployeeTypes'));
+				chart.draw(view, options);
+			}
+
+
+
+
 			function drawTransactions() {
 				var data = [];
 				var header=["Transaksi", "Jumlah"];
@@ -477,13 +536,23 @@ setlocale(LC_TIME, 'id_ID');
 		<div class="card card-body">
 			<span class="white-text"><h2>Kepegawaian</h2></span>
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<div id="chartPegawaiAktif" class="chart"></div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
+					<div id="chartGenderByEmployeeTypes" class="chart"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
 					<div id="chartGender" class="chart"></div>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-6">
+					<div id="" class="chart"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
 					<h4><b>Ulang tahun bulan {{$month }}</b></h4>
 					<table class="table table-striped table-hover table-bordered data-table" id="datatable">
 						<thead>

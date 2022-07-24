@@ -26,6 +26,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserPageMappingController;
 use App\Http\Controllers\GoodController;
 use App\Http\Controllers\UndernameController;
+use App\Http\Controllers\BarcodeController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -507,11 +508,17 @@ Route::get('/undername/ipl/{undername}', [UndernameController::class, 'cetak_ipl
 
 
 
+
 /*
-Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth', 'authorized']);
-Route::get('detailtransactionList/{transaction}',[DetailTransactionController::class, 'index'])->middleware(['auth', 'authorized'])->name('detailtransactionList');
-Route::get('detailtransactionAdd/{transaction}',[DetailTransactionController::class, 'create'])->middleware(['auth', 'authorized']);
-Route::get('itemDetailTransactionAdd',[DetailTransactionController::class, 'store'])->middleware(['auth'])->name('itemDetailTransactionAdd');
+*   Barcode Generator
+*
+*
 */
+
+Route::get('barcodeGenerator',[BarcodeController::class, 'create'])->middleware(['auth', 'authorized']);
+Route::POST('barcodeImageGenerate',[BarcodeController::class, 'generate'])->middleware(['auth']);
+Route::get('barcodeItemList/{speciesId}',[BarcodeController::class, 'itemList'])->middleware(['auth']);
+
+
 
 require __DIR__.'/auth.php';
