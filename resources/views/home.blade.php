@@ -98,6 +98,8 @@ setlocale(LC_TIME, 'id_ID');
 
 
 			};
+
+			
 			function drawEmployees() {
 				var data = [];
 				var header=["Pegawai", "Jumlah"];
