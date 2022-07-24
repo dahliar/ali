@@ -19,10 +19,4 @@ Homestead.json
 /config/database.php
 config/app.php
 config/database.php
-<<<<<<< HEAD
-config/app.php
-config/app.php
-config/app.php
-config/app.php
-=======
->>>>>>> parent of 092f4a7 (Revert "barcode dan detil gender pegawai")
+
