@@ -13,8 +13,7 @@ use App\Models\Company;
 use App\Models\Countries;
 use App\Models\TransactionNote;
 
-use \PDF;
-
+use PDF;
 use DB;
 use Auth;
 
