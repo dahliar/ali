@@ -1,6 +1,5 @@
 <!doctype html>
     <html lang="en">
-
     <style type="text/css">
         #invoice {
             font-family: Arial, Helvetica, sans-serif;
