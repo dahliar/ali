@@ -5,5 +5,8 @@
 		© 2021 Copyright:
 		<a class="text-dark" href="https://aliseafood.co.id/">aliseafood.co.id</a>
 	</div>
+		<?php 
+		echo 'PHP version: ' . phpversion();
+		?>
 	<!-- Copyright -->
 </footer>
