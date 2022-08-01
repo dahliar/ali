@@ -1,4 +1,5 @@
 <!doctype html>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">
         #invoice {
             font-family: Arial, Helvetica, sans-serif;

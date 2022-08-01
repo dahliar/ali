@@ -184,8 +184,9 @@ class InvoiceController extends Controller
         }
         $payerName = Auth::user()->name;
 
-        $pdf = PDF::loadview('invoice.ipl', compact('valutaType','containerType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
         $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
+
+        $pdf = PDF::loadview('invoice.ipl', compact('valutaType','containerType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
         return $pdf->download($filename);
     }
     public function cetak_local_ipl(Transaction $transaction)
