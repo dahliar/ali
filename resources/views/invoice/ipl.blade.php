@@ -1,5 +1,4 @@
 <!doctype html>
-    <html lang="en">
     <style type="text/css">
         #invoice {
             font-family: Arial, Helvetica, sans-serif;
@@ -46,6 +45,7 @@
             text-align: center;
         }
     </style>
+    <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Invoice - {{$transaction->transactionNum}}</title>
