@@ -50,7 +50,6 @@
         <meta charset="UTF-8">
         <title>Invoice - {{$transaction->transactionNum}}</title>
     </head>
-
     <body>
         <header>
             <table width="90%" style="margin-bottom: 0;">
