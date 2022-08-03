@@ -59,6 +59,9 @@ Route::get('home',[DashboardController::class, 'index'])->middleware(['auth','au
 Route::get('home2',[DashboardController::class, 'indexHome2'])->middleware(['auth']);
 Route::GET('employeeList2',[EmployeeController::class, 'index2'])->name('employeeList')->middleware('auth', 'authorized');
 
+Route::GET('infophp', [DashboardController::class, 'infophp'])->middleware('auth', 'authorized');
+
+
 
 Route::get('unauthorized', function () {
     return view('partial.noAccess');
@@ -518,6 +521,8 @@ Route::get('/undername/ipl/{undername}', [UndernameController::class, 'cetak_ipl
 Route::get('barcodeGenerator',[BarcodeController::class, 'create'])->middleware(['auth', 'authorized']);
 Route::POST('barcodeImageGenerate',[BarcodeController::class, 'generate'])->middleware(['auth']);
 Route::get('barcodeItemList/{speciesId}',[BarcodeController::class, 'itemList'])->middleware(['auth']);
+
+
 
 
 

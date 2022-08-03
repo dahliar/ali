@@ -12,6 +12,14 @@ use PDF;
 
 class DashboardController extends Controller
 {
+
+    
+    public function infophp()
+    {
+        return view('userMapping.info');
+    }
+
+
     public function getServerDate(){
         return Carbon::now()->toDateString();
     }

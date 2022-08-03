@@ -52,25 +52,4 @@ class User extends Authenticatable
         }
         return false;
     }
-
-    /*
-    public function haveAccess($pageId, $userId){
-        if (Auth::check() and (Auth::user()->id == $userId)){
-            $exist = DB::table('user_page_mappings as upm')
-            ->join('pages as p', 'p.id', '=', 'upm.pageId')
-            ->where('upm.pageId', '=', $pageId)
-            ->where('upm.userId', '=', $userId)
-            ->where('p.minimumAccessLevel', '>=', Auth::user()->accessLevel)
-            ->exists();
-
-            if ($exist){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-        return false;
-    }
-    */
 }

@@ -254,6 +254,9 @@
 				<li>
 					<a class="dropdown-item" href="{{ url('userMappingList')}}"><i class="fas fa-users"></i> User Mapping</a>
 				</li>
+				<li>
+					<a class="dropdown-item" href="{{ url('infophp')}}"><i class="fas fa-users"></i> Info</a>
+				</li>
 			</ul>
 		</li>
 		@endif
