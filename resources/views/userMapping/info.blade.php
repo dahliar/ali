@@ -10,6 +10,6 @@
 				<h1 align="center">COMMERCIAL INVOICE</h1>
 			</div>
 		</main>
+		Document generated at : {{Carbon\Carbon::now()}}
 	</body>
-	Document generated at : {{Carbon\Carbon::now()}}
 	</html>
