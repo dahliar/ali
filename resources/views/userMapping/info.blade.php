@@ -4,8 +4,7 @@
 <body>
 <main>
 <div>
-<h1>COMMERCIAL INVOICE</h1>
-<div>Document generated at : {{Carbon\Carbon::now()}}</div>
+COMMERCIAL INVOICE Document generated at : {{Carbon\Carbon::now()}}
 </div>
 </main>
 </body>
