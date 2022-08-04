@@ -8,8 +8,8 @@
 		<main>
 			<div>
 				<h1 align="center">COMMERCIAL INVOICE</h1>
+				Document generated at : {{Carbon\Carbon::now()}}
 			</div>
 		</main>
-		Document generated at : {{Carbon\Carbon::now()}}
 	</body>
 	</html>
