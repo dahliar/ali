@@ -2,7 +2,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 <html>
 <head>
-<title>Invoice - 1</title>
 </head>
 <body>
 <main>
