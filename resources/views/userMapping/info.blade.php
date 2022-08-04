@@ -7,8 +7,7 @@
 	<body>
 		<main>
 			<div>
-				<h1 align="center">
-				COMMERCIAL INVOICE</h1>
+				<h1 align="center">COMMERCIAL INVOICE</h1>
 			</div>
 		</main>
 	</body>
