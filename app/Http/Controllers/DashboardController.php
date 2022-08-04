@@ -6,17 +6,22 @@ use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 use App\Models\Species;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
 class DashboardController extends Controller
 {
 
-    
+
     public function infophp()
     {
-        return view('userMapping.info');
+        $x = ["1","2"];
+        $pdf = PDF::loadview('userMapping.info', $x);
+        $filename = 'Proforma Invoice.pdf';
+        return $pdf->download($filename);
+
+        //return view('userMapping.info');
     }
 
 
