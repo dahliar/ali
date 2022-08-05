@@ -524,7 +524,7 @@ class DashboardController extends Controller
 
         $monthYear = $bulan.' '.$request->tahun;
 
-        return view('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
+        return view('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'));
 
         /*        
         $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
@@ -659,7 +659,7 @@ class DashboardController extends Controller
         $monthYear = $bulan.' '.$request->tahun;
         $opsi = $request->opsi;
 
-        return view('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'))->setPaper('a4', 'landscape');
+        return view('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'));
         /*
         $pdf = PDF::loadview('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap pembelian '.$monthYear.' cetak tanggal '.today().'.pdf';
