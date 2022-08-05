@@ -8,12 +8,9 @@
 		Test
 	</header>
 	<body>
-		<div>
-			COMMERCIAL INVOICE
-		</div>
+		<div>COMMERCIAL INVOICE</div>
 	</body>
 	<footer>
 		Footer on every page
 	</footer>
-
 	</html>
