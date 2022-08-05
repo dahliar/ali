@@ -152,7 +152,7 @@ class InvoiceController extends Controller
             case(3) : $valutaType="RMB";  break;
         }
 
-
+        mb_internal_encoding('UTF-8');
 
         //return view('invoice.pi', compact('registration','notes','valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
 
