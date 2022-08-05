@@ -152,12 +152,13 @@ class InvoiceController extends Controller
             case(3) : $valutaType="RMB";  break;
         }
 
-        //return view('invoice.pi', compact('registration','notes','valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
+        return view('invoice.pi', compact('registration','notes','valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
 
-
+        /*
         $pdf = PDF::loadview('invoice.pi', compact('registration','notes','valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
         $filename = 'Proforma Invoice '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
         return $pdf->download($filename);
+        */
 
     }
 
