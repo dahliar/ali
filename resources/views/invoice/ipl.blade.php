@@ -53,6 +53,7 @@
     </head>
     <body>
         <header>
+            <!--
             <table width="90%" style="margin-bottom: 0;">
                 <tr>
                     <td width="30%" align="center">
@@ -76,6 +77,7 @@
                     </td>
                 </tr>
             </table>
+        -->
             <hr class="solid" style="width: 90%; margin-top: 0; margin-bottom: 0;">
         </header>
         <main>
