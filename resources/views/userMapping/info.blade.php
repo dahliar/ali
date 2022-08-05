@@ -12,7 +12,7 @@
 	</header>
 	<body>
 		<div>
-			<h1>COMMERCIAL INVOICE</h1>
+			COMMERCIAL INVOICE
 		</div>
 	</body>
 	<footer>
