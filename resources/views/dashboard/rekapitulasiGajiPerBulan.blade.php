@@ -51,7 +51,7 @@
     function openWindowWithPost(url, data) {
         var form = document.createElement("form");
         form.target = "_blank";
-        form.method = "GET";
+        form.method = "POST";
         form.action = url;
         form.style.display = "none";
 
