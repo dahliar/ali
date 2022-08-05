@@ -427,7 +427,7 @@ Route::post('getRekapitulasiGaji', [DashboardController::class, 'getRekapitulasi
 
 Route::get('rekapitulasiGajiPerBulan',[DashboardController::class, 'rekapitulasiGajiPerBulan'])->middleware(['auth', 'authorized']);
 Route::get('getRekapitulasiGajiPerBulan', [DashboardController::class, 'getRekapitulasiGajiPerBulan'])->middleware(['auth']);
-Route::post('cetakRekapGajiBulanan', [DashboardController::class, 'cetakRekapGajiBulanan'])->middleware(['auth', 'authorized']);
+Route::POST('cetakRekapGajiBulanan', [DashboardController::class, 'cetakRekapGajiBulanan'])->middleware(['auth', 'authorized']);
 
 
 Route::get('rekapitulasiPembelianPerBulan',[DashboardController::class, 'rekapitulasiPembelianPerBulan'])->middleware(['auth', 'authorized']);

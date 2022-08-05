@@ -487,6 +487,7 @@ class DashboardController extends Controller
     }
 
     public function cetakRekapGajiBulanan(Request $request){
+        dd("123");
         $bulan="";
         switch($request->bulan){
             case 1 : $bulan="Januari";break;
