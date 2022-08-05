@@ -7,9 +7,16 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title>Invoice - 1</title>
 	</head>
+	<header>
+		Test
+	</header>
 	<body>
 		<div>
 			<h1>COMMERCIAL INVOICE</h1>
 		</div>
 	</body>
+	<footer>
+		Footer on every page
+	</footer>
+
 	</html>
