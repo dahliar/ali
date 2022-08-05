@@ -51,7 +51,7 @@
     function openWindowWithPost(url, data) {
         var form = document.createElement("form");
         form.target = "_blank";
-        form.method = "POST";
+        form.method = "GET";
         form.action = url;
         form.style.display = "none";
 
@@ -99,7 +99,7 @@
             </div>
         </div>
         <div class="card card-header">
-            <form action="{{url('getRekapitulasiGajiPerBulan')}}" method="post">
+            <form action="{{url('getRekapitulasiGajiPerBulan')}}" method="get">
                 {{ csrf_field() }}
                 <div class="row form-group">
                     <div class="col-md-3">
