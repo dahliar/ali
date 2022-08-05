@@ -487,7 +487,6 @@ class DashboardController extends Controller
     }
 
     public function cetakRekapGajiBulanan(Request $request){
-        //dd($request);
         $bulan="";
         switch($request->bulan){
             case 1 : $bulan="Januari";break;
@@ -525,9 +524,13 @@ class DashboardController extends Controller
 
         $monthYear = $bulan.' '.$request->tahun;
 
+        return view('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
+
+        /*        
         $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
+        */
 
 
 
@@ -656,9 +659,12 @@ class DashboardController extends Controller
         $monthYear = $bulan.' '.$request->tahun;
         $opsi = $request->opsi;
 
+        return view('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'))->setPaper('a4', 'landscape');
+        /*
         $pdf = PDF::loadview('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap pembelian '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
+        */
     }
 
     public function checkPayrollByDateRange(){
