@@ -152,13 +152,13 @@ class InvoiceController extends Controller
             case(3) : $valutaType="RMB";  break;
         }
 
-        return view('invoice.pi', compact('registration','notes','valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
+        //return view('invoice.pi', compact('registration','notes','valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
 
-        /*
+        
         $pdf = PDF::loadview('invoice.pi', compact('registration','notes','valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
         $filename = 'Proforma Invoice '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
         return $pdf->download($filename);
-        */
+        
 
     }
 
@@ -185,13 +185,13 @@ class InvoiceController extends Controller
         $payerName = Auth::user()->name;
 
         
-        return view('invoice.ipl', compact('valutaType','containerType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
-        /*
+        //return view('invoice.ipl', compact('valutaType','containerType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
+        
         $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
 
         $pdf = PDF::loadview('invoice.ipl', compact('valutaType','containerType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
         return $pdf->download($filename);
-        */
+        
     }
     public function cetak_local_ipl(Transaction $transaction)
     {
@@ -207,13 +207,13 @@ class InvoiceController extends Controller
         }
         $payerName = Auth::user()->name;
 
-        return view('invoice.localIpl', compact('valutaType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
-        /*
+        //return view('invoice.localIpl', compact('valutaType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
+        
         $pdf = PDF::loadview('invoice.localIpl', compact('valutaType','companyName', 'transaction', 'detailTransactions', 'rekening', 'payerName'));
 
         $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
         return $pdf->download($filename);
-        */
+        
     }
 
 
@@ -229,13 +229,13 @@ class InvoiceController extends Controller
             case(3) : $valutaType="RMB";  break;
         }
 
-        return view('invoice.notaPembelian', compact('valutaType', 'company','purchase', 'purchaseDetails'));
+        //return view('invoice.notaPembelian', compact('valutaType', 'company','purchase', 'purchaseDetails'));
         
-        /*
+        
         $pdf = PDF::loadview('invoice.notaPembelian', compact('valutaType', 'company','purchase', 'purchaseDetails'));
         $filename = 'NotaPembelian '.$purchase->id.' '.$company->name.' '.today().'.pdf';
         return $pdf->download($filename);
-        */
+        
     }
 
     public function cetakDaftarGajiHarian(Transaction $transaction)
@@ -257,12 +257,12 @@ class InvoiceController extends Controller
             case(3) : $valutaType="RMB";  break;
         }
 
-        return view('invoice.ipl', compact('valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
-        /*
+        //return view('invoice.ipl', compact('valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
+        
         $pdf = PDF::loadview('invoice.ipl', compact('valutaType','containerType','companyName','transaction', 'detailTransactions', 'rekening'));
         $filename = 'IPL '.$transaction->id.' '.$companyName->name.' '.today().'.pdf';
         return $pdf->download($filename);
-        */
+        
     }
 
     public function slipGajiPerPayroll($dpid)
@@ -340,13 +340,13 @@ class InvoiceController extends Controller
 
         }
 
-        return view('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
+        //return view('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
         
-        /*
+        
         $pdf = PDF::loadview('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
         $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.now().'.pdf';
         return $pdf->download($filename);
-        */
+        
 
     }
     public function slipGajiPerPayrollBulanan($dpid)
@@ -425,13 +425,13 @@ class InvoiceController extends Controller
             }
 
         }
-        return view('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
+        //return view('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
 
-        /*
+        
         $pdf = PDF::loadview('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
         $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.now().'.pdf';
         return $pdf->download($filename);
-        */
+        
 
     }
 
