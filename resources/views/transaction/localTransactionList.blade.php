@@ -26,10 +26,11 @@
     function tambahTransaksi(){
         window.open(('{{ url("localTransactionAdd") }}'), '_self');
     }
-
-    function cetakPI(id){
-        window.open(('{{ url("transaction/pi") }}'+"/"+id), '_blank');
+    function documentList(id){
+        window.open(('{{ url("localTransactionDocument") }}'+"/"+id), '_blank');
     }
+
+
     function cetakIPL(id){
         window.open(('{{ url("transaction/localIpl") }}'+"/"+id), '_blank');
     }

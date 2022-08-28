@@ -26,6 +26,11 @@
     function tambahTransaksi(){
         window.open(('{{ url("transactionAdd") }}'), '_self');
     }
+    function documentList(id){
+        window.open(('{{ url("transactionDocument") }}'+"/"+id), '_blank');
+    }
+
+
 
     function cetakPI(id){
         window.open(('{{ url("transaction/pi") }}'+"/"+id), '_blank');

@@ -53,6 +53,11 @@ class TransactionController extends Controller
     public function getAllExportTransaction(Request $request){
         return $this->transaction->getAllExportTransactionData($request);
     }
+    public function getAllTransactionDocuments(Request $request){
+        return $this->transaction->getAllTransactionDocuments($request);
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -502,6 +507,15 @@ class TransactionController extends Controller
         $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
         return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners'));
+    }
+
+    public function transactionDocument(Transaction $transaction)
+    {
+        return view('transaction.transactionDocuments', compact('transaction'));
+    }
+    public function localTransactionDocument(Transaction $transaction)
+    {
+        return view('transaction.localTransactionDocuments', compact('transaction'));
     }
 
     public function undernameEdit(Undername $undername)

@@ -75,6 +75,7 @@ Route::get('transactionList',[TransactionController::class, 'index'])->middlewar
 Route::get('transactionAdd',[TransactionController::class, 'create'])->middleware(['auth', 'authorized']);
 Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth', 'authorized']);
 Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'])->middleware(['auth', 'authorized']);
+Route::get('transactionDocument/{transaction}',[TransactionController::class, 'transactionDocument'])->middleware(['auth', 'authorized']);
 Route::POST('transactionStore',[TransactionController::class, 'store'])->middleware(['auth']);
 Route::POST('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth'])->name('transactionUpdate');
 
@@ -86,8 +87,12 @@ Route::get('itemDetailTransactionAdd',[DetailTransactionController::class, 'stor
 Route::get('itemDetailTransactionDelete/{detail_transaction}',[DetailTransactionController::class, 'destroy'])->middleware(['auth'])->name('itemDetailTransactionDelete');
 Route::GET('getAllExportTransaction', [TransactionController::class, 'getAllExportTransaction'])->middleware(['auth']);
 Route::GET('getAllDetail/{transactionId}', [DetailTransactionController::class, 'getAllDetail'])->middleware(['auth']);
+
 Route::get('/transaction/pi/{transaction}', [InvoiceController::class, 'cetak_pi'])->middleware(['auth', 'authorized']);
 Route::get('/transaction/ipl/{transaction}', [InvoiceController::class, 'cetak_ipl'])->middleware(['auth', 'authorized']);
+Route::GET('getAllTransactionDocuments', [TransactionController::class, 'getAllTransactionDocuments'])->middleware(['auth']);
+
+Route::GET('getFileDownload/{filepath}', [InvoiceController::class, 'getFileDownload'])->middleware(['auth']);
 
 
 /*
@@ -101,6 +106,8 @@ Route::POST('localTransactionStore',[TransactionController::class, 'localStore']
 Route::get('localTransactionEdit/{transaction}',[TransactionController::class, 'localEdit'])->middleware(['auth', 'authorized']);
 Route::POST('localTransactionUpdate',[TransactionController::class, 'localUpdate'])->middleware(['auth']);
 Route::get('/transaction/localIpl/{transaction}', [InvoiceController::class, 'cetak_local_ipl'])->middleware(['auth', 'authorized']);
+Route::get('localTransactionDocument/{transaction}',[TransactionController::class, 'localTransactionDocument'])->middleware(['auth', 'authorized']);
+
 
 
 

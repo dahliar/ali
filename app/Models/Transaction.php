@@ -9,6 +9,7 @@ use App\Models\Stock;
 use Illuminate\Http\Request;
 
 use DB;
+use Illuminate\Support\Facades\Storage;
 
 
 class Transaction extends Model
@@ -102,21 +103,61 @@ class Transaction extends Model
         ->addColumn('action', function ($row) {
             $html = '
             <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')">
-            <i class="fa fa-plus""></i>
-            </button>
+            <i class="fa fa-plus""></i> Items
+            </button><br>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
-            <i class="fa fa-edit""></i>
-            </button>
-            <br>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="PI" onclick="cetakPI('."'".$row->id."'".')">PI
-            </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="IPL" onclick="cetakIPL('."'".$row->id."'".')">IPL
-            </button>
-            ';
+            <i class="fa fa-edit""></i> Transaction
+            </button><br>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar dokumen" onclick="documentList('."'".$row->id."'".')"><i class="fa fa-file-pdf""></i> Documents
+            </button><br>';
+
             return $html;
         })
         ->rawColumns(['action', 'tanggal', 'number'])
         ->toJson();
+    }
+
+    public function getAllTransactionDocuments(Request $request){
+        $query = DB::table('documents as d')
+        ->select(
+            't.id as id', 
+            't.transactionnum as invnum', 
+            't.pinum as pinum', 
+            'u.name as name', 
+            'd.created_at as tanggal',
+            'd.filepath as filepath',
+            DB::raw('(CASE WHEN dn.bagian ="PI-ALI" THEN "PI"
+                WHEN dn.bagian ="INV-ALI" then "Invoice" END) AS jenis')
+        )
+        ->join('document_numbers as dn', 'dn.id', '=', 'd.document_numbers_id')
+        ->join('transactions as t', 't.id', '=', 'dn.transactionId')
+        ->join('users as u', 'u.id', '=', 'd.userId')
+        ->where('t.id', '=', $request->transactionId)
+        ->orderBy('d.created_at', 'desc')
+        ->get();  
+
+
+        return datatables()->of($query)
+        ->addColumn('documentNo', function ($row) {
+            $html="";
+            if ($row->jenis == "PI")
+                $html = $row->pinum;
+            if ($row->jenis == "Invoice")
+                $html = $row->invnum;
+            return $html;
+        })
+        //return Storage::download('file.jpg');
+
+        ->addColumn('action', function ($row) {
+            $html = '    
+            <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Download" onclick="getFileDownload('."'".$row->filepath."'".')">Download
+            </button>
+            ';
+
+            return $html;
+        })
+        ->rawColumns(['action', 'tanggal'])
+        ->addIndexColumn()->toJson();
     }
 
     public function whenUndernameIsTrue($transactionId){
@@ -281,9 +322,8 @@ class Transaction extends Model
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')">
             <i class="fa fa-edit""></i>
             </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Invoice" onclick="cetakIPL('."'".$row->id."'".')">Invoice
-            </button>
-            ';
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar dokumen" onclick="documentList('."'".$row->id."'".')"><i class="fa fa-file-pdf""></i> Documents
+            </button><br>';
             return $html;
         })
         ->rawColumns(['action', 'tanggal', 'number'])
