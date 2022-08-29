@@ -73,7 +73,7 @@ class PurchaseController extends Controller
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit data pembelian " onclick="purchaseEdit('."'".$row->id."'".')">
             <i class="fa fa-edit"></i>
             </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Print Invoice" onclick="purchaseInvoice('."'".$row->id."'".')">Inv
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Document List" onclick="documentList('."'".$row->id."'".')"><i class="fa fa-file-pdf"></i> Dokumen
             </button>
             ';
             return $html;
@@ -199,15 +199,48 @@ class PurchaseController extends Controller
             return redirect('purchaseList')
             ->with('status','Transaksi pembelian ke '.$request->companyName.' berhasil diperbaharui.');
         }
-
-        /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Purchase  $purchase
-     * @return \Illuminate\Http\Response
-     */
-        public function destroy(Purchase $purchase)
+        public function purchaseDocument(Purchase $purchase)
         {
-        //
+            return view('purchase.purchaseDocuments', compact('purchase'));
         }
+        public function getAllPurchaseDocuments(Request $request){
+            $query = DB::table('documents as d')
+            ->select(
+                'p.id as id', 
+                'p.purchasingnum as invnum', 
+                'u.name as name', 
+                'd.created_at as tanggal',
+                'd.filepath as filepath',
+                DB::raw('(CASE WHEN dn.bagian ="PI-ALI" THEN "PI"
+                    WHEN dn.bagian ="PURCHASE-ALI" then "Invoice" END) AS jenis')
+            )
+            ->join('document_numbers as dn', 'dn.id', '=', 'd.document_numbers_id')
+            ->join('purchases as p', 'p.id', '=', 'dn.purchaseId')
+            ->join('users as u', 'u.id', '=', 'd.userId')
+            ->where('p.id', '=', $request->purchaseId)
+            ->orderBy('d.created_at', 'desc')
+            ->get();  
+
+
+            return datatables()->of($query)
+            ->addColumn('documentNo', function ($row) {
+                $html="";
+                if ($row->jenis == "PI")
+                    $html = $row->pinum;
+                if ($row->jenis == "Invoice")
+                    $html = $row->invnum;
+                return $html;
+            })
+            ->addColumn('action', function ($row) {
+                $html = '    
+                <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Download" onclick="getFileDownload('."'".$row->filepath."'".')">Download
+                </button>
+                ';
+
+                return $html;
+            })
+            ->rawColumns(['action', 'tanggal'])
+            ->addIndexColumn()->toJson();
+        }
+
     }

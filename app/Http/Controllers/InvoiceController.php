@@ -286,7 +286,6 @@ class InvoiceController extends Controller
 
     public function cetakNotaPembelian(Purchase $purchase)
     {
-        //dd($purchase);
         $purchaseDetails = $this->invoice->getOnePurchaseDetail($purchase->id);
         $company = Company::where('id',$purchase->companyId)->first();
         $valutaType = "";
@@ -295,13 +294,28 @@ class InvoiceController extends Controller
             case(2) : $valutaType="USD";  break;
             case(3) : $valutaType="RMB";  break;
         }
-
-        //return view('invoice.notaPembelian', compact('valutaType', 'company','purchase', 'purchaseDetails'));
-        
         
         $pdf = PDF::loadview('invoice.notaPembelian', compact('valutaType', 'company','purchase', 'purchaseDetails'));
-        $filename = 'NotaPembelian '.$purchase->id.' '.$company->name.' '.now().'.pdf';
-        return $pdf->download($filename);
+        $filename = 'NotaPembelian '.$purchase->id.' '.$company->name.' '.Carbon::now()->format('Ymd His').'.pdf';
+
+        $filepath = '../storage/app/docs/'.$filename;
+        //file disimpan di folder storage/docs/
+        $pdf->save($filepath);
+
+        //insert kedalam tabel documents
+        $document_numbers_id = DB::table('document_numbers as dn')
+        ->select('id')
+        ->where('bagian','=', 'PURCHASE-ALI')
+        ->where('purchaseId','=', $purchase->id)
+        ->first()->id;
+
+        $data = [
+            'document_numbers_id'   => $document_numbers_id,
+            'filepath'              => $filename,
+            'userId'                => auth()->user()->id
+        ];
+        $id = DB::table('documents')->insertGetId($data);
+        return true;
         
     }
 

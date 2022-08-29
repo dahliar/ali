@@ -122,7 +122,8 @@ Route::get('purchaseAdd',[PurchaseController::class, 'create'])->middleware(['au
 Route::get('purchaseStore',[PurchaseController::class, 'store'])->middleware(['auth'])->name('purchaseStore');
 Route::get('purchaseEdit/{purchase}',[PurchaseController::class, 'edit'])->middleware(['auth', 'authorized']);
 Route::post('purchaseUpdate',[PurchaseController::class, 'update'])->middleware(['auth']);
-
+Route::get('purchaseDocument/{purchase}',[PurchaseController::class, 'purchaseDocument'])->middleware(['auth', 'authorized']);
+Route::GET('getAllPurchaseDocuments', [PurchaseController::class, 'getAllPurchaseDocuments'])->middleware(['auth']);
 
 
 /*
@@ -141,6 +142,8 @@ Route::GET('getAllPurchaseItems/{purchase}', [DetailPurchaseController::class, '
 
 
 Route::get('/purchase/notaPembelian/{purchase}', [InvoiceController::class, 'cetakNotaPembelian'])->middleware(['auth', 'authorized']);
+
+
 
 //ITEM STOCKS
 Route::get('itemStockList',[ItemController::class, 'index'])->middleware(['auth', 'authorized'])->name('itemStockList');
