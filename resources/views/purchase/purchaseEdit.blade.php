@@ -178,12 +178,21 @@
                                     <span class="label" id="spanPayment">Status Pembelian*</span>
                                 </div>
                                 <div class="col-md-3">
+
+                                    @if (Auth::user()->accessLevel>1)
                                     <select id="progressStatus" name="progressStatus" class="form-select" @if($purchase->status != 1) disabled @endif>
-                                        <option value="1" @if($purchase->taxIncluded == 1) selected @endif>On Progress</option>
-                                        <option value="2" @if($purchase->taxIncluded == 2) selected @endif>Selesai</option>
-                                        <option value="3" @if($purchase->taxIncluded == 3) selected @endif>Batal</option>
+                                        <option value="1" @if($purchase->status == 1) selected @endif>On Progress</option>
+                                        <option value="2" @if($purchase->status == 2) selected @endif>Selesai</option>
+                                        <option value="3" @if($purchase->status == 3) selected @endif>Batal</option>
                                     </select>
-                                </div>                    
+                                    @else
+                                    <select id="progressStatus" name="progressStatus" class="form-select">
+                                        <option value="1" @if($purchase->status == 1) selected @endif>On Progress</option>
+                                        <option value="2" @if($purchase->status == 2) selected @endif>Selesai</option>
+                                        <option value="3" @if($purchase->status == 3) selected @endif>Batal</option>
+                                    </select>
+                                    @endif
+                                </div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-md-3 text-md-right">
@@ -195,7 +204,17 @@
                             </div>
                         </div>
 
-                        @if($purchase->status == 1)
+                        
+
+                        @if(Auth::user()->accessLevel<=1)
+                        <div class="row form-group">
+                            <div class="text-center col-md-8">
+                                <button type="submit" class="btn btn-primary">Ubah</button>
+                                <input type="reset" value="Reset" class="btn btn-secondary">
+                            </div>
+                        </div>
+                        @else
+                        @if ($purchase->status == 1)
                         <div class="row form-group">
                             <div class="text-center col-md-8">
                                 <button type="submit" class="btn btn-primary">Ubah</button>
@@ -203,6 +222,8 @@
                             </div>
                         </div>
                         @endif
+                        @endif
+
                     </div>
                 </form>
             </div>
