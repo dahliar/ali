@@ -94,6 +94,7 @@ class Item extends Model
         ->select(
             'i.id as id', 
             'sp.name as name', 
+            'sp.nameBahasa as nameBahasa', 
             DB::raw('sum(i.amount*weightbase) as jumlahPacked'),
             DB::raw('sum(amountUnpacked) as jumlahUnpacked'),
             'p.shortname as packingShortname',

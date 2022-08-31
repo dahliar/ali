@@ -22,15 +22,17 @@
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
             {   "width": "15%", "targets":  [1], "className": "text-left"   },
-            {   "width": "15%", "targets":  [2], "className": "text-end" },
-            {   "width": "10%", "targets":  [3], "className": "text-end" },
+            {   "width": "15%", "targets":  [2], "className": "text-left"   },
+            {   "width": "15%", "targets":  [3], "className": "text-end" },
             {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" }
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
+            {data: 'nameBahasa', name: 'nameBahasa'},
             {data: 'packed', name: 'jumlahPacked'},
             {data: 'unpacked', name: 'jumlahUnpacked'},
             {data: 'total', name: 'total'},
@@ -76,6 +78,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
+                                        <th>Nama</th>
                                         <th>Packed (Kg)</th>
                                         <th>Unpacked (Kg)</th>
                                         <th>Stock in hand (Kg)</th>
