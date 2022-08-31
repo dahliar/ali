@@ -108,9 +108,13 @@ class DashboardController extends Controller
             )
             ->join('sizes as s', 's.id', '=', 'i.sizeId')
             ->join('species as sp', 'sp.id', '=', 's.speciesId')
+            ->where('i.isActive', '=', '1')
             ->groupBy('sp.id')
             ->orderBy('sp.name')
             ->get();
+
+
+
 
             $transactionRupiah = DB::table('transactions as t')
             ->select(
@@ -342,6 +346,7 @@ class DashboardController extends Controller
             'dp.amount as amount',
             'dp.price as price'
         )
+        ->where('i.isActive', '=', '1')
         ->whereBetween('pur.purchaseDate', [$request->start, $request->end]);
         if ($request->species > 0){
             $purchases = $purchases->where('sp.id', '=', $request->species);
@@ -845,6 +850,7 @@ class DashboardController extends Controller
         ->join('species as sp', 's.speciesId', '=', 'sp.id')
         ->whereBetween('t.transactionDate', [$start." 00:00:00", $end." 23:59:59"])
         ->whereIn('t.status', [2,4])
+        ->where('i.isActive', '=', '1')
         ->orderBy('t.transactionDate', 'desc')
         ->orderBy('sp.name')
         ->orderBy('g.name', 'desc')
