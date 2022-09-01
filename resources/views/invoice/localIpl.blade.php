@@ -247,7 +247,7 @@
             <table width="100%">
                 <tr>
                     <td width="40%" style="text-align: left;vertical-align: top;">
-                        Tuban, {{$transaction->transactionDate}}
+                        Tuban, {{ Carbon\Carbon::now()->toDateString()}}
                         <br><br>ttd<br><br>
                         {{$payerName}}
                     </td>

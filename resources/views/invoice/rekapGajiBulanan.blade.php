@@ -149,7 +149,7 @@
             <table width="100%">
                 <tr>
                     <td width="40%">
-                        _________,___ {{ date(' F Y', strtotime(today())); }}
+                        Tuban, {{ Carbon\Carbon::now()->toDateString()}}
                     </td>
                     <td width="20%"></td>
                     <td width="40%">
