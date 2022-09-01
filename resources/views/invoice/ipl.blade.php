@@ -64,10 +64,7 @@
                         </h3>
                         <h5 align="left">
                             <div style="text-align: justify;">
-                                Office : Jl. Kahuripan Terrace III no. 30, Kahuripan Nirwana, Desa Sumput, Kecamatan Sidoarjo, Kabupaten Sidoarjo, Provinsi Jawa Timur, Indonesia
-                            </div>
-                            <div style="text-align: justify;">
-                                Factory : Jl. Raya Rembang - Tuban KM 40, Desa Bancar, Kecamatan Bancar, Kabupaten Tuban, Provinsi Jawa Timur, Indonesia
+                                Jl. Raya Rembang - Tuban KM 40, Desa Bancar, Kecamatan Bancar, Kabupaten Tuban, Provinsi Jawa Timur, Indonesia
                             </div>
                             <div>
                                 www.aliseafood.co.id
