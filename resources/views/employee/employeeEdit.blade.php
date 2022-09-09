@@ -92,11 +92,11 @@
                                     <option value="0" @if(old('accessLevel',$choosenUser->accessLevel) == 0) selected @endif>00 - Superadmin</option>
                                     @case (1)
                                     <option value="1" @if(old('accessLevel',$choosenUser->accessLevel) == 1) selected @endif>01 - Admin</option>
-                                    <option value="10" @if(old('accessLevel',$choosenUser->accessLevel) == 10) selected @endif>10 - Lite Admin</option>
-                                    <option value="20" @if(old('accessLevel',$choosenUser->accessLevel) == 20) selected @endif>20 - Superuser</option>
-                                    <option value="30" @if(old('accessLevel',$choosenUser->accessLevel) == 30) selected @endif>30 - Advanced User</option>
-                                    <option value="40" @if(old('accessLevel',$choosenUser->accessLevel) == 40) selected @endif>40 - User</option>
-                                    <option value="99" @if(old('accessLevel',$choosenUser->accessLevel) == 99) selected @endif>99 - Tamu</option>
+                                    <option value="10" @if(old('accessLevel',$choosenUser->accessLevel) == 10) selected @endif>10 - Direktur</option>
+                                    <option value="20" @if(old('accessLevel',$choosenUser->accessLevel) == 20) selected @endif>20 - Manager</option>
+                                    <option value="30" @if(old('accessLevel',$choosenUser->accessLevel) == 30) selected @endif>30 - Supervisor</option>
+                                    <option value="40" @if(old('accessLevel',$choosenUser->accessLevel) == 40) selected @endif>40 - Staf</option>
+                                    <option value="99" @if(old('accessLevel',$choosenUser->accessLevel) == 99) selected @endif>99 - Pekerja/Tamu</option>
                                     @endswitch
                                 </select>
                                 @else
