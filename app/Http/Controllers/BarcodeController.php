@@ -33,9 +33,10 @@ class BarcodeController extends Controller
         ->where('vid.speciesId','=', $speciesId)
         ->orderBy('vid.gradeName', 'asc')
         ->orderBy('vid.sizeName', 'asc')
-        ->orderBy('vid.freezingName');
+        ->orderBy('vid.freezingName')
+        ->get();
 
-        return $query->get();  
+        return $query;  
     }
     public function generate(Request $request){
 

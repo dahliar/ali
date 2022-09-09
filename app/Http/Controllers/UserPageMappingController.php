@@ -161,19 +161,20 @@ class UserPageMappingController extends Controller
             'p.name as name',
             'a.name as appName',
             'p.route as route',
-            'p.minimumAccessLevel as level',
+            'al.name as level',
             'p.icon as icon',
             DB::raw('
                 (CASE WHEN a.isActive="0" THEN "Non-Aktif" WHEN a.isActive="1" THEN "Aktif" END) AS isActive
                 '),
         )
         ->join('applications as a', 'a.id', '=', 'p.applicationId')
+        ->join('access_levels as al', 'al.level', '=', 'p.minimumAccessLevel')
         ->where('p.applicationId', '=', $applicationId)
         ->orderBy('a.name')
         ->orderBy('p.name');
         $query->get();
 
-        return datatables()->of($query)
+        return datatables()->of($query)        
         ->addColumn('action', function ($row) {
             $html = '
             <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Pemetaan laman" onclick="pemetaanPage('.$row->id.')">

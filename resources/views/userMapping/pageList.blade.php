@@ -42,7 +42,7 @@
             {   "width": "25%", "targets": [2], "className": "text-left" },
             {   "width": "25%", "targets": [3], "className": "text-left" },
             {   "width": "5%", "targets": [4], "className": "text-center" },
-            {   "width": "5%", "targets": [5], "className": "text-center" },
+            {   "width": "5%", "targets": [5], "className": "text-left" },
             {   "width": "5%", "targets": [6], "className": "text-center" },
             {   "width": "5%", "targets": [7], "className": "text-center" },
             {   "width": "10%", "targets": [8], "className": "text-center" }
