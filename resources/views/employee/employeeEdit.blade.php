@@ -95,7 +95,7 @@
                                     <option value="10" @if(old('accessLevel',$choosenUser->accessLevel) == 10) selected @endif>10 - Direktur</option>
                                     <option value="20" @if(old('accessLevel',$choosenUser->accessLevel) == 20) selected @endif>20 - Manager</option>
                                     <option value="30" @if(old('accessLevel',$choosenUser->accessLevel) == 30) selected @endif>30 - Supervisor</option>
-                                    <option value="40" @if(old('accessLevel',$choosenUser->accessLevel) == 40) selected @endif>40 - Staf</option>
+                                    <option value="40" @if(old('accessLevel',$choosenUser->accessLevel) == 40) selected @endif>40 - Staff</option>
                                     <option value="99" @if(old('accessLevel',$choosenUser->accessLevel) == 99) selected @endif>99 - Pekerja/Tamu</option>
                                     @endswitch
                                 </select>
@@ -109,19 +109,19 @@
                                 <input class="form-control" value="Admin" disabled>
                                 @break
                                 @case(10)
-                                <input class="form-control" value="Lite Admin" disabled>
+                                <input class="form-control" value="Direktur" disabled>
                                 @break
                                 @case(20)
-                                <input class="form-control" value="Superuser" disabled>
+                                <input class="form-control" value="Manager" disabled>
                                 @break
                                 @case(30)
-                                <input class="form-control" value="Advanced User" disabled>
+                                <input class="form-control" value="Supervisor" disabled>
                                 @break
                                 @case(40)
-                                <input class="form-control" value="User" disabled>
+                                <input class="form-control" value="Staf" disabled>
                                 @break
                                 @case(99)
-                                <input class="form-control" value="Tamu" disabled>
+                                <input class="form-control" value="Pekerja/Tamu" disabled>
                                 @break
                                 @endswitch
                                 @endif
