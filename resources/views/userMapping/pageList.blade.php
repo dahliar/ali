@@ -115,5 +115,15 @@
             </div>    
         </div>
     </div>
+    Daftar Level User
+    <ol>
+        <li>Superadmin</li>
+        <li>Admin</li>
+        <li>Direktur</li>
+        <li>Manager</li>
+        <li>Supervisor</li>
+        <li>Staf</li>
+        <li>Pekerja</li>
+    </ol>
 </body>
 @endsection

@@ -372,6 +372,7 @@ class EmployeeController extends Controller
             'e.nip as nip', 
             'u.username as username', 
             'e.startDate as startDate',
+            'al.name as accessLevel',
             DB::raw('concat(
                 TIMESTAMPDIFF(YEAR, startDate, curdate()), 
                 " Y + ",
@@ -385,6 +386,7 @@ class EmployeeController extends Controller
                 ')
         )
         ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('access_levels as al', 'al.level', '=', 'u.accessLevel')
         ->orderBy('u.name');
         $query->get();
 
