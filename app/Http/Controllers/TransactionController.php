@@ -499,6 +499,7 @@ class TransactionController extends Controller
     public function edit(Transaction $transaction)
     {
         $companies = Company::all();
+        
         $liners = Liner::all();
         $rekenings = Rekening::all();
         $countryRegister = Countries::where('isActive',1)->get();

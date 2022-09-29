@@ -253,6 +253,10 @@
                                     <span class="input-group-text col-4">Kg</span>
                                 </div>
                             </div>
+                            <div class="col-md-3 text-md-left">
+                                <span class="label">berat dalam 1 packing/mc</span>
+                            </div>
+
                         </div>
 
                         <div class="row form-group">
@@ -266,6 +270,10 @@
                                     <span id="spanAmount" class="input-group-text col-4">-</span>
                                 </div>
                             </div>
+                            <div class="col-md-3 text-md-left">
+                                <span class="label">Jumlah berat barang awal</span>
+                            </div>
+
                         </div>   
                         <div class="row form-group">
                             <div class="col-md-1"></div>
