@@ -175,7 +175,6 @@ class DashboardController extends Controller
             ->whereRaw('g.amount <= g.minimalAmount')
             ->orderBy('g.name')
             ->get();
-        //dd($goods);
 
             $purchases = DB::table('purchases as p')
             ->select(
@@ -530,7 +529,7 @@ class DashboardController extends Controller
 
         //return view('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'));
 
-                
+        
         $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);

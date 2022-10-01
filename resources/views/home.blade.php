@@ -10,7 +10,6 @@
 
 @section('content')
 @if ($errors->any())
-setlocale(LC_TIME, 'id_ID');
 <div class="alert alert-success">
 	<div class="row form-inline" onclick='$(this).parent().remove();'>
 		<div class="col-11">

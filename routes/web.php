@@ -57,7 +57,7 @@ Route::get('/', function () {
 
 
 
-Route::get('home',[DashboardController::class, 'index'])->middleware(['auth','authorized']);
+Route::get('home', [DashboardController::class, 'index'])->middleware(['auth','authorized']);
 
 
 
@@ -78,7 +78,13 @@ Route::get('unauthorized', function () {
 *   Route Transaksi Penjualan
 *
 */
+
 Route::get('transactionList',[TransactionController::class, 'index'])->middleware(['auth', 'authorized']);
+
+
+
+
+
 Route::get('transactionAdd',[TransactionController::class, 'create'])->middleware(['auth', 'authorized']);
 Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth', 'authorized']);
 Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'])->middleware(['auth', 'authorized']);
@@ -219,6 +225,8 @@ Route::POST('getIsItemAlreadyExist', [SpeciesController::class, 'getIsItemAlread
 
 
 Route::get('sizeEditStore',[SpeciesController::class, 'updateSize'])->middleware(['auth']);
+
+
 Route::get('itemEditStore',[SpeciesController::class, 'updateItem'])->middleware(['auth']);
 
 
