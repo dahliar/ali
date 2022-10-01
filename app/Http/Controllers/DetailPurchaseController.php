@@ -113,14 +113,6 @@ class DetailPurchaseController extends Controller
             'dp.id as id', 
             'dp.purchasesId as purchasesId', 
             'vid.nameBahasa as itemName',
-            /*
-            'i.name as itemName', 
-            'f.name as freezingName', 
-            'g.name as gradeName', 
-            'p.name as packingName',
-            'p.shortname as pShortname',
-            's.name as sizeName', 
-            */
             'vid.pshortname as packingName',
             'pur.status as status',
             'vid.weightbase as wb',
@@ -159,7 +151,7 @@ class DetailPurchaseController extends Controller
             return $html;
         })
         ->editColumn('bayar', function ($row) {
-            $html = 'Rp.'.number_format($row->price, 2, ',', '.');
+            $html = 'Rp.'.number_format($row->bayar, 2, ',', '.');
             return $html;
         })
         ->addColumn('action', function ($row) {
