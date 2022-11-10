@@ -395,7 +395,7 @@
                 <div class="col-2 my-auto text-md-right">
                 </div>
                 <div class="col-md-5">
-                    <button type="submit" onclick="myFunction()" class="btn btn-primary">Save</button>
+                    <button type="submit" onclick="myFunction()" class="btn btn-primary">Cari</button>
                     <input type="reset" value="Reset" class="btn btn-secondary">
                 </div>
             </div>
