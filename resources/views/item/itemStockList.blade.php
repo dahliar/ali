@@ -324,7 +324,7 @@
                         @foreach ($speciesList as $species)
                         <option value="{{ $species->id }}">{{ $species->name }}</option>
                         @endforeach
-                        <option value="0" selected>Semua Tipe</option>
+                        <option value="0" selected>Semua Spesies</option>
                     </select>
                 </div>
                 <div class="col-2 my-auto">
