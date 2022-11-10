@@ -5,6 +5,7 @@
 @section('content')
 <script type="text/javascript"> 
     $(document).ready(function() {
+        $('.js-example-basic-single').select2();
         $('#rekening').on('change', function() {
             var rek = $(this).val();
             if (rek>0){
@@ -115,7 +116,7 @@
                                     <span class="label" id="spanCompany">Pembeli*</span>
                                 </div>
                                 <div class="col-md-4">
-                                    <select id="company" name="company" class="form-select" >
+                                    <select id="company" name="company" class="js-example-basic-single" >
                                         <option value="-1">--Choose One--</option>
                                         @foreach ($companies as $company)
                                         @if ( $company->id == old('company'))

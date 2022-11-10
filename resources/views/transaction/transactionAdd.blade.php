@@ -5,6 +5,7 @@
 @section('content')
 <script type="text/javascript"> 
     $(document).ready(function() {
+        $('.js-example-basic-single').select2();
         var i=1;
         $('#add').click(function(){
             i++;  
@@ -193,7 +194,7 @@
                                     <span class="label" id="companyName">Consignee*</span>
                                 </div>
                                 <div class="col-md-8">
-                                    <select id="company" name="company" class="form-select" >
+                                    <select id="company" name="company" class="js-example-basic-single" >
                                         <option value="-1">--Choose One--</option>
                                         @foreach ($companies as $company)
                                         @if ( $company->id == old('company'))

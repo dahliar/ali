@@ -322,7 +322,7 @@
                     <select class="form-select w-100" id="selectSpecies">
                         <option value="0">Semua Species</option>
                         @foreach ($speciesList as $species)
-                        <option value="{{ $species->id }}">{{ $species->name }}</option>
+                        <option value="{{ $species->id }}">{{ $species->nameBahasa }} - {{ $species->name }}</option>
                         @endforeach
                         <option value="0" selected>Semua Spesies</option>
                     </select>

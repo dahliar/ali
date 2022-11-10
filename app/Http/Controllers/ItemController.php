@@ -65,17 +65,10 @@ class ItemController extends Controller
     {
         $speciesList=DB::table('species')
         ->where('isActive', 1)
-        ->orderBy('name','asc')
-        ->get();
-        $grades=Grade::where('isActive', 1)->get();
-        $shapes=Shape::where('isActive', 1)->orderBy('name')->get();
-        $packings=Packing::where('isActive', 1)->get();
-        $freezings=Freezing::where('isActive', 1)->get();
-        $sizes=DB::table('sizes')
-        ->where('isActive', 1)
+        ->orderBy('nameBahasa','asc')
         ->get();
 
-        return view('item.itemStockList', compact('speciesList', 'grades', 'shapes', 'packings', 'freezings', 'sizes'));
+        return view('item.itemStockList', compact('speciesList'));
     }
 
     public function indexStockSpecies(Request $request)

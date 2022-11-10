@@ -22,7 +22,7 @@
                 if(data){
                     var html = '';
                     var i;
-                    html += '<option value="-1">--Choose First--</option>';
+                    html += '<option value="-1">Pilih dulu</option>';
                     for(i=0; i<data.length; i++){
                         if (data[i].itemId != itemId){
                             html += '<option value='+data[i].itemId+'>'+
@@ -51,10 +51,10 @@
             }else{
                 $('#item')
                 .empty()
-                .append('<option value="-1">--Pilih spesies dahulu--</option>');
+                .append('<option value="-1">--Pilih spesies dulu--</option>');
                 $('[name="amount"]').val(0);
                 $('[name="harga"]').val(0);
-                swal.fire('warning','Choose Species first!','info');
+                swal.fire('warning','Pilih species dulu!','info');
             }
         });
     });
@@ -112,12 +112,12 @@
                     </div>
                     <div class="col-md-8">
                         <select class="form-select w-100" id="species" name="species">
-                            <option value="-1">--Pilih dahulu--</option>
+                            <option value="-1">--Pilih species--</option>
                             @foreach ($species as $spec)
                             @if ( $spec->id == old('species') )
-                            <option value="{{ $spec->id }}" selected>{{ $spec->nameBahasa }}</option>
+                            <option value="{{ $spec->id }}" selected>{{ $spec->nameBahasa }} - {{ $spec->name }}</option>
                             @else
-                            <option value="{{ $spec->id }}">{{ $spec->nameBahasa }}</option>                    
+                            <option value="{{ $spec->id }}">{{ $spec->nameBahasa }} - {{ $spec->name }}</option>                    
                             @endif
                             @endforeach
                         </select>
@@ -132,7 +132,7 @@
                     </div>
                     <div class="col-md-8">
                         <select id="item" name="item" class="form-control" >
-                            <option value="-1">--Pilih Spesies dahulu--</option>
+                            <option value="-1">--Pilih spesies dulu--</option>
                         </select>
                     </div>
                 </div>

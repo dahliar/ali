@@ -38,7 +38,7 @@ class DetailPurchaseController extends Controller
      */
     public function create(Purchase $purchase)
     {
-        $species = Species::orderBy('name')->get();
+        $species = Species::orderBy('nameBahasa')->get();
         $grades = Grade::all();
         $packings = Packing::all();
 
