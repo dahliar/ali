@@ -207,9 +207,15 @@
                 </div>
                 <div class="col-md-2">
                     <select id="opsi" name="opsi" class="form-select" >
+                        @empty(old('opsi'))
                         <option value="-1">Semua Status</option>
                         <option value="1">Approved</option>
-                        <option value="0">Unapproved</option>
+                        <option value="0" selected>Unapproved</option>
+                        @else
+                        <option value="-1" @if(old('opsi') == -1) selected @endif>Semua Status</option>
+                        <option value="0" @if(old('opsi') == 0) selected @endif>Unapproved</option>
+                        <option value="1" @if(old('opsi') == 1) selected @endif>Approved</option>      
+                        @endempty
                     </select>
                 </div>
                 <div class="col-md-2">

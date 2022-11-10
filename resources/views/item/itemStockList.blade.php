@@ -34,9 +34,31 @@
     }
 
 
-    function myFunction(speciesId){
+    function myFunction(){
+        var speciesId = document.getElementById("selectSpecies").value;
+        var sizeId = document.getElementById("size").value;
+        var gradeId = document.getElementById("grade").value;
+        var weightbase = document.getElementById("weightbase").value;
+        var shapeId = document.getElementById("shape").value;
+        var packingId = document.getElementById("packing").value;
+        var freezingId = document.getElementById("freezing").value;
         $('#datatable').DataTable({
-            ajax:'{{ url("getAllStockItem") }}' + "/"+ speciesId,
+
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            ajax:{
+                url: '{{ url("getAllStockItem") }}',
+                data: function (d){
+                    d.speciesId=speciesId;
+                    d.sizeId=sizeId;
+                    d.gradeId=gradeId;
+                    d.weightbase=weightbase;
+                    d.shapeId=shapeId;
+                    d.packingId=packingId;
+                }
+            },
+            dataType: "JSON",            
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -67,15 +89,195 @@
     }
 
     $(document).ready(function() {
-        $('#selectSpecies').change(function(){ 
-            var e = document.getElementById("selectSpecies");
-            var speciesId = e.options[e.selectedIndex].value;
-            if (speciesId >= 0){
-                myFunction(speciesId);
-            } else{
-                swal.fire("Warning!", "Pilih jenis spesies dulu!", "info");
+        $('#selectSpecies').on('change', function() {
+            var speciesId = $(this).val();
+            if (speciesId>=0){
+                $.ajax({
+                    url: '{{ url("getSizesForSpecies") }}/'+speciesId,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        if(data){
+                            $('#size').empty();
+                            var html = '';
+                            var i;
+                            html += '<option value="0">Semua size</option>';
+                            for(i=0; i<data.length; i++){
+                                html += '<option value='+data[i].sizeId+'>'+
+                                data[i].name+
+                                '</option>';
+                                $('#size').html(html);
+                            }
+                        }
+                    }
+                });
+            }else{
+                $('#size').empty().append('<option value="0">Semua size</option>');
+                $('#grade').empty().append('<option value="0">Semua grade</option>');
+                $('#packing').empty().append('<option value="0">Semua bentuk packing</option>');
+                $('#shape').empty().append('<option value="0">Semua bentuk olahan</option>');
+                $('#freezing').empty().append('<option value="0">Semua bentuk freezing</option>');
+                $('#weightbase').empty().append('<option value="0">Semua bentuk weightbase</option>');               
+                swal.fire('warning','Choose Species first!','info');
             }
+        });
 
+        $('#size').on('change', function() {
+            var sizeId = $(this).val();
+            if (sizeId>=0){
+                $.ajax({
+                    url: '{{ url("getGradesForSize") }}/'+sizeId,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        if(data){
+                            $('#grade').empty();
+                            var html = '';
+                            var i;
+                            html += '<option value="0">Semua grade</option>';
+                            for(i=0; i<data.length; i++){
+                                html += '<option value='+data[i].gradeId+'>'+
+                                data[i].name+
+                                '</option>';
+                                $('#grade').html(html);
+                            }
+                        }
+                    }
+                });
+            }else{
+                $('#grade').empty().append('<option value="0">Semua grade</option>');
+                $('#packing').empty().append('<option value="0">Semua bentuk packing</option>');
+                $('#shape').empty().append('<option value="0">Semua bentuk olahan</option>');
+                $('#freezing').empty().append('<option value="0">Semua bentuk freezing</option>');
+                $('#weightbase').empty().append('<option value="0">Semua bentuk weightbase</option>');                
+                swal.fire('warning','Choose Size first!','info');
+            }
+        });
+        $('#grade').on('change', function() {
+            var sizeId = document.getElementById("size").value;
+            var gradeId = $(this).val();
+            if (gradeId>=0){
+                $.ajax({
+                    url: '{{ url("getWeightbaseForSize") }}/'+sizeId+'/'+gradeId,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        if(data){
+                            $('#weightbase').empty();
+                            var html = '';
+                            var i;
+                            html += '<option value="0">Semua weightbase</option>';
+                            for(i=0; i<data.length; i++){
+                                html += '<option value='+data[i].weightbase+'>'+
+                                data[i].weightbase+
+                                '</option>';
+                                $('#weightbase').html(html);
+                            }
+                        }
+                    }
+                });
+
+            }else{
+                $('#weightbase').empty().append('<option value="0">Semua weightbase</option>');
+                $('#shape').empty().append('<option value="0">Semua bentuk olahan</option>');
+                $('#packing').empty().append('<option value="0">Semua bentuk packing</option>');
+                $('#freezing').empty().append('<option value="0">Semua bentuk freezing</option>');
+                swal.fire('warning','Choose grade first!','info');
+            }
+        });
+        $('#weightbase').on('change', function() {
+            var sizeId = document.getElementById("size").value;
+            var gradeId = document.getElementById("grade").value;
+            var weightbase = $(this).val();
+            if (weightbase>=0){
+                $.ajax({
+                    url: '{{ url("getShapesForWeightbase") }}/'+sizeId+'/'+gradeId+'/'+weightbase,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        if(data){
+                            $('#shape').empty();
+                            var html = '';
+                            var i;
+                            html += '<option value="0">Semua bentuk olahan</option>';
+                            for(i=0; i<data.length; i++){
+                                html += '<option value='+data[i].id+'>'+
+                                data[i].name+
+                                '</option>';
+                                $('#shape').html(html);
+                            }
+                        }
+                    }
+                });
+
+            }else{
+                $('#shape').empty().append('<option value="0">Semua bentuk olahan</option>');
+                $('#packing').empty().append('<option value="0">Semua bentuk packing</option>');
+                $('#freezing').empty().append('<option value="0">Semua bentuk freezing</option>');
+                swal.fire('warning','Choose weightbase first!','info');
+            }
+        });
+        $('#shape').on('change', function() {
+            var sizeId = document.getElementById("size").value;
+            var gradeId = document.getElementById("grade").value;
+            var weightbase = document.getElementById("weightbase").value;
+            var shapeId = $(this).val();
+            if (shapeId>=0){
+                $.ajax({
+                    url: '{{ url("getPackingsForShape") }}/'+sizeId+'/'+gradeId+'/'+weightbase+'/'+shapeId,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        if(data){
+                            $('#packing').empty();
+                            var html = '';
+                            var i;
+                            html += '<option value="0">Semua bentuk olahan</option>';
+                            for(i=0; i<data.length; i++){
+                                html += '<option value='+data[i].id+'>'+
+                                data[i].name+
+                                '</option>';
+                                $('#packing').html(html);
+                            }
+                        }
+                    }
+                });
+            }else{
+                $('#packing').empty().append('<option value="0">Semua bentuk packing</option>');
+                $('#freezing').empty().append('<option value="0">Semua bentuk freezing</option>');
+                swal.fire('warning','Choose grade first!','info');
+            }
+        });
+        $('#packing').on('change', function() {
+            var sizeId = document.getElementById("size").value;
+            var gradeId = document.getElementById("grade").value;
+            var weightbase = document.getElementById("weightbase").value;
+            var shapeId = document.getElementById("shape").value;
+            var packingId = $(this).val();
+            if (packingId>=0){
+                $.ajax({
+                    url: '{{ url("getFreezingsForPacking") }}/'+sizeId+'/'+gradeId+'/'+weightbase+'/'+shapeId+'/'+packingId,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        if(data){
+                            $('#freezing').empty();
+                            var html = '';
+                            var i;
+                            html += '<option value="0">Semua bentuk packing</option>';
+                            for(i=0; i<data.length; i++){
+                                html += '<option value='+data[i].id+'>'+
+                                data[i].name+
+                                '</option>';
+                                $('#freezing').html(html);
+                            }
+                        }
+                    }
+                });
+            }else{
+                $('#freezing').empty().append('<option value="0">Semua bentuk freezing</option>');
+                swal.fire('warning','Choose Freezing first!','info');
+            }
         });
     });
 </script>
@@ -97,7 +299,7 @@
 </div>
 @endif
 
-<body onload="myFunction(0)">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="card card-body">
@@ -116,18 +318,88 @@
                     <span class="label" id="statTran">Jenis Spesies</span>
                 </div>
                 <div class="col-6">
-                    <select class="form-control w-100" id="selectSpecies">
-                        <option value="-1">--Choose One--</option>
+
+                    <select class="form-select w-100" id="selectSpecies">
+                        <option value="0">Semua Species</option>
                         @foreach ($speciesList as $species)
                         <option value="{{ $species->id }}">{{ $species->name }}</option>
                         @endforeach
-                        <option value="0" selected>All</option>
+                        <option value="0" selected>Semua Tipe</option>
                     </select>
                 </div>
                 <div class="col-2 my-auto">
                     <span class="label" id="errSpan"></span>
                 </div>
             </div>
+            <div class="row form-group">
+                <div class="col-2 my-auto text-md-right">
+                    <span class="label">Size*</span>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select w-100" id="size" name="size">
+                        <option value="0">Semua Size</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-2 my-auto text-md-right">
+                    <span class="label">Grade*</span>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select w-100" id="grade" name="grade">
+                        <option value="0">Semua Grade</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-2 my-auto text-md-right">
+                    <span class="label">Weightbase*</span>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select w-100" id="weightbase" name="weightbase">
+                        <option value="0">Semua Weightbase</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-2 my-auto text-md-right">
+                    <span class="label">Bentuk Olahan*</span>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select w-100" id="shape" name="shape">
+                        <option value="0">Semua bentuk olahan</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-2 my-auto text-md-right">
+                    <span class="label">Packing Type*</span>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select w-100" id="packing" name="packing">
+                        <option value="0">Semua bentuk packing</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-2 my-auto text-md-right">
+                    <span class="label">Freeze Type*</span>
+                </div>
+                <div class="col-md-5">
+                    <select class="form-select w-100" id="freezing" name="freezing">
+                        <option value="0">Semua bentuk freezing</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-2 my-auto text-md-right">
+                </div>
+                <div class="col-md-5">
+                    <button type="submit" onclick="myFunction()" class="btn btn-primary">Save</button>
+                    <input type="reset" value="Reset" class="btn btn-secondary">
+                </div>
+            </div>
+
         </div>
         <div class="card">
             <div class="card-body">

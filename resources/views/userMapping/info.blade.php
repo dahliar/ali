@@ -2,15 +2,18 @@
 	<html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<title>Invoice - 1</title>
+		<title>Thing to do</title>
 	</head>
 	<header>
-		Test
+		Next thing to do
 	</header>
 	<body>
-		<div>COMMERCIAL INVOICE</div>
+		<ol>
+			<li>Barcode generator dan log data</li>
+			<li>Pembuatan Surat keterangan Kerja</li>
+			<li>Pembuatan Surat peringatan dan log data </li>
+		</ol>
 	</body>
 	<footer>
-		Footer on every page
 	</footer>
 	</html>

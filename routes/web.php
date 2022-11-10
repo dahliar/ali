@@ -160,7 +160,9 @@ Route::get('/purchase/notaPembelian/{purchase}', [InvoiceController::class, 'cet
 
 //ITEM STOCKS
 Route::get('itemStockList',[ItemController::class, 'index'])->middleware(['auth', 'authorized'])->name('itemStockList');
-Route::GET('getAllStockItem/{speciesId}', [ItemController::class, 'getAllStockItem'])->middleware(['auth']);
+
+Route::GET('getAllStockItem', [ItemController::class, 'getAllStockItem'])->middleware(['auth']);
+
 Route::get('itemStockView/{itemId}',[ItemController::class, 'show'])->middleware(['auth', 'authorized']);
 Route::get('itemStockViewUnpacked/{itemId}',[ItemController::class, 'showUnpacked'])->middleware(['auth', 'authorized']);
 Route::get('itemStockSubtractView/{itemId}',[ItemController::class, 'showKurangi'])->middleware(['auth', 'authorized']);
@@ -184,9 +186,19 @@ Route::get('storeAdd',[StoreController::class, 'store'])->middleware(['auth'])->
 Route::post('storeSubtract',[StoreController::class, 'storeSubtract'])->middleware(['auth'])->name('storeSubtract');
 Route::get('storeUpdate',[StoreController::class, 'update'])->middleware(['auth'])->name('storeUpdate');
 
+
+
 //ITEM STOCKS
 Route::get('speciesStockList',[ItemController::class, 'indexStockSpecies'])->middleware(['auth', 'authorized']);
 Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->middleware(['auth']);
+Route::get('getSizesForSpecies/{speciesId}',[ItemController::class, 'getSizeForSpecies'])->middleware(['auth']);
+Route::get('getGradesForSize/{sizeId}',[ItemController::class, 'getGradeForSize'])->middleware(['auth']);
+Route::get('getWeightbaseForSize/{sizeId}/{gradeId}',[ItemController::class, 'getWeightbaseForSize'])->middleware(['auth']);
+Route::get('getShapesForWeightbase/{sizeId}/{gradeId}/{weightbase}',[ItemController::class, 'getShapesForWeightbase'])->middleware(['auth']);
+Route::get('getPackingsForShape/{sizeId}/{gradeId}/{weightbase}/{packingId}',[ItemController::class, 'getPackingsForShape'])->middleware(['auth']);
+Route::get('getFreezingsForPacking/{sizeId}/{gradeId}/{weightbase}/{packingId}/{shapeId}',[ItemController::class, 'getFreezingsForPacking'])->middleware(['auth']);
+
+
 
 
 //Approval
@@ -398,6 +410,8 @@ Route::GET('getDailySalariesDetail',[SalaryController::class, 'getDailySalariesD
 */
 
 Route::GET('employeeList',[EmployeeController::class, 'index'])->name('employeeList')->middleware('auth', 'authorized');
+
+
 Route::GET('employeeAdd',[EmployeeController::class, 'create'])->middleware('auth', 'authorized');
 Route::GET('employeeEdit/{employee}',[EmployeeController::class, 'edit'])->middleware('auth', 'authorized');
 Route::GET('profileEdit/{employee}',[EmployeeController::class, 'employeePersonalDataEdit'])->middleware('auth', 'authorized');

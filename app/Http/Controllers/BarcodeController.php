@@ -60,15 +60,16 @@ class BarcodeController extends Controller
             str_pad($date->year, 4, '0', STR_PAD_LEFT).
             str_pad($date->month, 2, '0', STR_PAD_LEFT).
             str_pad($date->day, 2, '0', STR_PAD_LEFT).
-            str_pad($request->item, 4, '0', STR_PAD_LEFT).
-            str_pad($request->company, 4, '0', STR_PAD_LEFT).
-            str_pad($a, 5, '0', STR_PAD_LEFT);
+            str_pad($request->item, 6, '0', STR_PAD_LEFT);//.
+            //str_pad($request->company, 4, '0', STR_PAD_LEFT).
+            //str_pad($a, 5, '0', STR_PAD_LEFT);
             echo '<br>';
 
-            echo $barcodeId." ". $this->dns2d->getBarcodeHTML($barcodeId, 'QRCODE');
+            //echo $barcodeId." ". $this->dns2d->getBarcodeHTML($barcodeId, 'QRCODE');
+            echo $barcodeId." ". $this->dns1d->getBarcodeHTML($barcodeId, 'C128');
         }
 
-        dd($request->jumlahBarcode);
+        dd($request);
 
         
 

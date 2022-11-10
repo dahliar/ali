@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+
 use DB;
 use Auth;
 
@@ -13,7 +15,7 @@ class Item extends Model
     use HasFactory;
     protected $primaryKey = 'id';
 
-    public function getAllItemData($speciesId){
+    public function getAllItemData(Request $request){
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
@@ -36,7 +38,6 @@ class Item extends Model
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        //->where('dt.status','=', 1)
         ->where('i.isActive','=', 1)
         ->groupBy('i.name')
         ->orderBy('sp.name', 'desc')
@@ -44,8 +45,26 @@ class Item extends Model
         ->orderBy('s.name', 'asc');
 
 
-        if ($speciesId>0){
-            $query->where('sp.id','=', $speciesId);
+        if ($request->speciesId>0){
+            $query->where('sp.id','=', $request->speciesId);
+        }
+        if ($request->sizeId>0){
+            $query->where('i.sizeId','=', $request->sizeId);
+        }
+        if ($request->gradeId>0){
+            $query->where('i.gradeId','=', $request->gradeId);
+        }
+        if ($request->weightbase>0){
+            $query->where('i.weightbase','=', $request->weightbase);
+        }
+        if ($request->shapeId>0){
+            $query->where('i.shapeId','=', $request->shapeId);
+        }
+        if ($request->packingId>0){
+            $query->where('i.packingId','=', $request->packingId);
+        }
+        if ($request->freezingId>0){
+            $query->where('i.freezingId','=', $request->freezingId);
         }
         $query->get();  
 
@@ -270,5 +289,99 @@ class Item extends Model
         ->get();    
 
         return $query->first();
+    }
+
+    public function getSizeForSpecies($speciesId){
+        $query = DB::table('sizes as s')
+        ->select(
+            's.id as sizeId', 
+            's.name as name'
+        )
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->where('s.speciesId','=', $speciesId)
+        ->where('s.isActive','=', 1)
+        ->orderBy('s.name', 'asc');  
+
+        return $query->get();
+    }
+    public function getGradeForSize($sizeId){
+        $query = DB::table('items as i')
+        ->select(
+            'g.id as gradeId', 
+            'g.name as name'
+        )
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->where('i.sizeId','=', $sizeId)
+        ->where('i.isActive','=', 1)
+        ->where('g.isActive','=', 1)
+        ->distinct()
+        ->orderBy('g.name', 'asc');  
+
+        return $query->get();
+    }
+    public function getWeightbaseForSize($sizeId, $gradeId){
+        $query = DB::table('items as i')
+        ->select(
+            'i.weightbase as weightbase'
+        )
+        ->where('i.sizeId','=', $sizeId)
+        ->where('i.gradeId','=', $gradeId)
+        ->where('i.isActive','=', 1)
+        ->distinct()
+        ->orderBy('i.weightbase', 'asc');  
+
+        return $query->get();
+    }
+    public function getShapesForWeightbase($sizeId, $gradeId, $weightbase){
+        $query = DB::table('items as i')
+        ->select(
+            's.id as id',
+            's.name as name'
+        )
+        ->join('shapes as s', 's.id', '=', 'i.shapeId')
+        ->where('i.sizeId','=', $sizeId)
+        ->where('i.gradeId','=', $gradeId)
+        ->where('i.weightbase','=', $weightbase)
+        ->where('i.isActive','=', 1)
+        ->where('s.isActive','=', 1)
+        ->distinct()
+        ->orderBy('s.name', 'asc'); 
+
+        return $query->get();
+    }
+    public function getPackingsForShape($sizeId, $gradeId, $weightbase, $shapeId){
+        $query = DB::table('items as i')
+        ->select(
+            'p.id as id',
+            'p.name as name'
+        )
+        ->join('packings as p', 'p.id', '=', 'i.packingId')
+        ->where('i.sizeId','=', $sizeId)
+        ->where('i.gradeId','=', $gradeId)
+        ->where('i.weightbase','=', $weightbase)
+        ->where('i.shapeId','=', $shapeId)
+        ->where('i.isActive','=', 1)
+        ->where('p.isActive','=', 1)
+        ->distinct()
+        ->orderBy('p.name', 'asc'); 
+        return $query->get();
+    }
+    public function getFreezingsForPacking($sizeId, $gradeId, $weightbase, $shapeId, $packingId){
+        $query = DB::table('items as i')
+        ->select(
+            'f.id as id',
+            'f.name as name'
+        )
+        ->join('freezings as f', 'f.id', '=', 'i.freezingId')
+        ->where('i.sizeId','=', $sizeId)
+        ->where('i.gradeId','=', $gradeId)
+        ->where('i.weightbase','=', $weightbase)
+        ->where('i.shapeId','=', $shapeId)
+        ->where('i.packingId','=', $packingId)
+        ->where('i.isActive','=', 1)
+        ->where('f.isActive','=', 1)
+        ->distinct()
+        ->orderBy('f.name', 'asc'); 
+        return $query->get();
     }
 }

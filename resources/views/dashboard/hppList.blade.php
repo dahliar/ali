@@ -135,9 +135,11 @@ $itemChoosen=-1;
                     <div class="col-md-2">
                         <div class="align-middle">
                             @if(empty($showDetail))
+
                             @php
                             $showDetail=1;
                             @endphp
+                            
                             @endif
                             <select class="form-select w-100" id="showDetail" name="showDetail">
                                 <option value="1" @if ($showDetail == 1 ) selected @endif>Hide Detil Barang</option>

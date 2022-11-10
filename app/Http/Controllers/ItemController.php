@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\Species;
 use App\Models\Store;
+use App\Models\Shape;
+use App\Models\Packing;
+use App\Models\Freezing;
+use App\Models\Size;
+use App\Models\Grade;
+
 use DB;
 
 class ItemController extends Controller
@@ -25,10 +31,27 @@ class ItemController extends Controller
         return $something;
     }
 
+    public function getSizeForSpecies($speciesId){
+        return $this->item->getSizeForSpecies($speciesId);
+    }
+    public function getGradeForSize($sizeId){
+        return $this->item->getGradeForSize($sizeId);
+    }
+    public function getWeightbaseForSize($sizeId, $gradeId){
+        return $this->item->getWeightbaseForSize($sizeId, $gradeId);
+    }
+    public function getShapesForWeightbase($sizeId, $gradeId, $weightbase){
+        return $this->item->getShapesForWeightbase($sizeId, $gradeId, $weightbase);
+    }
+    public function getPackingsForShape($sizeId, $gradeId, $weightbase, $shapeId){
+        return $this->item->getPackingsForShape($sizeId, $gradeId, $weightbase, $shapeId);
+    }
+    public function getFreezingsForPacking($sizeId, $gradeId, $weightbase, $shapeId, $packingId){
+        return $this->item->getFreezingsForPacking($sizeId, $gradeId, $weightbase, $shapeId, $packingId);
+    }
 
-
-    public function getAllStockItem($speciesId){
-        return $this->item->getAllItemData($speciesId);
+    public function getAllStockItem(Request $request){
+        return $this->item->getAllItemData($request);
     }
     
     public function getItemHistory($itemId){
@@ -40,8 +63,19 @@ class ItemController extends Controller
 
     public function index(Request $request)
     {
-        $speciesList = Species::orderBy('name')->get();
-        return view('item.itemStockList', compact('speciesList'));
+        $speciesList=DB::table('species')
+        ->where('isActive', 1)
+        ->orderBy('name','asc')
+        ->get();
+        $grades=Grade::where('isActive', 1)->get();
+        $shapes=Shape::where('isActive', 1)->orderBy('name')->get();
+        $packings=Packing::where('isActive', 1)->get();
+        $freezings=Freezing::where('isActive', 1)->get();
+        $sizes=DB::table('sizes')
+        ->where('isActive', 1)
+        ->get();
+
+        return view('item.itemStockList', compact('speciesList', 'grades', 'shapes', 'packings', 'freezings', 'sizes'));
     }
 
     public function indexStockSpecies(Request $request)
