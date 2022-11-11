@@ -89,6 +89,8 @@
     }
 
     $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+
         $('#selectSpecies').on('change', function() {
             var speciesId = $(this).val();
             if (speciesId>=0){
@@ -318,8 +320,7 @@
                     <span class="label" id="statTran">Jenis Spesies</span>
                 </div>
                 <div class="col-6">
-
-                    <select class="form-select w-100" id="selectSpecies">
+                    <select class="js-example-basic-single" id="selectSpecies">
                         <option value="0">Semua Species</option>
                         @foreach ($speciesList as $species)
                         <option value="{{ $species->id }}">{{ $species->nameBahasa }} - {{ $species->name }}</option>

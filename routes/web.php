@@ -180,7 +180,7 @@ Route::get('itemStockAdd/{itemId}',[StoreController::class, 'create'])->middlewa
 Route::get('itemStockSubtract/{itemId}',[StoreController::class, 'subtract'])->middleware(['auth', 'authorized']);
 
 
-Route::get('itemStockEdit/{store}',[StoreController::class, 'edit'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
+Route::get('itemStockEdit/{store}',[StoreController::class, 'edit'])->middleware(['auth', 'authorized']);
 Route::get('itemStoreDetail/{storeId}',[StoreController::class, 'itemStoreDetail'])->middleware(['auth', 'authorized']);
 Route::get('storeAdd',[StoreController::class, 'store'])->middleware(['auth'])->name('storeAdd');
 Route::post('storeSubtract',[StoreController::class, 'storeSubtract'])->middleware(['auth'])->name('storeSubtract');
@@ -209,7 +209,7 @@ Route::post('approveStockChange',[StoreController::class, 'stockChange'])->middl
 Route::post('deleteStockChange',[StoreController::class, 'stockChangeDelete'])->middleware(['auth']);
 Route::post('deleteStockSubtractChange',[StoreController::class, 'deleteStockSubtractChange'])->middleware(['auth']);
 
-Route::get('itemStockSubtractEdit/{stockSubtract}',[StoreController::class, 'subtractEdit'])->middleware(['auth', 'authorized'])->name('itemStockAdd');
+Route::get('itemStockSubtractEdit/{stockSubtract}',[StoreController::class, 'subtractEdit'])->middleware(['auth', 'authorized']);
 Route::post('stockSubtractUpdate',[StoreController::class, 'subtractUpdate'])->middleware(['auth'])->name('storeUpdate');
 Route::post('getStorekSubtractRecord',[StoreController::class, 'getStorekSubtractRecord'])->middleware(['auth']);
 Route::post('approveStockSubtractChange',[StoreController::class, 'stockSubtractChange'])->middleware(['auth']);
