@@ -320,7 +320,7 @@
                     <span class="label" id="statTran">Jenis Spesies</span>
                 </div>
                 <div class="col-6">
-                    <select class="js-example-basic-single" id="selectSpecies">
+                    <select class="js-example-basic-single w-100" id="selectSpecies">
                         <option value="0">Semua Species</option>
                         @foreach ($speciesList as $species)
                         <option value="{{ $species->id }}">{{ $species->nameBahasa }} - {{ $species->name }}</option>
