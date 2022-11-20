@@ -29,7 +29,7 @@ class Presence extends Model
                     }
                 }
                 catch(\Exception $e){
-                    $text.=$row[1].", ";
+                    $text.=$e." ".$row[1].", ";
                 }
             }
         }
