@@ -422,6 +422,7 @@ Route::POST('employeeUpdate',[EmployeeController::class, 'update'])->name('emplo
 Route::POST('employeeMappingUpdate',[EmployeeController::class, 'updateMapping'])->name('employeeMappingUpdate')->middleware('auth');
 Route::get('getAllEmployees',[EmployeeController::class, 'getAllEmployees'])->middleware('auth');
 Route::GET('employeeMappingEdit/{employee}',[EmployeeController::class, 'editMapping'])->middleware('auth', 'authorized');
+Route::GET('employeeMappingHistory/{employee}',[EmployeeController::class, 'historyMapping'])->middleware('auth', 'authorized');
 
 Route::GET('organizationStructureList',[OrganizationStructureController::class, 'index'])->middleware('auth', 'authorized');
 Route::GET('organizationStructureAdd',[OrganizationStructureController::class, 'create'])->middleware('auth', 'authorized');

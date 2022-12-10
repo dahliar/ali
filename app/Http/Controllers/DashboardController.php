@@ -12,8 +12,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class DashboardController extends Controller
 {
-
-
     public function infophp()
     {
         //$pdf = Pdf::loadview("userMapping.info");
@@ -24,10 +22,10 @@ class DashboardController extends Controller
 
 
     public function getServerDate(){
-        return Carbon::now()->toDateString();
+                    return Carbon::now()->toDateString();
     }
     public function index(Request $request)
-    {   
+    {
         if ($request->has('tahun')){
             $request->validate([
                 'tahun' => 'required|numeric|gt:0',
@@ -58,7 +56,7 @@ class DashboardController extends Controller
             ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
             ->where('mapping.isActive', '1')
             ->groupBy('e.gender')
-            ->get();            
+            ->get();
 
             $employeesGenderByTypes = DB::table('employees as e')
             ->select(
@@ -67,7 +65,7 @@ class DashboardController extends Controller
                     '),
                 DB::raw('
                     (
-                    select count(e2.id) from employees e2 
+                    select count(e2.id) from employees e2
                     where e2.gender=1
                     and e2.employmentStatus=e.employmentStatus
                     and e2.isActive=1
@@ -76,7 +74,7 @@ class DashboardController extends Controller
                     '),
                 DB::raw('
                     (
-                    select count(e2.id) from employees e2 
+                    select count(e2.id) from employees e2
                     where e2.gender=2
                     and e2.employmentStatus=e.employmentStatus
                     and e2.isActive=1
@@ -204,7 +202,7 @@ class DashboardController extends Controller
                 'u.name as name',
                 'e.birthdate as birthdate',
                 DB::raw('concat(
-                    TIMESTAMPDIFF(YEAR, e.birthdate, curdate()), 
+                    TIMESTAMPDIFF(YEAR, e.birthdate, curdate()),
                     " Y") as usia')
             )
             ->join('users as u', 'u.id', '=', 'e.userid')
@@ -216,7 +214,7 @@ class DashboardController extends Controller
             $date->settings(['formatFunction' => 'translatedFormat']);
             $month=$date->format('F');
 
-            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));          
+            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));
         }
         else{
             return view('home');
@@ -265,7 +263,7 @@ class DashboardController extends Controller
             $query->where('sp.id','=', $species);
         }
 
-        
+
 
         return datatables()->of($query)
 
@@ -280,7 +278,7 @@ class DashboardController extends Controller
         })
         ->addIndexColumn()
         ->toJson();
-    }    
+    }
 
     public function indexHpp(Request $request)
     {
@@ -318,7 +316,7 @@ class DashboardController extends Controller
 
         $honorarium = DB::table('honorariums as h')
         ->select(
-            DB::raw('sum(jumlah) as total'),            
+            DB::raw('sum(jumlah) as total'),
             DB::raw('count(h.employeeId) as jumlahOrang'),
         )
         ->whereBetween('tanggalKerja', [$request->start, $request->end])
@@ -340,7 +338,7 @@ class DashboardController extends Controller
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->select(
             'c.name as perusahaan',
-            DB::raw('concat(sp.name, " ", g.name, " ", s.name) as name'), 
+            DB::raw('concat(sp.name, " ", g.name, " ", s.name) as name'),
             'pur.purchaseDate as tanggal',
             'dp.amount as amount',
             'dp.price as price'
@@ -361,7 +359,7 @@ class DashboardController extends Controller
         $itemChoosen=$request->item;
         $showDetail=$request->showDetail;
 
-        return view('dashboard.hppList', compact('showDetail','species','start','end','dataHarian', 'dataBorongan', 'dataHonorarium', 'purchases', 'speciesChoosen', 'itemChoosen'));    
+        return view('dashboard.hppList', compact('showDetail','species','start','end','dataHarian', 'dataBorongan', 'dataHonorarium', 'purchases', 'speciesChoosen', 'itemChoosen'));
     }
 
 
@@ -415,7 +413,7 @@ class DashboardController extends Controller
         ->get();
 
         $total=$payrollHarian->merge($payrollBulanan)->merge($payrollBorongan);
-        $payroll = [ 
+        $payroll = [
             ["Januari ".$tahun,0,0,0],
             ["Februari ".$tahun,0,0,0],
             ["Maret ".$tahun,0,0,0],
@@ -430,9 +428,9 @@ class DashboardController extends Controller
             ["Desember ".$tahun,0,0,0],
         ];
         foreach($total as $p){
-            $payroll[$p->bulan-1][1] +=$p->bulanan; 
-            $payroll[$p->bulan-1][2] +=$p->harian; 
-            $payroll[$p->bulan-1][3] +=$p->borongan; 
+            $payroll[$p->bulan-1][1] +=$p->bulanan;
+            $payroll[$p->bulan-1][2] +=$p->harian;
+            $payroll[$p->bulan-1][3] +=$p->borongan;
         }
 
         $payrollChart = DB::table('detail_payrolls as dp')
@@ -449,7 +447,7 @@ class DashboardController extends Controller
         ->groupBy('e.employmentStatus')
         ->get();
 
-        return view('dashboard.rekapitulasiGaji', compact('payrollChart','tahun', 'payroll'));        
+        return view('dashboard.rekapitulasiGaji', compact('payrollChart','tahun', 'payroll'));
     }
     public function rekapitulasiGajiPerBulan(){
         return view('dashboard.rekapitulasiGajiPerBulan');
@@ -486,7 +484,7 @@ class DashboardController extends Controller
         $tahun = $request->tahun;
         $bulan = $request->bulan;
 
-        return view('dashboard.rekapitulasiGajiPerBulan', compact('tahun','bulan', 'payroll'));        
+        return view('dashboard.rekapitulasiGajiPerBulan', compact('tahun','bulan', 'payroll'));
     }
 
     public function cetakRekapGajiBulanan(Request $request){
@@ -529,11 +527,11 @@ class DashboardController extends Controller
 
         //return view('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'));
 
-        
+
         $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
-        
+
 
 
 
@@ -563,8 +561,8 @@ class DashboardController extends Controller
                 DB::raw('p.paymentAmount as jumlah'),
                 DB::raw('p.taxPercentage as persen'),
                 DB::raw('p.tax as pajak'),
-                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
-                    WHEN p.taxIncluded="1" THEN "Ya" 
+                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
+                    WHEN p.taxIncluded="1" THEN "Ya"
                     END) as taxIncluded'
                 )
             )
@@ -580,8 +578,8 @@ class DashboardController extends Controller
                 DB::raw('sum(p.paymentAmount) as jumlah'),
                 DB::raw('p.taxPercentage as persen'),
                 DB::raw('sum(p.tax) as pajak'),
-                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
-                    WHEN p.taxIncluded="1" THEN "Ya" 
+                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
+                    WHEN p.taxIncluded="1" THEN "Ya"
                     END) as taxIncluded'
                 )
             )
@@ -597,7 +595,7 @@ class DashboardController extends Controller
         $bulan = $request->bulan;
         $opsi = $request->opsi;
 
-        return view('dashboard.rekapitulasiPembelianPerBulan', compact('opsi','tahun','bulan', 'payroll'));        
+        return view('dashboard.rekapitulasiPembelianPerBulan', compact('opsi','tahun','bulan', 'payroll'));
     }
 
     public function cetakRekapPembelianPerBulan(Request $request){
@@ -628,8 +626,8 @@ class DashboardController extends Controller
                 DB::raw('p.paymentAmount as jumlah'),
                 DB::raw('p.taxPercentage as persen'),
                 DB::raw('p.tax as pajak'),
-                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
-                    WHEN p.taxIncluded="1" THEN "Ya" 
+                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
+                    WHEN p.taxIncluded="1" THEN "Ya"
                     END) as taxIncluded'
                 )
             )
@@ -645,8 +643,8 @@ class DashboardController extends Controller
                 DB::raw('sum(p.paymentAmount) as jumlah'),
                 DB::raw('p.taxPercentage as persen'),
                 DB::raw('sum(p.tax) as pajak'),
-                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak" 
-                    WHEN p.taxIncluded="1" THEN "Ya" 
+                DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
+                    WHEN p.taxIncluded="1" THEN "Ya"
                     END) as taxIncluded'
                 )
             )
@@ -663,11 +661,11 @@ class DashboardController extends Controller
         $opsi = $request->opsi;
 
         //return view('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'));
-        
+
         $pdf = PDF::loadview('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap pembelian '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
-        
+
     }
 
     public function checkPayrollByDateRange(){
@@ -711,7 +709,7 @@ class DashboardController extends Controller
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->orderBy('u.name')
         ->orderBy('h.tanggalKerja')
-        ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal' 
+        ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal'
     )
         ->whereBetween('h.tanggalKerja', [$start, $end])
         ->union($harian)
@@ -721,10 +719,10 @@ class DashboardController extends Controller
             $third = DB::table($honorarium)
             ->select(
                 'name',
-                'empid', 
-                DB::raw('sum(uh) as uh'), 
-                DB::raw('sum(ul) as ul'), 
-                DB::raw('sum(borongan) as borongan'), 
+                'empid',
+                DB::raw('sum(uh) as uh'),
+                DB::raw('sum(ul) as ul'),
+                DB::raw('sum(borongan) as borongan'),
                 DB::raw('sum(honorarium) as honorarium'),
                 DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total'),
                 'tanggal'
@@ -739,10 +737,10 @@ class DashboardController extends Controller
             $third = DB::table($honorarium)
             ->select(
                 'name',
-                'empid', 
-                DB::raw('sum(uh) as uh'), 
-                DB::raw('sum(ul) as ul'), 
-                DB::raw('sum(borongan) as borongan'), 
+                'empid',
+                DB::raw('sum(uh) as uh'),
+                DB::raw('sum(ul) as ul'),
+                DB::raw('sum(borongan) as borongan'),
                 DB::raw('sum(honorarium) as honorarium'),
                 DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total')
             )
@@ -752,7 +750,7 @@ class DashboardController extends Controller
             ->get();
         }
 
-        return view('salary.checkPayrollByDateRange', compact('opsi','start','end','third'));  
+        return view('salary.checkPayrollByDateRange', compact('opsi','start','end','third'));
     }
 
 
@@ -764,12 +762,12 @@ class DashboardController extends Controller
         $end=Carbon::parse($end);
         $query = DB::table('presences as p')
         ->select(
-            'e.id as empid', 
-            'u.name as name', 
+            'e.id as empid',
+            'u.name as name',
             'os.name as jabatan',
             DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenis'),
             'wp.name as bagian',
-            DB::raw('sum(p.jamKerja) as jamKerja'), 
+            DB::raw('sum(p.jamKerja) as jamKerja'),
             DB::raw('sum(p.jamlembur) as jamLembur'),
             DB::raw('sum(p.jamKerja + p.jamlembur) as totalJam'),
             DB::raw('count(p.id) as hari')
@@ -798,14 +796,14 @@ class DashboardController extends Controller
         }
 
         $query = $query->get();
-        return datatables()->of($query) 
+        return datatables()->of($query)
         ->addColumn('action', function ($row) {
             $html='<button  data-rowid="'.$row->empid.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Ubah Presensi" onclick="employeePresenceHarianHistory('."'".$row->empid."'".')">
             <i class="fa fa-edit" style="font-size:20px"></i>
             </button>';
             return $html;
-        })       
-        ->addIndexColumn()->toJson();      
+        })
+        ->addIndexColumn()->toJson();
     }
 
     public function historyDetailPenjualan()
@@ -818,23 +816,23 @@ class DashboardController extends Controller
     public function getDetailTransactionListHistory($species, $start, $end){
         $query = DB::table('detail_transactions as dt')
         ->select(
-            'dt.id as id', 
-            'dt.transactionId as transactionId', 
-            'i.name as itemName', 
-            'f.name as freezingName', 
-            'g.name as gradeName', 
-            'p.name as packingName', 
+            'dt.id as id',
+            'dt.transactionId as transactionId',
+            'i.name as itemName',
+            'f.name as freezingName',
+            'g.name as gradeName',
+            'p.name as packingName',
             'p.shortname as pshortname',
-            's.name as sizeName', 
-            'sp.name as speciesName', 
-            't.status as status', 
+            's.name as sizeName',
+            'sp.name as speciesName',
+            't.status as status',
             't.loadingDate as loadingDate',
             'c.name as company',
-            DB::raw('(CASE   WHEN t.valutaType="1" THEN "Rp. " 
-                WHEN t.valutaType="2" THEN "USD. " 
-                WHEN t.valutaType="3" THEN "Rmb. " 
+            DB::raw('(CASE   WHEN t.valutaType="1" THEN "Rp. "
+                WHEN t.valutaType="2" THEN "USD. "
+                WHEN t.valutaType="3" THEN "Rmb. "
                 END) as valuta'
-            ), 
+            ),
             'dt.amount as amount',
             'i.weightbase as wb',
             'dt.price as price',
@@ -881,7 +879,7 @@ class DashboardController extends Controller
             $html = $row->valuta.' '.number_format(($row->price * $row->amount * $row->wb), 2, ',', '.');
             return $html;
         })
-        ->addIndexColumn()->toJson();    
+        ->addIndexColumn()->toJson();
     }
 
 }

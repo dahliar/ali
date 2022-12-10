@@ -101,7 +101,7 @@
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <a class="white-text" href="{{ ('employeeList')}}">Pegawai</a>
+                            <a class="white-text" href="{{ url('employeeList')}}">Pegawai</a>
                         </li>
                         <li class="breadcrumb-item active">Ubah penempatan pegawai</li>
                     </ol>

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Carbon\Carbon;
+use App\Models\Employee;
+use App\Models\EmployeeHistory;
+
 
 
 class Employee extends Model
@@ -33,6 +36,9 @@ class Employee extends Model
         return $affected;
     }
     public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender){
+        $copy = Employee::all()->where('id', $id)->toArray();
+        EmployeeHistory::insert($copy);
+
         $affected = DB::table('employees')
         ->where('id', $id)
         ->update([
@@ -58,7 +64,8 @@ class Employee extends Model
     public function userMappingUpdate($newMappingData, $mappingid){
         $affected = DB::table('employeeorgstructuremapping')
         ->where('id', $mappingid)
-        ->update(['isactive' => 0]);
+        ->update(['isactive' => 0])
+        ->where('isactive','=', 1);
 
         $id = DB::table('employeeorgstructuremapping')->insertGetId($newMappingData);
         return $id;

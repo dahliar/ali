@@ -15,43 +15,6 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    function employeePresenceHistory(id){
-        window.open(('{{ url("employeePresenceHarianHistory") }}'+"/"+id), '_blank');
-    }
-    function slipGajiPegawai(id){
-        alert("belum");
-        var mapForm = document.createElement("form");
-        mapForm.target = "_blank";    
-        mapForm.method = "POST";
-        mapForm.action = "{{url("slipGajiKaryawan")}}";
-
-        var mapInput = document.createElement("input");
-        mapInput.type = "text";
-        mapInput.name = "empid";
-        mapInput.value = id;
-
-        mapForm.appendChild(mapInput);
-
-        document.body.appendChild(mapForm);
-        mapForm.submit();
-    }
-
-    function editEmployee(id){
-        window.open(('{{ url("employeeEdit") }}'+"/"+id), '_self');
-    }
-    function editPassword(id){
-        window.open(('{{ url("passedit") }}'+"/"+id), '_self');
-    }
-    function editPemetaan(id){
-        window.open(('{{ url("employeeMappingEdit") }}'+"/"+id), '_self');
-    }
-    function historyPemetaan(id){
-        window.open(('{{ url("employeeMappingHistory") }}'+"/"+id), '_self');
-    }
-
-    function tambahTransaksi(){
-        window.open(('{{ url("employeeAdd") }}'), '_self');
-    }
 
     function myFunction(){
         $('#datatable').DataTable({
@@ -86,9 +49,6 @@
             ]
         });
     }
-
-    $(document).ready(function() {
-    });
 </script>
 
 @if (session('status'))
@@ -103,6 +63,21 @@
     </div>
 </div>
 @endif
+
+
+
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
+//HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
 
 <body onload="myFunction()">
     <div class="container-fluid">
@@ -126,12 +101,12 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>Username</th>
-                                <th>JK</th>
-                                <th>Telepon</th>
-                                <th>Karyawan</th>
-                                <th>Level Akses</th>
-                                <th>Status</th>
+                                <th>Jabatan</th>
+                                <th>Bagian</th>
+                                <th>Penempatan</th>
+                                <th>Gaji Pokok</th>
+                                <th>Uang Harian</th>
+                                <th>Uang Lembur</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>

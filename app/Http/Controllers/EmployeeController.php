@@ -267,11 +267,10 @@ class EmployeeController extends Controller
      */
     public function update(Request $request)
     {
-
         $request->validate([
             'email'                 => ['email'],
             'phone'                 => ['required'],
-            'accessLevel'           => ['required', 'gte:0'],
+            'accessLevel'           => ['required', 'gte:curUserAccessLevel'],
             'address'               => ['required', 'string'],
             'gender'                => ['required', 'integer', 'gt:0'],
             'employmentStatus'      => ['required', 'gt:0'],
@@ -399,6 +398,9 @@ class EmployeeController extends Controller
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Penempatan" onclick="editPemetaan('."'".$row->id."'".')">
             <i class="fa fa-address-card"></i>
             </button>            
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="History Penempatan" onclick="historyPemetaan('."'".$row->id."'".')">
+            <i class="fa-solid fa-list"></i>
+            </button>            
             ';            
 
             if (Auth::user()->accessLevel <= 30){
@@ -411,4 +413,10 @@ class EmployeeController extends Controller
             return $html;
         })->addIndexColumn()->toJson();
     }
+
+    public function historyMapping(Employee $employee)
+    {
+        return view('employee.employeeMappingHistory');
+    }
+
 }

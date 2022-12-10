@@ -85,22 +85,37 @@
                                 <label class="form-label">Level akses</label>
                             </div>
                             <div class="col-md-4">
-                                @if (Auth::user()->accessLevel<=1)
+                                <input id="OldAccessLevel" name="OldAccessLevel" type="hidden" value="{{$choosenUser->accessLevel}}">
+                                @php
+                                $curUserAccessLevel=Auth::user()->accessLevel;
+                                @endphp
+                                <input id="curUserAccessLevel" name="curUserAccessLevel" type="hidden" value="{{$curUserAccessLevel}}">
+
+                                @if (Auth::user()->accessLevel<=30)
                                 <select id="accessLevel" name="accessLevel" class="form-select" required>
-                                    @switch(Auth::user()->accessLevel)
-                                    @case (0)
-                                    <option value="0" @if(old('accessLevel',$choosenUser->accessLevel) == 0) selected @endif>00 - Superadmin</option>
-                                    @case (1)
-                                    <option value="1" @if(old('accessLevel',$choosenUser->accessLevel) == 1) selected @endif>01 - Admin</option>
-                                    <option value="10" @if(old('accessLevel',$choosenUser->accessLevel) == 10) selected @endif>10 - Direktur</option>
-                                    <option value="20" @if(old('accessLevel',$choosenUser->accessLevel) == 20) selected @endif>20 - Manager</option>
-                                    <option value="30" @if(old('accessLevel',$choosenUser->accessLevel) == 30) selected @endif>30 - Supervisor</option>
-                                    <option value="40" @if(old('accessLevel',$choosenUser->accessLevel) == 40) selected @endif>40 - Staff</option>
-                                    <option value="99" @if(old('accessLevel',$choosenUser->accessLevel) == 99) selected @endif>99 - Pekerja/Tamu</option>
-                                    @endswitch
+                                    @if ($curUserAccessLevel<=0)
+                                    <option value="0" @if(old('accessLevel',$choosenUser->accessLevel) == 0) selected @endif>Superadmin</option>
+                                    @endif
+                                    @if ($curUserAccessLevel<=1)
+                                    <option value="1" @if(old('accessLevel',$choosenUser->accessLevel) == 1) selected @endif>Admin</option>
+                                    @endif
+                                    @if ($curUserAccessLevel<=10)
+                                    <option value="10" @if(old('accessLevel',$choosenUser->accessLevel) == 10) selected @endif>Direktur</option>
+                                    @endif
+                                    @if ($curUserAccessLevel<=20)
+                                    <option value="20" @if(old('accessLevel',$choosenUser->accessLevel) == 20) selected @endif>Manager</option>
+                                    @endif
+                                    @if ($curUserAccessLevel<=30)
+                                    <option value="30" @if(old('accessLevel',$choosenUser->accessLevel) == 30) selected @endif>Supervisor</option>
+                                    @endif
+                                    @if ($curUserAccessLevel<=40)
+                                    <option value="40" @if(old('accessLevel',$choosenUser->accessLevel) == 40) selected @endif>Staff</option>
+                                    @endif
+                                    @if ($curUserAccessLevel<=99)
+                                    <option value="99" @if(old('accessLevel',$choosenUser->accessLevel) == 99) selected @endif>Pekerja/Tamu</option>
+                                    @endif
                                 </select>
                                 @else
-                                <input id="OldAccessLevel" name="OldAccessLevel" type="hidden" value="{{$choosenUser->accessLevel}}">
                                 @switch($choosenUser->accessLevel)
                                 @case(0)
                                 <input class="form-control" value="Superadmin" disabled>
@@ -276,7 +291,7 @@
                                 <input class="form-control" value="@if ($employee->isActive==0) Non Aktif @else Aktif @endif" disabled>
                                 @endif                                
                             </div>
-                        </div> 
+                        </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                             </div>
