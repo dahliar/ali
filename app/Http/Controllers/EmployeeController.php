@@ -399,7 +399,7 @@ class EmployeeController extends Controller
             <i class="fa fa-address-card"></i>
             </button>            
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="History Penempatan" onclick="historyPemetaan('."'".$row->id."'".')">
-            <i class="fa-solid fa-list"></i>
+            <i class="fa fa-list"></i>
             </button>            
             ';            
 
