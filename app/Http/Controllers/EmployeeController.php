@@ -275,15 +275,33 @@ class EmployeeController extends Controller
             'gender'                => ['required', 'integer', 'gt:0'],
             'employmentStatus'      => ['required', 'gt:0'],
             'bankid'                => ['required', 'gt:0'],
+            'startdate'             => ['required', 'date', 'before_or_equal:today'],
             'noRekening'            => ['required', 'gt:0'],
             'pendidikan'            => ['required', 'gte:0'],
             'bidangPendidikan'      => ['required', 'string'],
             'isactive'              => ['required']
+        ],
+        [
+            'startdate.required'            => 'Tanggal mulai harus diisi',
+            'startdate.before_or_equal'     => 'Tanggal mulai harus sebelum atau sama dengan hari ini',            
         ]);
         DB::beginTransaction();
         try {
             $userUpdate = $this->employee->userUpdate($request->accessLevel, $request->email, $request->userid);
-            $employeeUpdate = $this->employee->employeeUpdate($request->phone, $request->address, $request->employmentStatus, $request->isActive, $request->noRekening, $request->bankid, $request->employeeId, $request->isactive, $request->pendidikan, $request->bidangPendidikan, $request->gender);
+            $employeeUpdate = $this->employee->employeeUpdate(
+                $request->phone, 
+                $request->address,
+                $request->employmentStatus, 
+                $request->isActive, 
+                $request->noRekening, 
+                $request->bankid, 
+                $request->employeeId, 
+                $request->isactive, 
+                $request->pendidikan, 
+                $request->bidangPendidikan, 
+                $request->gender,
+                $request->startdate
+            );
             if($request->isactive != $request->isActiveCurrent){
                 $setActive = $this->setEmployeeActiveness($request->employeeId, $request->isactive);
             }

@@ -208,10 +208,18 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Tanggal Mulai*</span>
+                                <span class="label">Tanggal Mulai Sebelumnya</span>
                             </div>
                             <div class="col-md-4">
-                                <input id="startdate" name="startdate" class="form-control" type="date"  value="{{$employee->startdate}}" readonly>  
+                                <input id="startdate" name="startdateLama" class="form-control" type="date" value="{{$employee->startdate}}" readonly>
+                            </div>      
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Tanggal Mulai Baru*</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="startdate" name="startdate" class="form-control" type="date" value="{{old('stardate',$employee->startdate)}}">
                                 <span class="add-on"><i class="icon-th"></i></span>
                             </div>      
                         </div>

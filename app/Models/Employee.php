@@ -38,7 +38,7 @@ class Employee extends Model
         ->update(['accessLevel' => $accessLevel, 'email' => $email]);
         return $affected;
     }
-    public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender){
+    public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender, $startdate){
         $copy = Employee::get()->where('id', $id)->toArray();
         EmployeeHistory::insert($copy);
 
@@ -55,7 +55,7 @@ class Employee extends Model
             'jenjangPendidikan' => $pendidikan,
             'bidangPendidikan'  => $bidangPendidikan,
             'bankid'            => $bankid,
-            
+            'startdate'         => $startdate
         ]);
         return $affected;
     }
