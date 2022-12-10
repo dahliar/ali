@@ -30,13 +30,16 @@ class Employee extends Model
 
 
     public function userUpdate($accessLevel, $email, $id){
+        $copy = User::get()->where('id', $id)->toArray();
+        UserHistory::insert($copy);
+
         $affected = DB::table('users')
         ->where('id', $id)
         ->update(['accessLevel' => $accessLevel, 'email' => $email]);
         return $affected;
     }
     public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender){
-        $copy = Employee::all()->where('id', $id)->toArray();
+        $copy = Employee::get()->where('id', $id)->toArray();
         EmployeeHistory::insert($copy);
 
         $affected = DB::table('employees')
