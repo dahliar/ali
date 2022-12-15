@@ -8,6 +8,9 @@ use Carbon\Carbon;
 use App\Models\Species;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+use Auth;
+
+
 
 
 class DashboardController extends Controller
@@ -16,13 +19,13 @@ class DashboardController extends Controller
     {
         //$pdf = Pdf::loadview("userMapping.info");
         //return $pdf->download("Proforma Invoice.pdf");
-
+        dd(Auth::user()->accessLevel);
         return view('userMapping.info');
     }
 
 
     public function getServerDate(){
-                    return Carbon::now()->toDateString();
+        return Carbon::now()->toDateString();
     }
     public function index(Request $request)
     {

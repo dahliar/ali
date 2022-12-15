@@ -1,0 +1,2 @@
+1. 	Problem : Attempt to read property "accessLevel" on null (View: /Users/dahliar/DocumentRoot/ali/resources/views/partial/headerAdmin.blade.php)
+	Solusi	: cek di route, method kirim get atau post

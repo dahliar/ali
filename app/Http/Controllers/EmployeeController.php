@@ -432,6 +432,43 @@ class EmployeeController extends Controller
         })->addIndexColumn()->toJson();
     }
 
+    public function getAllActiveEmployees(){
+        $query = DB::table('employees as e')
+        ->select(
+            'e.id as id', 
+            'u.name as name', 
+            'e.phone as phone',
+            DB::raw('
+                (CASE WHEN e.gender="1" THEN "L" WHEN e.gender="2" THEN "P" END) AS gender
+                '),
+            'e.nip as nip', 
+            DB::raw('
+                (CASE WHEN e.isActive="0" THEN "Non-Aktif" WHEN e.isActive="1" THEN "Aktif" END) AS statusKepegawaian
+                '),
+            DB::raw('
+                (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian
+                ')
+        )
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('access_levels as al', 'al.level', '=', 'u.accessLevel')
+        ->where('isActive', '=', '1')
+        ->orderBy('u.name');
+        $query->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Buat Surat" onclick="buatSurat('."'".$row->id."'".')">
+            <i class="fa fa-edit"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Surat yang pernah dibuat" onclick="employeePaperList('."'".$row->id."'".')">
+            <i class="fa fa-list"></i>
+            </button>            
+            ';            
+            return $html;
+        })->addIndexColumn()->toJson();
+    }
+
     public function historyMapping(Employee $employee)
     {
         return view('employee.employeeMappingHistory');

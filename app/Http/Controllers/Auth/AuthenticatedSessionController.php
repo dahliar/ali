@@ -32,10 +32,20 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
         $query = DB::table('employees as e')
-        ->select('e.id as empid')
-        ->where('e.userid', Auth::user()->id)->first();
+        ->select(
+            'e.id as empid', 
+            'u.accessLevel as accessLevel', 
+            'u.name as name', 
+            'u.username as username'
+        )
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->where('e.userid', Auth::user()->id)
+        ->first();
 
         $request->session()->put('employeeId', $query->empid);
+        $request->session()->put('accessLevel', $query->accessLevel);
+        $request->session()->put('name', $query->name);
+        $request->session()->put('username', $query->username);
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 

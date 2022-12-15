@@ -156,6 +156,17 @@
 						</li>
 					</ul>
 				</li>
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarSuratMenyurat" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-tasks" onclick=""></i> Administrasi
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarPresensi">
+						<li>
+							<a class="dropdown-item" href="{{ url('administrasi')}}"><i class="fas fa-tasks"></i> Administrasi Surat
+							</a>
+						</li>
+					</ul>
+				</li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">
@@ -242,7 +253,7 @@
 				</li>
 			</ul>
 		</li>
-		@if (auth()->user()->accessLevel <= 1)
+		@if (Session::get('accessLevel') <= 1)
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 				<i class="fas fa-database"></i> Admin Area

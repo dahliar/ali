@@ -27,6 +27,7 @@ use App\Http\Controllers\UserPageMappingController;
 use App\Http\Controllers\GoodController;
 use App\Http\Controllers\UndernameController;
 use App\Http\Controllers\BarcodeController;
+use App\Http\Controllers\AdministrationController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -421,6 +422,12 @@ Route::POST('employeeStore',[EmployeeController::class, 'store'])->name('employe
 Route::POST('employeeUpdate',[EmployeeController::class, 'update'])->name('employeeUpdate')->middleware('auth');
 Route::POST('employeeMappingUpdate',[EmployeeController::class, 'updateMapping'])->name('employeeMappingUpdate')->middleware('auth');
 Route::get('getAllEmployees',[EmployeeController::class, 'getAllEmployees'])->middleware('auth');
+Route::get('getAllActiveEmployees',[EmployeeController::class, 'getAllActiveEmployees'])->middleware('auth');
+
+
+
+
+
 Route::GET('employeeMappingEdit/{employee}',[EmployeeController::class, 'editMapping'])->middleware('auth', 'authorized');
 Route::GET('employeeMappingHistory/{employee}',[EmployeeController::class, 'historyMapping'])->middleware('auth', 'authorized');
 
@@ -561,6 +568,18 @@ Route::get('/undername/ipl/{undername}', [UndernameController::class, 'cetak_ipl
 Route::get('barcodeGenerator',[BarcodeController::class, 'create'])->middleware(['auth', 'authorized']);
 Route::POST('barcodeImageGenerate',[BarcodeController::class, 'generate'])->middleware(['auth']);
 Route::get('barcodeItemList/{speciesId}',[BarcodeController::class, 'itemList'])->middleware(['auth']);
+
+/*
+*   Surat Menyurat
+*
+*
+*/
+
+Route::get('administrasi',[AdministrationController::class, 'index'])->middleware(['auth', 'authorized']);
+Route::get('employeePaperList/{employeeId}',[AdministrationController::class, 'paperList'])->middleware(['auth', 'authorized']);
+Route::get('administrasiFormPilihSurat/{employeeId}',[AdministrationController::class, 'formPilih'])->middleware(['auth', 'authorized']);
+Route::post('administrasiSuratStore',[AdministrationController::class, 'store'])->middleware(['auth', 'authorized']);
+Route::get('getAllEmployeePaper/{employeeId}',[AdministrationController::class, 'getAllEmployeePaper']);
 
 
 
