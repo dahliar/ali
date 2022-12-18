@@ -35,8 +35,6 @@ class InvoiceController extends Controller
         $filepath = storage_path('app/docs/'. $filename);
         $headers = ['Content-Type: application/pdf'];
         return \Response::download($filepath, $filename, $headers);
-
-
     }
 
     public function getPurchaseNumber($purchaseId){

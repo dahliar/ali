@@ -22,36 +22,9 @@
     function employeePaperList(id){
         window.open(('{{ url("employeePaperList") }}'+"/"+id), '_self');
     }
-
-    /*
-    function myFunction(id){
-        $('#datatable').DataTable({
-            ajax:'{{ url("getAllEmployeePaper") }}'+"/"+id,
-            serverSide: false,
-            processing: true,
-            deferRender: true,
-            type: 'GET',
-            destroy:true,
-            columnDefs: [
-                {   "width": "5%",  "targets":  [0], "className": "text-center" },
-                {   "width": "30%", "targets":  [1], "className": "text-left"   },
-                {   "width": "15%", "targets":  [2], "className": "text-left"   },
-                {   "width": "15%", "targets":   [3], "className": "text-center" },
-                {   "width": "15%", "targets":  [4], "className": "text-left" },
-                {   "width": "15%", "targets":  [5], "className": "text-left" }
-                ], 
-
-            columns: [
-                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                {data: 'name', name: 'name'},
-                {data: 'startdate', name: 'startdate'},
-                {data: 'enddate', name: 'enddate'},
-                {data: 'hariMasaBerlaku', name: 'hariMasaBerlaku'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
-                ]
-        });
-    }
-    */
+    function getFileDownload(filename){
+        window.open(('{{ url("getAdministrationFileDownload") }}'+"/"+filename), '_self');
+    };
 
     $(document).ready(function() {
         var employeeId = {!! json_encode($employee->employeeId) !!};

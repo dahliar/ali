@@ -10,6 +10,8 @@ use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
 
 use DB;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class BarcodeController extends Controller
 {
@@ -26,7 +28,7 @@ class BarcodeController extends Controller
     }
     public function itemList($speciesId){
         $query = DB::table('view_item_details as vid')
-        ->select(
+        ->select(   
             'vid.itemId as itemId', 
             'vid.nameBahasa as itemName'
         )
@@ -42,13 +44,10 @@ class BarcodeController extends Controller
 
         $request->validate(
             [
-                //'transactionNum' => 'required|unique:transactions',
                 'species' => 'required|gt:0',
                 'item' => 'required|gt:0',
                 'transactionDate' => 'required|date|after_or_equal:today',
-                'company' => 'required|gt:0',
                 'jumlahBarcode' => 'required|gt:0',
-
             ],
             [
                 'jumlahBarcode.required'=> 'Jumlah barcode minimal 1'
@@ -60,22 +59,22 @@ class BarcodeController extends Controller
             str_pad($date->year, 4, '0', STR_PAD_LEFT).
             str_pad($date->month, 2, '0', STR_PAD_LEFT).
             str_pad($date->day, 2, '0', STR_PAD_LEFT).
-            str_pad($request->item, 6, '0', STR_PAD_LEFT);//.
-            //str_pad($request->company, 4, '0', STR_PAD_LEFT).
-            //str_pad($a, 5, '0', STR_PAD_LEFT);
+            str_pad($request->item, 5, '0', STR_PAD_LEFT).
+            str_pad($a, 4, '0', STR_PAD_LEFT);
             echo '<br>';
 
-            //echo $barcodeId." ". $this->dns2d->getBarcodeHTML($barcodeId, 'QRCODE');
             echo $barcodeId." ". $this->dns1d->getBarcodeHTML($barcodeId, 'C128');
         }
-
-        dd($request);
-
+        /*
+        $speciesName  = DB::table('species')
+        ->select('name')
+        ->where('id', $request->name)
+        ->first();
         
-
-        $pdf = PDF::loadview('barcode.cetakBarcode', compact('registration','paymentValuta','containerType','companyName','undername', 'undername_details'));
-        $filename = 'Proforma Invoice '.$undername->id.' '.$companyName.' '.today().'.pdf';
+        $pdf = PDF::loadview('barcode.cetakBarcode');
+        $filename = 'Barcode '.$speciesName.today().'.pdf';
         return $pdf->download($filename);
+        */
     }
 
 }

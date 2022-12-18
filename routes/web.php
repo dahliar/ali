@@ -580,6 +580,8 @@ Route::get('employeePaperList/{employeeId}',[AdministrationController::class, 'p
 Route::get('administrasiFormPilihSurat/{employeeId}',[AdministrationController::class, 'formPilih'])->middleware(['auth', 'authorized']);
 Route::post('administrasiSuratStore',[AdministrationController::class, 'store'])->middleware(['auth', 'authorized']);
 Route::get('getAllEmployeePaper/{employeeId}',[AdministrationController::class, 'getAllEmployeePaper']);
+Route::GET('getAdministrationFileDownload/{filepath}', [AdministrationController::class, 'getAdministrationFileDownload'])->middleware(['auth']);
+
 
 
 

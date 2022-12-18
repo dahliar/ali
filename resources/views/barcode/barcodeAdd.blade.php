@@ -135,23 +135,6 @@
                     </div>
                     <div class="row form-group mb-2">
                         <div class="col-md-2 text-end">
-                            <span class="label">Supplier*</span>
-                        </div>
-                        <div class="col-md-4">
-                            <select class="form-select w-100" id="company" name="company">
-                                <option value="-1">--Pilih dahulu--</option>
-                                @foreach ($companies as $company)
-                                @if ( $spec->id == old('company') )
-                                <option value="{{ $company->id }}" selected>{{ $company->name }}</option>
-                                @else
-                                <option value="{{ $company->id }}">{{ $company->name }}</option>                    
-                                @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row form-group mb-2">
-                        <div class="col-md-2 text-end">
                             <span class="label">Jumlah barcode*</span>
                         </div>
                         <div class="col-md-4">

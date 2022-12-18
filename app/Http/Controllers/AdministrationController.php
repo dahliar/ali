@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use DB;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -107,6 +108,9 @@ class AdministrationController extends Controller
         ];
         $id = DB::table('paperworks')->insertGetId($paper);
 
+
+        $paperwork = self::cetakSuratKeterangan($request->employeeId, $id);
+
         return redirect('administrasi')
         ->with('status','Surat berhasil dibuat');
 
@@ -119,6 +123,7 @@ class AdministrationController extends Controller
             'pt.name as name',
             'p.startdate as startdate',
             'p.enddate as enddate',
+            'p.filepath as filename',
             DB::raw('concat(
                 (TIMESTAMPDIFF(DAY, curdate(), enddate)), 
                 " hari") as hariMasaBerlaku'),
@@ -131,7 +136,7 @@ class AdministrationController extends Controller
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
             $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tampilkan file" onclick="tampilkanfile('."'".$row->id."'".')">
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tampilkan file" onclick="getFileDownload('."'".$row->filename."'".')">
             <i class="fa fa-file"></i>
             </button>            
             ';            
@@ -139,5 +144,59 @@ class AdministrationController extends Controller
         })->addIndexColumn()->toJson();
     }
 
+
+    public function cetakSuratKeterangan($employeeId, $paperworkId)
+    {
+        $employee = DB::table('employees as e')
+        ->select(
+            'e.id as employeeId', 
+            'u.name as name', 
+            'e.nik as nik', 
+            'e.nip as nip', 
+            'e.phone as phone',
+            'e.startDate as startdate',
+            'os.name as orgstructure',
+            'wp.name as workPosition',
+            'sp.name as structuralPosition',
+            DB::raw('trim(e.address) as address'),
+            DB::raw('concat(
+                TIMESTAMPDIFF(YEAR, startdate, curdate()), 
+                " Tahun dan ",
+                (TIMESTAMPDIFF(MONTH, startdate, curdate()) - (TIMESTAMPDIFF(YEAR, startdate, curdate()) * 12)), 
+                " Bulan") as lamaKerja'),
+            DB::raw('
+                (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian
+                ')
+        )
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('access_levels as al', 'al.level', '=', 'u.accessLevel')
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->where('e.id', '=', $employeeId)
+        ->orderBy('u.name')
+        ->first();
+
+
+
+        $pdf = PDF::loadView('administration.suratKeterangan', compact('employee'));
+        $filename = 'Surat Keterangan Bekerja '.$employee->name.' '.Carbon::now()->format('Ymd His').'.pdf';
+
+        //$filepath = '../storage/app/paperworks/'.$filename;
+        $filepath = storage_path('/app/paperworks/'.$filename);
+        $pdf->save($filepath);
+
+        $affected = DB::table('paperworks')
+        ->where('id', $paperworkId)
+        ->update(['filepath' => $filename]);
+
+        return true;
+    }
+    public function getAdministrationFileDownload($filename){
+        $filepath = storage_path('/app/paperworks/'. $filename);
+        $headers = ['Content-Type: application/pdf'];
+        return \Response::download($filepath, $filename, $headers);
+    }
 
 }
