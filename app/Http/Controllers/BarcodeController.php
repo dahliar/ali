@@ -46,7 +46,7 @@ class BarcodeController extends Controller
             [
                 'species' => 'required|gt:0',
                 'item' => 'required|gt:0',
-                'transactionDate' => 'required|date|after_or_equal:today',
+                'transactionDate' => 'required|date|before_or_equal:today',
                 'jumlahBarcode' => 'required|gt:0',
             ],
             [
