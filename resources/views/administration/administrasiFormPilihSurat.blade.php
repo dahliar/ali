@@ -56,14 +56,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="d-grid gap-1">
-                        <input id="employeeId" name="employeeId" type="hidden" class="form-control text-left" value="{{old('name', $employee->employeeId)}}" readonly>
+                        <input id="employeeId" name="employeeId" type="hidden" class="form-control text-left" value="{{old('employeeId', $employee->employeeId)}}" readonly>
                         <div class="row form-group">
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Nama</span>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="name" name="name" type="text" class="form-control text-left" value="{{$employee->name}}" disabled>
+                                    <input id="name" name="name" type="text" class="form-control text-left" value="{{old('name', $employee->name)}}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="nik" name="nik" type="text" class="form-control text-left" value="{{$employee->nik}}" disabled>
+                                    <input id="nik" name="nik" type="text" class="form-control text-left" value="{{old('nik',$employee->nik)}}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="nip" name="nip" type="text" class="form-control text-left" value="{{$employee->nip}}" disabled>
+                                    <input id="nip" name="nip" type="text" class="form-control text-left" value="{{old('nip',$employee->nip)}}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="jabatan" name="jabatan" type="text" class="form-control text-left" value="{{$employee->structuralPosition}}" disabled>
+                                    <input id="jabatan" name="jabatan" type="text" class="form-control text-left" value="{{old('jabatan', $employee->structuralPosition)}}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="orgstructure" name="orgstructure" type="text" class="form-control text-left" value="{{$employee->orgstructure}}" disabled>
+                                    <input id="orgstructure" name="orgstructure" type="text" class="form-control text-left" value="{{old('orgstructure', $employee->orgstructure)}}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="workPosition" name="workPosition" type="text" class="form-control text-left" value="{{$employee->workPosition}}" disabled>
+                                    <input id="workPosition" name="workPosition" type="text" class="form-control text-left" value="{{old('workPosition', $employee->workPosition)}}" readonly>
                                 </div>
                             </div>
                         </div>

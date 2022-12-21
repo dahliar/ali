@@ -79,89 +79,153 @@
     <div class="row form-group">
         <div>
             <h1 align="center" style="margin-top: 0; margin-bottom: 0;">
-            Surat Keterangan Bekerja</h1>
+                @if($num == 1)
+                Surat Peringatan Pertama
+                @elseif($num == 2)
+                Surat Peringatan Kedua
+                @else
+                Surat Pemberhentian Kerja
+                @endif
+
+            </h1>
             <h3 align="center"  style="margin-top: 0; margin-bottom: 10px;">
                 No : {{$paperworkNum}}
             </h3>
         </div>
     </div>
+
+    @if($num <= 2)
     <table width="100%">
         <tr>
             <td>
-                Kami yang bertanda tangan dibawah ini, menerangkan bahwa :
+                Surat peringatan ini dibuat oleh perusahaan ditujukan kepada :
             </td>
         </tr>
     </table>
+    @else
+    <table width="100%">
+        <tr>
+            <td>
+                Surat pemberhentian ini dibuat oleh perusahaan ditujukan kepada :    
+            </td>
+        </tr>
+    </table>
+    @endif
     <br>
     <table width="100%">
         <tr>
             <td style="width:5%"></td>
             <td style="width:25%"><b>Nama</b></td>
             <td style="width:5%">:</td>
-            <td style="width:60%">{{$employee->name}}</td>
+            <td style="width:60%">{{$name}}</td>
             <td style="width:5%"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><b>NIK</b></td>
-            <td>:</td>
-            <td>{{$employee->nik}}</td>
-            <td></td>
         </tr>
         <tr>
             <td></td>
             <td><b>NIP</b></td>
             <td>:</td>
-            <td>{{$employee->nip}}</td>
+            <td>{{$nip}}</td>
             <td></td>
         </tr>
         <tr>
             <td></td>
             <td><b>Level</b></td>
             <td>:</td>
-            <td>{{$employee->structuralPosition}}</td>
+            <td>{{$jabatan}}</td>
             <td></td>
         </tr>
         <tr>
             <td></td>
             <td><b>Posisi</b></td>
             <td>:</td>
-            <td>{{$employee->orgstructure}}</td>
+            <td>{{$orgStructure}}</td>
             <td></td>
         </tr>
         <tr>
             <td></td>
             <td><b>Bagian</b></td>
             <td>:</td>
-            <td>{{$employee->workPosition}}</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><b>Alamat</b></td>
-            <td>:</td>
-            <td>{{$employee->address}}</td>
+            <td>{{$workPosition}}</td>
             <td></td>
         </tr>
     </table>
     <br>
+    @if($num == 1)
     <table width="100%">
         <tr>
             <td style="word-break: break-all;">
-                adalah benar merupakan karyawan dari PT. Anugrah Laut Indonesia, yang telah bekerja mulai dari tanggal {{$employee->startdate}} sampai dengan sekarang. Selama bekerja, yang bersangkutan memiliki kinerja yang baik dan bertanggung jawab, serta selalu menjaga nama baik dari PT. Anugrah Laut Indonesia.
+                Surat peringatan ini dibuat berdasarkan atas tindakan yang telah saudara perbuat, yaitu
                 <br>
                 <br>
-                Demikian surat keterangan ini dibuat dengan sebenarnya untuk dipergunakan sebagaimana mestinya.
+                {{$reason}}
+                <br>
+                <br>
+                Oleh karena itu perusahaan memberikan surat peringatan/teguran ini, dengan tujuan agar saudara tidak mengulangi kesalahan yang sama yang dapat merugikan perusahaan. Jika saudara masih mengulangi kesalahan yang sama, maka perusahaan berhak mengambil keputusan terkait dengan status kepegawaian saudara.
+                <br>
+                <br>
+                Demikian surat peringatan ini dibuat dengan sebenarnya.
             </td>
         </tr>
     </table>
+    @elseif($num == 2)
+    <table width="100%">
+        <tr>
+            <td style="word-break: break-all;">
+                Surat peringatan ini dibuat berdasarkan atas tindakan yang telah saudara perbuat, yaitu
+                <br>
+                <br>
+                {{$reason}}
+                <br>
+                <br>
+                Skorsing hingga tanggal {{$skorsingTanggal}}
+                <br>
+                <br>
+                Denda berupa {{$skorsingDenda}}
+                <br>
+                <br>
+                Oleh karena itu perusahaan memberikan surat peringatan/teguran ini, dengan tujuan agar saudara tidak mengulangi kesalahan yang sama yang dapat merugikan perusahaan. Jika saudara masih mengulangi kesalahan yang sama, maka perusahaan berhak mengambil keputusan terkait dengan status kepegawaian saudara.
+                <br>
+                <br>
+                Demikian surat peringatan ini dibuat dengan sebenarnya.
+            </td>
+        </tr>
+    </table>
+    @else
+    <table width="100%">
+        <tr>
+            <td style="width:10%"></td>
+            <td style="word-break: break-all;">
+                Surat peringatan ketiga atau Pemutusan Hubungan Kerja (PHK) ini diterbitkan karena perusahaan tidak dapat menerima alasan Saudara terkait dengan masalah
+                <br>
+                <br>
+                {{$reason}}
+                <br>
+                <br>
+                Demikian Surat Pemberhentian Hubungan Kerja ini dibuat. PT. Anugrah Laut Indonesia mengucapkan terimakasih atas sumbangsih yang telah diberikan kepada saudara selama bergabung dengan kami.
+                <br>
+                <br>
+                Demikian surat pemberhentian hubungan kerja ini dibuat dengan sebenarnya.
+            </td>
+            <td style="width:10%"></td>
+        </tr>
+    </table>
+    @endif
     <br>
     <br>
     <table width="100%">
         <tr>
             <td width="40%" style="text-align: left;vertical-align: top;">
                 Tuban, {{ Carbon\Carbon::now()->toDateString()}}
+                <br>
+                Pembuat,
                 <br><br>ttd<br><br>
+                <br>
+                Bagian Sumber Daya Manusia
+            </td>
+            <td width="40%" style="text-align: left;vertical-align: top;">
+                <br>
+                Mengetahui,
+                <br><br>ttd<br><br><br>
                 Aktaria Hidapratiwi
                 <br>
                 Direktur Utama PT. Anugrah Laut Indonesia

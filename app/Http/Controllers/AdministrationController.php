@@ -89,39 +89,71 @@ class AdministrationController extends Controller
             'paper.gt'  => 'Pilih salah satu surat yang hendak dibuat'
         ]);
         
+        switch($request->paper){
+            case "1":
+            $paperwork = self::suratKeteranganKerja($request->employeeId, $request->paper);
+            return redirect('administrasi')
+            ->with('status','Surat berhasil dibuat');
+            break;
+
+            case "2":
+            return redirect()->route('administrasiFormSuratPeringatan', [
+                'employeeId'    => $request->employeeId,
+                'name'          => $request->name,
+                'nip'           => $request->nip,
+                'jabatan'       => $request->jabatan,
+                'orgStructure'  => $request->orgstructure,
+                'workPosition'  => $request->workPosition,
+                'paper'         => $request->paper
+            ]);
+            break;
+        }
+    }
+
+    public function formSuratPeringatan(Request $request){
+        //dd($request);
+        $employeeId = $request->employeeId;
+        $name = $request->name;
+        $nip    = $request->nip;
+        $jabatan= $request->jabatan;
+        $orgStructure = $request->orgStructure;
+        $workPosition = $request->workPosition;
+        $paper = $request->paper;
+        return view('administration.administrasiSuratPeringatan', compact('employeeId', 'name', 'nip', 'jabatan', 'orgStructure', 'workPosition', 'paper'));
+
+    }
+
+    public function suratKeteranganKerja($employeeId, $paper){
         $papers = DB::table('paperwork_types')
         ->select('masaBerlaku')
         ->where('isActive', 1)
-        ->where('id', $request->paper)
+        ->where('id', $paper)
         ->first();
 
         $now    = Carbon::now();
         $until  = Carbon::now()->addMonths($papers->masaBerlaku);
 
         $paper = [
-            'employeeId'        => $request->employeeId,
-            'paperworkTypeId'   => $request->paper,
+            'employeeId'        => $employeeId,
+            'paperworkTypeId'   => $paper,
+            'name'              => "Surat Keterangan Kerja",
             'startdate'         => $now,
             'enddate'           => $until
         ];
-        $id = DB::table('paperworks')->insertGetId($paper);
+        $paperworkId = DB::table('paperworks')->insertGetId($paper);
 
-        switch($request->paper){
-            case "1": break;
-            $paperwork = self::cetakSuratKeterangan($request->employeeId, $id);
-            case "2": break;
-            $paperwork = self::cetakSuratPeringatan($request->employeeId, $id);
-        }
-        return redirect('administrasi')
-        ->with('status','Surat berhasil dibuat');
+        $paperworkNum = self::generatePaperNumber($paperworkId, "SKK");
 
+
+        $paperwork = self::cetakSuratKeterangan($employeeId, $paperworkId, $paperworkNum);
+        return true;
     }
 
     public function getAllEmployeePaper($employeeId){
         $query = DB::table('paperworks as p')
         ->select(
             'p.id as id', 
-            'pt.name as name',
+            'p.name as name',
             'p.startdate as startdate',
             'p.enddate as enddate',
             'p.filepath as filename',
@@ -146,7 +178,7 @@ class AdministrationController extends Controller
     }
 
 
-    public function cetakSuratKeterangan($employeeId, $paperworkId)
+    public function cetakSuratKeterangan($employeeId, $paperworkId, $paperworkNum)
     {
         $employee = DB::table('employees as e')
         ->select(
@@ -181,10 +213,9 @@ class AdministrationController extends Controller
 
 
 
-        $pdf = PDF::loadView('administration.suratKeterangan', compact('employee'));
+        $pdf = PDF::loadView('administration.suratKeterangan', compact('employee', 'paperworkNum'));
         $filename = 'Surat Keterangan Bekerja '.$employee->name.' '.Carbon::now()->format('Ymd His').'.pdf';
 
-        //$filepath = '../storage/app/paperworks/'.$filename;
         $filepath = storage_path('/app/paperworks/'.$filename);
         $pdf->save($filepath);
 
@@ -195,45 +226,83 @@ class AdministrationController extends Controller
         return true;
     }
 
-    public function cetakSuratPeringatan($employeeId, $paperworkId)
-    {
-        $employee = DB::table('employees as e')
-        ->select(
-            'e.id as employeeId', 
-            'u.name as name', 
-            'e.nik as nik', 
-            'e.nip as nip', 
-            'e.phone as phone',
-            'e.startDate as startdate',
-            'os.name as orgstructure',
-            'wp.name as workPosition',
-            'sp.name as structuralPosition',
-            DB::raw('trim(e.address) as address'),
-            DB::raw('concat(
-                TIMESTAMPDIFF(YEAR, startdate, curdate()), 
-                " Tahun dan ",
-                (TIMESTAMPDIFF(MONTH, startdate, curdate()) - (TIMESTAMPDIFF(YEAR, startdate, curdate()) * 12)), 
-                " Bulan") as lamaKerja'),
-            DB::raw('
-                (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian
-                ')
-        )
-        ->join('users as u', 'u.id', '=', 'e.userid')
-        ->join('access_levels as al', 'al.level', '=', 'u.accessLevel')
-        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
-        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
-        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
-        ->where('e.id', '=', $employeeId)
-        ->orderBy('u.name')
+    public function suratPeringatan(Request $request)
+    {        
+        $request->validate([
+            'employeeId'    => [
+                'required', 
+                Rule::exists('employees', 'id')->where('id', $request->employeeId)
+            ],
+            'reason'         => ['required'],
+            'publishDate'    => ['required', 'date', 'before_or_equal:today']
+        ],
+        [
+            'reason.*'  => 'Alasan wajib diisi',
+            'publishDate.*'  => 'Tanggal terbit harus sebelum hari ini',
+        ]);
+
+
+        $papers = DB::table('paperwork_types')
+        ->select('masaBerlaku')
+        ->where('isActive', 1)
+        ->where('id', $request->paper)
+        ->first();
+
+        $startdate = Carbon::createFromFormat('Y-m-d', $request->publishDate);  
+        $until = Carbon::createFromFormat('Y-m-d', $request->publishDate)->addMonths($papers->masaBerlaku);
+        $past = Carbon::createFromFormat('Y-m-d', $request->publishDate)->addMonths(-12);
+
+
+        $warningNumber = DB::table('paperwork_warning as pw')
+        ->select(DB::raw('max(pw.warningNumber) as warningNumber'))
+        ->join('paperworks as p', 'pw.paperworkId', '=', 'p.id')
+        ->where('p.employeeId', '=', $request->employeeId)
+        ->whereBetween('pw.publishDate', [$past." 00:00:00", $startdate." 23:59:59"])
         ->first();
 
 
+        if ($warningNumber->warningNumber){
+            $num = $warningNumber->warningNumber+1;
+        } else {
+            $num=1;
+        }
+        
+        $paper = [
+            'employeeId'        => $request->employeeId,
+            'paperworkTypeId'   => $request->paper,
+            'name'              => "Surat Peringatan ".$num,
+            'startdate'         => $startdate." 00:00:00",
+            'enddate'           => $until." 23:59:59"
+        ];
+        $paperworkId = DB::table('paperworks')->insertGetId($paper);
 
-        $pdf = PDF::loadView('administration.suratKeterangan', compact('employee'));
-        $filename = 'Surat Keterangan Bekerja '.$employee->name.' '.Carbon::now()->format('Ymd His').'.pdf';
+        $paperworkNum = self::generatePaperNumber($paperworkId, "SKP");
 
-        //$filepath = '../storage/app/paperworks/'.$filename;
+
+        $warning = [
+            'paperworkId'       => $paperworkId,
+            'publishDate'       => $request->publishDate,
+            'warningNumber'     => $num,
+            'reason'            => $request->reason,
+            'skorsingTanggal'   => $request->skorsingTanggal,
+            'skorsingDenda'     => $request->skorsingDenda
+        ];
+        $pw = DB::table('paperwork_warning')->insertGetId($warning);
+
+        $employeeId = $request->employeeId;
+        $name = $request->name;
+        $nip    = $request->nip;
+        $jabatan= $request->jabatan;
+        $orgStructure = $request->orgStructure;
+        $workPosition = $request->workPosition;
+        $paper = $request->paper;
+        $reason = $request->reason;
+        $skorsingDenda = $request->skorsingDenda;
+        $skorsingTanggal = $request->skorsingTanggal;
+
+        $pdf = PDF::loadView('administration.suratPeringatan', compact('employeeId', 'name', 'nip', 'jabatan', 'orgStructure', 'workPosition', 'num', 'startdate', 'until','reason', 'skorsingDenda', 'skorsingTanggal', 'paperworkNum'));
+        $filename = 'Surat Peringatan ke '.$num.' - '.$name.' '.Carbon::now()->format('Ymd His').'.pdf';
+
         $filepath = storage_path('/app/paperworks/'.$filename);
         $pdf->save($filepath);
 
@@ -247,6 +316,52 @@ class AdministrationController extends Controller
         $filepath = storage_path('/app/paperworks/'. $filename);
         $headers = ['Content-Type: application/pdf'];
         return \Response::download($filepath, $filename, $headers);
+    }
+
+
+    public function generatePaperNumber($paperworkId, $paperworkType){
+        /*  format nomor surat
+        *   Surat Keterangan    No. 123/ALI-ADM/SKT/Bulan/Tahun
+        *   Surat Peringatan    No. 123/ALI-ADM/SKP/Bulan/Tahun
+        *   Surat Keputusan     No. 123/ALI-ADM/SKK/Bulan/Tahun
+        */ 
+        $bagian="ALI-ADM";
+        $month = date('m');
+        $year = date('Y');
+        $isActive=1;
+
+        $result = DB::table('paperwork_numbers as pn')
+        ->where('year', $year)
+        ->max('paperworkNumber');
+
+        if ($result>0){
+            $paperworkNumber=$result+1;
+        }
+        else{
+            $paperworkNumber=1;
+        }
+
+        $data = [
+            'paperworkNumber'=>$paperworkNumber,
+            'paperworkId'=>$paperworkId,
+            'month'=>$month,
+            'year'=>$year
+        ];
+        $paperworkNumberId = DB::table('paperwork_numbers')->insertGetId($data);
+        $pnum = $paperworkNumber.'/'.$bagian.'/'.$paperworkType.'/'.$month.'/'.$year;
+
+        $affected = DB::table('paperworks')
+        ->where('id', $paperworkId)
+        ->update([
+            'paperworkNumber'       => $paperworkNumber,
+            'paperworkNumberFull'   => $pnum,
+        ]);
+
+        //DB::table('document_numbers')->insert($data);
+        return $pnum;
+
+
+
     }
 
 }
