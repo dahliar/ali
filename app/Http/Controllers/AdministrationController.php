@@ -141,12 +141,9 @@ class AdministrationController extends Controller
             'enddate'           => $until
         ];
         $paperworkId = DB::table('paperworks')->insertGetId($paper);
-
         $paperworkNum = self::generatePaperNumber($paperworkId, "SKK");
-
-
         $paperwork = self::cetakSuratKeterangan($employeeId, $paperworkId, $paperworkNum);
-        return true;
+        return view('administration.administrasiList');
     }
 
     public function getAllEmployeePaper($employeeId){
@@ -310,7 +307,7 @@ class AdministrationController extends Controller
         ->where('id', $paperworkId)
         ->update(['filepath' => $filename]);
 
-        return true;
+        return view('administration.administrasiList');
     }
     public function getAdministrationFileDownload($filename){
         $filepath = storage_path('/app/paperworks/'. $filename);

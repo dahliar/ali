@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 use App\Models\Species;
 use App\Models\Company;
@@ -22,10 +23,47 @@ class BarcodeController extends Controller
     public function create()
     {
         $species = Species::orderBy('name')->get();
-        $companies = Company::orderBy('name')->get();
-
-        return view('barcode.barcodeAdd', compact('species', 'companies'));
+        return view('barcode.barcodeAdd', compact('species'));
     }
+
+    public function barcodeList($itemId)
+    {
+        $species = Species::orderBy('name')->get();
+
+        return view('barcode.barcodeList', compact('species'));
+    }
+
+    public function getAllBarcodes($itemId){
+        $query = DB::table('codes as c')
+        ->select(
+            'c.id as id',
+            'c.productionDate as productionDate',
+            'c.amountPrinted as amountPrinted',
+            'c.filename as filename',
+            'c.startFrom as startFrom',
+            'vid.nameBahasa as name'
+        )
+        ->where('c.itemId','=', $itemId)
+        ->join('view_item_details as vid', 'c.itemId', '=', 'vid.itemId')
+        ->orderBy('c.productionDate', 'asc');
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tampilkan file" onclick="getFileDownload('."'".$row->filename."'".')">
+            <i class="fa fa-file"></i>
+            </button>';
+            return $html;
+        })
+        ->addIndexColumn()->toJson();
+    }
+
+    public function getBarcodeFileDownload($filename){
+        $filepath = storage_path('/app/barcodes/'. $filename);
+        $headers = ['Content-Type: application/pdf'];
+        return \Response::download($filepath, $filename, $headers);
+    }
+
     public function itemList($speciesId){
         $query = DB::table('view_item_details as vid')
         ->select(   
@@ -47,34 +85,71 @@ class BarcodeController extends Controller
                 'species' => 'required|gt:0',
                 'item' => 'required|gt:0',
                 'transactionDate' => 'required|date|before_or_equal:today',
-                'jumlahBarcode' => 'required|gt:0',
+                'jumlahBarcode' => 'required|gt:0'
             ],
             [
                 'jumlahBarcode.required'=> 'Jumlah barcode minimal 1'
             ]
         );
-        $date = \Carbon\Carbon::parse($request->transactionDate);
-        for ($a=1; $a<=$request->jumlahBarcode; $a++){
-            $barcodeId = 
-            str_pad($date->year, 4, '0', STR_PAD_LEFT).
-            str_pad($date->month, 2, '0', STR_PAD_LEFT).
-            str_pad($date->day, 2, '0', STR_PAD_LEFT).
-            str_pad($request->item, 5, '0', STR_PAD_LEFT).
-            str_pad($a, 4, '0', STR_PAD_LEFT);
-            echo '<br>';
+        $transactionDate = $request->transactionDate;
+        $jumlah = $request->jumlahBarcode;
+        $item = $request->item;
 
-            echo $barcodeId." ". $this->dns1d->getBarcodeHTML($barcodeId, 'C128');
-        }
-        /*
-        $speciesName  = DB::table('species')
-        ->select('name')
-        ->where('id', $request->name)
+        $name = DB::table('view_item_details as vid')
+        ->select(DB::raw('concat(speciesName, " ", gradeName, " ", sizeName, " ", shapesName) as name'))
+        ->where('vid.itemId','=', $request->item)
         ->first();
-        
-        $pdf = PDF::loadview('barcode.cetakBarcode');
-        $filename = 'Barcode '.$speciesName.today().'.pdf';
-        return $pdf->download($filename);
-        */
+
+        $name = $name->name;
+
+        $date = \Carbon\Carbon::parse($transactionDate);
+        $productionDateData = str_pad($date->year, 4, '0', STR_PAD_LEFT).
+        str_pad($date->month, 2, '0', STR_PAD_LEFT).
+        str_pad($date->day, 2, '0', STR_PAD_LEFT).
+        str_pad($item, 5, '0', STR_PAD_LEFT);
+
+        $max = DB::table('codes')
+        ->where('productionDate', $transactionDate)
+        ->where('itemId', $item)
+        ->sum('amountPrinted');
+
+
+        $time = \Carbon\Carbon::now()->toDateTimeString();
+
+        $filename = 'Barcode '.$item.' - '.$transactionDate.' '.$time.'.pdf';
+        $filepath = '../storage/app/barcodes/'.$filename;
+        $startFrom = 1;
+        if (DB::table('codes')->where('productionDate', $transactionDate)->where('itemId', $item)->exists()){
+            $startFrom = $max + 1; 
+        }
+
+        $codes = [
+            'productionDate'    => $transactionDate,
+            'amountPrinted'     => $jumlah,
+            'startFrom'         => $startFrom,
+            'itemId'            => $item,
+            'filename'          => $filename
+        ];
+        DB::table('codes')->insert($codes);            
+
+
+        $arrData = array();
+        for ($a=$startFrom; $a<($startFrom+$jumlah); $a++){
+            $barcode = $productionDateData.str_pad($a, 4, '0', STR_PAD_LEFT);
+            $data = [
+                "barcode" => $barcode, 
+                "fullname" => "www.aliseafood.co.id ".$name." ".$barcode
+            ];
+            $arrData[$a] = $data;
+        }
+        $customPaper = array(0,0,150.00,500.00);
+
+        $pdf = PDF::loadview('barcode.barcodeFile', compact('arrData','jumlah', 'startFrom'))
+        ->setPaper($customPaper, 'landscape');
+        $pdf->save($filepath);
+
+        return redirect('barcodeList/'.$item)
+        ->with('status','Barcode berhasil dibuat.');
     }
 
 }

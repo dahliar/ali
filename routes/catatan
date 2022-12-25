@@ -1,2 +1,15 @@
 1. 	Problem : Attempt to read property "accessLevel" on null (View: /Users/dahliar/DocumentRoot/ali/resources/views/partial/headerAdmin.blade.php)
 	Solusi	: cek di route, method kirim get atau post
+
+
+	<tr>
+                <td style="width:40%;" ROWSPAN="2">
+                    <center>{!! DNS2D::getBarcodeHTML($fullName, 'QRCODE',5,5)!!}</center>
+                </td>
+                <td style="width:60%;">
+                    <center>{!! DNS1D::getBarcodeHTML($barcodeId, 'C128')!!}</center>
+                </td>
+            </tr>
+            <tr>
+                <td>{!! $barcodeId!!}</td>
+            </tr>
