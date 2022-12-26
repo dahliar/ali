@@ -138,7 +138,7 @@
                             <span class="label">Jumlah barcode*</span>
                         </div>
                         <div class="col-md-4">
-                            <input type="text" id="jumlahBarcode" name="jumlahBarcode" class="form-control text-end" value="{{ old('jumlahBarcode',1)}}" >
+                            <input type="text" id="jumlahBarcode" name="jumlahBarcode" class="form-control text-end" value="{{ old('jumlahBarcode',0)}}" >
                         </div>
                         <div class="col-md-4">
                             *Antara 1-100
