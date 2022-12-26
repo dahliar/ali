@@ -26,10 +26,9 @@ class BarcodeController extends Controller
         return view('barcode.barcodeAdd', compact('species'));
     }
 
-    public function barcodeList($itemId)
+    public function barcodeList()
     {
         $species = Species::orderBy('name')->get();
-
         return view('barcode.barcodeList', compact('species'));
     }
 

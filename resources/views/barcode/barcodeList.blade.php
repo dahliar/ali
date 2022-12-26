@@ -13,6 +13,9 @@
     function getFileDownload(filename){
         window.open(('{{ url("getBarcodeFileDownload") }}'+"/"+filename), '_self');
     };
+    function tambahBarcode(){
+        window.open(('{{ url("barcodeGenerator") }}'), '_self');
+    }
     function myFunction(){
         var itemId = document.getElementById("item").value;
         $('#datatable').DataTable({
@@ -108,6 +111,10 @@
                         <li class="breadcrumb-item active">Daftar Barcode</li>
                     </ol>
                 </nav>
+
+                <button onclick="tambahBarcode()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Barcode">
+                    <i class="fa fa-plus"></i> Barcode
+                </button>
             </div>
             <div class="modal-content">
                 <div class="modal-body">

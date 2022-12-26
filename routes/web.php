@@ -568,7 +568,7 @@ Route::get('/undername/ipl/{undername}', [UndernameController::class, 'cetak_ipl
 Route::get('barcodeGenerator',[BarcodeController::class, 'create'])->middleware(['auth', 'authorized']);
 Route::POST('barcodeImageGenerate',[BarcodeController::class, 'generate'])->middleware(['auth']);
 Route::get('barcodeItemList/{speciesId}',[BarcodeController::class, 'itemList'])->middleware(['auth']);
-Route::get('barcodeList/{itemId}',[BarcodeController::class, 'barcodeList'])->middleware(['auth', 'authorized']);
+Route::get('barcodeList',[BarcodeController::class, 'barcodeList'])->middleware(['auth', 'authorized']);
 Route::get('getAllBarcodes/{itemId}',[BarcodeController::class, 'getAllBarcodes'])->middleware(['auth']);
 Route::GET('getBarcodeFileDownload/{filepath}', [BarcodeController::class, 'getBarcodeFileDownload'])->middleware(['auth']);
 
