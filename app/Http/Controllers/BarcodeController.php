@@ -147,7 +147,7 @@ class BarcodeController extends Controller
         ->setPaper($customPaper, 'landscape');
         $pdf->save($filepath);
 
-        return redirect('barcodeList/'.$item)
+        return redirect('barcodeList')
         ->with('status','Barcode berhasil dibuat.');
     }
 
