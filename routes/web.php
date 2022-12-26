@@ -569,7 +569,7 @@ Route::get('barcodeGenerator',[BarcodeController::class, 'create'])->middleware(
 Route::POST('barcodeImageGenerate',[BarcodeController::class, 'generate'])->middleware(['auth']);
 Route::get('barcodeItemList/{speciesId}',[BarcodeController::class, 'itemList'])->middleware(['auth']);
 Route::get('barcodeList',[BarcodeController::class, 'barcodeList'])->middleware(['auth', 'authorized']);
-Route::get('getAllBarcodes/{itemId}',[BarcodeController::class, 'getAllBarcodes'])->middleware(['auth']);
+Route::get('getAllBarcodes/{speciesId}/{itemId}',[BarcodeController::class, 'getAllBarcodes'])->middleware(['auth']);
 Route::GET('getBarcodeFileDownload/{filepath}', [BarcodeController::class, 'getBarcodeFileDownload'])->middleware(['auth']);
 
 

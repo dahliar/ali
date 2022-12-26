@@ -32,7 +32,9 @@ class BarcodeController extends Controller
         return view('barcode.barcodeList', compact('species'));
     }
 
-    public function getAllBarcodes($itemId){
+    public function getAllBarcodes($speciesId, $itemId){
+
+
         $query = DB::table('codes as c')
         ->select(
             'c.id as id',
@@ -42,9 +44,15 @@ class BarcodeController extends Controller
             'c.startFrom as startFrom',
             'vid.nameBahasa as name'
         )
-        ->where('c.itemId','=', $itemId)
         ->join('view_item_details as vid', 'c.itemId', '=', 'vid.itemId')
         ->orderBy('c.productionDate', 'asc');
+
+        if ($speciesId!=0){
+            $query = $query->where('vid.speciesId','=', $speciesId);
+            if($itemId!=0){
+                $query = $query->where('c.itemId','=', $itemId);
+            }
+        }
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
@@ -143,8 +151,8 @@ class BarcodeController extends Controller
         }
         $customPaper = array(0,0,150.00,500.00);
 
-        $pdf = PDF::loadview('barcode.barcodeFile', compact('arrData','jumlah', 'startFrom'))
-        ->setPaper($customPaper, 'landscape');
+        $pdf = PDF::loadview('barcode.barcodeFile', compact('arrData','jumlah', 'startFrom'));
+        //->setPaper($customPaper, 'landscape');
         $pdf->save($filepath);
 
         return redirect('barcodeList')

@@ -17,9 +17,10 @@
         window.open(('{{ url("barcodeGenerator") }}'), '_self');
     }
     function myFunction(){
+        var speciesId = document.getElementById("species").value;
         var itemId = document.getElementById("item").value;
         $('#datatable').DataTable({
-            ajax:'{{ url("getAllBarcodes") }}' + "/"+ itemId,
+            ajax:'{{ url("getAllBarcodes") }}' + "/"+ speciesId+ "/"+ itemId,
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -54,7 +55,7 @@
                 if(data){
                     var html = '';
                     var i;
-                    html += '<option value="-1">--Choose First--</option>';
+                    html += '<option value="0">--All--</option>';
                     for(i=0; i<data.length; i++){
                         if (data[i].itemId != itemId){
                             html += '<option value='+data[i].itemId+'>'+
@@ -79,8 +80,8 @@
             }else{
                 $('#item')
                 .empty()
-                .append('<option value="-1">--Choose Species First--</option>');
-                swal.fire('warning','Choose Species first!','info');
+                .append('<option value="0">--All--</option>');
+                //swal.fire('warning','Choose Species first!','info');
             }
         });
     });
@@ -124,7 +125,7 @@
                         </div>
                         <div class="col-md-4">
                             <select class="form-select w-100" id="species" name="species">
-                                <option value="-1">--Pilih dahulu--</option>
+                                <option value="0">--All--</option>
                                 @foreach ($species as $spec)
                                 @if ( $spec->id == old('species') )
                                 <option value="{{ $spec->id }}" selected>{{ $spec->name }}</option>
@@ -141,7 +142,7 @@
                         </div>
                         <div class="col-md-4">
                             <select id="item" name="item" class="form-select" >
-                                <option value="-1">--Choose Species First--</option>
+                                <option value="0">--All--</option>
                             </select>
                         </div>
                     </div>

@@ -3,7 +3,8 @@
 
 <style type="text/css">
     @page {
-        margin: 15px; 
+        margin:15px;
+        size: 10cm 5cm landscape;
     }
     body { 
         margin: 0px; 
@@ -31,10 +32,10 @@
             @foreach ($arrData as $a)
             <tr>
                 <td style="width:40%;" ROWSPAN="2">
-                    <img src="data:image/png;base64,{{DNS2D::getBarcodePNG($a['fullname'], 'QRCODE',4,4)}}"/>
+                    <img src="data:image/png;base64,{{DNS2D::getBarcodePNG($a['fullname'], 'QRCODE',3,3)}}"/>
                 </td>
                 <td style="width:60%;">
-                    <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($a['barcode'], 'C128',2,50)}}"/>
+                    <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($a['barcode'], 'C128',1,30)}}"/>
                 </td>
             </tr>
             <tr>
