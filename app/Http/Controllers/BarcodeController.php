@@ -45,7 +45,7 @@ class BarcodeController extends Controller
             'vid.nameBahasa as name'
         )
         ->join('view_item_details as vid', 'c.itemId', '=', 'vid.itemId')
-        ->orderBy('c.productionDate', 'asc');
+        ->orderBy('c.created_at', 'desc');
 
         if ($speciesId!=0){
             $query = $query->where('vid.speciesId','=', $speciesId);
