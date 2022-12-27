@@ -40,6 +40,7 @@ class BarcodeController extends Controller
             'c.id as id',
             'c.productionDate as productionDate',
             'c.amountPrinted as amountPrinted',
+            'c.created_at as created',
             'c.filename as filename',
             'c.startFrom as startFrom',
             'vid.nameBahasa as name'
