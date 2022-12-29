@@ -4,7 +4,7 @@
 <style type="text/css">
     @page {
         margin:15px;
-        size: 10cm 5cm landscape;
+        size: 10cm 12cm landscape;
     }
     body { 
         margin: 0px; 
@@ -41,6 +41,8 @@
             <tr>
                 <td> <p style="font-size:20px"> {!! $a['barcode']!!}</p></td>
             </tr>
+            <br>
+            <br>
             @endforeach
             <!--
                 DNS1D::getBarcodeHTML(data, jenis, lebar, tinggi, warna)

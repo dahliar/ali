@@ -150,7 +150,7 @@ class BarcodeController extends Controller
             ];
             $arrData[$a] = $data;
         }
-        $customPaper = array(0,0,150.00,500.00);
+        $customPaper = array(0,0,300.00,500.00);
 
         $pdf = PDF::loadview('barcode.barcodeFile', compact('arrData','jumlah', 'startFrom'));
         //->setPaper($customPaper, 'landscape');
