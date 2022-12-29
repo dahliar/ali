@@ -165,6 +165,10 @@
 							<a class="dropdown-item" href="{{ url('administrasi')}}"><i class="fas fa-tasks"></i> Administrasi Surat
 							</a>
 						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('administrasiAllSurat')}}"><i class="fas fa-tasks"></i> Semua Surat
+							</a>
+						</li>
 					</ul>
 				</li>
 			</ul>

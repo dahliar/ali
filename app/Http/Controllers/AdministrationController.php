@@ -22,6 +22,10 @@ class AdministrationController extends Controller
     {
         return view('administration.administrasiList');
     }
+    public function indexAllSurat()
+    {
+        return view('administration.administrasiAllSurat');
+    }
     public function paperList($employeeId)
     {
         $employee = self::getEmployeeData($employeeId);
@@ -145,7 +149,36 @@ class AdministrationController extends Controller
         $paperwork = self::cetakSuratKeterangan($employeeId, $paperworkId, $paperworkNum);
         return view('administration.administrasiList');
     }
+    public function getAllPapers(){
+        $query = DB::table('paperworks as p')
+        ->select(
+            'p.id as id', 
+            'p.name as name',
+            'u.name as empName',
+            'e.nik as empNik',
+            'p.startdate as startdate',
+            'p.enddate as enddate',
+            'p.filepath as filename',
+            DB::raw('concat(
+                (TIMESTAMPDIFF(DAY, curdate(), enddate)), 
+                " hari") as hariMasaBerlaku'),
+        )
+        ->join('paperwork_types as pt', 'pt.id', '=', 'p.paperworkTypeId')
+        ->join('employees as e', 'p.employeeId', '=', 'e.id')
+        ->join('users as u', 'e.userid', '=', 'u.id')
+        ->orderBy('p.startdate')
+        ->get();
 
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tampilkan file" onclick="getFileDownload('."'".$row->filename."'".')">
+            <i class="fa fa-file"></i>
+            </button>            
+            ';            
+            return $html;
+        })->addIndexColumn()->toJson();
+    }
     public function getAllEmployeePaper($employeeId){
         $query = DB::table('paperworks as p')
         ->select(
