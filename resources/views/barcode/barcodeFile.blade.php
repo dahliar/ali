@@ -4,7 +4,7 @@
 <style type="text/css">
     @page {
         margin:15px;
-        size: 10cm 12cm landscape;
+        size: 10cm 20cm portrait;
     }
     body { 
         margin: 0px; 
@@ -26,9 +26,6 @@
 <body>
     <main>
         <table width="100%" >
-            @php
-            $i=0;
-            @endphp
             @foreach ($arrData as $a)
             <tr>
                 <td style="width:40%;" ROWSPAN="2">
@@ -41,7 +38,6 @@
             <tr>
                 <td> <p style="font-size:20px"> {!! $a['barcode']!!}</p></td>
             </tr>
-            <br>
             <br>
             @endforeach
             <!--
