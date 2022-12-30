@@ -156,6 +156,19 @@
                     -->
                     <div class="row form-group mb-2">
                         <div class="col-md-2 text-end">
+                            <span class="label">Printer*</span>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-select w-100" id="printer" name="printer">
+                                <option value="-1">--Pilih dahulu--</option>
+                                <option value="1">Postek</option>
+                                <option value="2">Zebra ZT411CN</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group mb-2">
+                        <div class="col-md-2 text-end">
                         </div>
                         <div class="col-md-6">
                             <button type="submit" class="btn btn-primary">Generate</button>

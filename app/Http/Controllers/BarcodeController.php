@@ -42,6 +42,7 @@ class BarcodeController extends Controller
             'c.amountPrinted as amountPrinted',
             'c.created_at as created',
             'c.filename as filename',
+            'c.printer as printer',
             'c.startFrom as startFrom',
             'vid.nameBahasa as name'
         )
@@ -61,6 +62,15 @@ class BarcodeController extends Controller
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tampilkan file" onclick="getFileDownload('."'".$row->filename."'".')">
             <i class="fa fa-file"></i>
             </button>';
+            return $html;
+        })
+        ->editColumn('printer', function ($row) {
+            $html="";
+            if ($row->printer == 1){
+                $html = "Postek";
+            } else {
+                $html = "Zebra ZT411CN";
+            }
             return $html;
         })
         ->addIndexColumn()->toJson();
@@ -93,7 +103,8 @@ class BarcodeController extends Controller
                 'species' => 'required|gt:0',
                 'item' => 'required|gt:0',
                 'transactionDate' => 'required|date|before_or_equal:today',
-                'jumlahBarcode' => 'required|gt:0|lte:100'
+                'jumlahBarcode' => 'required|gt:0|lte:100',
+                'printer' => 'required|gt:0',
             ],
             [
                 'jumlahBarcode.required'=> 'Jumlah barcode minimal 1'
@@ -102,6 +113,7 @@ class BarcodeController extends Controller
         $transactionDate = $request->transactionDate;
         $jumlah = $request->jumlahBarcode;
         $item = $request->item;
+        $printer = $request->printer;
 
         $name = DB::table('view_item_details as vid')
         ->select(DB::raw('concat(speciesName, " ", gradeName, " ", sizeName, " ", shapesName) as name'))
@@ -136,7 +148,8 @@ class BarcodeController extends Controller
             'amountPrinted'     => $jumlah,
             'startFrom'         => $startFrom,
             'itemId'            => $item,
-            'filename'          => $filename
+            'filename'          => $filename,
+            'printer'           => $printer
         ];
         DB::table('codes')->insert($codes);            
 
@@ -151,9 +164,14 @@ class BarcodeController extends Controller
             $arrData[$a] = $data;
         }
         $customPaper = array(0,0,300.00,500.00);
-
-        $pdf = PDF::loadview('barcode.barcodeFile', compact('arrData','jumlah', 'startFrom'));
-        //->setPaper($customPaper, 'landscape');
+        
+        if ($printer == 1){
+            $customPaper = array(0,0,300.00,500.00);
+        } else
+        {
+            $customPaper = array(0,0,150.00,500.00);
+        }
+        $pdf = PDF::loadview('barcode.barcodeFile', compact('arrData','jumlah', 'startFrom', 'printer'))->setPaper($customPaper, 'landscape');
         $pdf->save($filepath);
 
         return redirect('barcodeList')
