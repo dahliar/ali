@@ -90,7 +90,7 @@ class Item extends Model
             $html="";
             if (Auth::user()->accessLevel <=40){
                 $html = '
-                <button  data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang"><i onclick="tambahStockItem('."'".$row->id."'".')" class="fa fa-plus"></i></button>
+                <button onclick="tambahStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah stok barang"><i class="fa fa-plus"></i></button>
                 <button onclick="historyStockItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-info" data-toggle="tooltip" data-placement="top" title="History tambah stock"><i class="far fa-list-alt"></i></button>
                 <button onclick="UpdateStockUnpacked('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Update jumlah unpacked"><i class="fa fa-box-open"></i></button>';
             }
