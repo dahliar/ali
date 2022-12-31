@@ -38,6 +38,7 @@ class BarcodeController extends Controller
         $query = DB::table('codes as c')
         ->select(
             'c.id as id',
+            DB::raw('concat(c.id, "-", c.itemId) as identifier'),
             'c.productionDate as productionDate',
             'c.amountPrinted as amountPrinted',
             'c.created_at as created',

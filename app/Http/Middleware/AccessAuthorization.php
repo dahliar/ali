@@ -19,17 +19,20 @@ class AccessAuthorization
      */
     public function handle(Request $request, Closure $next)
     {
-        $exist = DB::table('user_page_mappings as upm')
-        ->join('pages as p', 'p.id', '=', 'upm.pageId')
-        ->where('p.route', '=', Route::current()->uri)
-        ->where('upm.userId', '=', Auth::user()->id)
-        ->where('p.minimumAccessLevel', '>=', Auth::user()->accessLevel)
-        ->exists();
+        if (auth()->check()){
+            $exist = DB::table('user_page_mappings as upm')
+            ->join('pages as p', 'p.id', '=', 'upm.pageId')
+            ->where('p.route', '=', Route::current()->uri)
+            ->where('upm.userId', '=', Auth::user()->id)
+            ->where('p.minimumAccessLevel', '>=', Auth::user()->accessLevel)
+            ->exists();
 
-        if (!$exist){
-            //return redirect('unauthorized')->with('message', "");
-            return redirect('unauthorized')->with('message', Route::current()->uri);
+            if (!$exist){
+                return redirect('unauthorized')->with('message', Route::current()->uri);
+            }
+            return $next($request);
+        } else{
+            return redirect('unauthorized')->with('message', "");
         }
-        return $next($request);
     }
 }
