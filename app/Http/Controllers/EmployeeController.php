@@ -380,6 +380,7 @@ class EmployeeController extends Controller
         $query = DB::table('employees as e')
         ->select(
             'e.id as id', 
+            DB::raw('concat(e.id,"-",u.id) as uidempid'),
             'u.name as name', 
             'e.nik as nik', 
             'e.phone as phone',
