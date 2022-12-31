@@ -13,7 +13,8 @@ class Store extends Model
     protected $primaryKey = 'id';
 
     public function getOneStore($storeId){
-        $query = DB::table('alicore_stock.stores as str')
+        //$query = DB::table('alicore_stock.stores as str')
+        $query = DB::table('stores as str')
         ->select('str.id', 
             'i.name as name', 
             's.name as size',
