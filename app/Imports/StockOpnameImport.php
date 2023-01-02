@@ -1,23 +1,24 @@
 <?php
 
 namespace App\Imports;
-use App\Models\Presence;
 
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 
+use DB;
 
-class EmployeePresenceImport implements ToCollection, WithStartRow
+
+class StockOpnameImport implements ToCollection, WithStartRow
 {
     /**
     * @param Collection $collection
     */
     private $text = "";
-    private $isLembur = 0;
-    function __construct($isLembur) {   
-        $this->presence = new Presence();
-        $this->isLembur = $isLembur;     
+    private $stockOpnameDate = 0;
+
+    function __construct($stockOpnameDate) {   
+        $this->stockOpnameDate = $stockOpnameDate;     
     }
 
     public function startRow(): int
@@ -26,8 +27,32 @@ class EmployeePresenceImport implements ToCollection, WithStartRow
     }
     public function collection(Collection $collection)
     {
-        $this->text = $this->presence->presenceCalculator($collection, $this->isLembur);
+        $a=0;
+        $mesej = "";
+        foreach ($collection as $row) 
+        {
+            if ($row[11] == 1){
+                try{ 
+                    $affected = DB::table('items')
+                    ->where('id', $row[0])
+                    ->update(['amount' => $row[10]]);
 
+                    $data = [
+                        'userId'                => auth()->user()->name,
+                        'jenis'                 => 3,
+                        'informasiTransaksi'    => "Stock Opname tanggal ".$this->stockOpnameDate,
+                        'itemId'                =>  $row[0],
+                        'prevAmount'            =>  $row[7],
+                        'amount'                =>  $row[10]               
+                    ];
+                    DB::table('stock_histories')->insert($data);
+                }
+                catch(\Exception $e){
+                    $mesej.=$row[0].", ";
+                }
+            }
+        }
+        $this->text = $mesej;
     }
     public function getImportResult(): string
     {

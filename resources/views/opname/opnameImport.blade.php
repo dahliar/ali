@@ -29,14 +29,30 @@
             confirmButtonText: 'Ya, generate data import',
             cancelButtonText: 'Tidak, batalkan saja'
         }).then((result) => {
-          if (result.isConfirmed) {
-            window.open('{{ url("getStockOpnameImportList")}}', '_blank');
-        }
-    })
+            if (result.isConfirmed) {
+                window.open('{{ url("getStockOpnameImportList")}}', '_blank');
+            }
+        })
+    };
 
-    }
 
-
+    $(document).on('click', '#buttonSubmit', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Stock Opname',
+            text: 'Upload File Stock Opname?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Upload saja',
+            cancelButtonText: 'Tidak, batalkan saja'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $('#stockOpnameStore').submit();
+            }
+        });
+    });
 
 </script>
 @if ($errors->any())
@@ -87,7 +103,7 @@
         <div class="modal-body">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form id="presenceFileStore" action="{{url('presenceHarianImportStore')}}" method="POST" name="presenceFileStore" autocomplete="off" enctype="multipart/form-data">
+                    <form id="stockOpnameStore" action="{{url('stockOpnameStore')}}" method="POST" name="stockOpnameStore" autocomplete="off" enctype="multipart/form-data">
                         @csrf
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
@@ -95,31 +111,51 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <input class="form-control" type="file" id="presenceFile" name="presenceFile">
+                                    <input class="form-control" type="file" id="stockOpnameFile" name="stockOpnameFile">
                                 </div>
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Lembur</span>
+                                <span class="label">Tanggal Stock Opname</span>
                             </div>
-                            <div class="col-md-8">
-                                <div class="form-check form-switch">
-                                    <input id="isLembur" type="checkbox" class="form-check-input" name="isLembur" checked>
-                                </div>
+                            <div class="col-md-3">
+                                <input type="date" id="stockOpnameDate" name="stockOpnameDate" class="form-control text-end" value="{{ old('stockOpnameDate')}}">
                             </div>
-                        </div> 
+                        </div>
+
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary">Upload dan Simpan Presensi</button>
+                                <button type="submit" id="buttonSubmit" class="btn btn-primary">Upload dan Simpan Stock Opname</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
+            <ol>
+                <li>Hanya untuk digunakan melakukan proses stock opname</b></li>
+                <li>Klik tombol "Download daftar barang"</li>
+                <li>Edit file yang telah didownload, hanya diperbolehkan untuk mengedit 2 kolom saja</li>
+                <ol type="A">
+                    <li>Jumlah stock terbaru</li>
+                    <ol type="i">
+                        <li>Untuk barang dengan packing MC, isi besaran jumlah MC saja</li>
+                        <li>Untuk barang dengan packing karung, isi besaran running weight jumlah kilogramnya</li>
+                    </ol>
+                    <li>Ubah kolom "Ubah data stock?" 
+                        <ol type="i">
+                            <li>dengan nilai 0 jika data <b>tidak</b> berubah</li>
+                            <li>dengan nilai 1 untuk data yang akan diubah</li>
+                        </ol>
+                    </ol>
+                    <li>Simpan File tersebut</li>
+                    <li>Pilih Tanggal dilakukan stock opname</li>
+                    <li>Klik "Choose File", dan pilih file yang telah diedit </li>
+                    <li>Klik "Upload dan Simpan Stock Opname"</li>
+                </ol>
+            </div>
         </div>
     </div>
-</div>
-@endsection
+    @endsection

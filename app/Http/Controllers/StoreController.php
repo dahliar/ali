@@ -778,4 +778,18 @@ class StoreController extends Controller
         return Excel::download(new StockOpnameExport(), 'Stock Opname Tanggal '.Carbon::now()->toDateString().'.xlsx');
     }
 
+    public function stockOpnameStore(Request $request)
+    {
+        $request->validate([
+            'stockOpnameFile' => 'required', 
+            'stockOpnameDate' => 'required|date|before_or_equal:today'
+        ]);
+
+
+        $import = new StockOpnameImport($request->stockOpnameDate);
+        Excel::import($import, $request->stockOpnameFile);
+
+        $message = $import->getImportResult();
+        return redirect('opname')->with('status', $message);
+    }
 }

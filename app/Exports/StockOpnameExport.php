@@ -38,7 +38,8 @@ class StockOpnameExport implements FromQuery, WithHeadings, WithStyles, WithColu
             'i.amount as jumlahPacked',
             DB::raw('concat(weightbase, "Kg/",p.shortname) as weightbase'),
             DB::RAW('(i.amount * i.weightbase) as amount'),
-            DB::raw("'0' as jumlahBaru")
+            DB::raw("'0' as jumlahBaru"),
+            DB::raw("'0' as perubahan")
         )
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
@@ -88,7 +89,7 @@ class StockOpnameExport implements FromQuery, WithHeadings, WithStyles, WithColu
             ],
         ];
 
-        $sheet->getStyle('K2:M'.$this->rowCount)->applyFromArray($styleArrayEditable);
+        $sheet->getStyle('K1:M'.$this->rowCount)->applyFromArray($styleArrayEditable);
         $sheet->getStyle('A1:J'.$this->rowCount)->applyFromArray($styleArrayNonEditable);
 
         return [
@@ -117,6 +118,7 @@ class StockOpnameExport implements FromQuery, WithHeadings, WithStyles, WithColu
             'Weightbase',
             'Existing Jumlah Barang Kg',
             'Baru Jumlah Update Packing MC/Karung',
+            'Ubah data stock?',
         ];
     }
 
