@@ -729,39 +729,6 @@ class StoreController extends Controller
 
     public function opname()
     {
-        /*
-        $items = DB::table('items as i')
-        ->select(
-            'i.id as id', 
-            'sp.nameBahasa as speciesName', 
-            'i.amount as jumlahPacked',
-            DB::RAW('(i.amount * i.weightbase) as amount'),
-            'amountUnpacked as jumlahUnpacked',
-            'p.shortname as packingShortname',
-            DB::raw('concat(sp.nameBahasa," ",g.name," ",sh.name," ",s.name, " ",f.name," ",weightbase," Kg/",p.shortname," - ",i.name) as itemName'),
-            DB::raw('(select sum(dt.amount) from detail_transactions as dt join transactions t on dt.transactionId=t.id where t.status=4 and dt.itemId=i.id) as jumlahOnLoading'),
-            'i.name as iname',
-            's.name as sname',
-            'sh.name as shname',
-            'f.name as fname',
-            'g.name as gname',
-            'baseprice as baseprice',
-            'weightbase as weightbase'
-        )
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        ->where('i.isActive','=', 1)
-        ->orderBy('sp.nameBahasa', 'desc')
-        ->orderBy('g.name', 'asc')
-        ->orderBy('s.name', 'asc')
-        ->get();
-
-        return view('opname.opname', compact('items'));
-        */
         return view('opname.opname');
     }
 

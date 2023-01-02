@@ -49,7 +49,7 @@ class StockOpnameExport implements FromQuery, WithHeadings, WithStyles, WithColu
         ->where('i.isActive','=', 1)
         ->orderBy('sp.nameBahasa', 'asc')
         ->orderBy('g.name', 'asc')
-        ->orderBy('s.name', 'asc')
+        ->orderBy('s.name', 'asc');
 
         $this->rowCount = $query->count() + 1;
 
