@@ -754,7 +754,6 @@ class StoreController extends Controller
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->where('i.isActive','=', 1)
-        ->groupBy('i.name')
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
         ->orderBy('s.name', 'asc')
