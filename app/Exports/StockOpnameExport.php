@@ -58,7 +58,7 @@ class StockOpnameExport implements FromQuery, WithHeadings, WithStyles, WithColu
     public function styles(Worksheet $sheet)
     {
         $sheet->getProtection()->setSheet(true);
-        $sheet->getStyle('K2:K'.$this->rowCount)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle('K2:M'.$this->rowCount)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
         $styleArrayEditable = [
             'font' => [
                 'bold' => true,
