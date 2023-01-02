@@ -19,19 +19,23 @@
 
     $(document).ready(function() {
         $('#datatable').DataTable({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: {!! json_encode($items->toArray()) !!},
+            ajax:'{{ url("getOpnameData") }}',
+            serverSide: false,
+            processing: true,
+            deferRender: true,
+            type: 'GET',
+            destroy:true,
+            pageLength: 50,
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
-                {   "width": "15%", "targets":  [1], "className": "text-left"   },
-                {   "width": "30%", "targets":  [2], "className": "text-left" },
-                {   "width": "15%", "targets":  [3], "className": "text-end" },
-                {   "width": "12%", "targets":  [4], "className": "text-end" }
+                {   "width": "5%",  "targets":  [1], "className": "text-center" },
+                {   "width": "15%", "targets":  [2], "className": "text-left"   },
+                {   "width": "30%", "targets":  [3], "className": "text-left" },
+                {   "width": "15%", "targets":  [4], "className": "text-end" },
+                {   "width": "12%", "targets":  [5], "className": "text-end" }
                 ], 
-
             columns: [
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'id', name: 'id'},
                 {data: 'speciesName', name: 'speciesName'},
                 {data: 'itemName', name: 'itemName'},
@@ -39,7 +43,6 @@
                 {data: 'amount', name: 'amount'}
                 ]
         });
-        
     });
 </script>
 
@@ -76,6 +79,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>ID</th>
                             <th>Name</th>
                             <th>Nama</th>
                             <th>Jumlah (MC/Karung)</th>

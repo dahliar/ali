@@ -601,6 +601,7 @@ Route::GET('getAdministrationFileDownload/{filepath}', [AdministrationController
 */
 
 Route::get('opname',[StoreController::class, 'opname'])->middleware(['auth', 'authorized']);
+Route::get('getOpnameData',[StoreController::class, 'getOpnameData'])->middleware(['auth']);
 Route::get('opnameImport',[StoreController::class, 'opnameImport'])->middleware(['auth', 'authorized']);
 Route::get('getStockOpnameImportList', [StoreController::class, 'excelStockOpnameFileGenerator']);
 

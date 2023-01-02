@@ -47,9 +47,9 @@ class StockOpnameExport implements FromQuery, WithHeadings, WithStyles, WithColu
         ->join('packings as p', 'i.packingId', '=', 'p.id')
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->where('i.isActive','=', 1)
-        ->orderBy('sp.name', 'desc')
+        ->orderBy('sp.nameBahasa', 'asc')
         ->orderBy('g.name', 'asc')
-        ->orderBy('s.name', 'asc');
+        ->orderBy('s.name', 'asc')
 
         $this->rowCount = $query->count() + 1;
 
@@ -88,7 +88,7 @@ class StockOpnameExport implements FromQuery, WithHeadings, WithStyles, WithColu
             ],
         ];
 
-        $sheet->getStyle('K2:K'.$this->rowCount)->applyFromArray($styleArrayEditable);
+        $sheet->getStyle('K2:M'.$this->rowCount)->applyFromArray($styleArrayEditable);
         $sheet->getStyle('A1:J'.$this->rowCount)->applyFromArray($styleArrayNonEditable);
 
         return [
