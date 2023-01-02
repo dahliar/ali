@@ -203,6 +203,9 @@
 				<li>
 					<a class="dropdown-item" href="{{ url('barcodeList')}}"><i class="fas fa-barcode"></i> Barcode </a>
 				</li>
+				<li>
+					<a class="dropdown-item" href="{{ url('opname')}}"><i class="fas fa-barcode"></i> Opname </a>
+				</li>
 			</ul>
 		</li>
 		<li class="nav-item dropdown">

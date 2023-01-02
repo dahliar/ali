@@ -34,27 +34,21 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "3%",  "targets":  [0], "className": "text-center" },
+            {   "width": "5%",  "targets":  [0], "className": "text-center" },
             {   "width": "30%",  "targets": [1], "className": "text-left" },
-            {   "width": "15%", "targets":  [2], "className": "text-left" },
-            {   "width": "8%", "targets":  [3], "className": "text-center" },
+            {   "width": "10%", "targets":  [2], "className": "text-end" },
+            {   "width": "15%", "targets":  [3], "className": "text-left" },
             {   "width": "15%", "targets":  [4], "className": "text-left" },
             {   "width": "5%", "targets":  [5], "className": "text-center" },
-            {   "width": "9%", "targets":  [6], "className": "text-center" },
-            {   "width": "10%", "targets":  [7], "className": "text-left" },
-            {   "width": "5%", "targets":  [8], "className": "text-left" },
-            {   "width": "5%", "targets":  [9], "className": "text-center" }
+            {   "width": "10%", "targets":  [6], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'jenis', name: 'jenis'},
+            {data: 'amount', name: 'amount'},
+            {data: 'packing', name: 'packing'},
             {data: 'itemName', name: 'itemName'},
-            {data: 'speciesName', name: 'speciesName'},
-            {data: 'weightbase', name: 'weightbase'},
-            {data: 'sizeName', name: 'sizeName'},
-            {data: 'gradeName', name: 'gradeName'},
-            {data: 'freezingName', name: 'freezingName'},
-            {data: 'packingName', name: 'packingName'},
             {data: 'isActive', name: 'isActive'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -112,13 +106,10 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Item</th>
-                                        <th>Species</th>
-                                        <th>WB (Kg)</th>
-                                        <th>Size</th>
-                                        <th>Grade</th>
-                                        <th>Freeze</th>
-                                        <th>Package</th>
+                                        <th>Spesies</th>
+                                        <th>Jumlah</th>
+                                        <th>Packing</th>
+                                        <th>Nama</th>
                                         <th>Aktif</th>
                                         <th>Act</th>
                                     </tr>

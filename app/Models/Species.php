@@ -96,24 +96,21 @@ class Species extends Model
     public function getAllSpeciesItemData($speciesId){
         $query = DB::table('items as i')
         ->select(
-            'i.id as id', 
-            'i.name as itemName', 
-            'i.weightbase as weightbase', 
-            'sp.name as speciesName', 
-            'si.name as sizeName', 
-            'sp.name as speciesName', 
-            'f.name as familyName', 
-            'g.name as gradeName', 
-            'p.name as packingName', 
+            'i.id as id',
+            DB::RAW('concat(sp.nameBahasa," ", sh.name," ", g.name, " ",si.name) as jenis'),
+            DB::raw('concat(fr.name, " ", i.weightbase, " Kg/", p.shortname) as packing'), 
+            'i.name as itemName',
+
+            'i.amount as amount', 
             'i.imageurl as url', 
-             DB::raw('(CASE WHEN i.isActive=0 THEN "Tidak" WHEN i.isActive="1" THEN "Ya" END) AS isActive'),
-            'fr.name as freezingName', 
+            DB::raw('(CASE WHEN i.isActive=0 THEN "Tidak" WHEN i.isActive="1" THEN "Ya" END) AS isActive'),
         )
         ->join('sizes as si', 'i.sizeId', '=', 'si.id')
         ->join('species as sp', 'si.speciesId', '=', 'sp.id')
         ->join('families as f', 'sp.familyid', '=', 'f.id')
         ->join('grades as g', 'i.gradeId', '=', 'g.id')
         ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
         ->join('freezings as fr', 'i.freezingId', '=', 'fr.id');
 
         if ($speciesId>0){

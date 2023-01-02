@@ -595,7 +595,14 @@ Route::get('getAllPapers',[AdministrationController::class, 'getAllPapers']);
 Route::GET('getAdministrationFileDownload/{filepath}', [AdministrationController::class, 'getAdministrationFileDownload'])->middleware(['auth']);
 
 
+/*
+*   Stock Opname
+*
+*/
 
+Route::get('opname',[StoreController::class, 'opname'])->middleware(['auth', 'authorized']);
+Route::get('opnameImport',[StoreController::class, 'opnameImport'])->middleware(['auth', 'authorized']);
+Route::get('getStockOpnameImportList', [StoreController::class, 'excelStockOpnameFileGenerator']);
 
 
 

@@ -43,7 +43,6 @@
         var packingId = document.getElementById("packing").value;
         var freezingId = document.getElementById("freezing").value;
         $('#datatable').DataTable({
-
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -65,22 +64,20 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "3%",  "targets":  [0], "className": "text-center" },
-            {   "width": "23%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%", "targets":  [2], "className": "text-end" },
-            {   "width": "10%", "targets":  [3], "className": "text-end" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "12%", "targets":  [6], "className": "text-center" },
-            {   "width": "12%", "targets":  [7], "className": "text-center" }
+            {   "width": "5%",  "targets":  [0], "className": "text-center" },
+            {   "width": "25%", "targets":  [1], "className": "text-left"   },
+            {   "width": "18%", "targets":  [2], "className": "text-left" },
+            {   "width": "15%", "targets":  [3], "className": "text-end" },
+            {   "width": "12%", "targets":  [4], "className": "text-end" },
+            {   "width": "15%", "targets":  [5], "className": "text-center" },
+            {   "width": "10%", "targets":  [6], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'itemName', name: 'itemName'},
-            {data: 'amountPacked', name: 'amountPacked'},
-            {data: 'amountUnpacked', name: 'amountUnpacked'},
-            {data: 'stockOnHand', name: 'stockOnHand'},
+            {data: 'amount', name: 'amount'},
+            {data: 'totalGudang', name: 'totalGudang'},
             {data: 'loading', name: 'loading'},
             {data: 'action1', name: 'action1', orderable: false, searchable: false},
             {data: 'action2', name: 'action2', orderable: false, searchable: false}
@@ -408,12 +405,11 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <th>Packed</th>
-                            <th>Unpacked</th>
-                            <th>Stock gudang</th>
-                            <th>Sailing</th>
-                            <th>Tambah Stock</th>
-                            <th>Kurang Stock</th>
+                            <th>Packed/Unpacked</th>
+                            <th>Total Gudang (Kg)</th>
+                            <th>Sailing (Kg)</th>
+                            <th>Tambah</th>
+                            <th>Kurang</th>
                         </tr>
                     </thead>
                     <tbody style="font-size: 14px;">
@@ -423,7 +419,7 @@
             <div class="card-footer">
                 <ol>
                     <li>Loading : Jumlah barang yang saat ini dalam perjalanan ke buyer</li>
-                    <li>Stock In Hand adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
+                    <li>Sailing adalah jumlah barang di storage dalam satuan Kilogram, hasil penjumlahan dari Packed + Unpacked</li>
                 </ol>
             </div>
         </div>

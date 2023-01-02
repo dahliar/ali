@@ -69,22 +69,28 @@ class Item extends Model
         $query->get();  
 
         return datatables()->of($query)
-        ->addColumn('stockOnHand', function ($row) {
-            $jumlah = number_format(((($row->jumlahPacked) * $row->weightbase) + $row->jumlahUnpacked), 2).' Kg';
-            return $jumlah;
+        ->addColumn('amount', function ($row) {
+            $html = '
+            <div class="row form-group">
+            <span class="col-5">Packed</span>
+            <span class="col-7 text-end">'.number_format($row->jumlahPacked, 2).' '.$row->packingShortname.'</span>
+            </div>
+
+            <div class="row form-group">
+            <span class="col-5">Unpacked</span>
+            <span class="col-7 text-end">'.number_format($row->jumlahUnpacked, 2).' Kg'.'</span>
+            </div>';
+            return $html;
         })
         ->addColumn('itemName', function ($row) {
             $name = $row->speciesName." ".$row->gname. " ".$row->shname. " ".$row->sname. " ".$row->fname." ".$row->weightbase." Kg/".$row->packingShortname." - ".$row->iname;
             return $name;
         })
-        ->addColumn('amountPacked', function ($row) {
-            return number_format($row->jumlahPacked, 2).' '.$row->packingShortname;
-        })
-        ->addColumn('amountUnpacked', function ($row) {
-            return number_format($row->jumlahUnpacked, 2).' Kg';
-        })
         ->addColumn('loading', function ($row) {
-            return number_format(($row->jumlahOnLoading*$row->weightbase), 2).' Kg';
+            return number_format(($row->jumlahOnLoading*$row->weightbase), 2);
+        })
+        ->addColumn('totalGudang', function ($row) {
+            return number_format(((($row->jumlahPacked) * $row->weightbase) + $row->jumlahUnpacked), 2);
         })
         ->addColumn('action1', function ($row) {
             $html="";
@@ -105,7 +111,7 @@ class Item extends Model
             }
             return $html;
         })
-        ->rawColumns(['action1', 'action2'])->addIndexColumn()->toJson();
+        ->rawColumns(['action1', 'action2', 'amount'])->addIndexColumn()->toJson();
     }
 
     public function getSpeciesStock(){
