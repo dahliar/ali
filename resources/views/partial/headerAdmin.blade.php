@@ -201,10 +201,10 @@
 					<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i> Barang Pendukung Produksi</a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{ url('barcodeList')}}"><i class="fas fa-barcode"></i> Barcode </a>
+					<a class="dropdown-item" href="{{ url('barcodeList')}}"><i class="fas fa-qrcode"></i> QR Code </a>
 				</li>
 				<li>
-					<a class="dropdown-item" href="{{ url('opname')}}"><i class="fas fa-barcode"></i> Opname </a>
+					<a class="dropdown-item" href="{{ url('opname')}}"><i class="fas fa-dolly-flatbed"></i> Opname </a>
 				</li>
 			</ul>
 		</li>
