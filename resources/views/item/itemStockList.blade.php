@@ -64,24 +64,24 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "25%", "targets":  [1], "className": "text-left"   },
-            {   "width": "18%", "targets":  [2], "className": "text-left" },
-            {   "width": "15%", "targets":  [3], "className": "text-end" },
-            {   "width": "12%", "targets":  [4], "className": "text-end" },
-            {   "width": "15%", "targets":  [5], "className": "text-center" },
-            {   "width": "10%", "targets":  [6], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "25%", "targets":  [1], "className": "text-left"   },
+                {   "width": "18%", "targets":  [2], "className": "text-left" },
+                {   "width": "15%", "targets":  [3], "className": "text-end" },
+                {   "width": "12%", "targets":  [4], "className": "text-end" },
+                {   "width": "15%", "targets":  [5], "className": "text-center" },
+                {   "width": "10%", "targets":  [6], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'itemName', name: 'itemName'},
-            {data: 'amount', name: 'amount'},
-            {data: 'totalGudang', name: 'totalGudang'},
-            {data: 'loading', name: 'loading'},
-            {data: 'action1', name: 'action1', orderable: false, searchable: false},
-            {data: 'action2', name: 'action2', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'itemName', name: 'itemName'},
+                {data: 'amount', name: 'amount'},
+                {data: 'totalGudang', name: 'totalGudang'},
+                {data: 'loading', name: 'loading'},
+                {data: 'action1', name: 'action1', orderable: false, searchable: false},
+                {data: 'action2', name: 'action2', orderable: false, searchable: false}
+                ]
         });
     }
 
@@ -301,15 +301,19 @@
 <body>
     {{ csrf_field() }}
     <div class="container-fluid">
-        <div class="card card-body">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb primary-color my-auto">
-                    <li class="breadcrumb-item">
-                        <a class="white-text" href="{{ url('/home') }}">Home</a>
-                    </li>
-                    <li class="breadcrumb-item active">Stock per-Barang</li>
-                </ol>
-            </nav>
+        <div class="modal-content">
+            <div class="modal-header">
+                <nav aria-label="breadcrumb" class="navbar navbar-expand-lg navbar-light">
+                    <ol class="breadcrumb primary-color my-auto">
+                        <li class="breadcrumb-item">
+                            <a class="white-text" href="{{ url('/home') }}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Stock per-Barang</li>
+                    </ol>
+                </nav>
+                <a href="{{ url('historyPerubahanStock')}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="History perubahan stock"><i class="fa fa-history">History Stock</i>
+                </a>
+            </div>
         </div>
         <div class="card card-header">
             <div class="row form-group">

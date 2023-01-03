@@ -792,4 +792,47 @@ class StoreController extends Controller
         $message = $import->getImportResult();
         return redirect('opname')->with('status', $message);
     }
+    public function historyPerubahanStock()
+    {
+        $speciesList = Species::orderBy('nameBahasa')->select('id','nameBahasa')->get();
+        return view('item.itemStockHistories', compact('speciesList'));
+    }
+
+    public function getHistoryPerubahanStock($species, $start, $end){
+        $query = DB::table('stock_histories as sh')
+        ->select(
+            DB::raw('(CASE WHEN sh.jenis="1" THEN "Tambah"
+                WHEN sh.jenis="2" THEN "Kurang"
+                WHEN sh.jenis="3" THEN "Opname"
+                END) as jenis'
+            ),
+            'sh.userId as userPeubah',
+            'sh.informasiTransaksi as informasiTransaksi',
+            'sh.amount as realAmount',
+            DB::raw('concat(i.weightbase, " Kg/", p.shortname) as weightbase'),
+            DB::raw('concat(sp.nameBahasa," ",g.name," ",b.name," ",s.name, " ",f.name," ",weightbase," ",p.shortname," - ",i.name) as itemName'),
+            DB::raw('concat((sh.amount*i.weightbase)," Kg") as amount'),
+            DB::raw('concat(((sh.amount+sh.prevAmount)*i.weightbase)," Kg") as afterAmount'),
+            DB::raw('concat((sh.prevAmount*i.weightbase)," Kg") as prevAmount')
+        )
+        ->join('items as i', 'i.id', '=', 'sh.itemId')
+        ->join('freezings as f', 'i.freezingid', '=', 'f.id')
+        ->join('grades as g', 'i.gradeid', '=', 'g.id')
+        ->join('packings as p', 'i.packingid', '=', 'p.id')
+        ->join('shapes as b', 'i.sizeid', '=', 'b.id')
+        ->join('sizes as s', 'i.sizeid', '=', 's.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->whereBetween('sh.created_at', [$start." 00:00:00", $end." 23:59:59"])
+        ->orderBy('sp.name')
+        ->orderBy('g.name', 'desc')
+        ->orderBy('s.name', 'asc')
+        ->orderBy('f.name');
+        if ($species>0){
+            $query->where('sp.id','=', $species);
+        }
+        $query->get();
+        return datatables()->of($query)
+        ->addIndexColumn()->toJson();
+    }
+
 }

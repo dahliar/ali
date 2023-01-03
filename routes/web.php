@@ -603,8 +603,10 @@ Route::GET('getAdministrationFileDownload/{filepath}', [AdministrationController
 Route::get('opname',[StoreController::class, 'opname'])->middleware(['auth', 'authorized']);
 Route::get('getOpnameData',[StoreController::class, 'getOpnameData'])->middleware(['auth']);
 Route::get('opnameImport',[StoreController::class, 'opnameImport'])->middleware(['auth', 'authorized']);
-Route::get('getStockOpnameImportList', [StoreController::class, 'excelStockOpnameFileGenerator']);
+Route::get('getStockOpnameImportList', [StoreController::class, 'excelStockOpnameFileGenerator'])->middleware(['auth']);
 Route::post('stockOpnameStore',[StoreController::class, 'stockOpnameStore'])->middleware(['auth', 'authorized']);
+Route::get('historyPerubahanStock', [StoreController::class, 'historyPerubahanStock'])->middleware(['auth']);
+Route::get('getPerubahanStock/{species}/{start}/{end}', [StoreController::class, 'getHistoryPerubahanStock'])->middleware(['auth']);
 
 
 
