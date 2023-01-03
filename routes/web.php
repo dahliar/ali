@@ -605,7 +605,7 @@ Route::get('getOpnameData',[StoreController::class, 'getOpnameData'])->middlewar
 Route::get('opnameImport',[StoreController::class, 'opnameImport'])->middleware(['auth', 'authorized']);
 Route::get('getStockOpnameImportList', [StoreController::class, 'excelStockOpnameFileGenerator'])->middleware(['auth']);
 Route::post('stockOpnameStore',[StoreController::class, 'stockOpnameStore'])->middleware(['auth', 'authorized']);
-Route::get('historyPerubahanStock', [StoreController::class, 'historyPerubahanStock'])->middleware(['auth']);
+Route::get('historyPerubahanStock', [StoreController::class, 'historyPerubahanStock'])->middleware(['auth', 'authorized']);
 Route::get('getPerubahanStock/{species}/{start}/{end}', [StoreController::class, 'getHistoryPerubahanStock'])->middleware(['auth']);
 
 

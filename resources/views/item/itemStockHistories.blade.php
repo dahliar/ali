@@ -41,6 +41,7 @@
             serverSide: false,
             processing: true,
             deferRender: true,
+            pageLength: 50,
             destroy:true,
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
