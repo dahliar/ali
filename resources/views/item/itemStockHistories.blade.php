@@ -46,24 +46,18 @@
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
                 {   "width": "30%", "targets":  [1], "className": "text-left"   },
-                {   "width": "10%", "targets":  [2], "className": "text-left" },
-                {   "width": "15%", "targets":  [3], "className": "text-left" },
-                {   "width": "30%", "targets":  [4], "className": "text-left" },
-                {   "width": "10%", "targets":  [5], "className": "text-end" },
-                {   "width": "10%", "targets":  [6], "className": "text-end" },
-                {   "width": "10%", "targets":  [7], "className": "text-end" },
-                {   "width": "10%", "targets":  [8], "className": "text-end" },
-                {   "width": "10%", "targets":  [9], "className": "text-end" }
+                {   "width": "20%", "targets":  [2], "className": "text-left" },
+                {   "width": "25%", "targets":  [3], "className": "text-left" },
+                {   "width": "5%", "targets":  [4], "className": "text-end" },
+                {   "width": "10%", "targets":  [5], "className": "text-left" },
+                {   "width": "5%", "targets":  [6], "className": "text-end" }
                 ], 
 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'itemName', name: 'itemName'},
-                {data: 'jenis', name: 'jenis'},
                 {data: 'userPeubah', name: 'userPeubah'},
                 {data: 'informasiTransaksi', name: 'informasiTransaksi'},
-                {data: 'realAmount', name: 'realAmount'},
-                {data: 'weightbase', name: 'weightbase'},
                 {data: 'prevAmount', name: 'prevAmount'},
                 {data: 'amount', name: 'amount'},
                 {data: 'afterAmount', name: 'afterAmount'}
@@ -100,6 +94,8 @@ $itemChoosen=-1;
         </div>
         <div class="card card-header">
             {{ csrf_field() }}
+
+            kenapa bawal hitam ngga muncul
             <div class="container-fluid">
                 <div class="row form-group">
                     <div class="col-3">
@@ -136,14 +132,11 @@ $itemChoosen=-1;
                             <tr>
                                 <th>No</th>
                                 <th>Nama Barang</th>
-                                <th>Jenis</th>
                                 <th>Peubah</th>
                                 <th>Alasan</th>
-                                <th>Jumlah </th>
-                                <th>Weightbase</th>
-                                <th>Jumlah Sebelum (Kg)</th>
-                                <th>Perubahan (Kg)</th>
-                                <th>Jumlah Sesudah (Kg)</th>
+                                <th>Sebelum (Kg)</th>
+                                <th>Penambahan</th>
+                                <th>Sesudah (Kg)</th>
                             </tr>
                         </thead>
                         <tbody style="font-size: 14px;">

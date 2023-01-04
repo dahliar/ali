@@ -801,17 +801,12 @@ class StoreController extends Controller
     public function getHistoryPerubahanStock($species, $start, $end){
         $query = DB::table('stock_histories as sh')
         ->select(
-            DB::raw('(CASE WHEN sh.jenis="1" THEN "Tambah"
-                WHEN sh.jenis="2" THEN "Kurang"
-                WHEN sh.jenis="3" THEN "Opname"
-                END) as jenis'
-            ),
+            'sh.jenis as jenis',
             'sh.userId as userPeubah',
             'sh.informasiTransaksi as informasiTransaksi',
-            'sh.amount as realAmount',
-            DB::raw('concat(i.weightbase, " Kg/", p.shortname) as weightbase'),
             DB::raw('concat(sp.nameBahasa," ",g.name," ",b.name," ",s.name, " ",f.name," ",weightbase," ",p.shortname," - ",i.name) as itemName'),
-            DB::raw('concat((sh.amount*i.weightbase)," Kg") as amount'),
+            'sh.amount as realAmount',
+            DB::RAW('concat(sh.amount, " * ", i.weightbase, " Kg/", p.shortname) as amount'),
             DB::raw('concat(((sh.amount+sh.prevAmount)*i.weightbase)," Kg") as afterAmount'),
             DB::raw('concat((sh.prevAmount*i.weightbase)," Kg") as prevAmount')
         )
@@ -832,6 +827,16 @@ class StoreController extends Controller
         }
         $query->get();
         return datatables()->of($query)
+        ->editColumn('realAmount', function ($row) {
+            $html = '';
+            switch($row->jenis){
+                case('1') : $html = '<i class="fas fa-plus"></i> '.$row->realAmount;break;
+                case('2') : $html =  '<i class="fas fa-minus"></i> '.$row->realAmount;break;
+                case('3') : $html =  '<i class="fas fa-dolly-flatbed"></i> '.$row->realAmount;break;
+            }
+            return $html;
+        })
+        ->rawColumns(['realAmount'])
         ->addIndexColumn()->toJson();
     }
 

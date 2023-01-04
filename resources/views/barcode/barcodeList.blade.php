@@ -13,6 +13,27 @@
     function getFileDownload(filename){
         window.open(('{{ url("getBarcodeFileDownload") }}'+"/"+filename), '_self');
     };
+    function deleteBarcode(id){
+        Swal.fire({
+            title: 'Hapus barcode',
+            text: "Hapus?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus saja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.open(('{{ url("deleteBarcode") }}'+"/"+id), '_self');
+            } else {
+                Swal.fire(
+                    'Batal!',
+                    "Penghapusan barcode batal",
+                    'info'
+                    );
+            }
+        })
+    };
     function tambahBarcode(){
         window.open(('{{ url("barcodeGenerator") }}'), '_self');
     }

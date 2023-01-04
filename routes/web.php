@@ -571,6 +571,7 @@ Route::get('barcodeItemList/{speciesId}',[BarcodeController::class, 'itemList'])
 Route::get('barcodeList',[BarcodeController::class, 'barcodeList'])->middleware(['auth', 'authorized']);
 Route::get('getAllBarcodes/{speciesId}/{itemId}',[BarcodeController::class, 'getAllBarcodes'])->middleware(['auth']);
 Route::GET('getBarcodeFileDownload/{filepath}', [BarcodeController::class, 'getBarcodeFileDownload'])->middleware(['auth']);
+Route::GET('deleteBarcode/{id}', [BarcodeController::class, 'deleteBarcode']);
 
 
 

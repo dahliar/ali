@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+
 
 use App\Models\Species;
 use App\Models\Company;
@@ -33,8 +37,6 @@ class BarcodeController extends Controller
     }
 
     public function getAllBarcodes($speciesId, $itemId){
-
-
         $query = DB::table('codes as c')
         ->select(
             'c.id as id',
@@ -62,6 +64,9 @@ class BarcodeController extends Controller
             $html = '
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tampilkan file" onclick="getFileDownload('."'".$row->filename."'".')">
             <i class="fa fa-file"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Delete Barcode dan File" onclick="deleteBarcode('."'".$row->id."'".')">
+            <i class="fas fa-trash"></i>
             </button>';
             return $html;
         })
@@ -81,6 +86,24 @@ class BarcodeController extends Controller
         $filepath = storage_path('/app/barcodes/'. $filename);
         $headers = ['Content-Type: application/pdf'];
         return \Response::download($filepath, $filename, $headers);
+    }
+    public function deleteBarcode($id){
+        $check = DB::table('codes as c')
+        ->where('c.id', '=', $id);
+
+        if($check->count() > 0){
+            $filename = $check->select('filename')->first()->filename;
+            if (File::exists(storage_path('app/barcodes/'. $filename))){
+                unlink(storage_path('app/barcodes/'.$filename));
+            } 
+            $deleted = DB::table('codes')->where('id', '=', $id)->delete();
+            return redirect('barcodeList')
+            ->with('status','Barcode sudah dihapus.');
+
+        } else{
+            return redirect('barcodeList')
+            ->with('status','Barcode tidak ditemukan.');
+        }
     }
 
     public function itemList($speciesId){
@@ -119,9 +142,7 @@ class BarcodeController extends Controller
         $name = DB::table('view_item_details as vid')
         ->select(DB::raw('concat(speciesName, " ", gradeName, " ", sizeName, " ", shapesName) as name'))
         ->where('vid.itemId','=', $request->item)
-        ->first();
-
-        $name = $name->name;
+        ->first()->name;
 
         $date = \Carbon\Carbon::parse($transactionDate);
         $productionDateData = str_pad($date->year, 4, '0', STR_PAD_LEFT).
@@ -135,9 +156,9 @@ class BarcodeController extends Controller
         ->sum('amountPrinted');
 
 
-        $time = \Carbon\Carbon::now()->toDateTimeString();
+        $timeFormat = \Carbon\Carbon::now()->format('YmdHis');
 
-        $filename = 'Barcode '.$item.' - '.$transactionDate.' '.$time.'.pdf';
+        $filename = 'Barcode '.$item.' '.$timeFormat.'.pdf';
         $filepath = '../storage/app/barcodes/'.$filename;
         $startFrom = 1;
         if (DB::table('codes')->where('productionDate', $transactionDate)->where('itemId', $item)->exists()){
