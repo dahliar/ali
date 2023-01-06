@@ -284,15 +284,14 @@ class AdministrationController extends Controller
 
 
         $warningNumber = DB::table('paperwork_warning as pw')
-        ->select(DB::raw('max(pw.warningNumber) as warningNumber'))
+        //->select(DB::raw('max(pw.warningNumber) as warningNumber'))
         ->join('paperworks as p', 'pw.paperworkId', '=', 'p.id')
         ->where('p.employeeId', '=', $request->employeeId)
         ->whereBetween('pw.publishDate', [$past." 00:00:00", $startdate." 23:59:59"])
-        ->first();
+        ->max('pw.warningNumber');
 
-
-        if ($warningNumber->warningNumber){
-            $num = $warningNumber->warningNumber+1;
+        if ($warningNumber>0){
+            $num = $warningNumber+1;
         } else {
             $num=1;
         }
