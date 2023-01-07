@@ -1,22 +1,12 @@
 <!doctype html>
 <html lang="en">
 
-
-@if ($printer == 1)
 <style type="text/css">
     @page {
         margin:15px;
-        size: 10cm 5cm landscape;
+        size: 10cm 20cm landscape;
     }
 </style>
-@else
-<style type="text/css">
-    @page {
-        margin:15px;
-        size: 10cm 20cm portrait;
-    }
-</style>
-@endif
 
 <style type="text/css">
     body { 
@@ -48,10 +38,11 @@
                 </td>
             </tr>
             <tr>
-                <td> <p style="font-size:20px"> {!! $a['barcode']!!}</p></td>
+                <td> <p style="font-size:15px"> {!! $a['barcode']!!}</p></td>
             </tr>
-            <br>
             @endforeach
+
+
             <!--
                 DNS1D::getBarcodeHTML(data, jenis, lebar, tinggi, warna)
             -->

@@ -189,12 +189,15 @@ class BarcodeController extends Controller
         
         if ($printer == 1){
             $customPaper = array(0,0,300.00,500.00);
+            $pdf = PDF::loadview('barcode.barcodeFilePostek', compact('arrData','jumlah', 'startFrom', 'printer'))->setPaper($customPaper, 'landscape');
+            $pdf->save($filepath);
+
         } else
         {
             $customPaper = array(0,0,150.00,500.00);
+            $pdf = PDF::loadview('barcode.barcodeFileZebra', compact('arrData','jumlah', 'startFrom', 'printer'))->setPaper($customPaper, 'landscape');
+            $pdf->save($filepath);
         }
-        $pdf = PDF::loadview('barcode.barcodeFile', compact('arrData','jumlah', 'startFrom', 'printer'))->setPaper($customPaper, 'landscape');
-        $pdf->save($filepath);
 
         return redirect('barcodeList')
         ->with('status','Barcode berhasil dibuat.');
