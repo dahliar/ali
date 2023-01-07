@@ -185,8 +185,7 @@ class BarcodeController extends Controller
             ];
             $arrData[$a] = $data;
         }
-        $customPaper = array(0,0,300.00,500.00);
-        
+
         if ($printer == 1){
             $customPaper = array(0,0,300.00,500.00);
             $pdf = PDF::loadview('barcode.barcodeFilePostek', compact('arrData','jumlah', 'startFrom', 'printer'))->setPaper($customPaper, 'landscape');
@@ -194,8 +193,7 @@ class BarcodeController extends Controller
 
         } else
         {
-            $customPaper = array(0,0,150.00,500.00);
-            $pdf = PDF::loadview('barcode.barcodeFileZebra', compact('arrData','jumlah', 'startFrom', 'printer'))->setPaper($customPaper, 'landscape');
+            $pdf = PDF::loadview('barcode.barcodeFileZebra', compact('arrData','jumlah', 'startFrom', 'printer'));
             $pdf->save($filepath);
         }
 

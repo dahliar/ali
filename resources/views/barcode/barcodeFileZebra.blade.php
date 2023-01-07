@@ -4,7 +4,7 @@
 <style type="text/css">
     @page {
         margin:15px;
-        size: 10cm 20cm landscape;
+        size: 10cm 4cm landscape;
     }
 </style>
 
@@ -38,7 +38,7 @@
                 </td>
             </tr>
             <tr>
-                <td> <p style="font-size:15px"> {!! $a['barcode']!!}</p></td>
+                <td> {!! $a['barcode']!!}</p></td>
             </tr>
             @endforeach
 
