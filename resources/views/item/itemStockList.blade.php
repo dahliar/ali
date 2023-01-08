@@ -66,16 +66,18 @@
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
                 {   "width": "25%", "targets":  [1], "className": "text-left"   },
-                {   "width": "18%", "targets":  [2], "className": "text-left" },
-                {   "width": "15%", "targets":  [3], "className": "text-end" },
-                {   "width": "12%", "targets":  [4], "className": "text-end" },
-                {   "width": "15%", "targets":  [5], "className": "text-center" },
-                {   "width": "10%", "targets":  [6], "className": "text-center" }
+                {   "width": "5%", "targets":  [2], "className": "text-left" },
+                {   "width": "20%", "targets":  [3], "className": "text-left" },
+                {   "width": "10%", "targets":  [4], "className": "text-end" },
+                {   "width": "10%", "targets":  [5], "className": "text-end" },
+                {   "width": "15%", "targets":  [6], "className": "text-center" },
+                {   "width": "10%", "targets":  [7], "className": "text-center" }
                 ], 
 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'itemName', name: 'itemName'},
+                {data: 'id', name: 'id'},
                 {data: 'amount', name: 'amount'},
                 {data: 'totalGudang', name: 'totalGudang'},
                 {data: 'loading', name: 'loading'},
@@ -409,8 +411,9 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
+                            <th>ID</th>
                             <th>Packed/Unpacked</th>
-                            <th>Total Gudang (Kg)</th>
+                            <th>Total (Kg)</th>
                             <th>Sailing (Kg)</th>
                             <th>Tambah</th>
                             <th>Kurang</th>
