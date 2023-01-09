@@ -181,7 +181,7 @@ class BarcodeController extends Controller
             $barcode = $productionDateData.str_pad($a, 4, '0', STR_PAD_LEFT);
             $data = [
                 "barcode" => $barcode, 
-                "fullname" => public_path()."/productChecking/".$barcode." - ".$name." ".$barcode
+                "fullname" => url('/productChecking/'.$barcode).' - '.$name.' '.$barcode
             ];
             $arrData[$a] = $data;
         }
