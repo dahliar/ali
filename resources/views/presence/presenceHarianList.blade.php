@@ -32,6 +32,8 @@
         var shift = document.getElementById("shift").value;
         var isLembur = document.getElementById("isLembur").checked;
         lembur=0;
+
+        alert(shift);
         if(isLembur){
             lembur=1;
         }

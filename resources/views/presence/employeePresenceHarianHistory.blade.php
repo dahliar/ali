@@ -37,27 +37,21 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "15%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-left" },
-            {   "width": "10%", "targets":  [8], "className": "text-left" },
-            {   "width": "10%", "targets":  [9], "className": "text-left" }
+            {   "width": "20%", "targets":  [1], "className": "text-left"   },
+            {   "width": "5%", "targets":  [2], "className": "text-left" },
+            {   "width": "20%", "targets":  [3], "className": "text-left" },
+            {   "width": "15%", "targets":  [4], "className": "text-left" },
+            {   "width": "20%", "targets":  [5], "className": "text-left" },
+            {   "width": "5%", "targets":  [6], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'orgStructure', name: 'orgStructure'},
-            {data: 'bagian', name: 'bagian'},
+            {data: 'posisi', name: 'posisi'},
             {data: 'shift', name: 'shift'},
-            {data: 'start', name: 'start'},
-            {data: 'end', name: 'end'},
-            {data: 'jamKerja', name: 'jamKerja'},
-            {data: 'jamLembur', name: 'jamLembur'},
-            {data: 'lembur', name: 'lembur'},
+            {data: 'tanggal', name: 'tanggal'},
+            {data: 'jam', name: 'jam'},
+            {data: 'salary', name: 'salary'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
 
             ]
@@ -128,13 +122,10 @@
                             <tr>
                                 <th>No</th>
                                 <th>Posisi</th>
-                                <th>Bagian</th>
                                 <th>Shift</th>
-                                <th>Start</th>
-                                <th>End</th>
-                                <th>Jam Kerja</th>
-                                <th>Jam Lembur</th>
-                                <th>Lembur</th>
+                                <th>Tanggal</th>
+                                <th>Jam</th>
+                                <th>Jumlah</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

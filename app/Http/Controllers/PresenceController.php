@@ -115,6 +115,8 @@ class PresenceController extends Controller
         ->select(
             'e.id as id', 
             'p.id as pid',
+            'ds.uangHarian as uangHarian',
+            'ds.uangLembur as uangLembur',
             'u.name as name', 
             'e.nik as nik',
             'e.nip as nip',
@@ -127,6 +129,7 @@ class PresenceController extends Controller
             DB::raw('(CASE WHEN p.isLembur="1" THEN "Lembur" WHEN p.isLembur="0" THEN "Tidak" END) AS lembur'),
             DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" WHEN p.shift="3" THEN "Malam" END) AS shift')
         )
+        ->join('dailysalaries as ds', 'e.id', '=', 'ds.employeeId')
         ->join('presences as p', 'e.id', '=', 'p.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
@@ -136,11 +139,62 @@ class PresenceController extends Controller
         ->where('e.employmentStatus', '!=', '3')
         ->where('e.id', $employeeId)
         ->whereBetween('p.start', [$start." 00:00:00", $end." 23:59:59"])
+        ->whereBetween('ds.presenceDate', [$start, $end])
         ->where('mapping.isActive', '1')
         ->orderBy('p.start');
         $query->get();
 
         return datatables()->of($query)
+        ->addColumn('posisi', function ($row) {
+            $html = '
+            <div class="row form-group">
+            <span class="text-left">'.$row->orgStructure.'</span>
+            </div>
+
+            <div class="row form-group">
+            <span class="text-left">'.$row->bagian.'</span>
+            </div>';
+            return $html;
+        })
+        ->addColumn('tanggal', function ($row) {
+            $html = '
+            <div class="row form-group">
+            <span class="col-3">Start </span>
+            <span class="col-9 text-end">'.$row->start.'</span>
+            </div>
+
+            <div class="row form-group">
+            <span class="col-3">End</span>
+            <span class="col-9 text-end">'.$row->end.'</span>
+            </div>';
+            return $html;
+        })
+        ->addColumn('salary', function ($row) {
+            $html = '
+            <div class="row form-group">
+            <span class="col-5">Uang Harian</span>
+            <span class="col-7 text-end">'.number_format($row->uangHarian, 2).'</span>
+            </div>
+
+            <div class="row form-group">
+            <span class="col-5">Uang Lembur</span>
+            <span class="col-7 text-end">'.number_format($row->uangLembur, 2).'</span>
+            </div>';
+            return $html;
+        })
+        ->addColumn('jam', function ($row) {
+            $html = '
+            <div class="row form-group">
+            <span class="col-3">Kerja</span>
+            <span class="col-9 text-end">'.number_format($row->jamKerja, 2).'</span>
+            </div>
+
+            <div class="row form-group">
+            <span class="col-3">Lembur</span>
+            <span class="col-9 text-end">'.number_format($row->jamLembur, 2).'</span>
+            </div>';
+            return $html;
+        })
         ->addColumn('action', function ($row) {
             $html='';
             if (Auth::user()->accessLevel <= 40){
@@ -150,6 +204,7 @@ class PresenceController extends Controller
             }
             return $html;
         })
+        ->rawColumns(['salary', 'action', 'jam', 'tanggal', 'posisi'])
         ->addIndexColumn()->toJson();
     }    
 
