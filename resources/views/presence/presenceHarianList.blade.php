@@ -29,6 +29,7 @@
         var empidModal = document.getElementById("empidModal").value;
         var start = document.getElementById("modalStart").value;
         var end = document.getElementById("modalEnd").value;
+        var shift = document.getElementById("shift").value;
         var isLembur = document.getElementById("isLembur").checked;
         lembur=0;
         if(isLembur){
@@ -52,6 +53,7 @@
                         empidModal : empidModal,
                         start: start,
                         end: end,
+                        shift: shift,
                         lembur:lembur
                     },
                     dataType: "json",
@@ -94,26 +96,26 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "25%", "targets":  [1], "className": "text-left"   },
-            {   "width": "15%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-left" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "25%", "targets":  [1], "className": "text-left"   },
+                {   "width": "15%", "targets":  [2], "className": "text-left" },
+                {   "width": "10%", "targets":  [3], "className": "text-left" },
+                {   "width": "15%", "targets":  [4], "className": "text-left" },
+                {   "width": "10%", "targets":  [5], "className": "text-left" },
+                {   "width": "10%", "targets":  [6], "className": "text-left" },
+                {   "width": "10%", "targets":  [7], "className": "text-left" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nik', name: 'nik'},
-            {data: 'jenisPenggajian', name: 'jenisPenggajian'},
-            {data: 'orgStructure', name: 'orgStructure'},
-            {data: 'jabatan', name: 'jabatan'},
-            {data: 'bagian', name: 'bagian'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'nik', name: 'nik'},
+                {data: 'jenisPenggajian', name: 'jenisPenggajian'},
+                {data: 'orgStructure', name: 'orgStructure'},
+                {data: 'jabatan', name: 'jabatan'},
+                {data: 'bagian', name: 'bagian'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
@@ -211,6 +213,17 @@
                         </div>
                         <div class="col-md-8">
                             <input type="datetime-local" id="modalEnd" name="modalEnd" class="form-control text-end" value="{{date('Y-m-d\Th:m:s')}}">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Shift</span>
+                        </div>
+                        <div class="col-md-8">
+                            <select id="shift" name="shift" class="form-select" required>
+                                <option value="1">1 - sebelum pukul 16:00</option>
+                                <option value="2">2 - setelah pukul 16:00</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row form-group">

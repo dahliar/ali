@@ -289,7 +289,7 @@ class PresenceController extends Controller
     
     public function storePresenceHarianEmployee(Request $request)
     {
-        $retValue = $this->presence->storePresenceHarianEmployee($request->empidModal, $request->start, $request->end, $request->lembur);
+        $retValue = $this->presence->storePresenceHarianEmployee($request->empidModal, $request->start, $request->end, $request->lembur, $request->shift);
         return $retValue;
     }
     public function presenceHarianImportStore(Request $request)

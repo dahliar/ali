@@ -43,7 +43,8 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
             DB::raw("'08:00' as jamMasuk"),
             DB::raw("STR_TO_DATE('".$x."','%Y-%m-%d') as tanggalKeluar"),
             DB::raw("'16:00' as jamKeluar"),
-            DB::raw("'1' as statusMasuk")
+            DB::raw("'1' as statusMasuk"),
+            DB::raw("'1' as shift")
         )
         ->leftJoin('presences as p', function($join) use ($x){
             $join->on('e.id', '=', 'p.employeeId')
@@ -69,7 +70,7 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
     public function styles(Worksheet $sheet)
     {
         $sheet->getProtection()->setSheet(true);
-        $sheet->getStyle('I2:L'.$this->rowCount)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
+        $sheet->getStyle('I2:M'.$this->rowCount)->getProtection()->setLocked(\PhpOffice\PhpSpreadsheet\Style\Protection::PROTECTION_UNPROTECTED);
         $styleArrayEditable = [
             'font' => [
                 'bold' => true,
@@ -99,7 +100,7 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
             ],
         ];
 
-        $sheet->getStyle('I2:L'.$this->rowCount)->applyFromArray($styleArrayEditable);
+        $sheet->getStyle('I2:M'.$this->rowCount)->applyFromArray($styleArrayEditable);
         $sheet->getStyle('A1:H'.$this->rowCount)->applyFromArray($styleArrayNonEditable);
 
         return [
@@ -128,7 +129,8 @@ class EmployeePresenceExport implements FromQuery, WithHeadings, WithStyles, Wit
             'Jam Masuk',
             'Tanggal Keluar',
             'Jam Keluar',
-            'Presensi'
+            'Presensi',
+            'Shift'
         ];
     }
 
