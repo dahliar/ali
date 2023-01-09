@@ -181,7 +181,7 @@ class BarcodeController extends Controller
             $barcode = $productionDateData.str_pad($a, 4, '0', STR_PAD_LEFT);
             $data = [
                 "barcode" => $barcode, 
-                "fullname" => "www.aliseafood.co.id ".$name." ".$barcode
+                "fullname" => public_path()."/productChecking/".$barcode." - ".$name." ".$barcode
             ];
             $arrData[$a] = $data;
         }
@@ -199,6 +199,41 @@ class BarcodeController extends Controller
 
         return redirect('barcodeList')
         ->with('status','Barcode berhasil dibuat.');
+    }
+
+    public function productChecking($id){
+        $query = DB::table('codes as c')
+        ->select(
+            'productionDate as productionDate',
+            'packagingDate as packagingDate',
+            'loadingDate as loadingDate',
+            'c.id as id',
+            'cu.fullcode as fullcode',
+            'i.name as item',
+            's.name as size',
+            'sh.name as shape',
+            'f.name as freezing',
+            'g.name as grade',
+            'sp.name as species',
+        )
+        ->join('items as i', 'i.id', '=', 'c.itemId')
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
+        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('grades as g', 'i.gradeId', '=', 'g.id')
+        ->join('packings as p', 'i.packingId', '=', 'p.id')
+        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
+
+        ->join('code_usages as cu', 'c.id', '=', 'cu.codeId')
+        ->where('cu.fullcode','=', $id);
+        $product=0;
+        $found=0;
+        if($query->exists()){
+            $product = $query->first();
+            $found=1;
+        }
+
+        return view('barcode.productChecking', compact('product', 'found', 'id'));
     }
 
 }
