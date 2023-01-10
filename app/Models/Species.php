@@ -16,8 +16,12 @@ class Species extends Model
 
     public function getAllSpeciesData($familyId){
         $query = DB::table('species as s')
-        ->select('s.id as id', 's.name as name', 'f.name as familyName'
-    )
+        ->select(
+            's.id as id', 
+            's.name as name', 
+            's.nameBahasa as nameBahasa', 
+            'f.name as familyName'
+        )
         ->join('families as f', 's.familyId', '=', 'f.id')
         ->where('s.isActive','=', 1);
 
@@ -46,6 +50,7 @@ class Species extends Model
             'si.id as id', 
             'si.name as sizeName', 
             'sp.name as speciesName', 
+            'sp.nameBahasa as speciesNameBahasa', 
             'f.name as familyName', 
             'si.isActive as isActive', 
         )

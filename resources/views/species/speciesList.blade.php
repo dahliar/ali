@@ -34,14 +34,16 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "55%", "targets":  [1], "className": "text-left"   },
-            {   "width": "20%",  "targets": [2], "className": "text-left" },
-            {   "width": "20%", "targets":  [3], "className": "text-center" }
+            {   "width": "20%", "targets":  [1], "className": "text-left"   },
+            {   "width": "20%", "targets":  [2], "className": "text-left"   },
+            {   "width": "20%",  "targets": [3], "className": "text-left" },
+            {   "width": "20%", "targets":  [4], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
+            {data: 'nameBahasa', name: 'nameBahasa'},
             {data: 'familyName', name: 'familyName'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -120,7 +122,8 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Name</th>
+                        <th>English</th>
+                        <th>Bahasa</th>
                         <th>Family</th>
                         <th>Act</th>
                     </tr>
