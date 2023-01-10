@@ -27,6 +27,32 @@
 @endif
 <body>
 	<div class="container-fluid">
+		<div>
+			<table class="mx-auto table table-striped table-hover table-bordered data-table"  style="width: 50%;">
+				<thead>
+					<th class="align-middle" style="width: 40%;">No</td>
+					<th class="align-middle" style="width: 20%;text-align: center;">Jenis</td>
+				</thead>
+				<tbody style="font-size: 14px;">
+					<tr>
+						<td class="align-middle"><b>Penambahan Stock Belum Approve</b></td>
+						<td style="text-align: center;"><h3>{{$tambah}}</h3></td>
+					</tr>
+					<tr>
+						<td class="align-middle"><b>Pengurangan Stock Belum Approve</b></td>
+						<td style="text-align: center;"><h3>{{$kurang}}</h3></td>
+					</tr>
+					<tr>
+						<td class="align-middle"><b>Transaksi Export dalam perjalanan (unfinished)</b></td>
+						<td style="text-align: center;"><h3>{{$sailingExport}}</h3></td>
+					</tr>
+					<tr>
+						<td class="align-middle"><b>Transaksi Lokal dalam perjalanan (unfinished)</b></td>
+						<td style="text-align: center;"><h3>{{$sailingLocal}}</h3></td>
+					</tr>
+				</tbody>
+			</table> 
+		</div>
 		<div class="card card-header">
 			<form action="{{url('home')}}" method="get">
 				{{ csrf_field() }}
@@ -50,6 +76,8 @@
 				</div>
 			</form>
 		</div>
+
+
 		@isset ($tahun)
 		<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 		<style>
@@ -308,19 +336,19 @@
 				data.addColumn('string', 'Bulan');
 				data.addColumn('number', 'USD');
 				var arrValue = [ 
-				["Januari",0],
-				["Februari",0],
-				["Maret",0],
-				["April",0],
-				["Mei",0],
-				["Juni",0],
-				["Juli",0],
-				["Agustus",0],
-				["September",0],
-				["Oktober",0],
-				["November",0],
-				["Desember",0],
-				];
+					["Januari",0],
+					["Februari",0],
+					["Maret",0],
+					["April",0],
+					["Mei",0],
+					["Juni",0],
+					["Juli",0],
+					["Agustus",0],
+					["September",0],
+					["Oktober",0],
+					["November",0],
+					["Desember",0],
+					];
 
 				for (var i = 0; i < transactionUSDLine.length; i++) {
 					arrValue[transactionUSDLine[i].bulan-1][1] = Number(transactionUSDLine[i].amount);
@@ -349,19 +377,19 @@
 				data.addColumn('string', 'Bulan');
 				data.addColumn('number', 'Rupiah');
 				var arrValue = [ 
-				["Januari",0],
-				["Februari",0],
-				["Maret",0],
-				["April",0],
-				["Mei",0],
-				["Juni",0],
-				["Juli",0],
-				["Agustus",0],
-				["September",0],
-				["Oktober",0],
-				["November",0],
-				["Desember",0],
-				];
+					["Januari",0],
+					["Februari",0],
+					["Maret",0],
+					["April",0],
+					["Mei",0],
+					["Juni",0],
+					["Juli",0],
+					["Agustus",0],
+					["September",0],
+					["Oktober",0],
+					["November",0],
+					["Desember",0],
+					];
 
 				for (var i = 0; i < transactionRupiahLine.length; i++) {
 					arrValue[transactionRupiahLine[i].bulan-1][1] = Number(transactionRupiahLine[i].amount);
@@ -390,19 +418,19 @@
 				data.addColumn('string', 'Bulan');
 				data.addColumn('number', 'Rupiah');
 				var arrValue = [ 
-				["Januari",0],
-				["Februari",0],
-				["Maret",0],
-				["April",0],
-				["Mei",0],
-				["Juni",0],
-				["Juli",0],
-				["Agustus",0],
-				["September",0],
-				["Oktober",0],
-				["November",0],
-				["Desember",0],
-				];
+					["Januari",0],
+					["Februari",0],
+					["Maret",0],
+					["April",0],
+					["Mei",0],
+					["Juni",0],
+					["Juli",0],
+					["Agustus",0],
+					["September",0],
+					["Oktober",0],
+					["November",0],
+					["Desember",0],
+					];
 
 				for (var i = 0; i < purchaseRupiahLine.length; i++) {
 					arrValue[purchaseRupiahLine[i].bulan-1][1] = Number(purchaseRupiahLine[i].amount);

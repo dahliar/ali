@@ -27,8 +27,29 @@ class DashboardController extends Controller
     public function getServerDate(){
         return Carbon::now()->toDateString();
     }
+
+    private function getStockApprovalPenambahan(){
+    }
+
     public function index(Request $request)
     {
+        $tambah = DB::table('stores')
+        ->where('isApproved', '=', '0')
+        ->count();
+        $kurang = DB::table('stock_subtracts')
+        ->where('isApproved', '=', '0')
+        ->count();
+
+        $sailingExport = DB::table('transactions')
+        ->where('status', '=', '4')
+        ->where('jenis', '=', '1')
+        ->count();
+
+        $sailingLocal = DB::table('transactions')
+        ->where('status', '=', '4')
+        ->where('jenis', '=', '2')
+        ->count();
+
         if ($request->has('tahun')){
             $request->validate([
                 'tahun' => 'required|numeric|gt:0',
@@ -217,10 +238,10 @@ class DashboardController extends Controller
             $date->settings(['formatFunction' => 'translatedFormat']);
             $month=$date->format('F');
 
-            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun'));
+            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','sailingExport', 'sailingLocal'));
         }
         else{
-            return view('home');
+            return view('home', compact('tambah', 'kurang', 'sailingExport', 'sailingLocal'));
         }
     }
 
