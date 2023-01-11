@@ -45,19 +45,36 @@ class DashboardController extends Controller
         ->where('jenis', '=', '1')
         ->count();
 
+        $offeringExport = DB::table('transactions')
+        ->where('status', '=', '1')
+        ->where('jenis', '=', '1')
+        ->count();
+
         $sailingLocal = DB::table('transactions')
         ->where('status', '=', '4')
         ->where('jenis', '=', '2')
         ->count();
 
+        $offeringLocal = DB::table('transactions')
+        ->where('status', '=', '1')
+        ->where('jenis', '=', '2')
+        ->count();
+        
+        $transactions = [
+            'sailingExport' => $sailingExport, 
+            'offeringExport' => $offeringExport, 
+            'sailingLocal' => $sailingLocal, 
+            'offeringLocal' => $offeringLocal
+        ];
+
         $totalSailing = DB::table('detail_transactions as dt')
-            ->select(
-                DB::raw('sum(dt.amount*weightbase) as amount')
-            )
-            ->join('items as i', 'dt.itemId', '=', 'i.id')
-            ->join('transactions as t','dt.transactionId', '=', 't.id')
-            ->where('t.status','=',4)
-            ->first()->amount;
+        ->select(
+            DB::raw('sum(dt.amount*weightbase) as amount')
+        )
+        ->join('items as i', 'dt.itemId', '=', 'i.id')
+        ->join('transactions as t','dt.transactionId', '=', 't.id')
+        ->where('t.status','=',4)
+        ->first()->amount;
 
         $totalStock = DB::table('items as i')
         ->select(
@@ -254,10 +271,10 @@ class DashboardController extends Controller
             $date->settings(['formatFunction' => 'translatedFormat']);
             $month=$date->format('F');
 
-            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','sailingExport', 'sailingLocal', 'totalStock', 'totalSailing'));
+            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','transactions', 'totalStock', 'totalSailing'));
         }
         else{
-            return view('home', compact('tambah', 'kurang', 'sailingExport', 'sailingLocal', 'totalStock', 'totalSailing'));
+            return view('home', compact('tambah', 'kurang', 'transactions', 'totalStock', 'totalSailing'));
         }
     }
 

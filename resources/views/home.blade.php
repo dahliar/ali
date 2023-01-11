@@ -43,12 +43,50 @@
 								<td style="text-align: right;"><b>{{$kurang}} inputan</b></td>
 							</tr>
 							<tr>
-								<td class="align-middle"><b>Transaksi Export dalam perjalanan (unfinished)</b></td>
-								<td style="text-align: right;"><b>{{$sailingExport}} Transaksi</b></td>
+								<td class="align-middle"><b>Transaksi Export</b></td>
+								<td>
+									<div class="row">
+										<div class="col-md-4 text-left">
+											Offering 
+										</div>
+										<div class="col-md-1">:</div>
+										<div class="col-md-6 text-end">
+											{{$transactions['offeringExport']}} Transaksi
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4 text-left">
+											Sailing 
+										</div>
+										<div class="col-md-1">:</div>
+										<div class="col-md-6 text-end">
+											{{$transactions['sailingExport']}} Transaksi
+										</div>
+									</div>
+								</td>
 							</tr>
 							<tr>
-								<td class="align-middle"><b>Transaksi Lokal dalam perjalanan (unfinished)</b></td>
-								<td style="text-align: right;"><b>{{$sailingLocal}} Transaksi</b></td>
+								<td class="align-middle"><b>Transaksi Lokal</b></td>
+								<td>
+									<div class="row">
+										<div class="col-md-4 text-left">
+											Offering 
+										</div>
+										<div class="col-md-1">:</div>
+										<div class="col-md-6 text-end">
+											{{$transactions['offeringLocal']}} Transaksi
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-4 text-left">
+											Sailing 
+										</div>
+										<div class="col-md-1">:</div>
+										<div class="col-md-6 text-end">
+											{{$transactions['sailingLocal']}} Transaksi
+										</div>
+									</div>
+								</td>
 							</tr>
 							<tr>
 								<td class="align-middle"><b>Total Stock Packed</b></td>
