@@ -50,6 +50,22 @@ class DashboardController extends Controller
         ->where('jenis', '=', '2')
         ->count();
 
+        $totalSailing = DB::table('detail_transactions as dt')
+            ->select(
+                DB::raw('sum(dt.amount*weightbase) as amount')
+            )
+            ->join('items as i', 'dt.itemId', '=', 'i.id')
+            ->join('transactions as t','dt.transactionId', '=', 't.id')
+            ->where('t.status','=',4)
+            ->first()->amount;
+
+        $totalStock = DB::table('items as i')
+        ->select(
+            DB::raw('sum(i.amount*weightbase) as jumlahPacked'),
+            DB::raw('sum(amountUnpacked) as jumlahUnpacked')            
+        )
+        ->where('i.isActive','=', 1)->first();
+
         if ($request->has('tahun')){
             $request->validate([
                 'tahun' => 'required|numeric|gt:0',
@@ -238,10 +254,10 @@ class DashboardController extends Controller
             $date->settings(['formatFunction' => 'translatedFormat']);
             $month=$date->format('F');
 
-            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','sailingExport', 'sailingLocal'));
+            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','sailingExport', 'sailingLocal', 'totalStock', 'totalSailing'));
         }
         else{
-            return view('home', compact('tambah', 'kurang', 'sailingExport', 'sailingLocal'));
+            return view('home', compact('tambah', 'kurang', 'sailingExport', 'sailingLocal', 'totalStock', 'totalSailing'));
         }
     }
 
