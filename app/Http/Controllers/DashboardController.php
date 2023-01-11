@@ -59,12 +59,17 @@ class DashboardController extends Controller
         ->where('status', '=', '1')
         ->where('jenis', '=', '2')
         ->count();
+
+        $pembelian = DB::table('purchases')
+        ->where('status', '=', '1')
+        ->count();
         
         $transactions = [
             'sailingExport' => $sailingExport, 
             'offeringExport' => $offeringExport, 
             'sailingLocal' => $sailingLocal, 
-            'offeringLocal' => $offeringLocal
+            'offeringLocal' => $offeringLocal,
+            'pembelian' => $pembelian
         ];
 
         $totalSailing = DB::table('detail_transactions as dt')

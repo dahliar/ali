@@ -43,7 +43,7 @@
 								<td style="text-align: right;"><b>{{$kurang}} inputan</b></td>
 							</tr>
 							<tr>
-								<td class="align-middle"><b>Transaksi Export</b></td>
+								<td class="align-middle"><b>Transaksi Penjualan Export</b></td>
 								<td>
 									<div class="row">
 										<div class="col-md-4 text-left">
@@ -66,7 +66,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td class="align-middle"><b>Transaksi Lokal</b></td>
+								<td class="align-middle"><b>Transaksi Penjualan Lokal</b></td>
 								<td>
 									<div class="row">
 										<div class="col-md-4 text-left">
@@ -84,6 +84,20 @@
 										<div class="col-md-1">:</div>
 										<div class="col-md-6 text-end">
 											{{$transactions['sailingLocal']}} Transaksi
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="align-middle"><b>Transaksi Pembelian</b></td>
+								<td>
+									<div class="row">
+										<div class="col-md-4 text-left">
+											On Progress 
+										</div>
+										<div class="col-md-1">:</div>
+										<div class="col-md-6 text-end">
+											{{$transactions['pembelian']}} Transaksi
 										</div>
 									</div>
 								</td>

@@ -84,14 +84,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="d-grid gap-1">
+                        <input id="itemId" name="itemId" type="hidden" class="form-control text-md-right" value="{{$item->id}}" readonly>
                         <div class="row form-group">
                             <div class="col-md-2"></div>
                             <div class="col-md-3 text-md-right">
                                 <span class="label">Item Name</span>
                             </div>
                             <div class="col-md-5">
-                                <input id="name" name="name" type="text" class="form-control text-md-right" value="{{$item->itemName}}" readonly>
-                                <input id="itemId" name="itemId" type="text" class="form-control text-md-right" value="{{$item->id}}" readonly>
+                                <input id="name" name="name" type="text" class="form-control text-md-right" value="{{old('name', $item->itemName)}}">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -100,7 +100,7 @@
                                 <span class="label">Species</span>
                             </div>
                             <div class="col-md-5">
-                                <input id="checker" name="checker" type="text" class="form-control text-md-right" value="{{$item->speciesName}}" readonly>
+                                <input id="checker" name="checker" type="text" class="form-control text-md-right" value="{{$item->speciesName}} - {{$item->speciesNameBahasa}}" readonly>
                             </div>
                         </div>
                         <div class="row form-group">

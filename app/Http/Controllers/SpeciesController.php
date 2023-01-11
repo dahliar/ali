@@ -220,24 +220,20 @@ class SpeciesController extends Controller
     {   
         $validated = $request->validate(
             [
-                'shape' => 'required|gt:0',
+                'shape'     => 'required|gt:0',
+                'name'  => ['required', 'string', 'max:255', 'unique:items'],
             ],[
                 'shape.*' => 'Pilih bentuk olahan'
             ]
         );
 
-
         DB::table('items')
         ->where('id', $request->itemId)
-        ->update(['isActive' => $request->isActive, 'shapeId' => $request->shape]);
-
-
-        /*
-        DB::table('items')
-        ->where('id', $request->itemId)
-        ->update(['isActive' => $request->isActive]);
-        */
-        
+        ->update([
+            'isActive' => $request->isActive, 
+            'shapeId' => $request->shape,
+            'name' => $request->name
+        ]);        
         return redirect()->back()->with('status','Update berhasil dilakukan.');
     }
 
