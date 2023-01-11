@@ -62,20 +62,20 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "35%", "targets":  [0], "className": "text-left" },
-            {   "width": "25%", "targets":  [1], "className": "text-left" },
-            {   "width": "10%", "targets": [2], "className": "text-left" },
-            {   "width": "10%", "targets": [3], "className": "text-left" },
-            {   "width": "20%", "targets":  [4], "className": "text-left" }
-            ], 
+                {   "width": "35%", "targets":  [0], "className": "text-left" },
+                {   "width": "25%", "targets":  [1], "className": "text-left" },
+                {   "width": "10%", "targets": [2], "className": "text-left" },
+                {   "width": "10%", "targets": [3], "className": "text-left" },
+                {   "width": "20%", "targets":  [4], "className": "text-left" }
+                ], 
 
             columns: [
-            {data: 'name', name: 'name'},
-            {data: 'invnum', name: 'invnum'},
-            {data: 'td', name: 'td'},
-            {data: 'status', name: 'status'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'name', name: 'name'},
+                {data: 'invnum', name: 'invnum'},
+                {data: 'td', name: 'td'},
+                {data: 'status', name: 'status'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 </script>
@@ -124,9 +124,10 @@
                 <div class="col-md-2">
                     <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
                         <option value="-1" selected>--Semua Status--</option>
-                        <option value="1" @if(old('statusTransaksi') == 1) selected @endif>On Progress</option>
-                        <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Finished</option>
-                        <option value="3" @if(old('statusTransaksi') == 2) selected @endif>Canceled</option>
+                        <option value="1" @if(old('statusTransaksi') == 1) selected @endif>Trasaksi baru</option>
+                        <option value="4" @if(old('statusTransaksi') == 4) selected @endif>Dalam perjalanan</option>
+                        <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Selesai</option>
+                        <option value="3" @if(old('statusTransaksi') == 3) selected @endif>Batal</option>
                     </select>
                 </div>
                 <div class="col-md-2">
