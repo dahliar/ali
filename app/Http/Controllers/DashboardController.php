@@ -141,7 +141,7 @@ class DashboardController extends Controller
             $stocks = DB::table('items as i')
             ->select(
                 'sp.nameBahasa as name',
-                DB::raw('sum(i.amount) as jumlahSpecies'),
+                DB::raw('sum(i.amount * i.weightbase) as jumlahSpecies'),
                 DB::raw('"blue" as kedua')
             )
             ->join('sizes as s', 's.id', '=', 'i.sizeId')
