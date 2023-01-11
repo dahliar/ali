@@ -40,9 +40,11 @@ class Item extends Model
         ->join('freezings as f', 'i.freezingId', '=', 'f.id')
         ->where('i.isActive','=', 1)
         ->groupBy('i.name')
-        ->orderBy('sp.name', 'desc')
+        ->orderBy('sp.nameBahasa', 'asc')
+        ->orderBy('sh.name', 'asc')
         ->orderBy('g.name', 'asc')
-        ->orderBy('s.name', 'asc');
+        ->orderBy('s.name', 'asc')
+        ->orderBy('f.name', 'asc');
 
 
         if ($request->speciesId>0){
@@ -83,7 +85,14 @@ class Item extends Model
             return $html;
         })
         ->addColumn('itemName', function ($row) {
-            $name = $row->speciesName." ".$row->gname. " ".$row->shname. " ".$row->sname. " ".$row->fname." ".$row->weightbase." Kg/".$row->packingShortname." - ".$row->iname;
+            $name = $row->speciesName." ".
+            $row->shname." ".
+            $row->gname. " ".
+            $row->sname. " ".
+            $row->fname." ".
+            $row->weightbase." Kg/".
+            $row->packingShortname." - ".
+            $row->iname;
             return $name;
         })
         ->addColumn('loading', function ($row) {
