@@ -33,34 +33,34 @@
 					<th class="align-middle" style="width: 40%;">No</td>
 						<th class="align-middle" style="width: 20%;text-align: center;">Jenis</td>
 						</thead>
-						<tbody style="font-size: 14px;">
+						<tbody style="font-size: 12px;">
 							<tr>
 								<td class="align-middle"><b>Penambahan Stock Belum Approve</b></td>
-								<td style="text-align: right;"><h3>{{$tambah}} inputan</h3></td>
+								<td style="text-align: right;"><b>{{$tambah}} inputan</b></td>
 							</tr>
 							<tr>
 								<td class="align-middle"><b>Pengurangan Stock Belum Approve</b></td>
-								<td style="text-align: right;"><h3>{{$kurang}} inputan</h3></td>
+								<td style="text-align: right;"><b>{{$kurang}} inputan</b></td>
 							</tr>
 							<tr>
 								<td class="align-middle"><b>Transaksi Export dalam perjalanan (unfinished)</b></td>
-								<td style="text-align: right;"><h3>{{$sailingExport}} Transaksi</h3></td>
+								<td style="text-align: right;"><b>{{$sailingExport}} Transaksi</b></td>
 							</tr>
 							<tr>
 								<td class="align-middle"><b>Transaksi Lokal dalam perjalanan (unfinished)</b></td>
-								<td style="text-align: right;"><h3>{{$sailingLocal}} Transaksi</h3></td>
+								<td style="text-align: right;"><b>{{$sailingLocal}} Transaksi</b></td>
 							</tr>
 							<tr>
 								<td class="align-middle"><b>Total Stock Packed</b></td>
-								<td style="text-align: right;"><h3>{{number_format($totalStock->jumlahPacked, 2, ',', '.').' Kg'}}</h3></td>
+								<td style="text-align: right;"><b>{{number_format($totalStock->jumlahPacked, 2, ',', '.').' Kg'}}</b></td>
 							</tr>
 							<tr>
 								<td class="align-middle"><b>Total Stock Unpacked</b></td>
-								<td style="text-align: right;"><h3>{{number_format($totalStock->jumlahUnpacked, 2, ',', '.').' Kg'}}</h3></td>
+								<td style="text-align: right;"><b>{{number_format($totalStock->jumlahUnpacked, 2, ',', '.').' Kg'}}</b></td>
 							</tr>
 							<tr>
 								<td class="align-middle"><b>Total Stock Sailing</b></td>
-								<td style="text-align: right;"><h3>{{number_format($totalSailing, 2, ',', '.').' Kg'}}</h3></td>
+								<td style="text-align: right;"><b>{{number_format($totalSailing, 2, ',', '.').' Kg'}}</b></td>
 							</tr>
 						</tbody>
 					</table> 
