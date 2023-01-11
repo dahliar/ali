@@ -13,8 +13,6 @@
 @section('content')
 <script type="text/javascript"> 
     function editChecker(){
-        var $name = document.getElementById("name").value;
-
         var e = document.getElementById("size");
         var $size = e.options[e.selectedIndex].value;
 
@@ -31,15 +29,16 @@
         var $freezing = e.options[e.selectedIndex].value;
 
         var $weightbase = document.getElementById("weightbase").value;
+        //if (  ($size!=-1) && ($shape!=-1) && ($grade!=-1) && ($packing!=-1) && ($freezing!=-1) && ($weightbase)  && ($name) ) {
 
-        if (  ($size!=-1) && ($shape!=-1) && ($grade!=-1) && ($packing!=-1) && ($freezing!=-1) && ($weightbase)  && ($name) ) {
+        if (  ($size!=-1) && ($shape!=-1) && ($grade!=-1) && ($packing!=-1) && ($freezing!=-1) && ($weightbase) ) {
             $.ajax({
                 url: '{{ url("getIsItemAlreadyExist") }}',
                 type: "POST",
                 data: {
                     "_token":"{{ csrf_token() }}",
                     shape: $shape,
-                    name: $name,
+                    //name: $name,
                     size: $size,
                     grade: $grade,
                     packing: $packing,
@@ -127,8 +126,8 @@
                                 <span class="label">Species*</span>
                             </div>
                             <div class="col-md-5">
-                                <input id="speciesId" name="speciesId" type="hidden" class="form-control text-md-end" value="{{$species->id}}" readonly>
-                                <input id="speciesName" name="speciesName" type="text" class="form-control text-md-end" value="{{$species->name}}" readonly>
+                                <input id="speciesId" name="speciesId" type="hidden" class="form-control" value="{{$species->id}}" readonly>
+                                <input id="speciesName" name="speciesName" type="text" class="form-control" value="{{$species->nameBahasa}}" readonly>
                             </div>
                         </div>
                         <div class="row form-group">
@@ -221,15 +220,17 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-1"></div>
-                            <div class="col-md-3 text-md-end">
-                                <span class="label">Item Name*</span>
+                            <!--
+                            <div class="row form-group">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-3 text-md-end">
+                                    <span class="label">Item Name*</span>
+                                </div>
+                                <div class="col-md-5">
+                                    <input onchange="editChecker()" id="name" name="name" type="text" class="form-control text-md-end" value="{{old('name')}}" placeholder="Nama harus unik untuk species & size tersebut">
+                                </div>
                             </div>
-                            <div class="col-md-5">
-                                <input onchange="editChecker()" id="name" name="name" type="text" class="form-control text-md-end" value="{{old('name')}}" placeholder="Nama harus unik untuk species & size tersebut">
-                            </div>
-                        </div>
+                        -->
                         <div class="row form-group">
                             <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">

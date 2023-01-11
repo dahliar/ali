@@ -86,13 +86,12 @@ class Item extends Model
         })
         ->addColumn('itemName', function ($row) {
             $name = $row->speciesName." ".
-            $row->shname." ".
+            $row->shname." Grade ".
             $row->gname. " ".
-            $row->sname. " ".
-            $row->fname." ".
+            $row->fname." Size ".
+            $row->sname. " Packing ".
             $row->weightbase." Kg/".
-            $row->packingShortname." - ".
-            $row->iname;
+            $row->packingShortname;
             return $name;
         })
         ->addColumn('loading', function ($row) {
@@ -202,43 +201,9 @@ class Item extends Model
     }
 
     public function getItemForSelectOption($transactionId, $purchaseId, $speciesId){
-        /*
-        $query = DB::table('items as i')
-        ->select(
-            'i.id as itemId', 
-            'i.name as itemName', 
-            'sp.nameBahasa as speciesName', 
-            'sp.name as speciesNameEng', 
-            's.name as sizeName',
-            'sh.name as shapeName',
-            'p.shortname as pshortname',
-            'g.name as gradeName',
-            'p.name as packingName',
-            'f.name as freezingName',
-            'i.amount as amount',
-            'i.weightbase as wb'
-        )
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        ->where('sp.id','=', $speciesId)
-        ->where('sp.isActive','=', 1)
-        ->where('sh.isActive','=', 1)
-        ->where('s.isActive','=', 1)
-        ->where('g.isActive','=', 1)
-        ->where('f.isActive','=', 1)
-        ->where('p.isActive','=', 1)
-        ->where('i.isActive','=', 1)
-        ->orderBy('g.name', 'desc')
-        ->orderBy('s.name', 'asc')
-        ->orderBy('f.name');
-        */
-
         $query = DB::table('view_item_details as vid')
         ->where('vid.speciesId','=', $speciesId)
+        ->orderBy('vid.shapesName', 'asc')
         ->orderBy('vid.gradeName', 'asc')
         ->orderBy('vid.sizeName', 'asc')
         ->orderBy('vid.freezingName');

@@ -103,16 +103,17 @@ class Species extends Model
         $query = DB::table('items as i')
         ->select(
             'i.id as id',
+            'sp.nameBahasa as species',
             DB::raw('concat(
                 sp.nameBahasa," ",
-                sh.name," ",
+                sh.name," Grade ",
                 g.name," ",
-                si.name," ",
+                fr.name," Size ",
+                si.name," Packing ",
                 weightbase," Kg/", p.shortname
-            ) as jenis'), 
-            DB::raw('concat(fr.name, " ", i.weightbase, " Kg/", p.shortname) as packing'), 
-            'i.name as itemName',
-            'i.amount as amount', 
+            ) as itemName'),
+            DB::raw('concat(i.amount," ", p.shortname, " * ", i.weightbase, " Kg") as packing'), 
+            DB::raw('concat((i.amount * i.weightbase), " Kg") as amount'), 
             'i.imageurl as url', 
             DB::raw('(CASE WHEN i.isActive=0 THEN "Tidak" WHEN i.isActive="1" THEN "Ya" END) AS isActive'),
         )

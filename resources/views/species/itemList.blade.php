@@ -35,20 +35,18 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "30%",  "targets": [1], "className": "text-left" },
-            {   "width": "10%", "targets":  [2], "className": "text-end" },
-            {   "width": "15%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "5%", "targets":  [5], "className": "text-center" },
-            {   "width": "10%", "targets":  [6], "className": "text-center" }
+            {   "width": "40%", "targets":  [1], "className": "text-left" },
+            {   "width": "15%", "targets":  [2], "className": "text-end" },
+            {   "width": "15%", "targets":  [3], "className": "text-end" },
+            {   "width": "15%", "targets":  [4], "className": "text-center" },
+            {   "width": "10%", "targets":  [5], "className": "text-center" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'jenis', name: 'jenis'},
-            {data: 'amount', name: 'amount'},
-            {data: 'packing', name: 'packing'},
             {data: 'itemName', name: 'itemName'},
+            {data: 'packing', name: 'packing'},
+            {data: 'amount', name: 'amount'},
             {data: 'isActive', name: 'isActive'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -106,10 +104,9 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Spesies</th>
-                                        <th>Jumlah</th>
-                                        <th>Packing</th>
                                         <th>Nama</th>
+                                        <th>Jumlah</th>
+                                        <th>Berat</th>
                                         <th>Aktif</th>
                                         <th>Act</th>
                                     </tr>

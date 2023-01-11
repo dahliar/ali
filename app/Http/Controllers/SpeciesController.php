@@ -105,7 +105,7 @@ class SpeciesController extends Controller
         $freezings=Freezing::where('isActive', 1)->get();
         $sizes=DB::table('sizes')
         ->where('isActive', 1)
-        ->where('speciesId', $speciesId)
+        ->where('speciesId', $speciesId)->orderBy('name')
         ->get();
         return view('species.itemCreate', compact('shapes', 'species', 'sizes','packings','freezings','grades'));
     }
@@ -143,7 +143,7 @@ class SpeciesController extends Controller
     }
     public function getIsItemAlreadyExist(Request $request){
         $query = DB::table('items')
-        ->where("name", $request->name)
+        //->where("name", $request->name)
         ->where("shapeId", $request->shape)
         ->where("sizeId", $request->size)
         ->where("gradeId", $request->grade)
@@ -164,7 +164,7 @@ class SpeciesController extends Controller
     {
         $validated = $request->validate(
             [
-                'name' => 'required|unique:items',
+                //'name' => 'required|unique:items',
                 'shape' => 'required|gt:0',
                 'grade' => 'required|gt:0',
                 'packing' => 'required|gt:0',
@@ -172,8 +172,6 @@ class SpeciesController extends Controller
                 'baseprice' => 'required|numeric|gt:0',
                 'weightbase' => 'required|numeric|gt:0',
                 'amount' => 'required|numeric|gte:0',
-            ],[
-                'name.unique' => 'Nama harus unik, ":input" sudah digunakan'
             ]
         );
 
@@ -181,13 +179,12 @@ class SpeciesController extends Controller
         $filename="";
         if($request->hasFile('imageurl')){
             $file = $request->imageurl;
-            $filename = $request->name.$request->shape.$request->size.$request->grade.$request->packing.$request->freezing.$request->weightbase.".".$file->getClientOriginalExtension();
+            $filename = $request->shape.$request->size.$request->grade.$request->packing.$request->freezing.$request->weightbase.".".$file->getClientOriginalExtension();
 
             $file->move(base_path("/public/images/items/"), $filename);
         }
 
         $data = [
-            'name' => $request->name,
             'sizeId' => $request->size,
             'shapeId' => $request->shape,
             'gradeId' =>  $request->grade,

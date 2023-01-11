@@ -742,7 +742,14 @@ class StoreController extends Controller
             DB::RAW('(i.amount * i.weightbase) as amount'),
             'amountUnpacked as jumlahUnpacked',
             'p.shortname as packingShortname',
-            DB::raw('concat(sp.nameBahasa," ",g.name," ",sh.name," ",s.name, " ",f.name," ",weightbase," Kg/",p.shortname," - ",i.name) as itemName'),
+            DB::raw('concat(
+                sp.nameBahasa," ",
+                sh.name," Grade ",
+                g.name," ",
+                f.name," Size ",
+                s.name," Packing ",
+                weightbase," Kg/", p.shortname
+            ) as itemName'),
             DB::raw('(select sum(dt.amount) from detail_transactions as dt join transactions t on dt.transactionId=t.id where t.status=4 and dt.itemId=i.id) as jumlahOnLoading'),
             'i.name as iname',
             's.name as sname',
@@ -804,7 +811,14 @@ class StoreController extends Controller
             'sh.jenis as jenis',
             'sh.userId as userPeubah',
             'sh.informasiTransaksi as informasiTransaksi',
-            DB::raw('concat(sp.nameBahasa," ",g.name," ",b.name," ",s.name, " ",f.name," ",weightbase," ",p.shortname," - ",i.name) as itemName'),
+            DB::raw('concat(
+                sp.nameBahasa," ",
+                b.name," Grade ",
+                g.name," ",
+                f.name," Size ",
+                s.name," Packing ",
+                weightbase," Kg/", p.shortname
+            ) as itemName'),
             'sh.amount as realAmount',
             DB::RAW('concat(sh.amount, " * ", i.weightbase, " Kg/", p.shortname) as amount'),
             DB::raw('concat(((sh.amount+sh.prevAmount)*i.weightbase)," Kg") as afterAmount'),
