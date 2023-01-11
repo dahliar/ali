@@ -470,10 +470,12 @@
 				<div class="card card-body">
 					<div class="row">
 						<span class="white-text"><h4>Stok Barang</h4></span>
-						<div class="col-md-8">
+						<div class="col-md-12">
 							<div id="chartStock"></div>
 						</div>
-						<div class="col-md-4">
+					</div>
+					<div class="row">
+						<div class="col-md-12">
 							<br>
 							<br>
 							<h5><b>Jumlah minimal barang produksi</b></h5>
