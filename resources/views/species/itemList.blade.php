@@ -18,7 +18,7 @@
     });
 
     function editSpeciesItem(itemId){
-        window.open(('{{ url("editSpeciesItem") }}' + "/"+ itemId), '_self');
+        window.open(('{{ url("editSpeciesItem") }}' + "/"+ itemId), '_blank');
     }
     function tambahItem(speciesId){
         window.open(('{{ url("addSpeciesItem") }}' + "/"+ speciesId), '_self');
