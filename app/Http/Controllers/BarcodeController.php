@@ -113,6 +113,7 @@ class BarcodeController extends Controller
             'vid.nameBahasa as itemName'
         )
         ->where('vid.speciesId','=', $speciesId)
+        ->orderBy('vid.shapesName', 'asc')
         ->orderBy('vid.gradeName', 'asc')
         ->orderBy('vid.sizeName', 'asc')
         ->orderBy('vid.freezingName')
