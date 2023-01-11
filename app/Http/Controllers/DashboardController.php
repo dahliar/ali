@@ -148,7 +148,7 @@ class DashboardController extends Controller
             ->join('species as sp', 'sp.id', '=', 's.speciesId')
             ->where('i.isActive', '=', '1')
             ->groupBy('sp.id')
-            ->orderBy('sp.name')
+            ->orderBy('sp.nameBahasa')
             ->get();
 
 
