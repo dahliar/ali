@@ -632,8 +632,8 @@ class DashboardController extends Controller
             ->where('p.status', '=', 2)
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
-            ->orderBy('p.purchasingNum', 'asc')
-            ->orderBy('p.purchaseDate');
+            ->orderBy('p.purchaseDate')
+            ->orderBy('p.purchasingNum', 'asc');
         } else if($request->opsi == '2'){
             $payroll = $payroll->select(
                 DB::raw('c.name as name'),
@@ -651,6 +651,7 @@ class DashboardController extends Controller
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
             ->groupBy("c.id")
+            ->orderBy('p.purchaseDate')
             ->orderBy('c.name');
         }
         $payroll = $payroll->get();
@@ -699,8 +700,8 @@ class DashboardController extends Controller
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
             ->where('p.status', '=', 2)
-            ->orderBy('p.purchasingNum', 'asc')
-            ->orderBy('p.purchaseDate');
+            ->orderBy('p.purchaseDate')
+            ->orderBy('p.purchasingNum', 'asc');
         } else if($request->opsi == '2'){
             $payroll = $payroll->select(
                 DB::raw('c.name as name'),
@@ -718,6 +719,7 @@ class DashboardController extends Controller
             ->whereYear('p.purchaseDate', $request->tahun)
             ->where('p.status', '=', 2)
             ->groupBy("c.id")
+            ->orderBy('p.purchaseDate')
             ->orderBy('c.name');
         }
         $payroll = $payroll->get();
