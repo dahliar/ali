@@ -217,7 +217,7 @@ class SpeciesController extends Controller
         $validated = $request->validate(
             [
                 'shape'     => 'required|gt:0',
-                'name'      => ['required', 'string', 'max:255', 'unique:items'],
+                'name'      => ['required', 'string', 'max:255', 'unique:items,name,'.$request->itemId],
             ],[
                 'shape.*'   => 'Pilih bentuk olahan'
             ]
