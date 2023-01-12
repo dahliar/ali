@@ -723,8 +723,6 @@ class DashboardController extends Controller
             ->orderBy('c.name');
         }
         $payroll = $payroll->get();
-
-
         $monthYear = $bulan.' '.$request->tahun;
         $opsi = $request->opsi;
 
