@@ -82,7 +82,7 @@ class TransactionController extends Controller
     {
         $companies = Company::all();
         $banks = Bank::all();
-        $liners = Liner::all();
+        $liners = Liner::orderBy('name', 'ASC')->get();
         $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         $countryRegister = Countries::where('isActive',1)->get();
 
@@ -149,6 +149,8 @@ class TransactionController extends Controller
                 'undername.gt'=>'Pilih status jenis undername'
             ]
         );
+
+
 
 
         //21 validasi inputan wajib
@@ -291,6 +293,8 @@ class TransactionController extends Controller
             ]
         );
 
+        //dd($request->liner);
+
         $data = [
             'userId' => auth()->user()->id,
             'jenis' => 1,
@@ -306,11 +310,7 @@ class TransactionController extends Controller
             'destinationport' =>  $request->destinationPort,
             'orderType' => $request->orderType,
             'countryId' => $request->countryId,
-
-
-
             'packer' =>  $request->packer,
-
             'containerType' =>  $request->containerType,
             'containerParty' =>  $request->containerParty,
 
@@ -321,7 +321,6 @@ class TransactionController extends Controller
 
             'linerId' => $request->liner,
             'bl' => $request->bl,
-
             'transactionDate' => $request->transactionDate,
             'departureDate' =>  $request->departureDate,
             'loadingDate' =>  $request->loadingDate,

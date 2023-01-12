@@ -48,7 +48,23 @@ weightbase," Kg/", p.shortname
 ) as itemName')
 
 
-select `i`.`id` AS `itemId`,`i`.`name` AS `itemName`,`s`.`id` AS `sizeId`,`s`.`name` AS `sizeName`,`p`.`id` AS `packingId`,`p`.`name` AS `packingName`,`p`.`shortname` AS `pshortname`,`f`.`id` AS `freezingId`,`f`.`name` AS `freezingName`,`g`.`id` AS `gradeId`,`g`.`name` AS `gradeName`,`sp`.`id` AS `speciesId`,`sp`.`name` AS `speciesName`,`sh`.`id` AS `shapesId`,`sh`.`name` AS `shapesName`,concat(convert(`sp`.`name` using utf8mb4),' ',convert(`sh`.`name` using utf8mb4),' Grade ',convert(`g`.`name` using utf8mb4),' ',`f`.`name`,' Size ',convert(`s`.`name` using utf8mb4),' Packing ',`i`.`weightbase`,' Kg per',convert(`p`.`shortname` using utf8mb4)) AS `name`,concat(convert(`sp`.`nameBahasa` using utf8mb4),' ',convert(`sh`.`name` using utf8mb4),' Grade ',convert(`g`.`name` using utf8mb4),' ',`f`.`name`,' Size ',convert(`s`.`name` using utf8mb4),' Packing ',`i`.`weightbase`,' Kg per ',convert(`p`.`shortname` using utf8mb4)) AS `nameBahasa`,concat(`sp`.`nameBahasa`,' ',`g`.`name`,' ',`s`.`name`) AS `nameForPurchaseInvoice`,round(`i`.`amount`,2) AS `amount`,round(`i`.`amountUnpacked`,2) AS `amountUnpacked`,`i`.`baseprice` AS `baseprice`,`i`.`weightbase` AS `weightbase` from ((((((`alicore`.`items` `i` join `alicore`.`sizes` `s` on((`i`.`sizeId` = `s`.`id`))) join `alicore`.`packings` `p` on((`i`.`packingId` = `p`.`id`))) join `alicore`.`freezings` `f` on((`i`.`freezingId` = `f`.`id`))) join `alicore`.`grades` `g` on((`i`.`gradeId` = `g`.`id`))) join `alicore`.`species` `sp` on((`s`.`speciesId` = `sp`.`id`))) join `alicore`.`shapes` `sh` on((`i`.`shapeId` = `sh`.`id`))) where ((`i`.`isActive` = 1) and (`p`.`isActive` = 1) and (`f`.`isActive` = 1) and (`g`.`isActive` = 1) and (`sp`.`isActive` = 1) and (`sh`.`isActive` = 1)) order by `sp`.`name`,`sh`.`name`,`g`.`name`,`s`.`name`,`i`.`weightbase`,`f`.`name`
+select `i`.`id` AS `itemId`,`i`.`name` AS `itemName`,`s`.`id` AS `sizeId`,`s`.`name` AS `sizeName`,`p`.`id` AS `packingId`,`p`.`name` AS `packingName`,`p`.`shortname` AS `pshortname`,`f`.`id` AS `freezingId`,`f`.`name` AS `freezingName`,`g`.`id` AS `gradeId`,`g`.`name` AS `gradeName`,`sp`.`id` AS `speciesId`,`sp`.`name` AS `speciesName`,`sh`.`id` AS `shapesId`,`sh`.`name` AS `shapesName`,
+concat(
+`sp`.`name`,' ',
+`sh`.`name`,' Grade ',
+`g`.`name`,' ',`f`.`name`,' Size ',
+`s`.`name`,' Packing ',`i`.`weightbase`,' Kg per',
+`p`.`shortname`) AS `name`,
+concat(
+`sp`.`nameBahasa`,' ',
+`sh`.`name`,' Grade ',
+`g`.`name`,' ',`f`.`name`,' Size ',
+`s`.`name`,' Packing ',`i`.`weightbase`,' Kg per ',
+`p`.`shortname`) AS `nameBahasa`,
+concat(`sp`.`nameBahasa`,' ',`g`.`name`,' ',`s`.`name`) AS `nameForPurchaseInvoice`,round(`i`.`amount`,2) AS `amount`,round(`i`.`amountUnpacked`,2) AS `amountUnpacked`,`i`.`baseprice` AS `baseprice`,`i`.`weightbase` AS `weightbase` from ((((((`items` `i` join `sizes` `s` on((`i`.`sizeId` = `s`.`id`))) join `packings` `p` on((`i`.`packingId` = `p`.`id`))) join `freezings` `f` on((`i`.`freezingId` = `f`.`id`))) join `grades` `g` on((`i`.`gradeId` = `g`.`id`))) join `species` `sp` on((`s`.`speciesId` = `sp`.`id`))) join `shapes` `sh` on((`i`.`shapeId` = `sh`.`id`))) where ((`i`.`isActive` = 1) and (`p`.`isActive` = 1) and (`f`.`isActive` = 1) and (`g`.`isActive` = 1) and (`sp`.`isActive` = 1) and (`sh`.`isActive` = 1)) order by `sp`.`name`,`sh`.`name`,`g`.`name`,`s`.`name`,`i`.`weightbase`,`f`.`name`
+
+
+
 
 
 
