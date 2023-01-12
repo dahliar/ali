@@ -629,6 +629,7 @@ class DashboardController extends Controller
                 )
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
+            ->where('p.status', '=', 2)
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
             ->orderBy('p.purchasingNum', 'asc')
@@ -646,6 +647,7 @@ class DashboardController extends Controller
                 )
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
+            ->where('p.status', '=', 2)
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
             ->groupBy("c.id")
@@ -696,6 +698,7 @@ class DashboardController extends Controller
             ->join('companies as c', 'p.companyId', '=', 'c.id')
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
+            ->where('p.status', '=', 2)
             ->orderBy('p.purchasingNum', 'asc')
             ->orderBy('p.purchaseDate');
         } else if($request->opsi == '2'){
@@ -713,6 +716,7 @@ class DashboardController extends Controller
             ->join('companies as c', 'p.companyId', '=', 'c.id')
             ->whereMonth('p.purchaseDate', $request->bulan)
             ->whereYear('p.purchaseDate', $request->tahun)
+            ->where('p.status', '=', 2)
             ->groupBy("c.id")
             ->orderBy('c.name');
         }

@@ -13,22 +13,33 @@
 @section('content')
 <script type="text/javascript"> 
     function editChecker(){
+        var $speciesName = document.getElementById("speciesName").value;
+
         var e = document.getElementById("size");
         var $size = e.options[e.selectedIndex].value;
+        var $sizeText = e.options[e.selectedIndex].text;
 
         e = document.getElementById("shape");
-        $shape = e.options[e.selectedIndex].value;
+        var $shape = e.options[e.selectedIndex].value;
+        var $shapeText = e.options[e.selectedIndex].text;
 
         e = document.getElementById("grade");
         var $grade = e.options[e.selectedIndex].value;
+        var $gradeText = e.options[e.selectedIndex].text;
 
         e = document.getElementById("packing");
         var $packing = e.options[e.selectedIndex].value;
+        var $packingText = e.options[e.selectedIndex].text;
 
         e = document.getElementById("freezing");
         var $freezing = e.options[e.selectedIndex].value;
+        var $freezingText = e.options[e.selectedIndex].text;
 
         var $weightbase = document.getElementById("weightbase").value;
+
+        $itemName = $speciesName.concat(" ",$shapeText," Grade ",$gradeText," ",$freezingText," Size ",$sizeText," Packing ", $weightbase, " Kg/", $packingText);
+        document.getElementById("name").value = $itemName;
+
         //if (  ($size!=-1) && ($shape!=-1) && ($grade!=-1) && ($packing!=-1) && ($freezing!=-1) && ($weightbase)  && ($name) ) {
 
         if (  ($size!=-1) && ($shape!=-1) && ($grade!=-1) && ($packing!=-1) && ($freezing!=-1) && ($weightbase) ) {
@@ -38,7 +49,6 @@
                 data: {
                     "_token":"{{ csrf_token() }}",
                     shape: $shape,
-                    //name: $name,
                     size: $size,
                     grade: $grade,
                     packing: $packing,
@@ -121,23 +131,21 @@
                 <div class="modal-body">
                     <div class="d-grid gap-1">
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Species*</span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <input id="speciesId" name="speciesId" type="hidden" class="form-control" value="{{$species->id}}" readonly>
                                 <input id="speciesName" name="speciesName" type="text" class="form-control" value="{{$species->nameBahasa}}" readonly>
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Size*</span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <select onchange="editChecker()" class="form-select w-100" id="size" name="size">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="-1"></option>
                                     @foreach ($sizes as $size)
                                     @if ( $size->id == old('size') )
                                     <option value="{{ $size->id }}" selected>{{ $size->name }}</option>
@@ -149,13 +157,12 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Grade*</span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <select onchange="editChecker()" class="form-select w-100" id="grade" name="grade">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="-1"></option>
                                     @foreach ($grades as $grade)
                                     @if ( $grade->id == old('grade') )
                                     <option value="{{ $grade->id }}" selected>{{ $grade->name }}</option>
@@ -167,13 +174,12 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Packing Type*</span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <select onchange="editChecker()" class="form-select w-100" id="packing" name="packing">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="-1"></option>
                                     @foreach ($packings as $packing)
                                     @if ( $packing->id == old('packing') )
                                     <option value="{{ $packing->id }}" selected>{{ $packing->name }}</option>
@@ -185,13 +191,12 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Bentuk Olahan*</span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <select onchange="editChecker()" class="form-select w-100" id="shape" name="shape">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="-1"></option>
                                     @foreach ($shapes as $shape)
                                     @if ( $shape->id == old('shape') )
                                     <option value="{{ $shape->id }}" selected>{{ $shape->name }}</option>
@@ -203,13 +208,12 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Freeze Type*</span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <select onchange="editChecker()" class="form-select w-100" id="freezing" name="freezing">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="-1"></option>
                                     @foreach ($freezings as $freezing)
                                     @if ( $freezing->id == old('freezing') )
                                     <option value="{{ $freezing->id }}" selected>{{ $freezing->name }}</option>
@@ -220,23 +224,11 @@
                                 </select>
                             </div>
                         </div>
-                            <!--
-                            <div class="row form-group">
-                                <div class="col-md-1"></div>
-                                <div class="col-md-3 text-md-end">
-                                    <span class="label">Item Name*</span>
-                                </div>
-                                <div class="col-md-5">
-                                    <input onchange="editChecker()" id="name" name="name" type="text" class="form-control text-md-end" value="{{old('name')}}" placeholder="Nama harus unik untuk species & size tersebut">
-                                </div>
-                            </div>
-                        -->
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Base Price*</span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <div class="input-group">
                                     <span class="input-group-text col-4">Rp</span>
                                     <input id="baseprice" name="baseprice" type="text" class="form-control text-end" value="{{old('baseprice')}}" placeholder="gunakan titik untuk pecahan">
@@ -244,7 +236,6 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Weight Base*</span>
                             </div>
@@ -261,7 +252,6 @@
                         </div>
 
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Initial Amount*</span>
                             </div>
@@ -275,24 +265,30 @@
                                 <span class="label">Jumlah berat barang awal</span>
                             </div>
 
-                        </div>   
+                        </div>  
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
+                            <div class="col-md-3 text-md-end">
+                                <span class="label">Item Name*</span>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="name" name="name" type="text" class="form-control text-md-left" value="{{old('name')}}" readonly>
+                            </div>
+                        </div> 
+                        <div class="row form-group">
                             <div class="col-md-3 text-md-end">
                                 <span class="label">Gambar</span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <div class="input-group">
                                     <input class="form-control" type="file" id="imageurl" name="imageurl">
                                 </div>
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-md-1"></div>
                             <div class="col-md-3 text-md-end">
                                 <span class="label"></span>
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <span id="info" style="color:red" class="col-4"></span>
                             </div>
                         </div>

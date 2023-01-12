@@ -150,7 +150,6 @@ class SpeciesController extends Controller
         ->where("packingId", $request->packing)
         ->where("freezingId", $request->freezing)
         ->where("weightbase", $request->weightbase)
-        ->where("isActive", 1)
         ->count();
 
         if ($query>0){
@@ -164,7 +163,6 @@ class SpeciesController extends Controller
     {
         $validated = $request->validate(
             [
-                //'name' => 'required|unique:items',
                 'shape' => 'required|gt:0',
                 'grade' => 'required|gt:0',
                 'packing' => 'required|gt:0',
@@ -185,6 +183,7 @@ class SpeciesController extends Controller
         }
 
         $data = [
+            'name' => $request->name,
             'sizeId' => $request->size,
             'shapeId' => $request->shape,
             'gradeId' =>  $request->grade,
@@ -218,18 +217,18 @@ class SpeciesController extends Controller
         $validated = $request->validate(
             [
                 'shape'     => 'required|gt:0',
-                'name'  => ['required', 'string', 'max:255', 'unique:items'],
+                'name'      => ['required', 'string', 'max:255', 'unique:items'],
             ],[
-                'shape.*' => 'Pilih bentuk olahan'
+                'shape.*'   => 'Pilih bentuk olahan'
             ]
         );
 
         DB::table('items')
         ->where('id', $request->itemId)
         ->update([
-            'isActive' => $request->isActive, 
-            'shapeId' => $request->shape,
-            'name' => $request->name
+            'isActive'      => $request->isActive, 
+            'shapeId'       => $request->shape,
+            'name'          => $request->name
         ]);        
         return redirect()->back()->with('status','Update berhasil dilakukan.');
     }

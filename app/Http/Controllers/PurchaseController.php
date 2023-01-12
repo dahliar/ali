@@ -104,16 +104,28 @@ class PurchaseController extends Controller
     {
         $request->validate(
             [
-                'company' => 'required|gt:0',
-                'valutaType' => 'required|gt:0',
-                'purchaseDate' => 'required|date|before_or_equal:today',
-                'arrivalDate' => 'required|date|before_or_equal:purchaseDate',
-                'taxPercentage' => 'required|gt:0'
+                'company'       => ['required','gt:0'],
+                'valutaType'    => ['required','gt:0'],
+                'purchaseDate'  => [
+                    'required', 
+                    'date', 
+                    'before_or_equal:today', 
+                    'after:-1 month'
+                ],
+                'arrivalDate'   => [
+                    'required',
+                    'date',
+                    'before_or_equal:purchaseDate',
+                    'after:-1 month'
+                ],
+                'taxPercentage' => ['required','gt:0']
             ],
             [
                 'company.gt'=> 'Pilih salah satu perusahaan',
                 'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
-                'company.gt'=>'Pilih salah satu perusahaan'
+                'company.gt'=>'Pilih salah satu perusahaan',
+                'purchaseDate.after' => 'Maksimal 1 bulan yang lalu',
+                'arrivalDate.after' => 'Maksimal 1 bulan yang lalu'
             ]
         );
 

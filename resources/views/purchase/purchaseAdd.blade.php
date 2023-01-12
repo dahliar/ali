@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
-                                <input type="date" id="arrivalDate" name="arrivalDate" value="{{ old('arrivalDate', date('Y-m-d')) }}" class="form-control text-end">
+                                <input type="date" id="arrivalDate" name="arrivalDate" value="{{ old('arrivalDate', date('Y-m-d')) }}" class="form-control text-end" min="{{ old('arrivalDate', date('Y-m-d', strtotime('-1 month')))}}" max="{{ old('arrivalDate', date('Y-m-d', strtotime('+1 days')))}}">
                             </div>
                         </div>
                     </div>               
@@ -116,7 +116,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
-                                <input type="date" id="purchaseDate" name="purchaseDate" class="form-control text-end" value="{{ old('purchaseDate', date('Y-m-d'))}}" >
+                                <input type="date" id="purchaseDate" name="purchaseDate" class="form-control text-end" value="{{ old('purchaseDate', date('Y-m-d'))}}" min="{{ old('purchaseDate', date('Y-m-d', strtotime('-1 month')))}}" max="{{ old('purchaseDate', date('Y-m-d', strtotime('+1 days')))}}">
                             </div>
                         </div>
                     </div>                
