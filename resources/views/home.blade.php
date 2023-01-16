@@ -51,7 +51,7 @@
 									</div>
 									<div class="col-md-1">:</div>
 									<div class="col-md-7 text-end">
-										{{$transactions['offeringExport']}} Transaksi
+										{{$datas['offeringExport']}} Transaksi
 									</div>
 								</div>
 								<div class="row">
@@ -60,7 +60,7 @@
 									</div>
 									<div class="col-md-1">:</div>
 									<div class="col-md-7 text-end">
-										{{$transactions['sailingExport']}} Transaksi
+										{{$datas['sailingExport']}} Transaksi
 									</div>
 								</div>
 							</td>
@@ -74,7 +74,7 @@
 									</div>
 									<div class="col-md-1">:</div>
 									<div class="col-md-7 text-end">
-										{{$transactions['offeringLocal']}} Transaksi
+										{{$datas['offeringLocal']}} Transaksi
 									</div>
 								</div>
 								<div class="row">
@@ -83,7 +83,7 @@
 									</div>
 									<div class="col-md-1">:</div>
 									<div class="col-md-7 text-end">
-										{{$transactions['sailingLocal']}} Transaksi
+										{{$datas['sailingLocal']}} Transaksi
 									</div>
 								</div>
 							</td>
@@ -97,22 +97,22 @@
 									</div>
 									<div class="col-md-1">:</div>
 									<div class="col-md-7 text-end">
-										{{$transactions['pembelian']}} Transaksi
+										{{$datas['pembelian']}} Transaksi
 									</div>
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<td class="align-middle"><b>Total Stock Packed</b></td>
-							<td style="text-align: right;"><b>{{number_format($totalStock->jumlahPacked, 2, ',', '.').' Kg'}}</b></td>
+							<td style="text-align: right;"><b>{{number_format($datas['jumlahPacked'], 2, ',', '.').' Kg'}}</b></td>
 						</tr>
 						<tr>
 							<td class="align-middle"><b>Total Stock Unpacked</b></td>
-							<td style="text-align: right;"><b>{{number_format($totalStock->jumlahUnpacked, 2, ',', '.').' Kg'}}</b></td>
+							<td style="text-align: right;"><b>{{number_format($datas['jumlahUnpacked'], 2, ',', '.').' Kg'}}</b></td>
 						</tr>
 						<tr>
 							<td class="align-middle"><b>Total Stock Sailing</b></td>
-							<td style="text-align: right;"><b>{{number_format($totalSailing, 2, ',', '.').' Kg'}}</b></td>
+							<td style="text-align: right;"><b>{{number_format($datas['totalSailing'], 2, ',', '.').' Kg'}}</b></td>
 						</tr>
 					</tbody>
 				</table> 

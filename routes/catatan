@@ -68,3 +68,6 @@ concat(`sp`.`nameBahasa`,' ',`g`.`name`,' ',`s`.`name`) AS `nameForPurchaseInvoi
 
 min="{{ old('arrivalDate', date('Y-m-d', strtotime('-1 month')))}}" max="{{ old('arrivalDate', date('Y-m-d', strtotime('+1 days')))}}"
 
+
+
+Information Technology for Management  Digital Strategies for Insight, Action and Sustainable Performance 10th Edition

@@ -36,6 +36,7 @@ class DashboardController extends Controller
         $tambah = DB::table('stores')
         ->where('isApproved', '=', '0')
         ->count();
+
         $kurang = DB::table('stock_subtracts')
         ->where('isApproved', '=', '0')
         ->count();
@@ -64,13 +65,6 @@ class DashboardController extends Controller
         ->where('status', '=', '1')
         ->count();
         
-        $transactions = [
-            'sailingExport' => $sailingExport, 
-            'offeringExport' => $offeringExport, 
-            'sailingLocal' => $sailingLocal, 
-            'offeringLocal' => $offeringLocal,
-            'pembelian' => $pembelian
-        ];
 
         $totalSailing = DB::table('detail_transactions as dt')
         ->select(
@@ -87,6 +81,18 @@ class DashboardController extends Controller
             DB::raw('sum(amountUnpacked) as jumlahUnpacked')            
         )
         ->where('i.isActive','=', 1)->first();
+
+        $datas = [
+            'sailingExport' => $sailingExport, 
+            'offeringExport' => $offeringExport, 
+            'sailingLocal' => $sailingLocal, 
+            'offeringLocal' => $offeringLocal,
+            'pembelian' => $pembelian,
+            'totalSailing' => $totalSailing,
+            'jumlahPacked' => $totalStock->jumlahPacked,
+            'jumlahUnpacked' => $totalStock->jumlahUnpacked
+        ];
+
 
         if ($request->has('tahun')){
             $request->validate([
@@ -276,10 +282,11 @@ class DashboardController extends Controller
             $date->settings(['formatFunction' => 'translatedFormat']);
             $month=$date->format('F');
 
-            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','transactions', 'totalStock', 'totalSailing'));
+            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','datas'));
         }
         else{
-            return view('home', compact('tambah', 'kurang', 'transactions', 'totalStock', 'totalSailing'));
+
+            return view('home', compact('tambah', 'kurang', 'datas'));
         }
     }
 
