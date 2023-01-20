@@ -87,7 +87,6 @@ class GoodController extends Controller
                 'name.unique' => 'Nama harus unik, ":input" sudah digunakan'
             ]
         );
-
         $file="";
         $filename="";
         if($request->hasFile('imageurl')){
