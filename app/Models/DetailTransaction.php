@@ -24,6 +24,7 @@ class DetailTransaction extends Model
             'dt.transactionId as transactionId', 
             'dt.amount as amount',
             'dt.price as price',
+            'vid.itemId as itemId', 
             'vid.name as itemName', 
             'vid.weightbase as wb',
             'vid.pshortname as pshortname',
@@ -36,15 +37,6 @@ class DetailTransaction extends Model
         )
         ->join('transactions as t', 't.id', '=', 'dt.transactionId')
         ->join('view_item_details as vid', 'vid.itemId', '=', 'dt.itemId')
-        /*
-        ->join('items as i', 'i.id', '=', 'dt.itemId')
-        ->join('freezings as f', 'i.freezingid', '=', 'f.id')
-        ->join('grades as g', 'i.gradeid', '=', 'g.id')
-        ->join('packings as p', 'i.packingid', '=', 'p.id')
-        ->join('sizes as s', 'i.sizeid', '=', 's.id')
-        ->join('shapes as sh', 'i.shapeid', '=', 'sh.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        */
         ->where('t.id','=', $transactionId)
         ->orderBy('vid.speciesName')
         ->orderBy('vid.gradeName', 'desc')
