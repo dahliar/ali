@@ -98,12 +98,12 @@
 
 
 
-@if (session('status'))
+@if(session('status'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
             {{ session('status') }}
-            @if (session('listBarang'))
+            @if(session('listBarang'))
             <ol>
                 @foreach(session('listBarang') as $barang)
                 <li>

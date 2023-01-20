@@ -91,7 +91,7 @@ Route::get('transactionView',[TransactionController::class, 'show'])->middleware
 Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'])->middleware(['auth', 'authorized']);
 Route::get('transactionDocument/{transaction}',[TransactionController::class, 'transactionDocument'])->middleware(['auth', 'authorized']);
 Route::POST('transactionStore',[TransactionController::class, 'store'])->middleware(['auth']);
-Route::POST('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth'])->name('transactionUpdate');
+Route::POST('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth']);
 
 
 Route::get('detailtransactionList/{transaction}',[DetailTransactionController::class, 'index'])->middleware(['auth', 'authorized'])->name('detailtransactionList');

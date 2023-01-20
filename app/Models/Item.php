@@ -206,6 +206,7 @@ class Item extends Model
         ->orderBy('vid.shapesName', 'asc')
         ->orderBy('vid.gradeName', 'asc')
         ->orderBy('vid.sizeName', 'asc')
+        ->orderBy('vid.weightbase', 'asc')
         ->orderBy('vid.freezingName');
 
         if($transactionId>0){

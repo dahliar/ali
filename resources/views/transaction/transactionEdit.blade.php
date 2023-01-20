@@ -141,7 +141,7 @@
             </div>
         </div>
         <div class="card card-body">
-            <form id="TransactionForm" action="{{route('transactionUpdate')}}"  method="POST" name="TransactionForm">
+            <form id="TransactionForm" action="{{url('transactionUpdate')}}"  method="POST" name="TransactionForm">
                 @csrf
                 <div class="d-grid gap-1">
                     <input id="isEdit" name="isEdit"  class="form-control"  value="isEdit" type="hidden" readonly>

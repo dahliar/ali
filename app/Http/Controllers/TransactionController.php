@@ -562,12 +562,10 @@ class TransactionController extends Controller
             'containerVessel' => 'required',
             'valutaType' => 'required|gt:0',
             'payment' => 'required|gt:0',
-            'advance' => 'required|gt:0',
+            'advance' => 'required|gte:0',
             'forwarder' => 'required|gt:0',
             'liner' => 'required|gt:0',
             'bl' => 'required',
-
-
             'transactionDate' => 'required|date|before_or_equal:today',
             'loadingDate' => 'required|date',
             'departureDate' => 'required|date|after_or_equal:loadingDate',
@@ -583,228 +581,146 @@ class TransactionController extends Controller
             'status.gt'=> 'Pilih salah satu jenis status',
         ]);
 
-        if (($request->currentStatus==1)){
-            if ($request->status == 1){
-                //dari penawaran ke penawaran
-                $data = [
-                    'userId' => auth()->user()->id,
-                    'companyId' =>  $request->company,
-                    'companydetail' =>  $request->companydetail,
-                    'shipper' =>  $request->shipper,
-                    'shipperAddress' =>  $request->shipperAddress,
-                    'rekeningId' => $request->rekening,
-                    'countryId' => $request->countryId,
-                    'swiftcode' => $request->swiftcode,
-                    'valuta' => $request->valuta,
-                    'packer' =>  $request->packer,
-                    'loadingport' =>  $request->loadingPort,
-                    'destinationport' =>  $request->destinationPort,
-                    'containerParty' =>  $request->containerParty,
-                    'containerType' =>  $request->containerType,
-                    'containerNumber' =>  $request->containerNumber,
-                    'containerSeal' =>  $request->containerSeal,
-                    'containerVessel' =>  $request->containerVessel,
-                    'payment' =>  $request->payment,
-                    'advance' =>  $request->advance,
-                    'forwarderid' => $request->forwarder,
-                    'isundername' => 1,
-                    'valutaType' =>  $request->valutaType,
-                    'transactionDate' => $request->transactionDate,
-                    'departureDate' =>  $request->departureDate,
-                    'loadingDate' =>  $request->loadingDate,
-                    'arrivalDate' => $request->arrivalDate,
-                    'shippedDatePlan' => $request->shippedDatePlan,
-                    'paymentPlan' => $request->paymentPlan,
-                    'linerId' => $request->liner,
-                    'bl' => $request->bl
-                ];
-                $action = Transaction::where('id', $request->transactionId)
-                ->update($data);
-                $this->updatePinotes($request->pinotes);
-                return redirect('transactionList')
-                ->with('status','Update Berhasil: data pengiriman ke berhasil diperbaharui.');
-            } else if ($request->status == 3){
-                //dari penawaran ke canceled
-                $affected = DB::table('transactions')
-                ->where('id', $request->transactionId)
-                ->update(['status' => 3]);
-                return redirect('transactionList')
-                ->with('status', 'Update berhasil: Transaksi dibatalkan');
-            } else {
-                //dari penawaran ke sailing atau finished
-                $listBarang=$this->isTheItemsAmountEnough($request->transactionId);
-                if (count($listBarang)>0) {
-                    $data = [
-                        'userId' => auth()->user()->id,
-                        'companyId' =>  $request->company,
-                        'companydetail' =>  $request->companydetail,
-                        'shipper' =>  $request->shipper,
-                        'shipperAddress' =>  $request->shipperAddress,
-                        'rekeningId' => $request->rekening,
-                        'countryId' => $request->countryId,
-                        'swiftcode' => $request->swiftcode,
-                        'valuta' => $request->valuta,
-                        'packer' =>  $request->packer,
-                        'loadingport' =>  $request->loadingPort,
-                        'destinationport' =>  $request->destinationPort,
-                        'containerParty' =>  $request->containerParty,
-                        'containerType' =>  $request->containerType,
-                        'containerNumber' =>  $request->containerNumber,
-                        'containerSeal' =>  $request->containerSeal,
-                        'containerVessel' =>  $request->containerVessel,
-                        'payment' =>  $request->payment,
-                        'advance' =>  $request->advance,
-                        'forwarderid' => $request->forwarder,
-                        'isundername' => 1,
-                        'valutaType' =>  $request->valutaType,
-                        'transactionDate' => $request->transactionDate,
-                        'departureDate' =>  $request->departureDate,
-                        'loadingDate' =>  $request->loadingDate,
-                        'arrivalDate' => $request->arrivalDate,
-                        'shippedDatePlan' => $request->shippedDatePlan,
-                        'paymentPlan' => $request->paymentPlan
-                    ];
-                    $action = Transaction::where('id', $request->transactionId)
-                    ->update($data);
-                    return redirect('transactionList')
-                    ->with('status', 'Update Status Transaksi gagal, jumlah stock tidak mencukupi')
-                    ->with('listBarang', $listBarang);
-                } else {
-                    $this->inv = new InvoiceController();
-                    $tnum = $this->inv->createtransactionnum($request->transactionId);
-                    $data = [
-                        'userId' => auth()->user()->id,
-                        'transactionNum' => $tnum,
-                        'companyId' =>  $request->company,
-                        'companydetail' =>  $request->companydetail,
-                        'shipper' =>  $request->shipper,
-                        'shipperAddress' =>  $request->shipperAddress,
-                        'rekeningId' => $request->rekening,
-                        'countryId' => $request->countryId,
-                        'swiftcode' => $request->swiftcode,
-                        'valuta' => $request->valuta,
-                        'packer' =>  $request->packer,
-                        'loadingport' =>  $request->loadingPort,
-                        'destinationport' =>  $request->destinationPort,
-                        'containerParty' =>  $request->containerParty,
-                        'containerType' =>  $request->containerType,
-                        'containerNumber' =>  $request->containerNumber,
-                        'containerSeal' =>  $request->containerSeal,
-                        'containerVessel' =>  $request->containerVessel,
-                        'payment' =>  $request->payment,
-                        'advance' =>  $request->advance,
-                        'forwarderid' => $request->forwarder,
-                        'isundername' => 1,
-                        'valutaType' =>  $request->valutaType,
-                        'transactionDate' => $request->transactionDate,
-                        'departureDate' =>  $request->departureDate,
-                        'loadingDate' =>  $request->loadingDate,
-                        'arrivalDate' => $request->arrivalDate,
-                        'shippedDatePlan' => $request->shippedDatePlan,
-                        'paymentPlan' => $request->paymentPlan,
-                        'status' =>  $request->status
-                    ];
-                    $action = Transaction::where('id', $request->transactionId)
-                    ->update($data);
-                    $this->transactionLoadedOrFinished($request->transactionId);
-                    return redirect('transactionList')
-                    ->with('status','Update Transaksi pengiriman berhasil diperbaharui.');
-                }
-            }
-        } else if (($request->currentStatus==4)){
-            if ($request->status == 4){
-                //dari sailing ke sailing
-                $data = [
-                    'userId' => auth()->user()->id,
-                    'companyId' =>  $request->company,
-                    'companydetail' =>  $request->companydetail,
-                    'shipper' =>  $request->shipper,
-                    'shipperAddress' =>  $request->shipperAddress,
-                    'rekeningId' => $request->rekening,
-                    'countryId' => $request->countryId,
-                    'swiftcode' => $request->swiftcode,
-                    'valuta' => $request->valuta,
-                    'packer' =>  $request->packer,
-                    'loadingport' =>  $request->loadingPort,
-                    'destinationport' =>  $request->destinationPort,
-                    'containerParty' =>  $request->containerParty,
-                    'containerType' =>  $request->containerType,
-                    'containerNumber' =>  $request->containerNumber,
-                    'containerSeal' =>  $request->containerSeal,
-                    'containerVessel' =>  $request->containerVessel,
-                    'payment' =>  $request->payment,
-                    'advance' =>  $request->advance,
-                    'forwarderid' => $request->forwarder,
-                    'isundername' => 1,
-                    'valutaType' =>  $request->valutaType,
-                    'transactionDate' => $request->transactionDate,
-                    'departureDate' =>  $request->departureDate,
-                    'loadingDate' =>  $request->loadingDate,
-                    'arrivalDate' => $request->arrivalDate,
-                    'shippedDatePlan' => $request->shippedDatePlan,
-                    'paymentPlan' => $request->paymentPlan
-                ];
-                $action = Transaction::where('id', $request->transactionId)
-                ->update($data);
-                return redirect('transactionList')
-                ->with('status','Update Berhasil: data pengiriman berhasil diperbaharui.');
-            } else if ($request->status == 3){
-                //sailing ke canceled
-                $affected = DB::table('transactions')
-                ->where('id', $request->transactionId)
-                ->update(['status' => 3]);
-                $this->transactionCanceled($request->transactionId);
-                return redirect('transactionList')
-                ->with('status', 'Update berhasil: data stok dikembalikan, transaksi dibatalkan');
-            } else if ($request->status == 2) {
-                //sailing ke finished
-                $data = [
-                    'userId' => auth()->user()->id,
-                    'transactionNum' => $request->transactionNum,
-                    'companyId' =>  $request->company,
-                    'companydetail' =>  $request->companydetail,
-                    'shipper' =>  $request->shipper,
-                    'shipperAddress' =>  $request->shipperAddress,
-                    'rekeningId' => $request->rekening,
-                    'countryId' => $request->countryId,
-                    'swiftcode' => $request->swiftcode,
-                    'valuta' => $request->valuta,
-                    'packer' =>  $request->packer,
-                    'loadingport' =>  $request->loadingPort,
-                    'destinationport' =>  $request->destinationPort,
-                    'containerParty' =>  $request->containerParty,
-                    'containerType' =>  $request->containerType,
-                    'containerNumber' =>  $request->containerNumber,
-                    'containerSeal' =>  $request->containerSeal,
-                    'containerVessel' =>  $request->containerVessel,
-                    'payment' =>  $request->payment,
-                    'advance' =>  $request->advance,
-                    'forwarderid' => $request->forwarder,
-                    'isundername' => 1,
-                    'valutaType' =>  $request->valutaType,
-                    'transactionDate' => $request->transactionDate,
-                    'departureDate' =>  $request->departureDate,
-                    'loadingDate' =>  $request->loadingDate,
-                    'arrivalDate' => $request->arrivalDate,
-                    'shippedDatePlan' => $request->shippedDatePlan,
-                    'paymentPlan' => $request->paymentPlan,
-                    'status' =>  $request->status
-                ];
-                $action = Transaction::where('id', $request->transactionId)
-                ->update($data);
-                return redirect('transactionList')
-                ->with('status','Update Berhasil: Transaksi pengiriman berhasil selesai.');
-            }
-        }
+        $data = [
+            'userId' => auth()->user()->id,
+            'companyId' =>  $request->company,
+            'companydetail' =>  $request->companydetail,
+            'shipper' =>  $request->shipper,
+            'shipperAddress' =>  $request->shipperAddress,
+            'rekeningId' => $request->rekening,
+            'countryId' => $request->countryId,
+            'swiftcode' => $request->swiftcode,
+            'valuta' => $request->valuta,
+            'packer' =>  $request->packer,
+            'loadingport' =>  $request->loadingPort,
+            'destinationport' =>  $request->destinationPort,
+            'containerParty' =>  $request->containerParty,
+            'containerType' =>  $request->containerType,
+            'containerNumber' =>  $request->containerNumber,
+            'containerSeal' =>  $request->containerSeal,
+            'containerVessel' =>  $request->containerVessel,
+            'payment' =>  $request->payment,
+            'advance' =>  $request->advance,
+            'forwarderid' => $request->forwarder,
+            'isundername' => 1,
+            'valutaType' =>  $request->valutaType,
+            'transactionDate' => $request->transactionDate,
+            'departureDate' =>  $request->departureDate,
+            'loadingDate' =>  $request->loadingDate,
+            'arrivalDate' => $request->arrivalDate,
+            'shippedDatePlan' => $request->shippedDatePlan,
+            'paymentPlan' => $request->paymentPlan,
+            'linerId' => $request->liner,
+            'bl' => $request->bl
+        ];
+
+        $retVal = $this->updatingTransactionData(1, $request->transactionId, $request->transactionNum, $request->currentStatus, $request->status, $data, $request->pinotes);
+
+        return redirect('transactionList')
+        ->with('status',$retVal['message'])      
+        ->with('listBarang',$retVal['listBarang']);       
     }
 
+    private function updatingTransactionData($jenisTransaction, $transactionId, $transactionNum, $currentStatus, $status, $data, $pinotes){
+        //dd($data);
+        $listBarang = "";
+        switch ($currentStatus){
+            case 1 :
+            switch ($status){
+                case 1: 
+                //dari penawaran ke penawaran
+                $action = Transaction::where('id', $transactionId)->update($data);
+                if($jenisTransaction == 1){
+                    $this->updatePinotes($pinotes);
+                }
+                $message = "Update Berhasil";
+                break;
+                case 2: 
+                //dari penawaran ke finished
+                $action = Transaction::where('id', $transactionId)->update($data);
+                $message = "Data lain diupdate. Status tidak berubah, ubah dulu menjadi Sailing atau dalam perjalanan";
+                break;
+                case 3: 
+                //dari penawaran ke canceled
+                $affected = DB::table('transactions')->where('id', $transactionId)->update(['status' => 3]);
+                $message = "Update berhasil: Transaksi dibatalkan";
+                break;
+                case 4: 
+                //dari penawaran ke sailing
+                $listBarang=$this->isTheItemsAmountEnough($transactionId);
+                if (count($listBarang)>0) {
+                    $action = Transaction::where('id', $transactionId)->update($data);
+                    $message = "Data lain diupdate. Status tidak berubah karena ada barang dengan jumlah stock yang tidak mencukupi";
+                } else {
+                    $invoice = new InvoiceController();
+                    $transactionNum = $invoice->createtransactionnum($transactionId);
+                    $dataTambahan = [
+                        'transactionNum' => $transactionNum,
+                        'status' =>  4
+                    ];
+                    $data = array_merge($data, $dataTambahan);
+                    $action = Transaction::where('id', $transactionId)->update($data);
+                    $this->stockLoaded($transactionId);
+
+                    $message = "Update Transaksi pengiriman berhasil diperbaharui.";
+                }
+                break;
+                default : 
+                $message = "Tidak ada perubahan.";
+                break;
+            }
+            break;
+            case 2 :   
+            $message = "Transaksi yang sudah selesai tidak dapat dikembalikan."; 
+            break;
+            case 3 :  
+            $message = "Transaksi yang sudah dibatalkan tidak dapat dikembalikan.";  
+            break;
+            case 4 :
+            switch ($status){
+                case 1: 
+                $message = "Status tidak bisa diubah ke Penawaran.";
+                break;
+                case 2: 
+                //sailing ke finished
+                $dataTambahan = [
+                    'transactionNum' => $transactionNum,
+                    'status' =>  2
+                ];
+                $data = array_merge($data, $dataTambahan);                
+                $action = Transaction::where('id', $transactionId)->update($data);
+                $message = "Update Berhasil: Transaksi pengiriman berhasil selesai.";
+                break;
+                case 3: 
+                //sailing ke canceled
+                $affected = DB::table('transactions')->where('id', $transactionId)->update(['status' => 3]);
+                $this->transactionCanceled($transactionId);
+                $message = "Update berhasil: Transaksi dibatalkan, data stok dikembalikan.";
+                break;
+                case 4: 
+                //dari sailing ke sailing                
+                $action = Transaction::where('id', $transactionId)->update($data);
+                $message = "Update Berhasil: data pengiriman berhasil diperbaharui.";
+                break;
+            }
+            break;
+            default: 
+            $message = "Tidak ada perubahan.";
+            break;
+        }
+
+        $retVal= [
+            'message' => $message,
+            'listBarang' => $listBarang
+        ];
+        return $retVal;
+    }
     /*
     Function untuk check apakah daftar barang dalam detail_transaction cukup atau tidak untuk dilakukan transaksi.
     Input   : transactionId
     Output  : daftar barang yang tidak cukup
     Digunakan ketika ada perubahan dari status transaksi 
     Penawaran   ->  Sailing
-    Penawaran   ->  Finished
     */        
     public function isTheItemsAmountEnough($transactionId){
         $result = DB::table('detail_transactions as dt')
@@ -845,7 +761,7 @@ class TransactionController extends Controller
         return $listBarang;
     }
 
-    public function transactionLoadedOrFinished($transactionId){
+    public function stockLoaded($transactionId){
         $result = DB::table('detail_transactions as dt')
         ->select(
             'dt.itemId as itemId', 
@@ -859,7 +775,7 @@ class TransactionController extends Controller
             ->where('id', $itemDetail->itemId)
             ->decrement('amount', $itemDetail->amount);
 
-            $this->stockChangeLog(2, "Transaction ID ".$transactionId." dari Penawaran ke Sailing/Finished", $itemDetail->itemId, $itemDetail->amount);
+            $this->stockChangeLog(2, "Transaction ID ".$transactionId." dari Penawaran ke Sailing", $itemDetail->itemId, $itemDetail->amount);
         }
     }
 
@@ -998,6 +914,7 @@ class TransactionController extends Controller
         return view('transaction.localTransactionEdit', compact('companyName', 'rekenings', 'transaction'));
     }
 
+
     public function localUpdate(Request $request, Transaction $transaction)
     {
         if (($request->currentStatus!=2)) {
@@ -1012,7 +929,7 @@ class TransactionController extends Controller
                 'valuta' => 'required',
                 'valutaType' => 'required|gt:0',
                 'payment' => 'required|gt:0',
-                'advance' => 'required|gt:0',
+                'advance' => 'required|gte:0',
                 'status' => 'required|gt:0'
             ],[
                 'rekening.gt'=> 'Pilih salah satu rekening',
@@ -1027,149 +944,25 @@ class TransactionController extends Controller
             ]);
         }
 
+        $data = [
+            'userId' => auth()->user()->id,
+            'companydetail' =>  $request->companydetail,
+            'loadingport' =>  $request->loadingPort,
+            'destinationport' =>  $request->destinationPort,
+            'containerParty' =>  $request->containerParty,
+            'transactionDate' => $request->transactionDate,
+            'loadingDate' =>  $request->loadingDate,
+            'rekeningId' => $request->rekening,
+            'valuta' => $request->valuta,
+            'valutaType' =>  $request->valutaType,
+            'payment' =>  $request->payment,
+            'advance' =>  $request->advance
+        ];
+        $retVal = $this->updatingTransactionData(2, $request->transactionId, $request->transactionNum, $request->currentStatus, $request->status, $data, "1");
+        return redirect('localTransactionList')
+        ->with('status',$retVal['message'])      
+        ->with('listBarang',$retVal['listBarang']);       
 
-        if (($request->currentStatus==1)) {
-            if ($request->status == 1){
-                //dari penawaran ke penawaran
-                $data = [
-                    'userId' => auth()->user()->id,
-                    'companydetail' =>  $request->companydetail,
-                    'loadingport' =>  $request->loadingPort,
-                    'destinationport' =>  $request->destinationPort,
-                    'containerParty' =>  $request->containerParty,
-                    'transactionDate' => $request->transactionDate,
-                    'loadingDate' =>  $request->loadingDate,
-                    'rekeningId' => $request->rekening,
-                    'valuta' => $request->valuta,
-                    'valutaType' =>  $request->valutaType,
-                    'payment' =>  $request->payment,
-                    'advance' =>  $request->advance
-                ];
-                $action = Transaction::where('id', $request->transactionId)
-                ->update($data);
-                return redirect('localTransactionList')
-                ->with('status','Update Berhasil: data penjualan diperbarui.');
-            } else if ($request->status == 3){
-                //dari penawaran ke canceled
-                $affected = DB::table('transactions')
-                ->where('id', $request->transactionId)
-                ->update(['status' => 3]);
-                return redirect('localTransactionList')
-                ->with('status', 'Update berhasil: Transaksi dibatalkan');
-            } else {
-                //dari penawaran ke sailing atau finished
-                $listBarang=$this->isTheItemsAmountEnough($request->transactionId);
-                if (count($listBarang)>0) {
-                    $data = [
-                        'userId' => auth()->user()->id,
-                        'companydetail' =>  $request->companydetail,
-                        'loadingport' =>  $request->loadingPort,
-                        'destinationport' =>  $request->destinationPort,
-                        'containerParty' =>  $request->containerParty,
-                        'transactionDate' => $request->transactionDate,
-                        'loadingDate' =>  $request->loadingDate,
-                        'rekeningId' => $request->rekening,
-                        'valuta' => $request->valuta,
-                        'valutaType' =>  $request->valutaType,
-                        'payment' =>  $request->payment,
-                        'advance' =>  $request->advance
-                    ];
-                    $action = Transaction::where('id', $request->transactionId)
-                    ->update($data);
-                    return redirect('localTransactionList')
-                    ->with('status', 'Update Status Transaksi gagal, jumlah stock tidak mencukupi')
-                    ->with('listBarang', $listBarang);
-                } else {
-                    $this->inv = new InvoiceController();
-                    $tnum = $this->inv->createtransactionnum($request->transactionId);
-                    $data = [
-                        'userId' => auth()->user()->id,
-                        'transactionNum' => $tnum,
-                        'companydetail' =>  $request->companydetail,
-                        'loadingport' =>  $request->loadingPort,
-                        'destinationport' =>  $request->destinationPort,
-                        'containerParty' =>  $request->containerParty,
-                        'transactionDate' => $request->transactionDate,
-                        'loadingDate' =>  $request->loadingDate,
-                        'rekeningId' => $request->rekening,
-                        'valuta' => $request->valuta,
-                        'valutaType' =>  $request->valutaType,
-                        'payment' =>  $request->payment,
-                        'advance' =>  $request->advance,
-                        'status' =>  $request->status
-                    ];
-                    $action = Transaction::where('id', $request->transactionId)
-                    ->update($data);
-                    $this->transactionLoadedOrFinished($request->transactionId);
-                    return redirect('localTransactionList')
-                    ->with('status','Update Transaksi pengiriman berhasil diperbaharui.');
-                }
-            }
-        } else if (($request->currentStatus==4)){
-            if ($request->status == 4){
-                //dari sailing ke sailing
-                $data = [
-                    'userId' => auth()->user()->id,
-                    'companydetail' =>  $request->companydetail,
-                    'loadingport' =>  $request->loadingPort,
-                    'destinationport' =>  $request->destinationPort,
-                    'containerParty' =>  $request->containerParty,
-                    'transactionDate' => $request->transactionDate,
-                    'loadingDate' =>  $request->loadingDate,
-                    'rekeningId' => $request->rekening,
-                    'valuta' => $request->valuta,
-                    'valutaType' =>  $request->valutaType,
-                    'payment' =>  $request->payment,
-                    'advance' =>  $request->advance
-                ];
-                $action = Transaction::where('id', $request->transactionId)
-                ->update($data);
-                return redirect('localTransactionList')
-                ->with('status','Update Berhasil: data pengiriman berhasil diperbaharui.');
-            } else if ($request->status == 3){
-                //sailing ke canceled
-                $affected = DB::table('transactions')
-                ->where('id', $request->transactionId)
-                ->update(['status' => 3]);
-                $this->transactionCanceled($request->transactionId);
-                return redirect('localTransactionList')
-                ->with('status', 'Update berhasil: Transaksi dibatalkan, data stok dikembalikan');
-            } else if ($request->status == 2) {
-                //sailing ke finished
-                $data = [
-                    'userId' => auth()->user()->id,
-                    'companydetail' =>  $request->companydetail,
-                    'loadingport' =>  $request->loadingPort,
-                    'destinationport' =>  $request->destinationPort,
-                    'containerParty' =>  $request->containerParty,
-                    'transactionDate' => $request->transactionDate,
-                    'loadingDate' =>  $request->loadingDate,
-                    'rekeningId' => $request->rekening,
-                    'valuta' => $request->valuta,
-                    'valutaType' =>  $request->valutaType,
-                    'payment' =>  $request->payment,
-                    'advance' =>  $request->advance,
-                    'status' =>  $request->status
-                ];
-                $action = Transaction::where('id', $request->transactionId)
-                ->update($data);
-                return redirect('localTransactionList')
-                ->with('status','Update Berhasil: Transaksi penjualan berhasil selesai.');
-            }
-        } else if (($request->currentStatus==2)){
-            if ($request->status == 3){
-                $affected = DB::table('transactions')
-                ->where('id', $request->transactionId)
-                ->update(['status' => 3]);
-                $this->transactionCanceled($request->transactionId);
-                return redirect('localTransactionList')
-                ->with('status', 'Update berhasil: Transaksi dibatalkan, data stok dikembalikan');
-
-            } else{
-                return redirect('localTransactionList')
-                ->with('status', 'Batal update: Transaksi finished hanya bisa dibatalkan');
-            }
-        }
     }
 
 }
