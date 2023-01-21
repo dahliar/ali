@@ -50,6 +50,7 @@ class BarcodeController extends Controller
             'vid.nameBahasa as name'
         )
         ->join('view_item_details as vid', 'c.itemId', '=', 'vid.itemId')
+        ->where('vid.itemStatus', '=', 1)
         ->orderBy('c.created_at', 'desc');
 
         if ($speciesId!=0){
@@ -113,6 +114,7 @@ class BarcodeController extends Controller
             'vid.nameBahasa as itemName'
         )
         ->where('vid.speciesId','=', $speciesId)
+        ->where('vid.itemStatus', '=', 1)
         ->orderBy('vid.shapesName', 'asc')
         ->orderBy('vid.gradeName', 'asc')
         ->orderBy('vid.sizeName', 'asc')
@@ -142,6 +144,7 @@ class BarcodeController extends Controller
 
         $name = DB::table('view_item_details as vid')
         ->select(DB::raw('concat(speciesName, " ", gradeName, " ", sizeName, " ", shapesName) as name'))
+        ->where('vid.itemStatus', '=', 1)
         ->where('vid.itemId','=', $request->item)
         ->first()->name;
 

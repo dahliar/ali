@@ -203,6 +203,7 @@ class Item extends Model
     public function getItemForSelectOption($transactionId, $purchaseId, $speciesId){
         $query = DB::table('view_item_details as vid')
         ->where('vid.speciesId','=', $speciesId)
+        ->where('vid.itemStatus', '=', 1)
         ->orderBy('vid.shapesName', 'asc')
         ->orderBy('vid.gradeName', 'asc')
         ->orderBy('vid.sizeName', 'asc')

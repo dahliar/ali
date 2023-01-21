@@ -70,20 +70,7 @@ having sum(m.isactive)=0
 VIEW_ITEM_DETAILS
 =========================================================================================================================
 create view view_item_details as
-select `i`.`id` AS `itemId`,`i`.`name` AS `itemName`,`s`.`id` AS `sizeId`,`s`.`name` AS `sizeName`,`p`.`id` AS `packingId`,`p`.`name` AS `packingName`,`p`.`shortname` AS `pshortname`,`f`.`id` AS `freezingId`,`f`.`name` AS `freezingName`,`g`.`id` AS `gradeId`,`g`.`name` AS `gradeName`,`sp`.`id` AS `speciesId`,`sp`.`name` AS `speciesName`,`sh`.`id` AS `shapesId`,`sh`.`name` AS `shapesName`,
-concat(
-`sp`.`name`,' ',
-`sh`.`name`,' Grade ',
-`g`.`name`,' ',`f`.`name`,' Size ',
-`s`.`name`,' Packing ',`i`.`weightbase`,' Kg per',
-`p`.`shortname`) AS `name`,
-concat(
-`sp`.`nameBahasa`,' ',
-`sh`.`name`,' Grade ',
-`g`.`name`,' ',`f`.`name`,' Size ',
-`s`.`name`,' Packing ',`i`.`weightbase`,' Kg per ',
-`p`.`shortname`) AS `nameBahasa`,
-concat(`sp`.`nameBahasa`,' ',`g`.`name`,' ',`s`.`name`) AS `nameForPurchaseInvoice`,round(`i`.`amount`,2) AS `amount`,round(`i`.`amountUnpacked`,2) AS `amountUnpacked`,`i`.`baseprice` AS `baseprice`,`i`.`weightbase` AS `weightbase` from ((((((`items` `i` join `sizes` `s` on((`i`.`sizeId` = `s`.`id`))) join `packings` `p` on((`i`.`packingId` = `p`.`id`))) join `freezings` `f` on((`i`.`freezingId` = `f`.`id`))) join `grades` `g` on((`i`.`gradeId` = `g`.`id`))) join `species` `sp` on((`s`.`speciesId` = `sp`.`id`))) join `shapes` `sh` on((`i`.`shapeId` = `sh`.`id`))) where (`p`.`isActive` = 1) and (`f`.`isActive` = 1) and (`g`.`isActive` = 1) and (`sp`.`isActive` = 1) and (`sh`.`isActive` = 1)) order by `sp`.`name`,`sh`.`name`,`g`.`name`,`s`.`name`,`i`.`weightbase`,`f`.`name`
+select `i`.`id` AS `itemId`,`i`.`name` AS `itemName`,`s`.`id` AS `sizeId`,`s`.`name` AS `sizeName`,`p`.`id` AS `packingId`,`p`.`name` AS `packingName`,`p`.`shortname` AS `pshortname`,`f`.`id` AS `freezingId`,`f`.`name` AS `freezingName`,`g`.`id` AS `gradeId`,`g`.`name` AS `gradeName`,`sp`.`id` AS `speciesId`,`sp`.`name` AS `speciesName`,`sh`.`id` AS `shapesId`,`sh`.`name` AS `shapesName`,concat(`sp`.`name`,' ',`sh`.`name`,' Grade ',`g`.`name`,' ',`f`.`name`,' Size ',`s`.`name`,' Packing ',`i`.`weightbase`,' Kg per',`p`.`shortname`) AS `name`, i.isActive as itemStatus, concat(`sp`.`nameBahasa`,' ',`sh`.`name`,' Grade ',`g`.`name`,' ',`f`.`name`,' Size ',`s`.`name`,' Packing ',`i`.`weightbase`,' Kg per ',`p`.`shortname`) AS `nameBahasa`,concat(`sp`.`nameBahasa`,' ',`g`.`name`,' ',`s`.`name`) AS `nameForPurchaseInvoice`,round(`i`.`amount`,2) AS `amount`,round(`i`.`amountUnpacked`,2) AS `amountUnpacked`,`i`.`baseprice` AS `baseprice`,`i`.`weightbase` AS `weightbase` from ((((((`aliseafo_core`.`items` `i` join `aliseafo_core`.`sizes` `s` on(`i`.`sizeId` = `s`.`id`)) join `aliseafo_core`.`packings` `p` on(`i`.`packingId` = `p`.`id`)) join `aliseafo_core`.`freezings` `f` on(`i`.`freezingId` = `f`.`id`)) join `aliseafo_core`.`grades` `g` on(`i`.`gradeId` = `g`.`id`)) join `aliseafo_core`.`species` `sp` on(`s`.`speciesId` = `sp`.`id`)) join `aliseafo_core`.`shapes` `sh` on(`i`.`shapeId` = `sh`.`id`)) where `p`.`isActive` = 1 and `f`.`isActive` = 1 and `g`.`isActive` = 1 and `sp`.`isActive` = 1 and `sh`.`isActive` = 1 order by `sp`.`name`,`sh`.`name`,`g`.`name`,`s`.`name`,`i`.`weightbase`,`f`.`name`
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -95,3 +82,25 @@ min="{{ old('arrivalDate', date('Y-m-d', strtotime('-1 month')))}}" max="{{ old(
 
 
 Information Technology for Management  Digital Strategies for Insight, Action and Sustainable Performance 10th Edition
+
+
+
+
+
+
+select i.id, i.name, sp.name, s.name, sh.name from items i join sizes s on s.id=i.sizeId join species sp on sp.id=s.speciesId join shapes sh on sh.id=i.shapeId where sp.id=3 and i.shapeId=4
+
+select i.id, i.name, sp.name, s.name, sh.name from items i join sizes s on s.id=i.sizeId join species sp on sp.id=s.speciesId join shapes sh on sh.id=i.shapeId where sp.id=3 and i.shapeId=7  
+ORDER BY `s`.`name`  DESC
+
+
+1-120       260
+8-12        261
+61-80       262
+5-7         263
+41-60       264
+31-40       265
+21-30       266
+2-4         267
+13-20       268
+
