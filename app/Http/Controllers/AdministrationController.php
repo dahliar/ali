@@ -74,6 +74,7 @@ class AdministrationController extends Controller
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
 
+        ->where('mapping.isactive', '=', 1)
         ->where('e.id', '=', $employeeId)
         ->orderBy('u.name')
         ->first();
