@@ -18,7 +18,7 @@
 
 
 
-            SELECT 
+SELECT 
 sp.nameBahasa,
 GROUP_CONCAT(i.id) as id, 
 GROUP_CONCAT(i.name) as nama, 
@@ -46,6 +46,25 @@ fr.name," Size ",
 si.name," Packing ",
 weightbase," Kg/", p.shortname
 ) as itemName')
+
+
+
+
+
+
+
+
+=========================================================================================================================
+View check Employee without mapping 
+=========================================================================================================================
+create view NonActive_emp_without_mapping as
+SELECT u.id as uid, e.id as empid, u.name, sum(m.isactive) as active FROM employees as e right join employeeorgstructuremapping as m on e.id = m.idemp
+join users as u on u.id=e.userid
+where e.isActive=1
+group by e.id
+having sum(m.isactive)=0
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 
 =========================================================================================================================
 VIEW_ITEM_DETAILS

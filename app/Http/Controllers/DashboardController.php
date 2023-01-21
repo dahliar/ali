@@ -19,7 +19,10 @@ class DashboardController extends Controller
     {
         //$pdf = Pdf::loadview("userMapping.info");
         //return $pdf->download("Proforma Invoice.pdf");
-        dd(Auth::user()->accessLevel);
+
+        $data = DB::table('NonActive_emp_without_mapping')
+        ->get();
+        dd($data);
         return view('userMapping.info');
     }
 

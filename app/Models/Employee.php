@@ -67,7 +67,6 @@ class Employee extends Model
     public function userMappingUpdate($newMappingData, $mappingid){
         $affected = DB::table('employeeorgstructuremapping')
         ->where('id', '=', $mappingid)
-        ->where('isactive','=', 1)
         ->update(['isactive' => 0]);
 
         $id = DB::table('employeeorgstructuremapping')->insertGetId($newMappingData);

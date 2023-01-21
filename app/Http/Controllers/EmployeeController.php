@@ -229,7 +229,6 @@ class EmployeeController extends Controller
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->first();
 
-
         return view('employee.employeeMappingEdit', compact('orgstructure', 'employee', 'choosenUser','structpos', 'workpos'));
     }
 
@@ -342,13 +341,6 @@ class EmployeeController extends Controller
             'uangHarian'            => ['required', 'gte:0'],
             'uangLembur'            => ['required', 'gte:0']
         ]);
-
-
-        //bagian proses insert kedalam table Users
-        //REMEMBER, Tabel mapping itu insert baru, dan update data tstruktur lama,s et struktur lama isactive=0
-        //REMEMBER, Tabel mapping itu insert baru, dan update data tstruktur lama,s et struktur lama isactive=0
-        //REMEMBER, Tabel mapping itu insert baru, dan update data tstruktur lama,s et struktur lama isactive=0
-        //REMEMBER, Tabel mapping itu insert baru, dan update data tstruktur lama,s et struktur lama isactive=0
 
         $dataOrgStructure = [
             'idemp'                 => $request->empid,
