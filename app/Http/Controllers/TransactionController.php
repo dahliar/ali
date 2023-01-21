@@ -909,6 +909,7 @@ class TransactionController extends Controller
 
     public function localEdit(Transaction $transaction)
     {
+        //dd($transaction);
         $companyName = Company::where('id', '=', $transaction->companyId)->first()->name;
         $rekenings = Rekening::all();
         return view('transaction.localTransactionEdit', compact('companyName', 'rekenings', 'transaction'));
@@ -917,7 +918,7 @@ class TransactionController extends Controller
 
     public function localUpdate(Request $request, Transaction $transaction)
     {
-        if (($request->currentStatus!=2)) {
+        if (($request->currentStatus!=2) && ($request->currentStatus!=3) ) {
             $request->validate([
                 'companydetail' => 'required',
                 'loadingPort' => 'required',

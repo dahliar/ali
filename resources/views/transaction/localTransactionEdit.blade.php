@@ -15,6 +15,7 @@
     var i=1;
 
     function disableForm() {        
+        
         @if(($transaction->status == 2) or ($transaction->status == 3))
 
         document.getElementById("companydetail").readOnly=true;
