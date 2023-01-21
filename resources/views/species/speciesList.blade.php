@@ -127,7 +127,7 @@
                         <th>English</th>
                         <th>Bahasa</th>
                         <th>Family</th>
-                        <th>Item Aktif</th>
+                        <th>Item</th>
                         <th>Act</th>
                     </tr>
                 </thead>

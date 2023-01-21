@@ -21,13 +21,12 @@ class Species extends Model
             's.name as name', 
             's.nameBahasa as nameBahasa', 
             'f.name as familyName',
-            DB::raw('count(i.id) as aktifCount'),
+            DB::raw('IF(count(i.id)>0, count(i.id), 0) as aktifCount'),
         )
         ->join('families as f', 's.familyId', '=', 'f.id')
         ->join('sizes as si', 'si.speciesId', '=', 's.id')
         ->join('items as i', 'si.id', '=', 'i.sizeId')
         ->where('s.isActive','=', 1)
-        ->where('i.isActive', '=', 1)
         ->orderBy('s.nameBahasa')
         ->groupBy('s.id');
 
