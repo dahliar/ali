@@ -77,7 +77,7 @@ class AdministrationController extends Controller
         ->where('mapping.isactive', '=', 1)
         ->where('e.id', '=', $employeeId)
         ->orderBy('u.name')
-        ->first();
+        ->get();
         return $employee;
     }
 
