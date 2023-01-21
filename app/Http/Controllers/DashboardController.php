@@ -189,7 +189,7 @@ class DashboardController extends Controller
             )
             ->join('companies as c', 'c.id', '=', 't.companyId')
             ->where('t.valutaType', '=', '1')
-            ->whereYear('t.transactionDate', $tahun)
+            ->whereYear('t.loadingDate', $tahun)
             ->groupBy('c.id')
             ->orderBy('c.name')
             ->get();
@@ -203,30 +203,30 @@ class DashboardController extends Controller
             ->where('t.valutaType', '=', '2')
             ->groupBy('c.id')
             ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-            ->whereYear('t.transactionDate', $tahun)
+            ->whereYear('t.loadingDate', $tahun)
             ->get();
 
 
 
             $transactionUSDLine = DB::table('transactions as t')
             ->select(
-                DB::raw('MONTH(t.transactionDate) as bulan'),
+                DB::raw('MONTH(t.loadingDate) as bulan'),
                 DB::raw('sum(t.payment) as amount')
             )
             ->where('t.valutaType', '=', '2')
             ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-            ->whereYear('t.transactionDate', $tahun)
-            ->groupBy(DB::raw('MONTH(t.transactionDate)'))
+            ->whereYear('t.loadingDate', $tahun)
+            ->groupBy(DB::raw('MONTH(t.loadingDate)'))
             ->get();
             $transactionRupiahLine = DB::table('transactions as t')
             ->select(
-                DB::raw('MONTH(t.transactionDate) as bulan'),
+                DB::raw('MONTH(t.loadingDate) as bulan'),
                 DB::raw('sum(t.payment) as amount')
             )
             ->where('t.valutaType', '=', '1')
             ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-            ->whereYear('t.transactionDate', $tahun)
-            ->groupBy(DB::raw('MONTH(t.transactionDate)'))
+            ->whereYear('t.loadingDate', $tahun)
+            ->groupBy(DB::raw('MONTH(t.loadingDate)'))
             ->get();
 
 
