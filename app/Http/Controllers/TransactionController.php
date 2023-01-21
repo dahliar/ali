@@ -754,7 +754,7 @@ class TransactionController extends Controller
 
         $listBarang=array();
         foreach ($result as $dtitem){
-            if ($dtitem->amount>=$dtitem->currentAmount){
+            if ($dtitem->amount>$dtitem->currentAmount){
                 array_push($listBarang, $dtitem->itemName);
             }
         }
