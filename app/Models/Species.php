@@ -20,10 +20,16 @@ class Species extends Model
             's.id as id', 
             's.name as name', 
             's.nameBahasa as nameBahasa', 
-            'f.name as familyName'
+            'f.name as familyName',
+            DB::raw('count(i.id) as aktifCount'),
         )
         ->join('families as f', 's.familyId', '=', 'f.id')
-        ->where('s.isActive','=', 1);
+        ->join('sizes as si', 'si.speciesId', '=', 's.id')
+        ->join('items as i', 'si.id', '=', 'i.sizeId')
+        ->where('s.isActive','=', 1)
+        ->where('i.isActive', '=', 1)
+        ->orderBy('s.nameBahasa')
+        ->groupBy('s.id');
 
         if ($familyId>0){
             $query->where('s.familyId','=', $familyId);

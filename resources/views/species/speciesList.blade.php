@@ -37,7 +37,8 @@
             {   "width": "20%", "targets":  [1], "className": "text-left"   },
             {   "width": "20%", "targets":  [2], "className": "text-left"   },
             {   "width": "20%",  "targets": [3], "className": "text-left" },
-            {   "width": "20%", "targets":  [4], "className": "text-center" }
+            {   "width": "10%",  "targets": [4], "className": "text-center" },
+            {   "width": "10%", "targets":  [5], "className": "text-center" }
             ], 
 
             columns: [
@@ -45,6 +46,7 @@
             {data: 'name', name: 'name'},
             {data: 'nameBahasa', name: 'nameBahasa'},
             {data: 'familyName', name: 'familyName'},
+            {data: 'aktifCount', name: 'aktifCount'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
         });
@@ -125,6 +127,7 @@
                         <th>English</th>
                         <th>Bahasa</th>
                         <th>Family</th>
+                        <th>Item Aktif</th>
                         <th>Act</th>
                     </tr>
                 </thead>
