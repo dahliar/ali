@@ -37,18 +37,14 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "5%", "targets":  [2], "className": "text-left" },
+            {   "width": "30%", "targets":   [1], "className": "text-left" },
+            {   "width": "30%", "targets":  [2], "className": "text-left" },
             {   "width": "20%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "20%", "targets":  [5], "className": "text-left" },
-            {   "width": "5%", "targets":  [6], "className": "text-left" }
+            {   "width": "5%", "targets":  [4], "className": "text-left" }
             ], 
 
             columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'posisi', name: 'posisi'},
-            {data: 'shift', name: 'shift'},
             {data: 'tanggal', name: 'tanggal'},
             {data: 'jam', name: 'jam'},
             {data: 'salary', name: 'salary'},
@@ -121,8 +117,6 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Posisi</th>
-                                <th>Shift</th>
                                 <th>Tanggal</th>
                                 <th>Jam</th>
                                 <th>Jumlah</th>

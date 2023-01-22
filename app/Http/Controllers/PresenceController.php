@@ -118,44 +118,22 @@ class PresenceController extends Controller
             'ds.uangHarian as uangHarian',
             'ds.uangLembur as uangLembur',
             'u.name as name', 
-            'e.nik as nik',
-            'e.nip as nip',
-            'os.name as orgStructure',
-            'wp.name as bagian',
             'p.start as start',
             'p.end as end',
             'p.jamKerja as jamKerja',
-            'p.jamLembur as jamLembur',
-            DB::raw('(CASE WHEN p.isLembur="1" THEN "Lembur" WHEN p.isLembur="0" THEN "Tidak" END) AS lembur'),
-            DB::raw('(CASE WHEN p.shift="1" THEN "Pagi" WHEN p.shift="2" THEN "Siang" WHEN p.shift="3" THEN "Malam" END) AS shift')
+            'p.jamLembur as jamLembur'
         )
         ->join('dailysalaries as ds', 'e.id', '=', 'ds.employeeId')
         ->join('presences as p', 'e.id', '=', 'p.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
-        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
-        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->where('e.employmentStatus', '!=', '3')
         ->where('e.id', $employeeId)
         ->whereBetween('p.start', [$start." 00:00:00", $end." 23:59:59"])
         ->whereBetween('ds.presenceDate', [$start, $end])
-        ->where('mapping.isActive', '1')
         ->orderBy('p.start');
         $query->get();
 
         return datatables()->of($query)
-        ->addColumn('posisi', function ($row) {
-            $html = '
-            <div class="row form-group">
-            <span class="text-left">'.$row->orgStructure.'</span>
-            </div>
-
-            <div class="row form-group">
-            <span class="text-left">'.$row->bagian.'</span>
-            </div>';
-            return $html;
-        })
         ->addColumn('tanggal', function ($row) {
             $html = '
             <div class="row form-group">
