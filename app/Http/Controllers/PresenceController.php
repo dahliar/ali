@@ -130,6 +130,7 @@ class PresenceController extends Controller
         ->where('e.id', $employeeId)
         ->whereBetween('p.start', [$start." 00:00:00", $end." 23:59:59"])
         ->whereBetween('ds.presenceDate', [$start, $end])
+        ->distinct()
         ->orderBy('p.start');
         $query->get();
 
