@@ -50,7 +50,6 @@ class BarcodeController extends Controller
             'vid.nameBahasa as name'
         )
         ->join('view_item_details as vid', 'c.itemId', '=', 'vid.itemId')
-        ->where('vid.itemStatus', '=', 1)
         ->orderBy('c.created_at', 'desc');
 
         if ($speciesId!=0){
@@ -119,6 +118,7 @@ class BarcodeController extends Controller
         ->orderBy('vid.gradeName', 'asc')
         ->orderBy('vid.sizeName', 'asc')
         ->orderBy('vid.freezingName')
+        ->orderBy('vid.weightbase')
         ->get();
 
         return $query;  

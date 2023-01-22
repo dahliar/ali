@@ -86,11 +86,11 @@
                     for(i=0; i<data.length; i++){
                         if (data[i].itemId != itemId){
                             html += '<option value='+data[i].itemId+'>'+
-                            data[i].itemName+
+                            (i+1)+". "+data[i].itemName+
                             '</option>';
                         } else {
                             html += '<option selected value='+data[i].itemId+'>'+
-                            data[i].itemName+
+                            (i+1)+". "+data[i].itemName+
                             '</option>';
                         }
                         $('#item').html(html);
