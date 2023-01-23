@@ -109,7 +109,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction()">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">
@@ -144,7 +144,7 @@
                 <div class="col-md-2">
                     <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
                         <option value="-1" selected>--Semua Status--</option>
-                        <option value="1" @if(old('statusTransaksi') == 1) selected @endif>Offering</option>
+                        <option value="1" @if(old('statusTransaksi') == 1) selected @endif selected>Offering</option>
                         <option value="4" @if(old('statusTransaksi') == 4) selected @endif>Sailing</option>
                         <option value="2" @if(old('statusTransaksi') == 2) selected @endif>Finished</option>
                         <option value="3" @if(old('statusTransaksi') == 3) selected @endif>Canceled</option>
