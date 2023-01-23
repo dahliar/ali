@@ -124,13 +124,12 @@ class PresenceController extends Controller
             'p.jamLembur as jamLembur'
         )
         ->join('dailysalaries as ds', 'e.id', '=', 'ds.employeeId')
-        ->join('presences as p', 'e.id', '=', 'p.employeeId')
+        ->join('presences as p', 'ds.employeeId', '=', 'p.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->where('e.employmentStatus', '!=', '3')
         ->where('e.id', $employeeId)
         ->whereBetween('p.start', [$start." 00:00:00", $end." 23:59:59"])
         ->whereBetween('ds.presenceDate', [$start, $end])
-        ->distinct()
         ->orderBy('p.start');
         $query->get();
 

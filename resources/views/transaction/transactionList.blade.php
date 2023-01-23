@@ -43,8 +43,8 @@
         var e = document.getElementById("negara");
         var negara = e.options[e.selectedIndex].value;       
         //var companyName = e.options[e.selectedIndex].text;
-        var e = document.getElementById("jenis");
-        var jenis = e.options[e.selectedIndex].value;       
+        //var e = document.getElementById("jenis");
+        //var jenis = e.options[e.selectedIndex].value;       
 
         var e = document.getElementById("statusTransaksi");
         var statusTransaksi = e.options[e.selectedIndex].value;       
@@ -61,7 +61,7 @@
                 url: '{{ url("getAllExportTransaction") }}',
                 data: function (d){
                     d.negara = negara,
-                    d.jenis = jenis,
+                    //d.jenis = jenis,
                     d.statusTransaksi = statusTransaksi,
                     d.start = start,
                     d.end = end
@@ -74,24 +74,24 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "25%", "targets":  [0], "className": "text-left"   },
-            {   "width": "10%", "targets": [1], "className": "text-left" },
-            {   "width": "18%", "targets": [2], "className": "text-left" },
-            {   "width": "18%", "targets":  [3], "className": "text-left" },
-            {   "width": "7%", "targets":   [4], "className": "text-left" },
-            {   "width": "7%", "targets":  [5], "className": "text-left" },
-            {   "width": "15%", "targets":  [6], "className": "text-left" }
-            ], 
+                {   "width": "25%", "targets":  [0], "className": "text-left"   },
+                {   "width": "10%", "targets": [1], "className": "text-left" },
+                {   "width": "18%", "targets": [2], "className": "text-left" },
+                {   "width": "18%", "targets":  [3], "className": "text-left" },
+                {   "width": "7%", "targets":   [4], "className": "text-left" },
+                {   "width": "7%", "targets":  [5], "className": "text-left" },
+                {   "width": "15%", "targets":  [6], "className": "text-left" }
+                ], 
 
             columns: [
-            {data: 'name', name: 'name'},
-            {data: 'nation', name: 'nation'},
-            {data: 'number', name: 'number'},
-            {data: 'tanggal', name: 'tanggal'},
-            {data: 'undername', name: 'undername'},
-            {data: 'status', name: 'status'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'name', name: 'name'},
+                {data: 'nation', name: 'nation'},
+                {data: 'number', name: 'number'},
+                {data: 'tanggal', name: 'tanggal'},
+                {data: 'undername', name: 'undername'},
+                {data: 'status', name: 'status'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 </script>
@@ -151,13 +151,15 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <select class="form-select" id="jenis" name="jenis" >
+                    <!--
+                    <div class="col-md-2">
+                        <select class="form-select" id="jenis" name="jenis" >
                         <option value="-1" selected>--Semua Jenis--</option>
                         <option value="1" @if(old('jenis') == 1) selected @endif>Internal</option>
                         <option value="2" @if(old('jenis') == 2) selected @endif>Undername</option>
-                    </select>
-                </div>
+                        </select>
+                    </div>
+                -->
                 <div class="col-md-2">
                     <select class="form-select" id="statusTransaksi" name="statusTransaksi" >
                         <option value="-1" selected>--Semua Status--</option>

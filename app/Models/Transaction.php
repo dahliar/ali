@@ -52,9 +52,9 @@ class Transaction extends Model
         if($request->negara != -1){
             $query->where('n.id', '=', $request->negara);
         }
-        if($request->jenis != -1){
-            $query->where('t.isUndername', '=', $request->jenis);
-        }
+        //if($request->jenis != -1){
+        //    $query->where('t.isUndername', '=', $request->jenis);
+        //}
         if($request->statusTransaksi != -1){
             $query->where('t.status', '=', $request->statusTransaksi);
         }
