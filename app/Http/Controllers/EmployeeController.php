@@ -301,9 +301,7 @@ class EmployeeController extends Controller
                 $request->gender,
                 $request->startdate
             );
-            if($request->isactive != $request->isActiveCurrent){
-                $setActive = $this->setEmployeeActiveness($request->employeeId, $request->isactive);
-            }
+            $setActive = $this->setEmployeeActiveness($request->employeeId, $request->isactive);
             DB::commit();
             return redirect('employeeList')
             ->with('status','Data Karyawan berhasil diubah.');
@@ -372,7 +370,6 @@ class EmployeeController extends Controller
         $query = DB::table('employees as e')
         ->select(
             'e.id as id', 
-            DB::raw('concat(e.id,"-",u.id) as uidempid'),
             'u.name as name', 
             'e.nik as nik', 
             'e.phone as phone',
@@ -381,6 +378,7 @@ class EmployeeController extends Controller
                 '),
             'e.nip as nip', 
             'u.username as username', 
+            'e.isActive as isActive', 
             'e.startDate as startDate',
             'al.name as accessLevel',
             DB::raw('concat(
@@ -402,25 +400,35 @@ class EmployeeController extends Controller
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
-            $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Pegawai" onclick="editEmployee('."'".$row->id."'".')">
-            <i class="fa fa-edit"></i>
-            </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Penempatan" onclick="editPemetaan('."'".$row->id."'".')">
-            <i class="fa fa-address-card"></i>
-            </button>            
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="History Penempatan" onclick="historyPemetaan('."'".$row->id."'".')">
-            <i class="fa fa-list"></i>
-            </button>            
-            ';            
-
-            if (Auth::user()->accessLevel <= 30){
-                $html .= '
-                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Password" onclick="editPassword('."'".$row->id."'".')">
-                <i class="fa fa-key"></i>
+            $html = '';
+            if($row->isActive == 1){
+                $html = '            
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Pegawai" onclick="editEmployee('."'".$row->id."'".')">
+                <i class="fa fa-edit"></i>
+                </button>
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Penempatan" onclick="editPemetaan('."'".$row->id."'".')">
+                <i class="fa fa-address-card"></i>
                 </button>            
-                ';                            
-            }
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="History Penempatan" onclick="historyPemetaan('."'".$row->id."'".')">
+                <i class="fa fa-list"></i>
+                </button>            
+                ';      
+                if (Auth::user()->accessLevel <= 30){
+                    $html .= '
+                    <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="EID '.$row->id.'" onclick="editPassword('."'".$row->id."'".')">
+                    <i class="fa fa-key"></i>
+                    </button>            
+                    ';                            
+                }
+            } else{
+                $html = '            
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Pegawai" onclick="editEmployee('."'".$row->id."'".')">
+                <i class="fa fa-edit"></i>
+                </button>
+                ';                      
+            }      
+
+
             return $html;
         })->addIndexColumn()->toJson();
     }

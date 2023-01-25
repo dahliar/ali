@@ -165,6 +165,7 @@ class SalaryController extends Controller
         )
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->where('e.employmentStatus', '=', '1')
+        ->where('e.isActive', '=', '1')
         ->where('eosm.isactive', '=', '1')
         ->get();
 
