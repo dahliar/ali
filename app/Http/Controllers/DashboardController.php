@@ -204,9 +204,9 @@ class DashboardController extends Controller
             )
             ->join('companies as c', 'c.id', '=', 't.companyId')
             ->where('t.valutaType', '=', '2')
-            ->groupBy('c.id')
-            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
             ->whereYear('t.loadingDate', $tahun)
+            ->groupBy('c.id')
+//            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
             ->get();
 
 
