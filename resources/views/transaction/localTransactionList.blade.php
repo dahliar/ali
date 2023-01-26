@@ -72,7 +72,7 @@
             columns: [
                 {data: 'name', name: 'name'},
                 {data: 'invnum', name: 'invnum'},
-                {data: 'td', name: 'td'},
+                {data: 'ld', name: 'ld'},
                 {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
                 ]
@@ -152,7 +152,7 @@
                         <tr>
                             <th>Perusahaan</th>
                             <th>No Surat</th>
-                            <th>Tanggal</th>
+                            <th>Tanggal Loading</th>
                             <th>Status</th>
                             <th>Act</th>
                         </tr>

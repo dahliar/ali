@@ -221,6 +221,7 @@ class DashboardController extends Controller
             ->whereYear('t.loadingDate', $tahun)
             ->groupBy(DB::raw('MONTH(t.loadingDate)'))
             ->get();
+            
             $transactionRupiahLine = DB::table('transactions as t')
             ->select(
                 DB::raw('MONTH(t.loadingDate) as bulan'),
