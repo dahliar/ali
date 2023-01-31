@@ -339,7 +339,6 @@ class EmployeeController extends Controller
 
     public function updateMapping(Request $request)
     {
-        //
         $request->validate([
             'structural'            => ['required', 'gt:0'],
             'workPosition'          => ['required', 'gt:0'],
@@ -359,7 +358,7 @@ class EmployeeController extends Controller
             'uanglembur'            => $request->uangLembur,
             'updatedBy'             => Session()->get('employeeId')
         ];
-        $this->employee->userMappingUpdate($request->empid, $request->nip, $request->name, $dataOrgStructure, $request->mappingid, $request->tanggalBerlaku);
+        $this->employee->userMappingUpdate($request->empid, $request->nip, $request->name, $dataOrgStructure, $request->mappingid, $request->tanggalBerlaku, $request->oldOrgStructureOption);
 
         return redirect('employeeList')
         ->with('status','Data Karyawan berhasil diubah.');

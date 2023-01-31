@@ -67,38 +67,37 @@ class Employee extends Model
         return $id;
     }
 
-    public function userMappingUpdate($eid, $nip, $nama, $newMappingData, $mappingid, $tanggalBerlaku){
+    public function userMappingUpdate($eid, $nip, $nama, $newMappingData, $mappingid, $tanggalBerlaku, $oldOrgStructureOption){
         $affected = DB::table('employeeorgstructuremapping')
         ->where('id', '=', $mappingid)
         ->update(['isactive' => 0]);
 
         $newid = DB::table('employeeorgstructuremapping')->insertGetId($newMappingData);
 
-        $text = DB::table('employeeorgstructuremapping as eos')
-        ->select('os.name as jabatan', 'sp.name as level', 'wp.name as bagian', 'eos.isactive as stat')
-        ->join('organization_structures as os', 'eos.idorgstructure', '=', 'os.id')
-        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
-        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
-        ->whereIn('eos.id', [$mappingid, $newid])->get();
+        if ($oldOrgStructureOption != $newMappingData['idorgstructure']){
+            $text = DB::table('employeeorgstructuremapping as eos')
+            ->select('os.name as jabatan', 'sp.name as level', 'wp.name as bagian', 'eos.isactive as stat')
+            ->join('organization_structures as os', 'eos.idorgstructure', '=', 'os.id')
+            ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+            ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+            ->whereIn('eos.id', [$mappingid, $newid])->get();
 
-        $data = [
-            'eid'                   => $eid,
-            'nama'                  => $nama,
-            'nip'                   => $nip,
-            'oldJabatan'            => $text[0]->jabatan,
-            'oldLevel'              => $text[0]->level,
-            'oldBagian'             => $text[0]->bagian,
-            'newJabatan'            => $text[1]->jabatan,
-            'newLevel'              => $text[1]->level,
-            'newBagian'             => $text[1]->bagian,
-            'tanggalBerlaku'        => $tanggalBerlaku,
-        ];
+            $data = [
+                'eid'                   => $eid,
+                'nama'                  => $nama,
+                'nip'                   => $nip,
+                'oldJabatan'            => $text[0]->jabatan,
+                'oldLevel'              => $text[0]->level,
+                'oldBagian'             => $text[0]->bagian,
+                'newJabatan'            => $text[1]->jabatan,
+                'newLevel'              => $text[1]->level,
+                'newBagian'             => $text[1]->bagian,
+                'tanggalBerlaku'        => $tanggalBerlaku,
+            ];
 
-        $adm = new AdministrationController();
-        $adm->cetakSuratMutasi($data);
-
-
-
+            $adm = new AdministrationController();
+            $adm->cetakSuratMutasi($data);
+        }
 
         return $newid;
     }
