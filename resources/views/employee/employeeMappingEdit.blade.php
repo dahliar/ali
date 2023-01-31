@@ -139,6 +139,14 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
+                                <span class="label">NIP*</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="nip" name="nip" type="text" class="form-control" required autocomplete="none" value="{{$employee->nip}}" readonly>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
                                 <span class="label">Tanggal Lahir*</span>
                             </div>
                             <div class="col-md-4">
@@ -148,13 +156,27 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
-                                <span class="label">Tanggal Mulai*</span>
+                                <span class="label">Tanggal Mulai Bekerja*</span>
                             </div>
                             <div class="col-md-4">
                                 <input id="startdate" name="startdate" class="form-control" type="date"  value="{{$employee->startdate}}" readonly>  
                                 <span class="add-on"><i class="icon-th"></i></span>
                             </div>      
                         </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label">Tanggal Mulai Berlaku*</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="tanggalBerlaku" name="tanggalBerlaku" class="form-control" type="date" value="{{old('tanggalBerlaku')}}">
+                                <span class="add-on"><i class="icon-th"></i></span>
+                            </div>      
+                        </div>
+
+                        <input id="oldStructural" name="oldStructural" class="form-control" type="hidden"  value="{{$orgstructure->structuralPosition}}" readonly>  
+                        <input id="oldWorkPosition" name="oldWorkPosition" class="form-control" type="hidden"  value="{{$orgstructure->workPosition}}" readonly>  
+                        <input id="oldOrgStructureOption" name="oldOrgStructureOption" class="form-control" type="hidden"  value="{{$orgstructure->idorgstructure}}" readonly>  
+
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                                 <span class="label">Jabatan*</span>

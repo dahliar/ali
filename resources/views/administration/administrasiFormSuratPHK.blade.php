@@ -38,7 +38,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <form id="formSuratPeringatan" action="{{url('administrasiSuratPeringatanStore')}}" method="post" name="formSuratPeringatan">
+        <form id="formSuratPHK" action="{{url('administrasiSuratPHKStore')}}" method="post" name="formSuratPHK">
             {{ csrf_field() }}
             <div class="modal-content">
                 <div class="modal-header">
@@ -50,7 +50,7 @@
                             <li class="breadcrumb-item active">
                                 <a class="white-text" href="{{ url('administrasi')}}">Administrasi</a>
                             </li>
-                            <li class="breadcrumb-item active">Surat Peringatan</li>
+                            <li class="breadcrumb-item active">Surat Pemutusan Hubungan Kerja</li>
                         </ol>
                     </nav>
                 </div>
@@ -125,22 +125,6 @@
                             </div>
                             <div class="col-md-4">
                                 <input id="publishDate" name="publishDate" type="date" class="form-control" value="{{old('publishDate')}}">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-end">
-                                <span class="label">Skors hingga</span>
-                            </div>
-                            <div class="col-md-4">
-                                <input id="skorsingTanggal" name="skorsingTanggal" type="date" class="form-control" value="{{old('skorsingTanggal')}}">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-end">
-                                <span class="label">Denda</span>
-                            </div>
-                            <div class="col-md-6">
-                                <textarea id="skorsingDenda" name="skorsingDenda" class="form-control" rows="4" cols="100">{{old('skorsingDenda')}}</textarea>                                
                             </div>
                         </div>
                     </div>

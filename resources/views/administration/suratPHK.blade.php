@@ -79,14 +79,7 @@
     <div class="row form-group">
         <div>
             <h1 align="center" style="margin-top: 0; margin-bottom: 0;">
-                @if($num == 1)
-                Surat Peringatan Pertama
-                @elseif($num == 2)
-                Surat Peringatan Kedua
-                @else
                 Surat Pemberhentian Kerja
-                @endif
-
             </h1>
             <h3 align="center"  style="margin-top: 0; margin-bottom: 10px;">
                 No : {{$paperworkNum}}
@@ -94,15 +87,6 @@
         </div>
     </div>
 
-    @if($num <= 2)
-    <table width="100%">
-        <tr>
-            <td>
-                Surat peringatan ini dibuat oleh perusahaan ditujukan kepada :
-            </td>
-        </tr>
-    </table>
-    @else
     <table width="100%">
         <tr>
             <td>
@@ -110,7 +94,6 @@
             </td>
         </tr>
     </table>
-    @endif
     <br>
     <table width="100%">
         <tr>
@@ -150,55 +133,10 @@
         </tr>
     </table>
     <br>
-    @if($num == 1)
     <table width="100%">
         <tr>
             <td style="word-break: break-all;">
-                Surat peringatan ini dibuat berdasarkan atas tindakan yang telah saudara perbuat, yaitu
-                <br>
-                <br>
-                {{$reason}}
-                <br>
-                <br>
-                Oleh karena itu perusahaan memberikan surat peringatan/teguran ini, dengan tujuan agar saudara tidak mengulangi kesalahan yang sama yang dapat merugikan perusahaan. Jika saudara masih mengulangi kesalahan yang sama, maka perusahaan berhak mengambil keputusan terkait dengan status kepegawaian saudara.
-                <br>
-                <br>
-                Demikian surat peringatan ini dibuat dengan sebenarnya.
-            </td>
-        </tr>
-    </table>
-    @elseif($num == 2)
-    <table width="100%">
-        <tr>
-            <td style="word-break: break-all;">
-                Surat peringatan ini dibuat berdasarkan atas tindakan yang telah saudara perbuat, yaitu
-                <br>
-                <br>
-                {{$reason}}
-                <br>
-                <br>
-                Skorsing hingga tanggal {{$skorsingTanggal}}
-                <br>
-                <br>
-                Denda berupa {{$skorsingDenda}}
-                <br>
-                <br>
-                Oleh karena itu perusahaan memberikan surat peringatan/teguran ini, dengan tujuan agar saudara tidak mengulangi kesalahan yang sama yang dapat merugikan perusahaan. Jika saudara masih mengulangi kesalahan yang sama, maka perusahaan berhak mengambil keputusan terkait dengan status kepegawaian saudara.
-                <br>
-                <br>
-                Demikian surat peringatan ini dibuat dengan sebenarnya.
-            </td>
-        </tr>
-    </table>
-    @else
-    <table width="100%">
-        <tr>
-            <td style="width:10%"></td>
-            <td style="word-break: break-all;">
-                Surat peringatan ketiga atau Pemutusan Hubungan Kerja (PHK) ini diterbitkan karena perusahaan tidak dapat menerima alasan Saudara terkait dengan masalah
-                <br>
-                <br>
-                {{$reason}}
+                Surat Pemutusan Hubungan Kerja (PHK) ini diterbitkan karena perusahaan tidak dapat menerima alasan Saudara terkait dengan masalah : {{$reason}}.
                 <br>
                 <br>
                 PT. Anugrah Laut Indonesia mengucapkan terimakasih atas sumbangsih yang telah diberikan oleh saudara selama bergabung dengan kami.
@@ -206,10 +144,8 @@
                 <br>
                 Demikian surat pemberhentian hubungan kerja ini dibuat dengan sebenarnya.
             </td>
-            <td style="width:10%"></td>
         </tr>
     </table>
-    @endif
     <br>
     <br>
     <table width="100%">

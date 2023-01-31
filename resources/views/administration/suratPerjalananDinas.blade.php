@@ -50,7 +50,7 @@
 </style>
 <head>
     <meta charset="UTF-8">
-    <title>Surat Keterangan Bekerja</title>
+    <title>Surat Perjalanan Dinas</title>
 </head>
 <body>
     <header>
@@ -79,39 +79,35 @@
     <div class="row form-group">
         <div>
             <h1 align="center" style="margin-top: 0; margin-bottom: 0;">
-                @if($num == 1)
-                Surat Peringatan Pertama
-                @elseif($num == 2)
-                Surat Peringatan Kedua
-                @else
-                Surat Pemberhentian Kerja
-                @endif
-
-            </h1>
+            Surat Perjalanan Dinas</h1>
             <h3 align="center"  style="margin-top: 0; margin-bottom: 10px;">
                 No : {{$paperworkNum}}
             </h3>
         </div>
     </div>
-
-    @if($num <= 2)
     <table width="100%">
         <tr>
             <td>
-                Surat peringatan ini dibuat oleh perusahaan ditujukan kepada :
+                Kepada yth. Pimpinan {{$kepada}}
             </td>
         </tr>
-    </table>
-    @else
-    <table width="100%">
+        <br>
         <tr>
             <td>
-                Surat pemberhentian ini dibuat oleh perusahaan ditujukan kepada :    
+                Kami yang bertanda tangan dibawah ini adalah Direktur Utama PT. Anugrah Laut Indonesia, menerangkan bahwa :
             </td>
         </tr>
     </table>
-    @endif
     <br>
+    @php
+    $awal = Carbon\Carbon::parse($start)->locale('id');
+    $awal->settings(['formatFunction' => 'translatedFormat']);
+    $awal = $awal->format('j F Y');
+
+    $akhir = Carbon\Carbon::parse($end)->locale('id');
+    $akhir->settings(['formatFunction' => 'translatedFormat']);
+    $akhir = $akhir->format('j F Y');
+    @endphp
     <table width="100%">
         <tr>
             <td style="width:5%"></td>
@@ -150,85 +146,38 @@
         </tr>
     </table>
     <br>
-    @if($num == 1)
     <table width="100%">
         <tr>
             <td style="word-break: break-all;">
-                Surat peringatan ini dibuat berdasarkan atas tindakan yang telah saudara perbuat, yaitu
+                adalah benar merupakan karyawan dari PT. Anugrah Laut Indonesia, yang kami tugaskan dalam rangka melaksanakan kegiatan {{$kegiatan}} mulai dari tanggal {{$awal}} hingga {{$akhir}}.
                 <br>
                 <br>
-                {{$reason}}
-                <br>
-                <br>
-                Oleh karena itu perusahaan memberikan surat peringatan/teguran ini, dengan tujuan agar saudara tidak mengulangi kesalahan yang sama yang dapat merugikan perusahaan. Jika saudara masih mengulangi kesalahan yang sama, maka perusahaan berhak mengambil keputusan terkait dengan status kepegawaian saudara.
-                <br>
-                <br>
-                Demikian surat peringatan ini dibuat dengan sebenarnya.
+                Demikian surat keterangan ini dibuat dengan sebenarnya untuk dipergunakan sebagaimana mestinya.
             </td>
         </tr>
     </table>
-    @elseif($num == 2)
-    <table width="100%">
-        <tr>
-            <td style="word-break: break-all;">
-                Surat peringatan ini dibuat berdasarkan atas tindakan yang telah saudara perbuat, yaitu
-                <br>
-                <br>
-                {{$reason}}
-                <br>
-                <br>
-                Skorsing hingga tanggal {{$skorsingTanggal}}
-                <br>
-                <br>
-                Denda berupa {{$skorsingDenda}}
-                <br>
-                <br>
-                Oleh karena itu perusahaan memberikan surat peringatan/teguran ini, dengan tujuan agar saudara tidak mengulangi kesalahan yang sama yang dapat merugikan perusahaan. Jika saudara masih mengulangi kesalahan yang sama, maka perusahaan berhak mengambil keputusan terkait dengan status kepegawaian saudara.
-                <br>
-                <br>
-                Demikian surat peringatan ini dibuat dengan sebenarnya.
-            </td>
-        </tr>
-    </table>
-    @else
-    <table width="100%">
-        <tr>
-            <td style="width:10%"></td>
-            <td style="word-break: break-all;">
-                Surat peringatan ketiga atau Pemutusan Hubungan Kerja (PHK) ini diterbitkan karena perusahaan tidak dapat menerima alasan Saudara terkait dengan masalah
-                <br>
-                <br>
-                {{$reason}}
-                <br>
-                <br>
-                PT. Anugrah Laut Indonesia mengucapkan terimakasih atas sumbangsih yang telah diberikan oleh saudara selama bergabung dengan kami.
-                <br>
-                <br>
-                Demikian surat pemberhentian hubungan kerja ini dibuat dengan sebenarnya.
-            </td>
-            <td style="width:10%"></td>
-        </tr>
-    </table>
-    @endif
     <br>
     <br>
+    @php
+    $dateDitetapkan = Carbon\Carbon::now()->locale('id');
+    $dateDitetapkan->settings(['formatFunction' => 'translatedFormat']);
+    $tanggalDitetapkan = $dateDitetapkan->format('j F Y');
+    @endphp
     <table width="100%">
         <tr>
+            <td width="60%" style="text-align: left;vertical-align: top;"></td>
             <td width="40%" style="text-align: left;vertical-align: top;">
-                Tuban, {{ Carbon\Carbon::now()->toDateString()}}
-                <br>
-                Pembuat,
+                Tuban, {{ $tanggalDitetapkan }}
+            </td>
+        </tr>  
+        <tr>
+            <td width="60%" style="text-align: left;vertical-align: top;"></td>
+            <td width="40%" style="text-align: left;vertical-align: top;">
+                a.n PT. Anugrah Laut Indonesia
                 <br><br>ttd<br><br>
-                <br>
-                Bagian Sumber Daya Manusia
-            </td>
-            <td width="40%" style="text-align: left;vertical-align: top;">
-                <br>
-                Mengetahui,
-                <br><br>ttd<br><br><br>
                 Aktaria Hidapratiwi
                 <br>
-                Direktur Utama PT. Anugrah Laut Indonesia
+                Direktur Utama
             </td>
         </tr>       
     </table>

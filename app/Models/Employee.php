@@ -9,6 +9,9 @@ use Carbon\Carbon;
 use App\Models\Employee;
 use App\Models\EmployeeHistory;
 
+use App\Http\Controllers\AdministrationController;
+
+
 
 
 class Employee extends Model
@@ -64,13 +67,40 @@ class Employee extends Model
         return $id;
     }
 
-    public function userMappingUpdate($newMappingData, $mappingid){
+    public function userMappingUpdate($eid, $nip, $nama, $newMappingData, $mappingid, $tanggalBerlaku){
         $affected = DB::table('employeeorgstructuremapping')
         ->where('id', '=', $mappingid)
         ->update(['isactive' => 0]);
 
-        $id = DB::table('employeeorgstructuremapping')->insertGetId($newMappingData);
-        return $id;
+        $newid = DB::table('employeeorgstructuremapping')->insertGetId($newMappingData);
+
+        $text = DB::table('employeeorgstructuremapping as eos')
+        ->select('os.name as jabatan', 'sp.name as level', 'wp.name as bagian', 'eos.isactive as stat')
+        ->join('organization_structures as os', 'eos.idorgstructure', '=', 'os.id')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->whereIn('eos.id', [$mappingid, $newid])->get();
+
+        $data = [
+            'eid'                   => $eid,
+            'nama'                  => $nama,
+            'nip'                   => $nip,
+            'oldJabatan'            => $text[0]->jabatan,
+            'oldLevel'              => $text[0]->level,
+            'oldBagian'             => $text[0]->bagian,
+            'newJabatan'            => $text[1]->jabatan,
+            'newLevel'              => $text[1]->level,
+            'newBagian'             => $text[1]->bagian,
+            'tanggalBerlaku'        => $tanggalBerlaku,
+        ];
+
+        $adm = new AdministrationController();
+        $adm->cetakSuratMutasi($data);
+
+
+
+
+        return $newid;
     }
 
     public function generateNIP($birthdate, $startdate){

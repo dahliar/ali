@@ -588,10 +588,14 @@ Route::get('employeePaperList/{employeeId}',[AdministrationController::class, 'p
 Route::get('administrasiFormPilihSurat/{employeeId}',[AdministrationController::class, 'formPilih'])->middleware(['auth', 'authorized']);
 Route::post('administrasiSuratStore',[AdministrationController::class, 'store'])->middleware(['auth', 'authorized']);
 Route::get('administrasiFormSuratPeringatan',[AdministrationController::class, 'formSuratPeringatan'])->middleware(['auth', 'authorized'])->name('administrasiFormSuratPeringatan');
+Route::get('administrasiFormSuratPHK',[AdministrationController::class, 'formSuratPHK'])->middleware(['auth', 'authorized'])->name('administrasiFormSuratPHK');
+Route::get('administrasiFormSuratPerjalanan',[AdministrationController::class, 'formSuratPerjalananDinas'])->middleware(['auth', 'authorized'])->name('administrasiFormSuratPerjalanan');
+
 Route::get('administrasiAllSurat',[AdministrationController::class, 'indexAllSurat'])->middleware(['auth', 'authorized']);
 
-
-Route::post('administrasiSuratPeringatanStore',[AdministrationController::class, 'suratPeringatan'])->middleware(['auth', 'authorized']);
+Route::post('administrasiSuratPerjalananDinasStore',[AdministrationController::class, 'suratPerjalanan'])->middleware(['auth']);
+Route::post('administrasiSuratPeringatanStore',[AdministrationController::class, 'suratPeringatan'])->middleware(['auth']);
+Route::post('administrasiSuratPHKStore',[AdministrationController::class, 'suratPHK'])->middleware(['auth']);
 Route::get('getAllEmployeePaper/{employeeId}',[AdministrationController::class, 'getAllEmployeePaper'])->middleware(['auth']);
 Route::get('getAllPapers',[AdministrationController::class, 'getAllPapers']);
 Route::GET('getAdministrationFileDownload/{filepath}', [AdministrationController::class, 'getAdministrationFileDownload'])->middleware(['auth']);

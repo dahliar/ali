@@ -38,7 +38,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <form id="formSuratPeringatan" action="{{url('administrasiSuratPeringatanStore')}}" method="post" name="formSuratPeringatan">
+        <form id="formSuratPerjalanan" action="{{url('administrasiSuratPerjalananDinasStore')}}" method="post" name="formSuratPerjalanan">
             {{ csrf_field() }}
             <div class="modal-content">
                 <div class="modal-header">
@@ -50,7 +50,7 @@
                             <li class="breadcrumb-item active">
                                 <a class="white-text" href="{{ url('administrasi')}}">Administrasi</a>
                             </li>
-                            <li class="breadcrumb-item active">Surat Peringatan</li>
+                            <li class="breadcrumb-item active">Surat Perjalanan Dinas</li>
                         </ol>
                     </nav>
                 </div>
@@ -66,6 +66,16 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <input id="name" name="name" type="text" class="form-control text-left" value="{{$name}}" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-md-end">
+                                <span class="label">Nomor Induk Kependudukan</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <input id="nik" name="nik" type="text" class="form-control text-left" value="{{$nik}}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -111,36 +121,38 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-3 text-md-end">
-                                <span class="label">Alasan</span>
+                                <span class="label">Ditujukan Kepada</span>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <textarea id="reason" name="reason" class="form-control" rows="4" cols="100">{{old('reason')}}</textarea>
+                                    <input id="kepada" name="kepada" class="form-control" rows="4" cols="100" value="{{old('kepada')}}">
                                 </div>
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-3 text-md-end">
-                                <span class="label">Tanggal terbit</span>
-                            </div>
-                            <div class="col-md-4">
-                                <input id="publishDate" name="publishDate" type="date" class="form-control" value="{{old('publishDate')}}">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-end">
-                                <span class="label">Skors hingga</span>
-                            </div>
-                            <div class="col-md-4">
-                                <input id="skorsingTanggal" name="skorsingTanggal" type="date" class="form-control" value="{{old('skorsingTanggal')}}">
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-end">
-                                <span class="label">Denda</span>
+                                <span class="label">Kegiatan</span>
                             </div>
                             <div class="col-md-6">
-                                <textarea id="skorsingDenda" name="skorsingDenda" class="form-control" rows="4" cols="100">{{old('skorsingDenda')}}</textarea>                                
+                                <div class="input-group">
+                                    <input id="kegiatan" name="kegiatan" class="form-control" rows="4" cols="100" value="{{old('kegiatan')}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-md-end">
+                                <span class="label">Tanggal Mulai</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="startdate" name="startdate" type="date" class="form-control" value="{{old('startdate')}}">
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-3 text-md-end">
+                                <span class="label">Tanggal Selesai</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="enddate" name="enddate" type="date" class="form-control" value="{{old('enddate')}}">
                             </div>
                         </div>
                     </div>

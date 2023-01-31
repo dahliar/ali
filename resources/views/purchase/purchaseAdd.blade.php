@@ -80,7 +80,7 @@
         </div>
 
         <div class="card card-body">
-            <form id="PurchaseForm" action="{{route('purchaseStore')}}"  method="get" name="PurchaseForm">
+            <form id="PurchaseForm" action="{{route('purchaseStore')}}"  method="get" name="PurchaseForm" enctype="multipart/form-data">
                 @csrf
                 <div class="d-grid gap-1">
                     <div class="row form-group">
@@ -122,6 +122,16 @@
                     </div>                
                     <div class="row form-group">
                         <div class="col-md-3 text-md-end">
+                            <span class="label">Tanggal Jatuh tempo*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="date" id="dueDate" name="dueDate" class="form-control text-end" value="{{ old('dueDate', date('Y-m-d'))}}" min="{{ old('dueDate', date('Y-m-d'))}}" max="{{ old('dueDate', date('Y-m-d', strtotime('+2 month')))}}">
+                            </div>
+                        </div>
+                    </div>                
+                    <div class="row form-group">
+                        <div class="col-md-3 text-md-end">
                             <span class="label">Persen Pajak</span>
                         </div>
                         <div class="col-md-3">
@@ -144,6 +154,16 @@
                                 <option value="3" @if(old('valutaType') == 3) selected @endif>Renminbi</option>
                             </select>
                         </div>                    
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3 text-md-end">
+                            <span class="label">File Invoice</span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input class="form-control" type="file" id="imageurl" name="imageurl">
+                            </div>
+                        </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-md-3 text-md-end">

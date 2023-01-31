@@ -35,7 +35,9 @@
         document.body.appendChild(mapForm);
         mapForm.submit();
     }
-
+    function employeePaperList(id){
+        window.open(('{{ url("employeePaperList") }}'+"/"+id), '_self');
+    }
     function editEmployee(id){
         window.open(('{{ url("employeeEdit") }}'+"/"+id), '_self');
     }
@@ -62,28 +64,24 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "15%", "targets":  [2], "className": "text-left"   },
-            {   "width": "5%", "targets":   [3], "className": "text-center" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%",  "targets": [7], "className": "text-center" },
-            {   "width": "20%", "targets":  [8], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "20%", "targets":  [1], "className": "text-left"   },
+                {   "width": "15%", "targets":  [2], "className": "text-left"   },
+                {   "width": "5%", "targets":   [3], "className": "text-center" },
+                {   "width": "15%", "targets":  [4], "className": "text-left" },
+                {   "width": "10%", "targets":  [5], "className": "text-left" },
+                {   "width": "20%", "targets":  [6], "className": "text-left" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'username', name: 'username'},
-            {data: 'gender', name: 'gender'},
-            {data: 'phone', name: 'phone'},            
-            {data: 'jenisPenggajian', name: 'jenisPenggajian'},
-            {data: 'accessLevel', name: 'accessLevel'},
-            {data: 'statusKepegawaian', name: 'statusKepegawaian'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'username', name: 'username'},
+                {data: 'gender', name: 'gender'},
+                {data: 'jenisPenggajian', name: 'jenisPenggajian'},
+                {data: 'statusKepegawaian', name: 'statusKepegawaian'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
@@ -128,9 +126,7 @@
                                 <th>Nama</th>
                                 <th>Username</th>
                                 <th>JK</th>
-                                <th>Telepon</th>
                                 <th>Karyawan</th>
-                                <th>Level Akses</th>
                                 <th>Status</th>
                                 <th>Aksi</th>
                             </tr>

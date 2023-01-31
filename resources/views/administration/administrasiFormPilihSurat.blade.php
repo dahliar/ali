@@ -187,13 +187,13 @@
                                 <span class="label">Pilih Surat*</span>
                             </div>
                             <div class="col-md-6">
-                                <select class="form-select w-100" id="paper" name="paper">
+                                <select class="form-select w-100" id="paperworkTypeId" name="paperworkTypeId">
                                     <option value="-1">--Choose One--</option>
-                                    @foreach ($papers as $paper)
-                                    @if ( $paper->id == old('paper') )
-                                    <option value="{{ $paper->id }}" selected>{{ $paper->name }}</option>
+                                    @foreach ($paperworkTypes as $paperwork)
+                                    @if ( $paperwork->id == old('paperworkTypeId') )
+                                    <option value="{{ $paperwork->id }}" selected>{{ $paperwork->name }}</option>
                                     @else
-                                    <option value="{{ $paper->id }}">{{ $paper->name }}</option>
+                                    <option value="{{ $paperwork->id }}">{{ $paperwork->name }}</option>
                                     @endif
                                     @endforeach
                                 </select>

@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use App\Models\Employee;
 use App\Models\StructuralPosition;
 use App\Models\WorkPosition;
+use App\Http\Controllers\AdministrationController;
 use DB;
 use Auth;
 
@@ -140,6 +141,14 @@ class EmployeeController extends Controller
             'uanglembur'        => $request->uangLembur
         ];
         $mappingId = $this->employee->orgStructureStore($mapping);
+
+        //Bikin SK Pegawai Bulanan
+        /*
+        if($request->employmentStatus == 3){
+            $adm = new AdministrationController();
+            $adm->cetakSuratPengangkatanPegawaiBulanan($empid, $mappingId);
+        }
+        */
 
         return redirect('employeeList')
         ->with('status','Item berhasil ditambahkan.');
@@ -337,6 +346,7 @@ class EmployeeController extends Controller
             'OrgStructureOption'    => ['required', 'gt:0'],
             'gajiPokok'             => ['required', 'gte:0'],
             'uangHarian'            => ['required', 'gte:0'],
+            'tanggalBerlaku'        => ['required', 'before_or_equal:today'],
             'uangLembur'            => ['required', 'gte:0']
         ]);
 
@@ -349,7 +359,7 @@ class EmployeeController extends Controller
             'uanglembur'            => $request->uangLembur,
             'updatedBy'             => Session()->get('employeeId')
         ];
-        $this->employee->userMappingUpdate($dataOrgStructure, $request->mappingid);
+        $this->employee->userMappingUpdate($request->empid, $request->nip, $request->name, $dataOrgStructure, $request->mappingid, $request->tanggalBerlaku);
 
         return redirect('employeeList')
         ->with('status','Data Karyawan berhasil diubah.');
@@ -406,6 +416,10 @@ class EmployeeController extends Controller
                 <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Pegawai" onclick="editEmployee('."'".$row->id."'".')">
                 <i class="fa fa-edit"></i>
                 </button>
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Surat-Surat Pegawai'."'".$row->id."'".'" onclick="employeePaperList('."'".$row->id."'".')">
+                <i class="fas fa-envelope"></i>
+                </button>            
+
                 <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Penempatan" onclick="editPemetaan('."'".$row->id."'".')">
                 <i class="fa fa-address-card"></i>
                 </button>            
@@ -425,10 +439,11 @@ class EmployeeController extends Controller
                 <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Pegawai" onclick="editEmployee('."'".$row->id."'".')">
                 <i class="fa fa-edit"></i>
                 </button>
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Surat-Surat Pegawai'."'".$row->id."'".'" onclick="employeePaperList('."'".$row->id."'".')">
+                <i class="fas fa-envelope"></i>
+                </button>            
                 ';                      
             }      
-
-
             return $html;
         })->addIndexColumn()->toJson();
     }
