@@ -294,7 +294,7 @@ class AdministrationController extends Controller
 
 
         $pdf = PDF::loadView('administration.suratKeterangan', compact('employee', 'paperworkNum'));
-        $filename = 'Surat Keterangan Bekerja '.$employee->name.' '.Carbon::now()->format('Ymd His').'.pdf';
+        $filename = 'Surat Keterangan Bekerja '.$employee->nip.' '.Carbon::now()->format('Ymd His').'.pdf';
 
         $filepath = storage_path('/app/paperworks/'.$filename);
         $pdf->save($filepath);
@@ -372,7 +372,7 @@ class AdministrationController extends Controller
         $skorsingTanggal = $request->skorsingTanggal;
 
         $pdf = PDF::loadView('administration.suratPeringatan', compact('employeeId', 'name', 'nip', 'jabatan', 'orgStructure', 'workPosition', 'num', 'startdate', 'until','reason', 'skorsingDenda', 'skorsingTanggal', 'paperworkNum'));
-        $filename = 'Surat Peringatan ke '.$num.' - '.$name.' '.Carbon::now()->format('Ymd His').'.pdf';
+        $filename = 'Surat Peringatan ke '.$num.' - '.$nip.' '.Carbon::now()->format('Ymd His').'.pdf';
 
         $filepath = storage_path('/app/paperworks/'.$filename);
         $pdf->save($filepath);
@@ -435,7 +435,7 @@ class AdministrationController extends Controller
 
 
         $pdf = PDF::loadView('administration.suratPHK', compact('employeeId', 'name', 'nip', 'jabatan', 'orgStructure', 'workPosition', 'startdate', 'until','reason', 'skorsingTanggal', 'paperworkNum'));
-        $filename = 'Surat Pemutusan Hubungan Kerja - '.$name.' '.Carbon::now()->format('Ymd His').'.pdf';
+        $filename = 'Surat Pemutusan Hubungan Kerja - '.$nip.' '.Carbon::now()->format('Ymd His').'.pdf';
 
         $filepath = storage_path('/app/paperworks/'.$filename);
         $pdf->save($filepath);
@@ -525,7 +525,7 @@ class AdministrationController extends Controller
         $paperwork = self::cetakSuratKeterangan($data['eid'], $paperworkId, $paperworkNum);
 
         $pdf = PDF::loadView('administration.suratMutasi', compact('data', 'paperworkNum'));
-        $filename = 'Surat Keputusan Mutasi Pegawai '.$data['nama'].' '.Carbon::now()->format('Ymd His').'.pdf';
+        $filename = 'Surat Keputusan Mutasi Pegawai '.$data['nip'].' '.Carbon::now()->format('Ymd His').'.pdf';
 
         $filepath = storage_path('/app/paperworks/'.$filename);
         $pdf->save($filepath);
@@ -634,7 +634,7 @@ class AdministrationController extends Controller
         ];
 
         $pdf = PDF::loadView('administration.suratPegawaiTetap', compact('data', 'paperworkNum'));
-        $filename = 'Surat Keputusan Mutasi Pegawai '.$data['nama'].' '.Carbon::now()->format('Ymd His').'.pdf';
+        $filename = 'Surat Keputusan Mutasi Pegawai '.$data['nip'].' '.Carbon::now()->format('Ymd His').'.pdf';
 
         $filepath = storage_path('/app/paperworks/'.$filename);
         $pdf->save($filepath);
