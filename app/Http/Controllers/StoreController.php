@@ -635,25 +635,30 @@ class StoreController extends Controller
                 DB::beginTransaction();
                 $approved = DB::table('stores')
                 ->where('id', $request->storeId)
+                ->where('isApprovec', 0)
                 ->update([
                     'isApproved' => 1,
                     'approvedBy' => auth()->user()->id,
                     'approvedDate' => date('Y-m-d')
                 ]);
+                if ($approved>0){
+                    $store = DB::table('stores')
+                    ->where('id', $request->storeId)
+                    ->first();
 
-                $store = DB::table('stores')
-                ->where('id', $request->storeId)
-                ->first();
-
-                $affected = DB::table('items')
-                ->where('id', $store->itemId)
-                ->update([
-                    'amount' => DB::raw('amount + '.$store->amountPacked),
-                    'amountUnpacked' => DB::raw('amountUnpacked + '.$store->amountUnpacked),
-                ]);
-                $this->transaction->stockChangeLog(1, "Approval stock tanggal ".$store->datePackage, $store->itemId, $store->amountPacked);
-                DB::commit();
-                return "Data berhasil diupdate";
+                    $affected = DB::table('items')
+                    ->where('id', $store->itemId)
+                    ->update([
+                        'amount' => DB::raw('amount + '.$store->amountPacked),
+                        'amountUnpacked' => DB::raw('amountUnpacked + '.$store->amountUnpacked),
+                    ]);
+                    $this->transaction->stockChangeLog(1, "Approval stock tanggal ".$store->datePackage, $store->itemId, $store->amountPacked);
+                    DB::commit();
+                    return true;
+                } else{
+                    DB::commit();
+                    return true;
+                }
             }
             catch(\Exception $e){
                 DB::rollBack();
@@ -677,24 +682,29 @@ class StoreController extends Controller
                 DB::beginTransaction();
                 $approved = DB::table('stock_subtracts')
                 ->where('id', $request->stockSubtractId)
+                ->where('isApproved', 0)
                 ->update([
                     'isApproved' => 1,
                     'approvedBy' => auth()->user()->id,
                     'approvedDate' => date('Y-m-d')
                 ]);
+                if($approved>0){
+                    $stock_subtract = DB::table('stock_subtracts')
+                    ->where('id', $request->stockSubtractId)
+                    ->first();
 
-                $stock_subtract = DB::table('stock_subtracts')
-                ->where('id', $request->stockSubtractId)
-                ->first();
-
-                $affected = DB::table('items')
-                ->where('id', $stock_subtract->itemId)
-                ->update([
-                    'amount' => DB::raw('amount - '.$stock_subtract->amountSubtract)
-                ]);
-                $this->transaction->stockChangeLog(2, "Approval pengurangan stock tanggal ".$stock_subtract->tanggal, $stock_subtract->itemId, $stock_subtract->amountSubtract);
-                DB::commit();
-                return "Data pengurangan berhasil diupdate";
+                    $affected = DB::table('items')
+                    ->where('id', $stock_subtract->itemId)
+                    ->update([
+                        'amount' => DB::raw('amount - '.$stock_subtract->amountSubtract)
+                    ]);
+                    $this->transaction->stockChangeLog(2, "Approval pengurangan stock tanggal ".$stock_subtract->tanggal, $stock_subtract->itemId, $stock_subtract->amountSubtract);
+                    DB::commit();
+                    return true;
+                } else{
+                    DB::commit();
+                    return true;
+                }
             }
             catch(\Exception $e){
                 DB::rollBack();

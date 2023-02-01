@@ -95,7 +95,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input oninput="totalAmount()" id="packedKurang" name="packedKurang" value="{{ old('packedTambah',0) }}" type="number" class="form-control text-end" step="0.01">
+                                    <input oninput="totalAmount()" id="packedKurang" name="packedKurang" value="{{ old('packedKurang',0) }}" type="number" class="form-control text-end" step="0.01">
                                     <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
                                 </div>
                             </div>

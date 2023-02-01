@@ -42,9 +42,9 @@
                             'Approval selesai',
                             'success'
                             );
+                        myFunction();
                     }
                 });
-                myFunction();
             } else {
                 Swal.fire(
                     'Batal!',
@@ -80,9 +80,9 @@
                             'Perubahan stok ditolak',
                             'success'
                             );
+                        myFunction();
                     }
                 });
-                myFunction();
             } else {
                 Swal.fire(
                     'Batal!',
@@ -118,25 +118,25 @@
             deferRender: true,
             destroy:true,
             columnDefs: [
-            {   "width": "21%",  "targets":  [0], "className": "text-left" },
-            {   "width": "10%", "targets":  [1], "className": "text-end" },
-            {   "width": "8%", "targets":  [2], "className": "text-center" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "20%", "targets":  [4], "className": "text-left" },
-            {   "width": "8%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "12%", "targets":  [7], "className": "text-center" }
-            ], 
+                {   "width": "21%",  "targets":  [0], "className": "text-left" },
+                {   "width": "10%", "targets":  [1], "className": "text-end" },
+                {   "width": "8%", "targets":  [2], "className": "text-center" },
+                {   "width": "10%", "targets":  [3], "className": "text-left" },
+                {   "width": "20%", "targets":  [4], "className": "text-left" },
+                {   "width": "8%", "targets":  [5], "className": "text-left" },
+                {   "width": "10%", "targets":  [6], "className": "text-left" },
+                {   "width": "12%", "targets":  [7], "className": "text-center" }
+                ], 
             columns: [
-            {data: 'itemName', name: 'itemName'},
-            {data: 'amountSubtract', name: 'amountSubtract'},
-            {data: 'tanggal', name: 'tanggal'},
-            {data: 'userInputName', name: 'userInputName'},
-            {data: 'alasan', name: 'alasan'},
-            {data: 'isApproved', name: 'isApproved'},
-            {data: 'userApproveName', name: 'userApproveName'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'itemName', name: 'itemName'},
+                {data: 'amountSubtract', name: 'amountSubtract'},
+                {data: 'tanggal', name: 'tanggal'},
+                {data: 'userInputName', name: 'userInputName'},
+                {data: 'alasan', name: 'alasan'},
+                {data: 'isApproved', name: 'isApproved'},
+                {data: 'userApproveName', name: 'userApproveName'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
