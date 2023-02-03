@@ -39,7 +39,7 @@
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'Ok disimpan.'
                         }).then((result) => {
-                          document.getElementById("transactionForm").submit();
+                          document.getElementById("generateGaji").submit();
                       })
                     } else {
                         Swal.fire(
