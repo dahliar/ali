@@ -17,6 +17,38 @@
 </script>
 @endif
 
+<script type="text/javascript">
+    function myFunction(){
+        Swal.fire({
+            title: 'Yakin buat surat Peringatan?',
+            text: "Pembuatan surat Peringatan",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Buat saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Surat dibuat',
+                    text: "Pembuatan surat Peringatan",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok dibuat.'
+                }).then((result) => {
+                    document.getElementById("formSuratPeringatan").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal dibuat!',
+                    "Pembuatan surat Peringatan",
+                    'info'
+                    );
+            }
+        })
+    };
+</script>
+
 
 @if ($errors->any())
 <div class="alert alert-success">
@@ -146,7 +178,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="justify-content: center;">
-                    <button id="buttonSubmit" type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Buat surat</button>
                     <input type="reset" value="Reset" class="btn btn-secondary">
                 </div>
             </div>

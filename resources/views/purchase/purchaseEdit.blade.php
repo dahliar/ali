@@ -4,6 +4,35 @@
 
 @section('content')
 <script type="text/javascript"> 
+    function myFunction(){
+        Swal.fire({
+            title: 'Edit data pembelian?',
+            text: "Simpan transaksi pembelian",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Transaksi disimpan',
+                    text: "Simpan transaksi pembelian",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("purchaseForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan transaksi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     $(document).ready(function() {
         $('#company').on('change', function() {
             var company = $(this).val();
@@ -78,7 +107,7 @@
             <div class="row">
                 <div class="col-1"></div>
                 <div class="col-10">
-                    <form id="PurchaseForm" action="{{url('purchaseUpdate')}}"  method="post" name="PurchaseForm">
+                    <form id="purchaseForm" action="{{url('purchaseUpdate')}}"  method="post" name="purchaseForm">
                         @csrf
                         <div class="d-grid gap-1">
                             <div class="row form-group">
@@ -209,7 +238,7 @@
                         @if(Auth::user()->accessLevel<=1)
                         <div class="row form-group">
                             <div class="text-center col-md-8">
-                                <button type="submit" class="btn btn-primary">Ubah</button>
+                                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                                 <input type="reset" value="Reset" class="btn btn-secondary">
                             </div>
                         </div>
@@ -217,7 +246,7 @@
                         @if ($purchase->status == 1)
                         <div class="row form-group">
                             <div class="text-center col-md-8">
-                                <button type="submit" class="btn btn-primary">Ubah</button>
+                                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                                 <input type="reset" value="Reset" class="btn btn-secondary">
                             </div>
                         </div>

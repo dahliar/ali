@@ -8,8 +8,39 @@
 @section('footer')
 @include('partial.footer')
 @endsection
-    
+
 @section('content')
+<script type="text/javascript"> 
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah Jabatan?',
+            text: "Simpan penambahan jabatan.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Jabatan ditambahkan.',
+                    text: "Simpan penambahan jabatan.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("StructureAddForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Penambahan penempatan struktur organisasi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+</script>
 @if ($errors->any())
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -56,7 +87,7 @@
                     <div class="col-md-2 text-end">
                     </div>
                     <div class="col-md-8">
-                        <button class="btn btn-primary buttonConf" style="width:100px;" id="buttSubmit" type="submit">Ok</button>
+                        <button type="button" class="btn btn-primary" style="width:100px;" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                         <button type="Reset" class="btn btn-danger buttonConf" style="width:100px;" >Reset</button>
                     </div>
                 </div>

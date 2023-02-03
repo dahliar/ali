@@ -4,6 +4,36 @@
 
 @section('content')
 <script type="text/javascript"> 
+
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah Transaksi?',
+            text: "Simpan transaksi penjualan eksport",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Transaksi disimpan',
+                    text: "Simpan transaksi penjualan eksport",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("transactionForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan transaksi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     $(document).ready(function() {
         $('.js-example-basic-single').select2();
         $('#rekening').on('change', function() {
@@ -108,7 +138,7 @@
             <div class="row form-group">
                 <div class="col-1"></div>
                 <div class="col-10">
-                    <form id="TransactionForm" action="{{url('localTransactionStore')}}"  method="POST" name="TransactionForm">
+                    <form id="transactionForm" action="{{url('localTransactionStore')}}"  method="POST" name="transactionForm">
                         @csrf
                         <div class="d-grid gap-1">
                             <div class="row form-group">
@@ -241,7 +271,7 @@
                             <div class="row form-group">
                                 <div class="col-md-3 text-md-right"></div>
                                 <div class="col-md-8">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Save</button>
                                     <input type="reset" value="Reset" class="btn btn-secondary">
                                 </div>
                             </div>

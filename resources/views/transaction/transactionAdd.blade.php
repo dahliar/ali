@@ -3,7 +3,37 @@
 @extends('layouts.layout')
 
 @section('content')
-<script type="text/javascript"> 
+<script type="text/javascript">
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah Transaksi?',
+            text: "Simpan transaksi penjualan eksport",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Transaksi disimpan',
+                    text: "Simpan transaksi penjualan eksport",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("transactionForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan transaksi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+
     $(document).ready(function() {
         $('.js-example-basic-single').select2();
         var i=1;
@@ -11,6 +41,8 @@
             i++;  
             $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">notes</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>'); 
         });
+
+
         $(document).on('click', '.btn_remove', function(){  
             var button_id = $(this).attr("id");   
             $('#row'+button_id+'').remove();  
@@ -121,7 +153,7 @@
                 <div class="col-md-2"></div>
                 <div class="col-md-10">
                     <div class="modal-header">
-                        <form id="TransactionForm" action="{{url('transactionStore')}}"  method="POST" name="TransactionForm">
+                        <form id="transactionForm" action="{{url('transactionStore')}}"  method="POST" name="TransactionForm">
                             @csrf
                             <div class="row form-group">
                                 <div class="col-md-3 text-md-right">
@@ -413,7 +445,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             <table width="100%">
                                 <tr>
                                     <td><hr /></td>
@@ -454,7 +486,7 @@
                                 <div class="row form-group">
                                     <div class="col-md-3 text-md-right"></div>
                                     <div class="text-center col-md-8">
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Save</button>
                                         <input type="reset" value="Reset" class="btn btn-secondary">
                                     </div>
                                 </div>
@@ -464,31 +496,32 @@
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 
 
-    @if ($errors->any())
-    @if (!empty(old('pinotes')))
-    <script type="text/javascript">
-        var i=1;
-        var $arr = @json(old('pinotes'));
-        for ($note of $arr){
-            i++;  
-            $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">'+$note+'</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');  
-        }
-    </script>
-    @endif
-    @endif
+@if ($errors->any())
+@if (!empty(old('pinotes')))
+<script type="text/javascript">
+    var i=1;
+    var $arr = @json(old('pinotes'));
+    for ($note of $arr){
+        i++;  
+        $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added"><td class="col-md-11"><textarea id="pinotes[]" name="pinotes[]" rows="4"  class="form-control" style="min-width: 100%">'+$note+'</textarea></td><td class="col-md-1"><button type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove"><i class="fa fa-trash"></i></button></td></tr>');  
+    }
+</script>
+@endif
+@endif
 
-    @endsection
+@endsection
 
-    @section('footer')
-    @include('partial.footer')
-    @endsection
+@section('footer')
+@include('partial.footer')
+@endsection
 
-    @section('header')
-    @include('partial.header')
-    @endsection
+@section('header')
+@include('partial.header')
+@endsection
 
 
 

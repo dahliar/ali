@@ -30,6 +30,38 @@
 </script>
 @endif
 
+<script type="text/javascript">
+    function myFunction(){
+        Swal.fire({
+            title: 'Kurangi jumlah stock barang?',
+            text: "Simpan perubahan jumlah stock",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Jumlah stock dikurangi',
+                    text: "Simpan perubahan jumlah stock",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("formPenguranganStock").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Perubahan jumlah stock dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+</script>
+
 
 @if ($errors->any())
 <div class="alert alert-success">
@@ -51,7 +83,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <form id="formTambahItem" action="{{url('storeSubtract')}}" method="post" name="formTambahItem">
+        <form id="formPenguranganStock" action="{{url('storeSubtract')}}" method="post" name="formPenguranganStock">
             {{ csrf_field() }}
             <div class="modal-content">
                 <div class="modal-header">
@@ -132,7 +164,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="justify-content: center;">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                     <input type="reset" value="Reset" class="btn btn-secondary">
                 </div>
             </div>

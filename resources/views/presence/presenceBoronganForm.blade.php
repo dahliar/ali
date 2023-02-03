@@ -11,6 +11,36 @@
 
 @section('content')
 <script type="text/javascript"> 
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah presensi borongan?',
+            text: "Simpan presensi borongan.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Presensi borongan disimpan',
+                    text: "Simpan presensi borongan.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("tambahBorongan").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan presensi borongan dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+
     $(document).ready(function() {
         $('#jenis').on('change', function() {
             var jenis = $(this).val();
@@ -154,7 +184,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Reset</button>
-                        <button type="submit" class="btn btn-primary" >Save changes</button>
+                        <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                     </div>
                 </div>
             </div>

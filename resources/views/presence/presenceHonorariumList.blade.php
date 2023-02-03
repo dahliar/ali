@@ -14,13 +14,43 @@
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-    });
+    }); 
+
+    function simpanFunction(){
+        Swal.fire({
+            title: 'Simpan presensi harian pegawai?',
+            text: "Simpan presensi harian",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Data presensi disimpan',
+                    text: "Simpan presensi harian.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    presenceForTodayStore();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Presensi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
 
     function presenceForTodayModal(id){
         document.getElementById("empidModal").value = id;
         $('#employeePresenceHonorariumModal').modal('show');
     }
-    function presenceForTodayStore(id){
+    function presenceForTodayStore(){
         var empid = document.getElementById("empidModal").value;
         var tanggalKerja = document.getElementById("modalTanggalKerja").value;
         var jumlah = document.getElementById("modalJumlah").value;
@@ -63,26 +93,26 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "25%", "targets":  [1], "className": "text-left"   },
-            {   "width": "15%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-left" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "25%", "targets":  [1], "className": "text-left"   },
+                {   "width": "15%", "targets":  [2], "className": "text-left" },
+                {   "width": "10%", "targets":  [3], "className": "text-left" },
+                {   "width": "15%", "targets":  [4], "className": "text-left" },
+                {   "width": "10%", "targets":  [5], "className": "text-left" },
+                {   "width": "10%", "targets":  [6], "className": "text-left" },
+                {   "width": "10%", "targets":  [7], "className": "text-left" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nik', name: 'nik'},
-            {data: 'jenisPenggajian', name: 'jenisPenggajian'},
-            {data: 'orgStructure', name: 'orgStructure'},
-            {data: 'jabatan', name: 'jabatan'},
-            {data: 'bagian', name: 'bagian'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'nik', name: 'nik'},
+                {data: 'jenisPenggajian', name: 'jenisPenggajian'},
+                {data: 'orgStructure', name: 'orgStructure'},
+                {data: 'jabatan', name: 'jabatan'},
+                {data: 'bagian', name: 'bagian'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 </script>
@@ -182,7 +212,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="presenceForTodayStore()">Save changes</button>
+                    <button type="button" class="btn btn-primary" onclick="simpanFunction()">Save changes</button>
                 </div>
             </div>
         </div>

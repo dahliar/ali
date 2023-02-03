@@ -1,4 +1,4 @@
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
 @section('header')
@@ -10,11 +10,37 @@
 @endsection
 
 @section('content')
-<script type="text/javascript"> 
-</script>
-
-
 <script type="text/javascript">
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah data pekerja presensi borongan?',
+            text: "Simpan presensi borongan.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Presensi borongan disimpan',
+                    text: "Simpan presensi borongan.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("formTambahPekerjaBorongan").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan presensi borongan dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+
     function workerAddedChange($a, $b){
         if ($a){
             document.getElementById("workerAdded").value++;
@@ -143,7 +169,7 @@
                     <div class="col-md-5">
                     </div>
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                         <input type="reset" value="Reset" class="btn btn-secondary">
                     </div>
                 </div>

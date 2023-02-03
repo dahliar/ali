@@ -65,7 +65,7 @@ Route::get('home', [DashboardController::class, 'index'])->middleware(['auth','a
 
 
 Route::get('home2',[DashboardController::class, 'indexHome2'])->middleware(['auth']);
-Route::GET('employeeList2',[EmployeeController::class, 'index2'])->name('employeeList')->middleware('auth', 'authorized');
+Route::GET('employeeList2',[EmployeeController::class, 'index2'])->name('employeeList2')->middleware('auth', 'authorized');
 
 Route::GET('infophp', [DashboardController::class, 'infophp'])->middleware('auth', 'authorized');
 
@@ -211,7 +211,7 @@ Route::post('deleteStockChange',[StoreController::class, 'stockChangeDelete'])->
 Route::post('deleteStockSubtractChange',[StoreController::class, 'deleteStockSubtractChange'])->middleware(['auth']);
 
 Route::get('itemStockSubtractEdit/{stockSubtract}',[StoreController::class, 'subtractEdit'])->middleware(['auth', 'authorized']);
-Route::post('stockSubtractUpdate',[StoreController::class, 'subtractUpdate'])->middleware(['auth'])->name('storeUpdate');
+Route::post('stockSubtractUpdate',[StoreController::class, 'subtractUpdate'])->middleware(['auth']);
 Route::post('getStorekSubtractRecord',[StoreController::class, 'getStorekSubtractRecord'])->middleware(['auth']);
 Route::post('approveStockSubtractChange',[StoreController::class, 'stockSubtractChange'])->middleware(['auth']);
 

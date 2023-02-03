@@ -12,7 +12,35 @@
 
 @section('content')
 <script type="text/javascript"> 
-
+    function myFunction(){
+        Swal.fire({
+            title: 'Ubah jenis barang?',
+            text: "Peubahan jenis barang.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Jenis barang diubah',
+                    text: "Peubahan jenis barang baru.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("formEditItem").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal ditambah!',
+                    "Peubahan jenis barang dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     function editChecker(){
         var checker="";
         var e = document.getElementById("size");
@@ -66,7 +94,7 @@
     </script>
     @endif
     <div class="row">
-        <form id="formTambahItem" action="{{url('itemEditStore')}}" method="get" name="formTambahItem">
+        <form id="formEditItem" action="{{url('itemEditStore')}}" method="get" name="formEditItem">
             {{ csrf_field() }}
             <div class="modal-content">
                 <div class="modal-header">
@@ -220,7 +248,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="justify-content: center;">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit" style="width:100px;" name="btn-submit" onclick="myFunction()">Simpan</button>
                     <input type="reset" value="Reset" class="btn btn-secondary">
                 </div>
             </div>

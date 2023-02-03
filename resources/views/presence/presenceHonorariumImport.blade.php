@@ -18,6 +18,36 @@
         }
     });
 
+    function myFunction(){
+        Swal.fire({
+            title: 'Upload file presensi?',
+            text: "Upload file presensi harian",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'File presensi disimpan',
+                    text: "Simpan file presensi harian.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("presenceFileStore").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Upload file presensi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+
     function getHonorariumList(){
         var presenceDate = document.getElementById("presenceDate").value;
         Swal.fire({
@@ -75,7 +105,7 @@
         <div class="modal-body">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form id="presenceFileStore" action="" method="POST" name="presenceFileStore" autocomplete="off">
+                    <form id="presenceFileStoreDownload" action="" method="POST" name="presenceFileStoreDownload" autocomplete="off">
                         @csrf
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
@@ -115,7 +145,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary">Upload dan simpan honorarium</button>
+                                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Upload dan simpan honorarium</button>
                             </div>
                         </div>
                     </form>

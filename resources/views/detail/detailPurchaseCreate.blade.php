@@ -10,7 +10,36 @@
 @endsection
 
 @section('content')
-<script type="text/javascript"> 
+<script type="text/javascript">
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah detail transaksi pembelian?',
+            text: "Simpan detil transaksi pembelian",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Detail ransaksi pembelian disimpan',
+                    text: "Simpan detail transaksi pembelian",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("purchaseItemAddForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan transaksi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    }; 
     function selectOptionChange(speciesId, itemId){
         $.ajax({
             url: '{{ url("getItemsForSelectOption") }}'+'/0/'+'{{ $purchase->id }}'+"/"+speciesId
@@ -163,7 +192,7 @@
                     <div class="col-md-2 text-end">
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Save</button>
                         <input type="reset" value="Reset" class="btn btn-secondary">
                     </div>
                 </div>

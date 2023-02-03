@@ -17,6 +17,78 @@
 </script>
 @endif
 
+<script type="text/javascript">
+    function myFunction(){
+        var x = document.getElementById("paperworkTypeId");
+        var jenisSurat = x.options[x.selectedIndex].text;
+        var val = x.options[x.selectedIndex].value;
+        if(val == 0){
+            Swal.fire(
+                'Pilih jenis surat dulu',
+                "Pembuatan surat administrasi",
+                'info'
+                );
+
+        } else if (val == 1){
+            Swal.fire({
+                title: 'Buat '+jenisSurat,
+                text: "Pembuatan surat administrasi",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Simpan saja.'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Ok '+jenisSurat+' dibuatkan',
+                        text: "Pembuatan surat administrasi",
+                        icon: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok disimpan.'
+                    }).then((result) => {
+                        document.getElementById("formPemilihanSurat").submit();
+                    })
+                } else {
+                    Swal.fire(
+                        jenisSurat+' batal dibuat!',
+                        "Pembuatan surat administrasi",
+                        'info'
+                        );
+                }
+            });
+        } else{
+            Swal.fire({
+                title: 'Buat '+jenisSurat,
+                text: "Pembuatan surat administrasi",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, buatkan saja.'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'ok, ke tahap selanjutnya',
+                        text: "Pembuatan surat administrasi",
+                        icon: 'info',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Ok.'
+                    }).then((result) => {
+                        document.getElementById("formPemilihanSurat").submit();
+                    })
+                } else {
+                    Swal.fire(
+                        jenisSurat+' batal dibuat!',
+                        "Pembuatan surat administrasi",
+                        'info'
+                        );
+                }
+            });
+        }
+    };
+</script>
+
 
 @if ($errors->any())
 <div class="alert alert-success">
@@ -188,7 +260,7 @@
                             </div>
                             <div class="col-md-6">
                                 <select class="form-select w-100" id="paperworkTypeId" name="paperworkTypeId">
-                                    <option value="-1">--Choose One--</option>
+                                    <option value="0">--Choose One--</option>
                                     @foreach ($paperworkTypes as $paperwork)
                                     @if ( $paperwork->id == old('paperworkTypeId') )
                                     <option value="{{ $paperwork->id }}" selected>{{ $paperwork->name }}</option>
@@ -202,7 +274,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="justify-content: center;">
-                    <button id="buttonSubmit" type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Buat Surat</button>
                     <input type="reset" value="Reset" class="btn btn-secondary">
                 </div>
             </div>

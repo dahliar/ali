@@ -47,25 +47,44 @@
                 confirmButtonText: 'Ya, generate saja!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.ajax({
-                        url: '{{ url("generateGajiBulananStore") }}',
-                        type: "POST",
-                        data: {
-                            "_token":"{{ csrf_token() }}",
-                            monthBefore   : $monthBefore+1,
-                            yearBefore    : $yearBefore,
-                            monthPresent   : $monthPresent+1,
-                            yearPresent    : $yearPresent
-                        },
-                        dataType: "json",
-                        success:function(data){
+                    Swal.fire({
+                        title: 'Yakin generate gaji bulan '+$monthPresentName+' '+$yearPresent+'?',
+                        text: "Yakin",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, generate saja!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '{{ url("generateGajiBulananStore") }}',
+                                type: "POST",
+                                data: {
+                                    "_token":"{{ csrf_token() }}",
+                                    monthBefore   : $monthBefore+1,
+                                    yearBefore    : $yearBefore,
+                                    monthPresent   : $monthPresent+1,
+                                    yearPresent    : $yearPresent
+                                },
+                                dataType: "json",
+                                success:function(data){
+                                    Swal.fire(
+                                        'Berhasil digenerate!',
+                                        data[0]+', '+data[1]+', '+data[2],
+                                        'success'
+                                        );
+                                }
+                            });
+                        } else {
                             Swal.fire(
-                                'Berhasil digenerate!',
-                                data[0]+', '+data[1]+', '+data[2],
-                                'success'
+                                'Batal generate!',
+                                "Generate gaji dibatalkan",
+                                'info'
                                 );
                         }
-                    });
+                    })
+
                 } else {
                     Swal.fire(
                         'Batal generate!',

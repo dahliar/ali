@@ -143,6 +143,11 @@ class HonorariumController extends Controller
         ->addIndexColumn()->toJson();
     }  
     function honorariumImport(Request $request){
+        $request->validate(
+            [
+                'presenceFile' => 'required|mimes:xlsx',
+            ]
+        );
         $import = new EmployeeHonorariumImport();
         Excel::import($import, $request->presenceFile);
         $message = $import->getImportResult();

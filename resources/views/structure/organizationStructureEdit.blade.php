@@ -12,7 +12,35 @@
 
 @section('content')
 <script type="text/javascript"> 
-
+    function myFunction(){
+        Swal.fire({
+            title: 'Ubah penempatan struktur organisasi?',
+            text: "Peubahan penempatan struktur organisasi",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Ubah saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Penempatan struktur organisasi diubah.',
+                    text: "Peubahan penempatan struktur organisasi",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("StructureEditForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Peubahan penempatan struktur organisasi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     function getOrgStructureSelectOptionList(workPos, structuralPos, orgstructure){
         $.ajax({
             headers: {
@@ -119,7 +147,7 @@
                     </nav>
                 </div>
                 <div class="modal-body d-grid gap-1">
-                    <form id="StructureAddForm" action="{{url('organizationStructureUpdate')}}" method="POST" name="StructureAddForm" autocomplete="off">
+                    <form id="StructureEditForm" action="{{url('organizationStructureUpdate')}}" method="POST" name="StructureEditForm" autocomplete="off">
                         @csrf
                         <div class="p-1 row form-group">
                             <div class="col-md-2 text-end">
@@ -267,7 +295,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-8">
-                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Ok</button>
+                                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                                 <button type="Reset" class="btn btn-danger buttonConf"ß>Reset</button>
                             </div>
                         </div>

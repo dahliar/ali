@@ -10,6 +10,55 @@
 
 @section('content')
 <meta name="csrf-token" content="{{ csrf_token() }}" />
+<script type="text/javascript">
+    function myFunction(){
+        Swal.fire({
+            title: 'Generate?',
+            text: "Generate gaji harian/borongan/honorarium",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Yakin generate?',
+                    text: "Data tidak bisa dikembalikan",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Simpan saja.'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Generate dilakukan',
+                            text: "Generate gaji harian/borongan/honorarium",
+                            icon: 'info',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok disimpan.'
+                        }).then((result) => {
+                          document.getElementById("transactionForm").submit();
+                      })
+                    } else {
+                        Swal.fire(
+                            'Batal disimpan!',
+                            "Generate gaji harian/borongan/honorarium dibatalkan",
+                            'info'
+                            );
+                    }
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Generate gaji harian/borongan/honorarium dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+</script>
 @if (Session::has('val'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -63,19 +112,10 @@
                         <input type="date" id="start" name="start" class="form-control text-end" value="{{old('start', date('Y-m-d', strtotime('-1 week')))}}">
                     </div>
                 </div>
-                    <!--                    
-                    <div class="row form-group">
-                    <div class="col-md-3 text-end">
-                        <span class="label">Tanggal Akhir</span>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="date" id="end" name="end" class="form-control text-end" value="{{old('end', date('Y-m-d'))}}">
-                    </div>
-                    </div> 
-                -->
+
             </div>                   
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Generate</button>
+                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
             </div>
         </form>
     </div>

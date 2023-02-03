@@ -16,6 +16,36 @@
         }
     });
 
+    function simpanFunction(){
+        Swal.fire({
+            title: 'Simpan presensi harian pegawai?',
+            text: "Simpan presensi harian",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Data presensi disimpan',
+                    text: "Simpan presensi harian.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    presenceForTodayStore();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Presensi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+
     function tambahPresensiBatchInput(){
         window.open(('{{ url("presenceHarianEdit") }}'), '_blank');
     }
@@ -25,7 +55,7 @@
         document.getElementById("nameModal").value = name;
         $('#employeePresenceHarianModal').modal('show');
     }
-    function presenceForTodayStore(id){
+    function presenceForTodayStore(){
         var empidModal = document.getElementById("empidModal").value;
         var start = document.getElementById("modalStart").value;
         var end = document.getElementById("modalEnd").value;
@@ -33,7 +63,6 @@
         var isLembur = document.getElementById("isLembur").checked;
         lembur=0;
 
-        alert(shift);
         if(isLembur){
             lembur=1;
         }
@@ -120,9 +149,6 @@
                 ]
         });
     }
-
-    $(document).ready(function() {
-    });
 </script>
 {{ session('status') }}
 @if (Session::has('status'))
@@ -241,7 +267,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="presenceForTodayStore()">Save changes</button>
+                    <button type="button" class="btn btn-primary" onclick="simpanFunction()">Save changes</button>
                 </div>
             </div>
         </div>

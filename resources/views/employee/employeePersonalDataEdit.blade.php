@@ -11,7 +11,36 @@
 
 
 @section('content')
-<script type="text/javascript"> 
+<script type="text/javascript">
+    function myFunction(){
+        Swal.fire({
+            title: 'Ubah data karyawan?',
+            text: "Ubah data pribadu karyawan.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Data pribadi karyawan diubah',
+                    text: "Simpan data pribadi karyawan.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("EmployeeEditForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Peubahan data pribadi karyawan dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     function getOrgStructureSelectOptionList(workPos, structuralPos, orgstructure){
         $.ajax({
             headers: {
@@ -368,7 +397,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-8">
-                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Simpan</button>
+                                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                                 <button type="Reset" class="btn btn-danger buttonConf">Reset</button>
                             </div>
                         </div>

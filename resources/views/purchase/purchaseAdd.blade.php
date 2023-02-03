@@ -4,6 +4,36 @@
 
 @section('content')
 <script type="text/javascript"> 
+
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah Transaksi Pembelian?',
+            text: "Simpan transaksi pembelian",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Transaksi disimpan',
+                    text: "Simpan transaksi pembelian",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("purchaseForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan transaksi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     $(document).ready(function() {
 
         $('.js-example-basic-single').select2();
@@ -80,7 +110,7 @@
         </div>
 
         <div class="card card-body">
-            <form id="PurchaseForm" action="{{route('purchaseStore')}}"  method="get" name="PurchaseForm" enctype="multipart/form-data">
+            <form id="purchaseForm" action="{{route('purchaseStore')}}"  method="get" name="purchaseForm" enctype="multipart/form-data">
                 @csrf
                 <div class="d-grid gap-1">
                     <div class="row form-group">
@@ -175,7 +205,7 @@
                     </div>
                     <div class="row form-group">
                         <div class="text-center col-md-8">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                             <input type="reset" value="Reset" class="btn btn-secondary">
                         </div>
                     </div>

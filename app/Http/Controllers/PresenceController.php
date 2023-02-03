@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use App\Exports\EmployeePresenceExport;
 use App\Imports\EmployeePresenceImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\File;
 
 use DB;
 use Auth;
@@ -327,6 +328,12 @@ class PresenceController extends Controller
     }
     public function presenceHarianImportStore(Request $request)
     {
+        $request->validate(
+            [
+                'presenceFile' => 'required|mimes:xlsx',
+            ]
+        );
+
         $lembur=0;
         if ($request->has('isLembur')) {
             $lembur=1;

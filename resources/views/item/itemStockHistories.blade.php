@@ -94,8 +94,6 @@ $itemChoosen=-1;
         </div>
         <div class="card card-header">
             {{ csrf_field() }}
-
-            kenapa bawal hitam ngga muncul
             <div class="container-fluid">
                 <div class="row form-group">
                     <div class="col-3">

@@ -94,13 +94,38 @@ select i.id, i.name, sp.name, s.name, sh.name from items i join sizes s on s.id=
 ORDER BY `s`.`name`  DESC
 
 
-1-120       260
-8-12        261
-61-80       262
-5-7         263
-41-60       264
-31-40       265
-21-30       266
-2-4         267
-13-20       268
+
+
+form name
+<button type="button" class="btn btn-primary" id="btn-submit" style="width:100px;" name="btn-submit" onclick="myFunction()">Simpan</button>
+
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah Transaksi?',
+            text: "Simpan transaksi penjualan eksport",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Transaksi disimpan',
+                    text: "Simpan transaksi penjualan eksport",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("transactionForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan transaksi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
 

@@ -11,6 +11,35 @@
 
 @section('content')
 <script type="text/javascript"> 
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah barcode?',
+            text: "Simpan pembuatan barcode.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, buat saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Barcode dibuatkan.',
+                    text: "Simpan pembuatan barcode.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok dibuat.'
+                }).then((result) => {
+                    document.getElementById("barcodeGeneratorForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan barcode dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     function selectOptionChange(speciesId, itemId){
         $.ajax({
             url: '{{ url("barcodeItemList") }}/'+speciesId,
@@ -96,7 +125,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Generate Barcode</h5>
             </div>
             <div class="modal-body">
-                <form action="{{url('barcodeImageGenerate')}}" method="post">
+                <form id="barcodeGeneratorForm" name="barcodeGeneratorForm" action="{{url('barcodeImageGenerate')}}" method="post">
                     @csrf
                     <div class="row form-group mb-2">
                         <div class="col-md-2 text-end">
@@ -171,7 +200,7 @@
                         <div class="col-md-2 text-end">
                         </div>
                         <div class="col-md-6">
-                            <button type="submit" class="btn btn-primary">Generate</button>
+                            <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                             <input type="reset" value="Reset" class="btn btn-secondary">
                         </div>
                     </div>

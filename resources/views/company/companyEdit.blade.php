@@ -4,6 +4,35 @@
 
 @section('content')
 <script type="text/javascript"> 
+    function myFunction(){
+        Swal.fire({
+            title: 'Edit data perusahaan?',
+            text: "Simpan data perusahaan",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Data perusahaan disimpan',
+                    text: "Simpan data perusahaan",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("companyForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Penyimpanan data perusahaan dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     $(document).ready(function() {
         var i=1;
         $('#add').click(function(){
@@ -59,7 +88,7 @@
 
         <div class="card card-body">
             <div class="col-12">
-                <form id="CompanyForm" action="{{route('companyUpdate')}}"  method="get" name="CompanyForm">
+                <form id="companyForm" action="{{route('companyUpdate')}}"  method="get" name="companyForm">
                     @csrf
                     <div class="d-grid gap-1">
                         <div class="row form-group">
@@ -139,7 +168,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-6">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Save</button>
                                 <input type="reset" value="Reset" class="btn btn-secondary">
                             </div>
                         </div>

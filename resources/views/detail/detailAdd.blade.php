@@ -11,6 +11,37 @@
 
 @section('content')
 <script type="text/javascript"> 
+
+
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah detil transaksi?',
+            text: "Simpan detil transaksi penjualan",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Detil transaksi disimpan',
+                    text: "Simpan detil transaksi penjualan eksport",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("formDetilPenjualan").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Pembuatan transaksi dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
     function selectOptionChange(speciesId, itemId){
         $.ajax({
             url: '{{ url("getItemsForSelectOption") }}/'+'{{ $transactionId }}'+"/0/"+speciesId,
@@ -50,7 +81,6 @@
                 .append('<option value="-1">--Choose Species First--</option>');
                 $('[name="existingStock"]').val("");
                 $('[name="weightbase"]').val("");
-                $('[name="existingStockInKg"]').val("");
                 $('[name="amount"]').val(0);
                 $('[name="harga"]').val(0);
                 swal.fire('warning','Choose Species first!','info');
@@ -68,7 +98,6 @@
                     success:function(data){
                         $('[name="existingStock"]').val(data['amount']);
                         $('[name="weightbase"]').val(data['weightbase']);
-                        $('[name="existingStockInKg"]').val(data['amount']*data['weightbase']);
                     }
                 });
             }else{
@@ -120,7 +149,7 @@
                 <h5 class="modal-title" id="exampleModalLabel">Tambah detail transaksi penjualan</h5>
             </div>
             <div class="modal-body">
-                <form id="FormDetilPenjualan" action="{{route('itemDetailTransactionAdd')}}" method="get" name="FormDetilPenjualan">
+                <form id="formDetilPenjualan" action="{{route('itemDetailTransactionAdd')}}" method="get" name="formDetilPenjualan">
                     <input id="transactionId" name="transactionId" type="hidden" value="{{ old('transactionId', $transactionId) }}">
                     <div class="row form-group mb-2">
                         <div class="col-md-2 text-end">
@@ -162,12 +191,6 @@
                                 <span class="input-group-text">MC / Bag</span>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="input-group">
-                                <input id="existingStockInKg" value="{{number_format(old('existingStockInKg'), 2, ',', '.')}}" name="existingStockInKg" type="text" class="form-control text-end" readonly>
-                                <span class="input-group-text">Kg</span>
-                            </div>
-                        </div>
                     </div>
                     <div class="row form-group mb-2">
                         <div class="col-md-2 text-end">
@@ -207,7 +230,7 @@
                         <div class="col-md-2 text-end">
                         </div>
                         <div class="col-md-6">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                             <input type="reset" value="Reset" class="btn btn-secondary">
                         </div>
                     </div>

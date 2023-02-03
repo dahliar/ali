@@ -12,7 +12,6 @@
 
 @section('content')
 <script type="text/javascript">
-
     function changedInPacking(){
         var unpackedLama = parseFloat(document.getElementById("unpackedLama").value);
         var unpackedPerubahan = parseFloat(document.getElementById("unpackedPerubahan").value);
@@ -32,12 +31,44 @@
             document.getElementById("buttSubmit").disabled = false;
         }
     }
+
+    function myFunction(){
+        Swal.fire({
+            title: 'Ubah jumlah stock barang unpacked?',
+            text: "Simpan perubahan jumlah stock unpacked",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Perubahan jumlah stock disimpan',
+                    text: "Simpan perubahan jumlah stock unpacked",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("formEditUnpacked").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Perubahan jumlah stock unpacked dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
 </script>
 @if (session('success'))
 <script type="text/javascript">
     swal.fire("Success", "Data item berhasil ditambahkan", "info");
 </script>
 @endif
+
+
 
 
 @if ($errors->any())
@@ -134,7 +165,7 @@
                 </div>
             </div>
             <div class="modal-footer" style="justify-content: center;">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
                 <input type="reset" value="Reset" class="btn btn-secondary">
             </div>
         </div>

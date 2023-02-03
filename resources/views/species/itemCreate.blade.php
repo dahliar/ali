@@ -12,6 +12,36 @@
 
 @section('content')
 <script type="text/javascript"> 
+    function myFunction(){
+        Swal.fire({
+            title: 'Tambah jenis barang baru?',
+            text: "Penambahan jenis barang baru.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Jenis barang baru ditambahkan',
+                    text: "Penambahan jenis barang baru.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("formTambahItem").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal ditambah!',
+                    "Pembuatan jenis barang baru dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+
     function editChecker(){
         var $speciesName = document.getElementById("speciesName").value;
 
@@ -295,7 +325,7 @@
                     </div>
                 </div>
                 <div class="modal-footer" style="justify-content: center;">
-                    <button id="buttonSubmit" type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" id="btn-submit" style="width:100px;" name="btn-submit" onclick="myFunction()">Simpan</button>
                     <input type="reset" value="Reset" class="btn btn-secondary">
                 </div>
             </div>

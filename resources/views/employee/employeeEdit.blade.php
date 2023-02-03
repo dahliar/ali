@@ -10,6 +10,37 @@
 @endsection
 
 @section('content')
+<script type="text/javascript"> 
+    function myFunction(){
+        Swal.fire({
+            title: 'Ubah karyawan?',
+            text: "Ubah data karyawan.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Simpan saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Data karyawan baru diubah',
+                    text: "Simpan data karyawan baru.",
+                    icon: 'info',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ok disimpan.'
+                }).then((result) => {
+                    document.getElementById("EmployeeEditForm").submit();
+                })
+            } else {
+                Swal.fire(
+                    'Batal disimpan!',
+                    "Peubahan data karyawan dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    };
+</script>
 @if ($errors->any())
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -304,7 +335,7 @@
                             <div class="col-md-2 text-end">
                             </div>
                             <div class="col-md-8">
-                                <button class="btn btn-primary buttonConf" id="buttSubmit" type="submit">Simpan</button>
+                                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Ubah</button>
                                 <button type="Reset" class="btn btn-danger buttonConf">Reset</button>
                             </div>
                         </div>
