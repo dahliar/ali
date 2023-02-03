@@ -1481,7 +1481,7 @@ class SalaryController extends Controller
         })
         ->addColumn('total', function ($row) {
             $total = $row->bulanan+$row->borongan+$row->honorarium+$row->harian;
-            return number_format($total, 2, ',', '.');;
+            return $total;
         })
         ->rawColumns(['action', 'detilHarian', 'name'])
         ->toJson();
