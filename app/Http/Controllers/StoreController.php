@@ -635,7 +635,7 @@ class StoreController extends Controller
                 DB::beginTransaction();
                 $approved = DB::table('stores')
                 ->where('id', $request->storeId)
-                ->where('isApprove','=', 0)
+                ->where('isApproved','=', 0)
                 ->update([
                     'isApproved' => 1,
                     'approvedBy' => auth()->user()->id,
