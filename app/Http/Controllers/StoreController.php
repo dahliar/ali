@@ -653,12 +653,9 @@ class StoreController extends Controller
                         'amountUnpacked' => DB::raw('amountUnpacked + '.$store->amountUnpacked),
                     ]);
                     $this->transaction->stockChangeLog(1, "Approval stock tanggal ".$store->datePackage, $store->itemId, $store->amountPacked);
-                    DB::commit();
-                    return true;
-                } else{
-                    DB::commit();
-                    return true;
                 }
+                DB::commit();
+                return true;
             }
             catch(\Exception $e){
                 DB::rollBack();
