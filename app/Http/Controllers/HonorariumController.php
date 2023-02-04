@@ -135,9 +135,9 @@ class HonorariumController extends Controller
         return datatables()->of($query)
         ->editColumn('isGenerated', function ($row) {
             $html = '';
-            if ($row->isGenerated==0){
+            if ($row->isGenerated==1){
                 $html.='<i class="far fa-check-square" style="font-size:20px"></i>';
-            } else if ($row->isGenerated==1){
+            } else if ($row->isGenerated==0){
                 $html.='<i class="far fa-times-circle" style="font-size:20px"></i>';
             }
             return $html;
