@@ -13,6 +13,7 @@ use Illuminate\Support\Collection;
 
 
 use DB;
+use Auth;
 
 
 class HonorariumController extends Controller
@@ -101,18 +102,15 @@ class HonorariumController extends Controller
     }
 
 
-    public function getPresenceHonorariumHistory($start, $end){
+    public function getPresenceHonorariumHistory($start, $end, $isGenerated){
         $query = DB::table('employees as e')
         ->select(
-            'e.id as id', 
+            'p.id as hid', 
             'u.name as name', 
-            'e.nik as nik',
-            'e.nip as nip',
             'os.name as orgStructure',
             'wp.name as bagian',
-            'p.isPaid as statusIsPaid',
-            DB::raw('(CASE WHEN p.isPaid="0" THEN "Belum" WHEN p.isPaid="1" THEN "Sudah" END) AS isPaid'),
-            DB::raw('(CASE WHEN p.isGenerated="0" THEN "Belum" WHEN p.isGenerated="1" THEN "Sudah" END) AS isGenerated'),
+            'p.isGenerated as statusIsGenerated',
+            'p.isGenerated as isGenerated',
             'p.tanggalKerja as tanggalKerja',
             'p.keterangan as keterangan',
             'p.jumlah as jumlah'
@@ -126,20 +124,37 @@ class HonorariumController extends Controller
         ->whereBetween('p.tanggalKerja', [$start." 00:00:00", $end." 23:59:59"])
         ->where('mapping.isActive', '1')
         ->orderBy('u.name');
+
+        if ($isGenerated==0){
+            $query = $query->where('isGenerated', '=', 0);
+        } else if ($isGenerated==1){
+            $query = $query->where('isGenerated', '=', 1);
+        }
         $query->get();
 
         return datatables()->of($query)
-        ->addColumn('action', function ($row) {
+        ->editColumn('isGenerated', function ($row) {
             $html = '';
-            if ($row->statusIsPaid==0){
-                $html.='
-                <button type="button" class="btn btn-primary" onclick="tandaiSudahDibayar('."'".$row->id."'".', '."'".$row->name."'".')" data-toggle="tooltip" data-placement="top" data-container="body" title="Tandai sudah dibayar">
-                <i class="fa fa-check"></i>
-                </button>
-                ';
+            if ($row->isGenerated==0){
+                $html.='<i class="far fa-check-square" style="font-size:20px"></i>';
+            } else if ($row->isGenerated==1){
+                $html.='<i class="far fa-times-circle" style="font-size:20px"></i>';
             }
             return $html;
         })
+        ->addColumn('action', function ($row) {
+            $html = '';
+            if ((Auth::user()->accessLevel <= 40) && ($row->statusIsGenerated==0)){
+                $html.=' 
+                <button type="button" class="btn btn-warning btn-sm" onclick="hapusHonorarium('."'".$row->hid."'".')" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Honorarium '.$row->name.'">
+                <i class="fas fa-trash" style="font-size:20px"></i>
+                </button>
+                ';
+
+            }
+            return $html;
+        })
+        ->rawColumns(['isGenerated', 'action'])
         ->addIndexColumn()->toJson();
     }  
     function honorariumImport(Request $request){
@@ -153,4 +168,20 @@ class HonorariumController extends Controller
         $message = $import->getImportResult();
         return redirect('presenceHonorariumHistory')->with('status', $message);
     }  
+    public function destroy($hid)
+    {
+        $query=DB::table('honorariums')->where('id', '=', $hid)->where('isGenerated', '=', 0);
+        if ($query->exists()){
+            $deleted = $query->delete();
+            return $retValue = [
+                'message'       => "Record telah dihapus",
+                'isError'       => "0"
+            ];
+        } else {
+            return $retValue = [
+                'message'       => "Record gagal dihapus",
+                'isError'       => "0"
+            ];            
+        }
+    }
 }

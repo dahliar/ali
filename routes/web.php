@@ -309,11 +309,12 @@ Route::GET('honorariumList',[HonorariumController::class, 'index'])->middleware(
 Route::get('getPresenceHonorariumEmployees',[HonorariumController::class, 'getPresenceHonorariumEmployees'])->middleware('auth');
 Route::post('storePresenceHonorariumEmployee',[HonorariumController::class, 'storePresenceHonorariumEmployee'])->middleware(['auth']);
 Route::GET('presenceHonorariumHistory',[HonorariumController::class, 'presenceHonorariumHistory'])->middleware('auth', 'authorized');
-Route::get('getPresenceHonorariumHistory/{start}/{end}', [HonorariumController::class, 'getPresenceHonorariumHistory'])->middleware('auth');
+Route::get('getPresenceHonorariumHistory/{start}/{end}/{isGenerated}', [HonorariumController::class, 'getPresenceHonorariumHistory'])->middleware('auth');
 
 Route::GET('presenceHonorariumImport',[HonorariumController::class, 'createImportHonorarium'])->middleware('auth', 'authorized');
 Route::get('getHonorariumImportList/{presenceDate}', [HonorariumController::class, 'excelHonorariumFileGenerator']);
 Route::post('honorariumImportStore',[HonorariumController::class, 'honorariumImport'])->middleware(['auth']);
+Route::GET('honorariumDeleteRecord/{id}',[HonorariumController::class, 'destroy'])->middleware('auth');
 
 
 

@@ -15,15 +15,44 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function hapusHonorarium(id){
+        Swal.fire({
+            title: 'Yakin hendak dihapus??',
+            text: "Data akan hilang!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus aja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("honorariumDeleteRecord") }}'+"/"+id,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Deleted!',
+                            'Record honorarium telah dihapus.',
+                            'success'
+                            );
+                        myFunction();
+                    }
+                });
+            }
+        })
+    }
     
     function myFunction(){
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
+        var isGenerated = document.getElementById("isGenerated").value;
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            ajax:'{{ url("getPresenceHonorariumHistory") }}'+"/"+start+"/"+end,
+            ajax:'{{ url("getPresenceHonorariumHistory") }}'+"/"+start+"/"+end+"/"+isGenerated,
             dataType: "JSON",
             serverSide: false,
             processing: true,
@@ -31,32 +60,26 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "15%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-left" },
-            {   "width": "7%", "targets":  [5], "className": "text-left" },
-            {   "width": "9%", "targets":  [6], "className": "text-left" },
-            {   "width": "7%", "targets":  [7], "className": "text-left" },
-            {   "width": "7%", "targets":  [8], "className": "text-left" },
-            {   "width": "20%", "targets":  [9], "className": "text-left" },
-            {   "width": "5%", "targets":  [10], "className": "text-left" }
-            ], 
+                {   "width": "5%",  "targets": [0], "className": "text-center" },
+                {   "width": "15%", "targets": [1], "className": "text-left"   },
+                {   "width": "15%", "targets": [2], "className": "text-left" },
+                {   "width": "10%", "targets":  [3], "className": "text-center" },
+                {   "width": "7%", "targets":  [4], "className": "text-end" },
+                {   "width": "7%", "targets":  [5], "className": "text-center" },
+                {   "width": "30%", "targets": [6], "className": "text-left" },
+                {   "width": "6%", "targets":  [7], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nip', name: 'nip'},
-            {data: 'orgStructure', name: 'orgStructure'},
-            {data: 'bagian', name: 'bagian'},
-            {data: 'tanggalKerja', name: 'tanggalKerja'},
-            {data: 'jumlah', name: 'jumlah'},
-            {data: 'isGenerated', name: 'isGenerated'},
-            {data: 'isPaid', name: 'isPaid'},
-            {data: 'keterangan', name: 'keterangan'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'orgStructure', name: 'orgStructure'},
+                {data: 'tanggalKerja', name: 'tanggalKerja'},
+                {data: 'jumlah', name: 'jumlah'},
+                {data: 'isGenerated', name: 'isGenerated'},
+                {data: 'keterangan', name: 'keterangan'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
@@ -112,6 +135,13 @@
                                         <input type="date" id="end" name="end" class="form-control text-end" value="{{ old('end', date('Y-m-d'))}}">
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <select id="isGenerated" name="isGenerated" class="form-select" required>
+                                        <option value="-1">Semua</option>
+                                        <option value="0">Belum</option>
+                                        <option value="1">Sudah</option>
+                                    </select>
+                                </div>
                                 <div class="col-md-2">
                                     <button onclick="myFunction()" class="btn btn-primary">
                                         Search
@@ -124,18 +154,15 @@
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
-                    <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                    <table class="table table-striped table-hover table-bordered data-table"  id="datatable" style='font-size:80%'>
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>NIP</th>
                                 <th>Posisi</th>
-                                <th>Bagian</th>
                                 <th>Tanggal</th>
                                 <th>Jumlah</th>
-                                <th>Generate</th>
-                                <th>Bayar</th>
+                                <th>Generated</th>
                                 <th>Keterangan</th>
                                 <th>Act</th>
                             </tr>
