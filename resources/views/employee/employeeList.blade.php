@@ -69,7 +69,7 @@
                 {   "width": "15%", "targets":  [2], "className": "text-left"   },
                 {   "width": "5%", "targets":   [3], "className": "text-center" },
                 {   "width": "15%", "targets":  [4], "className": "text-left" },
-                {   "width": "10%", "targets":  [5], "className": "text-left" },
+                {   "width": "5%", "targets":  [5], "className": "text-center" },
                 {   "width": "20%", "targets":  [6], "className": "text-left" }
                 ], 
 
@@ -127,7 +127,7 @@
                                 <th>Username</th>
                                 <th>JK</th>
                                 <th>Karyawan</th>
-                                <th>Status</th>
+                                <th>Bekerja</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>

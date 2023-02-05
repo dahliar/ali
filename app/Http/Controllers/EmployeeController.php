@@ -396,9 +396,6 @@ class EmployeeController extends Controller
                 (TIMESTAMPDIFF(MONTH, startDate, curdate()) - (TIMESTAMPDIFF(YEAR, startDate, curdate()) * 12)), 
                 " M") as lamaKerja'),
             DB::raw('
-                (CASE WHEN e.isActive="0" THEN "Non-Aktif" WHEN e.isActive="1" THEN "Aktif" END) AS statusKepegawaian
-                '),
-            DB::raw('
                 (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian
                 ')
         )
@@ -408,6 +405,15 @@ class EmployeeController extends Controller
         $query->get();
 
         return datatables()->of($query)
+        ->addColumn('statusKepegawaian', function ($row) {
+            $html = '';
+            if ($row->isActive==1){
+                $html.='<i class="far fa-check-square" style="font-size:20px" data-toggle="tooltip" data-placement="top" data-container="body" title="Aktif"></i>';
+            } else if ($row->isActive==0){
+                $html.='<i class="far fa-times-circle" style="font-size:20px" data-toggle="tooltip" data-placement="top" data-container="body" title="Non-Aktif"></i>';
+            }
+            return $html;
+        })
         ->addColumn('action', function ($row) {
             $html = '';
             if($row->isActive == 1){
@@ -444,7 +450,9 @@ class EmployeeController extends Controller
                 ';                      
             }      
             return $html;
-        })->addIndexColumn()->toJson();
+        })
+        ->rawColumns(['statusKepegawaian', 'action'])
+        ->addIndexColumn()->toJson();
     }
 
     public function getAllActiveEmployees(){
