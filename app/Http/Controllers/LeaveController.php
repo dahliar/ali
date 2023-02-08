@@ -20,6 +20,13 @@ class LeaveController extends Controller
     {
         return view('leave.leaveList');
     }
+    public function indexHoliday()
+    {
+
+
+        return view('leave.leaveHolidayList');
+    }
+
     public function ajukanCuti($empid)
     {
         $leaveTypes = DB::table('leave_types')
@@ -44,11 +51,11 @@ class LeaveController extends Controller
                 'required', 
                 Rule::exists('employees', 'id')->where('id', $request->employeeId)
             ],
-            'alasan'         => ['required'],
-            'jumlahHari'         => ['required', 'gt:0'],
-            'alamatCuti'         => ['required'],
-            'startDate'    => ['required', 'date', 'after_or_equal:today'],
-            'endDate'    => ['required', 'date', 'after_or_equal:startDate']
+            'alasan'        => ['required'],
+            'jumlahHari'    => ['required', 'gt:0'],
+            'alamatCuti'    => ['required'],
+            'startDate'     => ['required', 'date', 'after_or_equal:today'],
+            'endDate'       => ['required', 'date', 'after_or_equal:startDate']
         ],
         [
             'alasan.*'  => 'Alasan wajib diisi',
@@ -63,13 +70,51 @@ class LeaveController extends Controller
         $leave->endDate = $request->endDate;
         $leave->jumlahHari = $request->jumlahHari;
         $leave->alasan = $request->alasan;
-        $leave->isApproved = 0;
+        $leave->isApproved = 1;
         $leave->alamat = $request->alamatCuti;
         $leave->save();
 
         return redirect('cuti')
         ->with('status','Cuti berhasil diajukan.');
     }
+    public function destroy(Request $request)
+    {
+        $request->validate([
+            'id'    => [
+                'required', 
+                Rule::exists('leave_holidays', 'id')->where('id', $request->id)
+            ]
+        ]);
+
+        $deleted = DB::table('leave_holidays')->where('id', '=', $request->id)->delete();
+
+        return true;
+    }
+    public function cutiHolidayDateAdddayDateStore(Request $request)
+    {
+        $exist = DB::table('leave_holidays')
+        ->where('dateActive', '=',$request->dateActive)
+        ->count();
+        if($exist == 0){
+            DB::table('leave_holidays')->insert([
+                'name' => $request->name,
+                'dateActive' => $request->dateActive
+            ]);           
+            $retValue = [
+                'message'       => "Data berhasil disimpan ",
+                'isError'       => 0
+            ];
+        }else{
+            $retValue = [
+                'message'       => "Tanggal ".$request->dateActive." sudah digunakan",
+                'isError'       => 1
+            ];
+        }
+
+        return $retValue;
+    }
+    
+
     public function view($empid)
     {
         $employee = self::getEmployeeData($empid);
@@ -227,6 +272,21 @@ class LeaveController extends Controller
             return $html;
         })
         ->rawColumns(['statusApprove', 'action'])
+        ->addIndexColumn()->toJson();
+    }
+    public function getAllHolidays(){
+        $query = DB::table('leave_holidays')
+        ->orderBy('dateActive')
+        ->get();
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus" onclick="hapus('."'".$row->id."',1".')">
+            <i class="fas fa-trash"></i>
+            </button>   
+            ';          
+            return $html;
+        })
         ->addIndexColumn()->toJson();
     }
 }
