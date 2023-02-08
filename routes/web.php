@@ -28,6 +28,7 @@ use App\Http\Controllers\GoodController;
 use App\Http\Controllers\UndernameController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\AdministrationController;
+use App\Http\Controllers\LeaveController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -615,6 +616,24 @@ Route::post('stockOpnameStore',[StoreController::class, 'stockOpnameStore'])->mi
 Route::get('historyPerubahanStock', [StoreController::class, 'historyPerubahanStock'])->middleware(['auth', 'authorized']);
 Route::get('getPerubahanStock/{species}/{start}/{end}', [StoreController::class, 'getHistoryPerubahanStock'])->middleware(['auth']);
 
+
+/*
+*   Cuti
+*
+*
+*/
+
+Route::get('cuti',[LeaveController::class, 'index'])->middleware(['auth', 'authorized']);
+Route::get('cutiAjukan/{empid}',[LeaveController::class, 'ajukanCuti'])->middleware(['auth', 'authorized']);
+Route::get('cutiHistory/{empid}',[LeaveController::class, 'view'])->middleware(['auth', 'authorized']);
+
+
+Route::get('getAllActiveEmployeesForLeave',[LeaveController::class, 'getAllActiveEmployeesForLeave'])->middleware('auth');
+Route::post('dateCounterChecker',[LeaveController::class, 'dateCounterChecker'])->middleware('auth');
+Route::post('cutiStore',[LeaveController::class, 'store'])->middleware('auth');
+Route::post('cutiUpdate',[LeaveController::class, 'update'])->middleware('auth');
+Route::post('dateOverlapExist',[LeaveController::class, 'dateOverlapExist'])->middleware('auth');
+Route::get('getAllEmployeeLeaveHistory/{id}',[LeaveController::class, 'viewEmployee'])->middleware('auth');
 
 
 
