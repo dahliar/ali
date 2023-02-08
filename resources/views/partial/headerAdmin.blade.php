@@ -71,31 +71,31 @@
 				</li>
 				<li class="dropdown dropend">
 					<a class="dropdown-item dropdown-toggle" href="#" id="navbarAdministrasi" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="fas fa-tasks"></i> Surat Menyurat
+						<i class="fas fa-mail-bulk"></i> Surat Menyurat
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarAdministrasi">
 						<li>
 							<a class="dropdown-item" href="{{ url('administrasi')}}">
-								<i class="fas fa-tasks"></i> Daftar Surat
+								<i class="fas fa-file-signature"></i> Buat Surat
 							</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="{{ url('administrasiAllSurat')}}"><i class="fas fa-tasks"></i> Semua Surat
+							<a class="dropdown-item" href="{{ url('administrasiAllSurat')}}"><i class="fas fa-folder-open"></i> Arsip
 							</a>
 						</li>
 					</ul>
 				</li>
 				<li class="dropdown dropend">
 					<a class="dropdown-item dropdown-toggle" href="#" id="navbarAdministrasi" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="fas fa-tasks"></i> Cuti
+						<i class="fas fa-plane-departure"></i></i> Cuti
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarAdministrasi">
 						<li>
-							<a class="dropdown-item" href="{{ url('cuti')}}"><i class="fas fa-tasks"></i> Daftar Cuti
+							<a class="dropdown-item" href="{{ url('cuti')}}"><i class="fas fa-file-signature"></i> Daftar Cuti
 							</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="{{ url('cutiHolidayList')}}"><i class="fas fa-tasks"></i> Daftar hari libur
+							<a class="dropdown-item" href="{{ url('cutiHolidayList')}}"><i class="fas fa-folder-open"></i> Daftar hari libur
 							</a>
 						</li>
 					</ul>
