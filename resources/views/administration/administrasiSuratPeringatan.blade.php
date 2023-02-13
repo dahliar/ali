@@ -16,7 +16,7 @@
     swal.fire("Success", "Data item berhasil ditambahkan", "info");
 </script>
 @endif
-
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
     function myFunction(){
         Swal.fire({

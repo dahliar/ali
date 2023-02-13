@@ -9,6 +9,9 @@
 @endsection
 
 @section('content')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js" type="text/javascript" ></script>
+
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -32,24 +35,24 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "30%", "targets":  [1], "className": "text-left"   },
-            {   "width": "20%", "targets":  [2], "className": "text-left"   },
-            {   "width": "5%", "targets":   [3], "className": "text-center" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "15%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "30%", "targets":  [1], "className": "text-left"   },
+                {   "width": "20%", "targets":  [2], "className": "text-left"   },
+                {   "width": "5%", "targets":   [3], "className": "text-center" },
+                {   "width": "15%", "targets":  [4], "className": "text-left" },
+                {   "width": "15%", "targets":  [5], "className": "text-left" },
+                {   "width": "10%", "targets":  [6], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nip', name: 'nip'},
-            {data: 'gender', name: 'gender'},
-            {data: 'phone', name: 'phone'},
-            {data: 'jenisPenggajian', name: 'jenisPenggajian'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'nip', name: 'nip'},
+                {data: 'gender', name: 'gender'},
+                {data: 'phone', name: 'phone'},
+                {data: 'jenisPenggajian', name: 'jenisPenggajian'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 

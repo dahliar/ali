@@ -9,6 +9,10 @@
 @endsection
 
 @section('content')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js" type="text/javascript" ></script>
+
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <script type="text/javascript">
     $.ajaxSetup({

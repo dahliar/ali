@@ -11,6 +11,7 @@
 
 
 @section('content')
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
     function totalAmount(){
         var addedPacked = parseFloat(document.getElementById("amountPacked").value);

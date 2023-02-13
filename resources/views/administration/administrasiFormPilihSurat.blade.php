@@ -1,4 +1,3 @@
-<meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
 @section('header')
@@ -16,6 +15,7 @@
     swal.fire("Success", "Data item berhasil ditambahkan", "info");
 </script>
 @endif
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script type="text/javascript">
     function myFunction(){

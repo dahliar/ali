@@ -1,4 +1,3 @@
-<meta name="csrf-token" content="{{ csrf_token() }}" />
 @extends('layouts.layout')
 
 @section('header')
@@ -10,6 +9,7 @@
 @endsection
 
 @section('content')
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
     function myFunction(){
         Swal.fire({

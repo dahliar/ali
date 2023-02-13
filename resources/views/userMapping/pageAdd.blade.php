@@ -1,8 +1,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}" />
-
 @extends('layouts.layout')
 
 @section('content')
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @if (session('success'))
 <script type="text/javascript">
     swal.fire("Success", "Data perusahaan berhasil ditambahkan", "info");

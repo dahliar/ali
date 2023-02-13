@@ -10,6 +10,9 @@
 
 
 @section('content')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js" type="text/javascript" ></script>
+
 <script type="text/javascript">
     function myFunction(){
         $('#datatable').DataTable({

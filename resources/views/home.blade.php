@@ -575,6 +575,8 @@
 					<div class="col-md-4">
 						<div id="chartTransaksi" class="chart"></div>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col-md-4">
 						<div id="chartTransaksiRupiah" class="chart"></div>
 					</div>
