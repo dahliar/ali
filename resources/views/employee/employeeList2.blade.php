@@ -87,6 +87,7 @@
     }
 
     $(document).ready(function() {
+        myFunction();
     });
 </script>
 
@@ -103,7 +104,7 @@
 </div>
 @endif
 
-<body onload="myFunction()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

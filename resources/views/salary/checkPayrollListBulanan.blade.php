@@ -34,30 +34,33 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left" },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "20%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" },
-            {   "width": "5%", "targets":  [8], "className": "text-end" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "20%", "targets":  [1], "className": "text-left" },
+                {   "width": "10%", "targets":  [2], "className": "text-left" },
+                {   "width": "20%", "targets":  [3], "className": "text-left" },
+                {   "width": "10%", "targets":  [4], "className": "text-end" },
+                {   "width": "10%", "targets":  [5], "className": "text-end" },
+                {   "width": "10%", "targets":  [6], "className": "text-end" },
+                {   "width": "10%", "targets":  [7], "className": "text-end" },
+                {   "width": "5%", "targets":  [8], "className": "text-end" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'bank', name: 'bank'},
-            {data: 'detilHarian', name: 'detilHarian'},
-            {data: 'bulanan', name: 'bulanan'},
-            {data: 'harian', name: 'harian'},
-            {data: 'honorarium', name: 'honorarium'},
-            {data: 'total', name: 'total'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'bank', name: 'bank'},
+                {data: 'detilHarian', name: 'detilHarian'},
+                {data: 'bulanan', name: 'bulanan'},
+                {data: 'harian', name: 'harian'},
+                {data: 'honorarium', name: 'honorarium'},
+                {data: 'total', name: 'total'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
+    $(document).ready(function() {
+        myFunction({{$payrollId}});
+    });
 </script>
 
 @if (session('status'))
@@ -72,7 +75,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction({{$payrollId}})">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

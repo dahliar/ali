@@ -36,24 +36,26 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "10%",  "targets": [0], "className": "text-center" },
-            {   "width": "30%", "targets":  [1], "className": "text-left"   },
-            {   "width": "30%",  "targets": [2], "className": "text-left" },
-            {   "width": "20%",  "targets": [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-center" }
-            ], 
+                {   "width": "10%",  "targets": [0], "className": "text-center" },
+                {   "width": "30%", "targets":  [1], "className": "text-left"   },
+                {   "width": "30%",  "targets": [2], "className": "text-left" },
+                {   "width": "20%",  "targets": [3], "className": "text-left" },
+                {   "width": "10%", "targets":  [4], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'sizeName', name: 'sizeName'},
-            {data: 'speciesName', name: 'speciesName'},
-            {data: 'familyName', name: 'familyName'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'sizeName', name: 'sizeName'},
+                {data: 'speciesName', name: 'speciesName'},
+                {data: 'familyName', name: 'familyName'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
     $(document).ready(function() {
+        myFunction({{$speciesId}});
+
         $('#selectSpecies').change(function(){ 
             var e = document.getElementById("selectSpecies");
             var speciesId = e.options[e.selectedIndex].value;
@@ -78,7 +80,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction({{$speciesId}})">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

@@ -39,6 +39,7 @@
     }
 
     $(document).ready(function() {
+        disableForm();
         $('#company').on('change', function() {
             var company = $(this).val();
             if (company>0){
@@ -95,7 +96,7 @@
     </div>
 </div>
 @endif
-<body onload="disableForm()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

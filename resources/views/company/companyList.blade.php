@@ -54,6 +54,7 @@
     }
 
     $(document).ready(function() {
+        myFunction(0)
     });
 </script>
 
@@ -74,7 +75,7 @@
 </div>
 @endif
 
-<body onload="myFunction(0)">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

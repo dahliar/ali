@@ -84,6 +84,7 @@
     }
 
     $(document).ready(function() {
+        myFunction({{ $transactionId }});
         /*
         $('#selectSpecies').change(function(){ 
             var e = document.getElementById("selectSpecies");
@@ -112,7 +113,7 @@
 </div>
 @endif
 
-<body onload="myFunction({{ $transactionId }})">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

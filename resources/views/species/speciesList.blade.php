@@ -36,26 +36,27 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "20%", "targets":  [2], "className": "text-left"   },
-            {   "width": "20%",  "targets": [3], "className": "text-left" },
-            {   "width": "10%",  "targets": [4], "className": "text-center" },
-            {   "width": "10%", "targets":  [5], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "20%", "targets":  [1], "className": "text-left"   },
+                {   "width": "20%", "targets":  [2], "className": "text-left"   },
+                {   "width": "20%",  "targets": [3], "className": "text-left" },
+                {   "width": "10%",  "targets": [4], "className": "text-center" },
+                {   "width": "10%", "targets":  [5], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nameBahasa', name: 'nameBahasa'},
-            {data: 'familyName', name: 'familyName'},
-            {data: 'aktifCount', name: 'aktifCount'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'nameBahasa', name: 'nameBahasa'},
+                {data: 'familyName', name: 'familyName'},
+                {data: 'aktifCount', name: 'aktifCount'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
     $(document).ready(function() {
+        myFunction(0);
         $('#selectFamily').change(function(){ 
             var e = document.getElementById("selectFamily");
             var familyId = e.options[e.selectedIndex].value;
@@ -86,7 +87,7 @@
 </div>
 @endif
 
-<body onload="myFunction(0)">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

@@ -37,26 +37,27 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "40%", "targets":  [1], "className": "text-left" },
-            {   "width": "15%", "targets":  [2], "className": "text-end" },
-            {   "width": "15%", "targets":  [3], "className": "text-end" },
-            {   "width": "15%", "targets":  [4], "className": "text-center" },
-            {   "width": "10%", "targets":  [5], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "40%", "targets":  [1], "className": "text-left" },
+                {   "width": "15%", "targets":  [2], "className": "text-end" },
+                {   "width": "15%", "targets":  [3], "className": "text-end" },
+                {   "width": "15%", "targets":  [4], "className": "text-center" },
+                {   "width": "10%", "targets":  [5], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'itemName', name: 'itemName'},
-            {data: 'packing', name: 'packing'},
-            {data: 'amount', name: 'amount'},
-            {data: 'isActive', name: 'isActive'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'itemName', name: 'itemName'},
+                {data: 'packing', name: 'packing'},
+                {data: 'amount', name: 'amount'},
+                {data: 'isActive', name: 'isActive'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
     $(document).ready(function() {
+        myFunction({{$speciesId}});
         $('#selectSpecies').change(function(){ 
             var e = document.getElementById("selectSpecies");
             var speciesId = e.options[e.selectedIndex].value;
@@ -83,7 +84,7 @@
 </div>
 @endif
 
-<body onload="myFunction({{$speciesId}})">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

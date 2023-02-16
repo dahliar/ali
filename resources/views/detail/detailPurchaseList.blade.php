@@ -65,26 +65,30 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "40%", "targets":  [1], "className": "text-left"   },
-            {   "width": "15%",  "targets": [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-end" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "15%", "targets":  [5], "className": "text-end" },
-            {   "width": "5%", "targets":  [6], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "40%", "targets":  [1], "className": "text-left"   },
+                {   "width": "15%",  "targets": [2], "className": "text-left" },
+                {   "width": "10%", "targets":  [3], "className": "text-end" },
+                {   "width": "10%", "targets":  [4], "className": "text-end" },
+                {   "width": "15%", "targets":  [5], "className": "text-end" },
+                {   "width": "5%", "targets":  [6], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'itemName', name: 'itemName'},
-            {data: 'packingName', name: 'packingName'},
-            {data: 'price', name: 'price'},
-            {data: 'amount', name: 'amount'},
-            {data: 'bayar', name: 'bayar'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'itemName', name: 'itemName'},
+                {data: 'packingName', name: 'packingName'},
+                {data: 'price', name: 'price'},
+                {data: 'amount', name: 'amount'},
+                {data: 'bayar', name: 'bayar'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
+
+    $(document).ready(function() {
+        myFunction({{ $purchase->id }});
+    });
 </script>
 
 @if (session('status'))
@@ -100,7 +104,7 @@
 </div>
 @endif
 
-<body onload="myFunction({{ $purchase->id }})">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

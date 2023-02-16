@@ -42,28 +42,31 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "30%",  "targets": [1], "className": "text-left" },
-            {   "width": "10%", "targets":  [2], "className": "text-end" },
-            {   "width": "10%", "targets":  [3], "className": "text-end" },
-            {   "width": "10%", "targets":  [4], "className": "text-center" },
-            {   "width": "10%", "targets":  [5], "className": "text-center" },
-            {   "width": "10%", "targets":  [6], "className": "text-center" },
-            {   "width": "15%", "targets":  [7], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "30%",  "targets": [1], "className": "text-left" },
+                {   "width": "10%", "targets":  [2], "className": "text-end" },
+                {   "width": "10%", "targets":  [3], "className": "text-end" },
+                {   "width": "10%", "targets":  [4], "className": "text-center" },
+                {   "width": "10%", "targets":  [5], "className": "text-center" },
+                {   "width": "10%", "targets":  [6], "className": "text-center" },
+                {   "width": "15%", "targets":  [7], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'amount', name: 'amount'},
-            {data: 'minimal', name: 'minimal'},
-            {data: 'satuan', name: 'satuan'},
-            {data: 'kategori', name: 'kategori'},
-            {data: 'isactive', name: 'isactive'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'amount', name: 'amount'},
+                {data: 'minimal', name: 'minimal'},
+                {data: 'satuan', name: 'satuan'},
+                {data: 'kategori', name: 'kategori'},
+                {data: 'isactive', name: 'isactive'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
+    $(document).ready(function() {
+        myFunction();
+    });
 </script>
 
 @if (session('status'))
@@ -79,7 +82,7 @@
 </div>
 @endif
 
-<body onload="myFunction()">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

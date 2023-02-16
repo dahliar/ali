@@ -65,6 +65,8 @@
     }
 
     $(document).ready(function() {
+        disableForm();
+
         var i=1;
         $('#add').click(function(){
             i++;  
@@ -151,7 +153,7 @@
     </div>
 </div>
 @endif
-<body onload="disableForm()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

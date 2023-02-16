@@ -10,6 +10,12 @@
 
 
 @section('content')
+@if (empty($speciesChoosen))
+@php
+$speciesChoosen=-1;
+$itemChoosen=-1;
+@endphp
+@endif
 @if (session('status'))
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -60,6 +66,7 @@
         });
     }
     $(document).ready(function() {
+        selectOptionChange({{$speciesChoosen}}, {{$itemChoosen}});
         $('#species').on('change', function() {
             var speciesId = $(this).val();
             if (speciesId>0){
@@ -72,13 +79,7 @@
         });
     });
 </script>
-@if (empty($speciesChoosen))
-@php
-$speciesChoosen=-1;
-$itemChoosen=-1;
-@endphp
-@endif
-<body onload="selectOptionChange({{$speciesChoosen}}, {{$itemChoosen}})">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

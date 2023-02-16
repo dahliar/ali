@@ -28,30 +28,33 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "15%", "targets":  [2], "className": "text-left"   },
-            {   "width": "5%", "targets":   [3], "className": "text-center" },
-            {   "width": "15%", "targets":  [4], "className": "text-left" },
-            {   "width": "10%", "targets":  [5], "className": "text-left" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "5%",  "targets":  [7], "className": "text-center" },
-            {   "width": "15%", "targets":  [8], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "20%", "targets":  [1], "className": "text-left"   },
+                {   "width": "15%", "targets":  [2], "className": "text-left"   },
+                {   "width": "5%", "targets":   [3], "className": "text-center" },
+                {   "width": "15%", "targets":  [4], "className": "text-left" },
+                {   "width": "10%", "targets":  [5], "className": "text-left" },
+                {   "width": "10%", "targets":  [6], "className": "text-left" },
+                {   "width": "5%",  "targets":  [7], "className": "text-center" },
+                {   "width": "15%", "targets":  [8], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'username', name: 'username'},
-            {data: 'gender', name: 'gender'},
-            {data: 'phone', name: 'phone'},
-            {data: 'jenisPenggajian', name: 'jenisPenggajian'},
-            {data: 'accessLevel', name: 'accessLevel'},
-            {data: 'statusKepegawaian', name: 'statusKepegawaian'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'username', name: 'username'},
+                {data: 'gender', name: 'gender'},
+                {data: 'phone', name: 'phone'},
+                {data: 'jenisPenggajian', name: 'jenisPenggajian'},
+                {data: 'accessLevel', name: 'accessLevel'},
+                {data: 'statusKepegawaian', name: 'statusKepegawaian'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
+    $(document).ready(function() {
+        myFunction();
+    });
 </script>
 
 @if (session('status'))
@@ -82,7 +85,7 @@
 //HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
 //HISTORY STATUS HARIAN BORONGAN BULANAN BELUM DISIMPAN
 
-<body onload="myFunction()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

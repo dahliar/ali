@@ -98,6 +98,12 @@
     });
 
     $(document).on("click", "#buttCancelAdd", function (e) {
+        getOrgStructureSelectOptionList(
+            {{ old('filterWorkPosition', $reportTo->idworkpos) }}, 
+            {{ old('filterStructuralPosition', $reportTo->idstructuralpos) }}, 
+            {{ old('reportTo', $reportTo->id) }} 
+            );
+
         e.preventDefault();
         formResetClearAllInfo();
     });
@@ -119,190 +125,179 @@
         </div>
     </div>
 </div>
-<script type="text/javascript"> 
-    getOrgStructureSelectOptionList(
-        {{ old('filterWorkPosition', $reportTo->idworkpos) }}, 
-        {{ old('filterStructuralPosition', $reportTo->idstructuralpos) }}, 
-        {{ old('reportTo', $reportTo->id) }} 
-        );
-    </script>
-    @endif
-    <body onload="getOrgStructureSelectOptionList(
-        {{ old('filterWorkPosition', $reportTo->idworkpos) }}, 
-        {{ old('filterStructuralPosition', $reportTo->idstructuralpos) }}, 
-        {{ old('reportTo', $reportTo->id) }} 
-        )">
-        <div class="container-fluid">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb primary-color">
-                            <li class="breadcrumb-item">
-                                <a class="white-text" href="{{ url('/home') }}">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active">
-                                <a class="white-text" href="{{ ('employeeList')}}">Structure</a>
-                            </li>
-                            <li class="breadcrumb-item active">Edit</li>
-                        </ol>
-                    </nav>
-                </div>
-                <div class="modal-body d-grid gap-1">
-                    <form id="StructureEditForm" action="{{url('organizationStructureUpdate')}}" method="POST" name="StructureEditForm" autocomplete="off">
-                        @csrf
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Nama*</span>
-                            </div>
-                            <div class="col-md-6">
-                                <input id="name" name="name" type="text" class="form-control" autocomplete="none" value="{{ old('name', $organization_structure->name) }}" readonly>
-                                <input id="idStructure" name="idStructure" type="hidden" class="form-control" autocomplete="none" value="{{ old('idStructure', $organization_structure->id) }}" readonly>
-                            </div>
+@endif
+<body>
+    <div class="container-fluid">
+        <div class="modal-content">
+            <div class="modal-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb primary-color">
+                        <li class="breadcrumb-item">
+                            <a class="white-text" href="{{ url('/home') }}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a class="white-text" href="{{ ('employeeList')}}">Structure</a>
+                        </li>
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="modal-body d-grid gap-1">
+                <form id="StructureEditForm" action="{{url('organizationStructureUpdate')}}" method="POST" name="StructureEditForm" autocomplete="off">
+                    @csrf
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Nama*</span>
                         </div>
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Bagian*</span>
-                            </div>
-                            <div class="col-md-6">
-                                <select id="workPosition" name="workPosition" class="form-control w-100" disabled>
-                                    <option selected value="-1">--Choose First--</option>
-                                    @foreach ($workpos as $row)
-                                    @if ( $row->id == old('workPosition', $organization_structure->idworkpos) )
-                                    <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
-                                    @else
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
+                        <div class="col-md-6">
+                            <input id="name" name="name" type="text" class="form-control" autocomplete="none" value="{{ old('name', $organization_structure->name) }}" readonly>
+                            <input id="idStructure" name="idStructure" type="hidden" class="form-control" autocomplete="none" value="{{ old('idStructure', $organization_structure->id) }}" readonly>
                         </div>
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Jabatan*</span>
-                            </div>
-                            <div class="col-md-6">
-                                <select id="structuralPosition" name="structuralPosition" class="form-control w-100" disabled>
-                                    <option selected value="-1">--Choose First--</option>
-                                    @foreach ($structpos as $row)
-                                    @if ( $row->id == old('structuralPosition', $organization_structure->idstructuralpos) )
-                                    <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
-                                    @else
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                            </div>
+                    </div>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Bagian*</span>
                         </div>
+                        <div class="col-md-6">
+                            <select id="workPosition" name="workPosition" class="form-control w-100" disabled>
+                                <option selected value="-1">--Choose First--</option>
+                                @foreach ($workpos as $row)
+                                @if ( $row->id == old('workPosition', $organization_structure->idworkpos) )
+                                <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
+                                @else
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Jabatan*</span>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="structuralPosition" name="structuralPosition" class="form-control w-100" disabled>
+                                <option selected value="-1">--Choose First--</option>
+                                @foreach ($structpos as $row)
+                                @if ( $row->id == old('structuralPosition', $organization_structure->idstructuralpos) )
+                                <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
+                                @else
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
 
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Report To*</span>
-                            </div>
-                            <div class="col-md-6 border rounded p-2 row form-group" style="margin-left: 11;margin-right: 11;">
-                                <select id="filterWorkPosition" name="filterWorkPosition" class="form-control w-100" >
-                                    <option selected value="-1">--Choose First--</option>
-                                    @foreach ($workpos as $row)
-                                    @if ( $row->id == old('filterWorkPosition', $reportTo->idworkpos) )
-                                    <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
-                                    @else
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                                <select id="filterStructuralPosition" name="filterStructuralPosition" class="form-control w-100" >
-                                    <option selected value="-1">--Choose First--</option>
-                                    @foreach ($structpos as $row)                             
-                                    @if ( $row->id == old('filterStructuralPosition', $reportTo->idstructuralpos) )
-                                    <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
-                                    @else
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-                                <select id="reportTo" name="reportTo" class="form-control" >
-                                    <option value="-1">--Choose First--</option>
-                                </select>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Report To*</span>
+                        </div>
+                        <div class="col-md-6 border rounded p-2 row form-group" style="margin-left: 11;margin-right: 11;">
+                            <select id="filterWorkPosition" name="filterWorkPosition" class="form-control w-100" >
+                                <option selected value="-1">--Choose First--</option>
+                                @foreach ($workpos as $row)
+                                @if ( $row->id == old('filterWorkPosition', $reportTo->idworkpos) )
+                                <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
+                                @else
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                            <select id="filterStructuralPosition" name="filterStructuralPosition" class="form-control w-100" >
+                                <option selected value="-1">--Choose First--</option>
+                                @foreach ($structpos as $row)                             
+                                @if ( $row->id == old('filterStructuralPosition', $reportTo->idstructuralpos) )
+                                <option value="{{ $row->id }}" selected>{{ $row->name }}</option>
+                                @else
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                            <select id="reportTo" name="reportTo" class="form-control" >
+                                <option value="-1">--Choose First--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Max Employee</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input id="maxemployee" name="maxemployee" type="number" class="form-control text-end" autocomplete="none" value="{{ old('maxemployee', $organization_structure->maxemployee) }}">
+                                <span class="input-group-text" id="basic-addon2">posisi</span>
                             </div>
                         </div>
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Max Employee</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input id="maxemployee" name="maxemployee" type="number" class="form-control text-end" autocomplete="none" value="{{ old('maxemployee', $organization_structure->maxemployee) }}">
-                                    <span class="input-group-text" id="basic-addon2">posisi</span>
-                                </div>
+                    </div>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Gaji Pokok*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input id="gajiPokok" name="gajiPokok" type="number" class="form-control text-end" autocomplete="none" value="{{ old('gajiPokok', $organization_structure->defGajiPokok) }}">
+                                <span class="input-group-text" id="basic-addon2">per bulan</span>
                             </div>
                         </div>
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Gaji Pokok*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input id="gajiPokok" name="gajiPokok" type="number" class="form-control text-end" autocomplete="none" value="{{ old('gajiPokok', $organization_structure->defGajiPokok) }}">
-                                    <span class="input-group-text" id="basic-addon2">per bulan</span>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Uang Harian*</span>
                         </div>
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Uang Harian*</span>
-                            </div>
-                            <div class="col-md-3">
+                        <div class="col-md-3">
+                            <div class="input-group">
                                 <div class="input-group">
-                                    <div class="input-group">
-                                        <input id="uangHarian" name="uangHarian" type="number" class="form-control text-end" autocomplete="none" value="{{ old('uangHarian', $organization_structure->defUangHarian) }}">
-                                        <span class="input-group-text" id="basic-addon2">per hari</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>                      
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Uang Lembur*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input id="uangLembur" name="uangLembur" type="number" class="form-control text-end" autocomplete="none" value="{{ old('uangLembur', $organization_structure->defUangLembur) }}">
-                                    <span class="input-group-text" id="basic-addon2">per jam</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Uang transport*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input id="uangTransport" name="uangTransport" type="number" class="form-control text-end" autocomplete="none" value="{{ old('uangTransport', $organization_structure->defUangTransport) }}">
+                                    <input id="uangHarian" name="uangHarian" type="number" class="form-control text-end" autocomplete="none" value="{{ old('uangHarian', $organization_structure->defUangHarian) }}">
                                     <span class="input-group-text" id="basic-addon2">per hari</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                                <span class="label">Uang Makan*</span>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="input-group">
-                                    <input id="uangMakan" name="uangMakan" type="number" class="form-control text-end" autocomplete="none"value="{{ old('uangMakan', $organization_structure->defUangMakan) }}">
-                                    <span class="input-group-text" id="basic-addon2">per hari</span>
-                                </div>
+                    </div>                      
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Uang Lembur*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input id="uangLembur" name="uangLembur" type="number" class="form-control text-end" autocomplete="none" value="{{ old('uangLembur', $organization_structure->defUangLembur) }}">
+                                <span class="input-group-text" id="basic-addon2">per jam</span>
                             </div>
                         </div>
-                        <div class="p-1 row form-group">
-                            <div class="col-md-2 text-end">
-                            </div>
-                            <div class="col-md-8">
-                                <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
-                                <button type="Reset" class="btn btn-danger buttonConf"ß>Reset</button>
+                    </div>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Uang transport*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input id="uangTransport" name="uangTransport" type="number" class="form-control text-end" autocomplete="none" value="{{ old('uangTransport', $organization_structure->defUangTransport) }}">
+                                <span class="input-group-text" id="basic-addon2">per hari</span>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Uang Makan*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input id="uangMakan" name="uangMakan" type="number" class="form-control text-end" autocomplete="none"value="{{ old('uangMakan', $organization_structure->defUangMakan) }}">
+                                <span class="input-group-text" id="basic-addon2">per hari</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-1 row form-group">
+                        <div class="col-md-2 text-end">
+                        </div>
+                        <div class="col-md-8">
+                            <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
+                            <button type="Reset" class="btn btn-danger buttonConf"ß>Reset</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-    </body>
-    @endsection
+    </div>
+</body>
+@endsection

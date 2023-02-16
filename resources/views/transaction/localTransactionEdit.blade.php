@@ -118,6 +118,9 @@
             }
         });
     });
+    $(document).ready(function() {
+        disableForm();
+    });
 </script>
 @if (session('success'))
 <script type="text/javascript">
@@ -142,7 +145,7 @@
     </div>
 </div>
 @endif
-<body onload="disableForm()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

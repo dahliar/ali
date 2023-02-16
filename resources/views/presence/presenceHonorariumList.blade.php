@@ -119,6 +119,9 @@
                 ]
         });
     }
+    $(document).ready(function() {
+        myFunction();
+    });
 </script>
 
 @if (session('status'))
@@ -133,7 +136,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

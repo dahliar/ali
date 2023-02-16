@@ -67,30 +67,33 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "15%", "targets":  [1], "className": "text-left" },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [4], "className": "text-left" },
-            {   "width": "15%", "targets":  [5], "className": "text-left" },
-            {   "width": "5%", "targets":  [6], "className": "text-left" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" },
-            {   "width": "5%", "targets":  [8], "className": "text-end" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "15%", "targets":  [1], "className": "text-left" },
+                {   "width": "10%", "targets":  [2], "className": "text-left" },
+                {   "width": "10%", "targets":  [3], "className": "text-left" },
+                {   "width": "10%", "targets":  [4], "className": "text-left" },
+                {   "width": "15%", "targets":  [5], "className": "text-left" },
+                {   "width": "5%", "targets":  [6], "className": "text-left" },
+                {   "width": "10%", "targets":  [7], "className": "text-end" },
+                {   "width": "5%", "targets":  [8], "className": "text-end" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nip', name: 'nip'},
-            {data: 'osname', name: 'osname'},
-            {data: 'noRekening', name: 'noRekening'},
-            {data: 'bankName', name: 'bankName'},
-            {data: 'isPaid', name: 'isPaid'},
-            {data: 'jumlah', name: 'jumlah'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'nip', name: 'nip'},
+                {data: 'osname', name: 'osname'},
+                {data: 'noRekening', name: 'noRekening'},
+                {data: 'bankName', name: 'bankName'},
+                {data: 'isPaid', name: 'isPaid'},
+                {data: 'jumlah', name: 'jumlah'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
+    $(document).ready(function() {
+        myFunction();
+    });
 </script>
 
 @if (session('status'))
@@ -105,7 +108,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

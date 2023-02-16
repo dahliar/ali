@@ -36,22 +36,23 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "3%",  "targets":[0], "className": "text-center"   },
-            {   "width": "17%", "targets": [1], "className": "text-left"    },
-            {   "width": "10%",  "targets": [2], "className": "text-left" },
-            {   "width": "7%",  "targets": [3], "className": "text-center"  }
-            ], 
+                {   "width": "3%",  "targets":[0], "className": "text-center"   },
+                {   "width": "17%", "targets": [1], "className": "text-left"    },
+                {   "width": "10%",  "targets": [2], "className": "text-left" },
+                {   "width": "7%",  "targets": [3], "className": "text-center"  }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'isActive', name: 'isActive'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'isActive', name: 'isActive'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
     $(document).ready(function() {
+        myFunction();
     });
 </script>
 
@@ -68,7 +69,7 @@
 </div>
 @endif
 
-<body onload="myFunction()">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">

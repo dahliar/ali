@@ -34,25 +34,29 @@
             destroy:true,
             data : {},
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "30%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%",  "targets": [2], "className": "text-center" },
-            {   "width": "10%", "targets":  [3], "className": "text-center" },
-            {   "width": "10%", "targets":  [4], "className": "text-center" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "30%", "targets":  [1], "className": "text-left"   },
+                {   "width": "10%",  "targets": [2], "className": "text-center" },
+                {   "width": "10%", "targets":  [3], "className": "text-center" },
+                {   "width": "10%", "targets":  [4], "className": "text-center" },
+                {   "width": "10%", "targets":  [5], "className": "text-end" }
+                ], 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
-            {data: 'item', name: 'item'},
-            {data: 'tanggalPacking', name: 'tanggalPacking'},
-            {data: 'username', name: 'username'},
-            {data: 'amountPacked', name: 'amountPacked'},
-            {data: 'amountUnpacked', name: 'amountUnpacked'}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
+                {data: 'item', name: 'item'},
+                {data: 'tanggalPacking', name: 'tanggalPacking'},
+                {data: 'username', name: 'username'},
+                {data: 'amountPacked', name: 'amountPacked'},
+                {data: 'amountUnpacked', name: 'amountUnpacked'}
+                ]
         });
     }
+    $(document).ready(function() {
+        myFunction({{$itemId}});
+    });
+
 </script>
-<body onload="myFunction({{$itemId}})">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

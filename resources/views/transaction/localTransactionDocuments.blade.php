@@ -71,24 +71,28 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%", "targets":  [0], "className": "text-left"   },
-            {   "width": "15%", "targets": [1], "className": "text-left" },
-            {   "width": "15%", "targets": [2], "className": "text-left" },
-            {   "width": "30%", "targets":  [3], "className": "text-left" },
-            {   "width": "20%", "targets":  [4], "className": "text-left" },
-            {   "width": "15%", "targets":   [5], "className": "text-left" }
-            ], 
+                {   "width": "5%", "targets":  [0], "className": "text-left"   },
+                {   "width": "15%", "targets": [1], "className": "text-left" },
+                {   "width": "15%", "targets": [2], "className": "text-left" },
+                {   "width": "30%", "targets":  [3], "className": "text-left" },
+                {   "width": "20%", "targets":  [4], "className": "text-left" },
+                {   "width": "15%", "targets":   [5], "className": "text-left" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'documentNo', name: 'documentNo'},
-            {data: 'jenis', name: 'jenis'},
-            {data: 'name', name: 'name'},
-            {data: 'tanggal', name: 'tanggal'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'documentNo', name: 'documentNo'},
+                {data: 'jenis', name: 'jenis'},
+                {data: 'name', name: 'name'},
+                {data: 'tanggal', name: 'tanggal'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
+    $(document).ready(function() {
+        myFunction({{$transaction->id}});
+    });
+
 </script>
 
 
@@ -114,7 +118,7 @@
     </div>
 </div>
 @endif
-<body onload="myFunction({{$transaction->id}})">
+<body>
     {{ csrf_field() }}
     <div class="container-fluid">
         <div class="modal-content">

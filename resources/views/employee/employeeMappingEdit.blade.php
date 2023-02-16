@@ -103,7 +103,9 @@
         e.preventDefault();
         formResetClearAllInfo();
     });
-
+    $(document).ready(function() {
+        getOrgStructureSelectOptionList({{$orgstructure->workPosition}},{{$orgstructure->structuralPosition}},{{$orgstructure->idorgstructure}});
+    });
 </script>
 
 @if ($errors->any())
@@ -122,7 +124,7 @@
     </div>
 </div>
 @endif
-<body onload="getOrgStructureSelectOptionList({{$orgstructure->workPosition}},{{$orgstructure->structuralPosition}},{{$orgstructure->idorgstructure}})">
+<body>
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">
