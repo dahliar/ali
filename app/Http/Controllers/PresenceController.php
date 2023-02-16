@@ -267,7 +267,6 @@ class PresenceController extends Controller
         ->select(
             'e.id as id', 
             'u.name as name', 
-            'e.nik as nik',
             DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian'), 
             DB::raw('(STR_TO_DATE(p.start,"%Y-%m-%d")) as presenceToday'),
             'os.name as orgStructure',
@@ -284,6 +283,7 @@ class PresenceController extends Controller
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->where('e.employmentStatus', '!=','3')
+        ->where('e.isActive', '=','1')
         ->where('mapping.isActive', '1')
         ->orderBy('u.name');
 

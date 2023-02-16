@@ -133,18 +133,16 @@
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
                 {   "width": "25%", "targets":  [1], "className": "text-left"   },
-                {   "width": "15%", "targets":  [2], "className": "text-left" },
-                {   "width": "10%", "targets":  [3], "className": "text-left" },
-                {   "width": "15%", "targets":  [4], "className": "text-left" },
+                {   "width": "10%", "targets":  [2], "className": "text-left" },
+                {   "width": "15%", "targets":  [3], "className": "text-left" },
+                {   "width": "10%", "targets":  [4], "className": "text-left" },
                 {   "width": "10%", "targets":  [5], "className": "text-left" },
-                {   "width": "10%", "targets":  [6], "className": "text-left" },
-                {   "width": "10%", "targets":  [7], "className": "text-left" }
+                {   "width": "10%", "targets":  [6], "className": "text-left" }
                 ], 
 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'name', name: 'name'},
-                {data: 'nik', name: 'nik'},
                 {data: 'jenisPenggajian', name: 'jenisPenggajian'},
                 {data: 'orgStructure', name: 'orgStructure'},
                 {data: 'jabatan', name: 'jabatan'},
@@ -195,12 +193,11 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama</th>
-                                <th>NIK</th>
                                 <th>Jenis Karyawan</th>
                                 <th>Posisi</th>
                                 <th>Jabatan</th>
                                 <th>Bagian</th>
-                                <th>Act</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
