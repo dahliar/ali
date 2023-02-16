@@ -74,14 +74,6 @@ class BoronganController extends Controller
         $query->get();
 
         return datatables()->of($query)
-        ->addColumn('countIsPaid', function ($row) {
-            $jumlah=$row->jumlahPaid;
-            if ($row->jumlahPaid == null){
-                $jumlah=0;
-            }
-            $html = $jumlah." dari ".$row->worker;
-            return $html;
-        })
         ->addColumn('action', function ($row) {
             $html='';
             if ($row->status == 0){
