@@ -64,20 +64,26 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-                {   "width": "35%", "targets":  [0], "className": "text-left" },
-                {   "width": "25%", "targets":  [1], "className": "text-left" },
-                {   "width": "10%", "targets": [2], "className": "text-left" },
+                {   "width": "5%", "targets":  [0], "className": "text-left" },
+                {   "width": "30%", "targets": [1], "className": "text-left" },
+                {   "width": "25%", "targets": [2], "className": "text-left" },
                 {   "width": "10%", "targets": [3], "className": "text-left" },
-                {   "width": "20%", "targets":  [4], "className": "text-left" }
+                {   "width": "10%", "targets": [4], "className": "text-left" },
+                {   "width": "20%", "targets": [5], "className": "text-left" }
                 ], 
 
             columns: [
-                {data: 'name', name: 'name'},
-                {data: 'invnum', name: 'invnum'},
-                {data: 'ld', name: 'ld'},
-                {data: 'status', name: 'status'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
-                ]
+                {data: 'SrNo',
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
+            {data: 'name', name: 'name'},
+            {data: 'invnum', name: 'invnum'},
+            {data: 'ld', name: 'ld'},
+            {data: 'status', name: 'status'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
+            ]
         });
     }
 </script>
@@ -152,6 +158,7 @@
                 <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                     <thead>
                         <tr>
+                            <th>No</th>
                             <th>Perusahaan</th>
                             <th>No Surat</th>
                             <th>Tanggal Loading</th>
