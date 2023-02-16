@@ -77,24 +77,28 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-                {   "width": "25%", "targets":  [0], "className": "text-left"   },
-                {   "width": "10%", "targets": [1], "className": "text-left" },
-                {   "width": "18%", "targets": [2], "className": "text-left" },
+                {   "width": "7%", "targets":   [0], "className": "text-left" },
+                {   "width": "25%", "targets":  [1], "className": "text-left"   },
+                {   "width": "10%", "targets":  [2], "className": "text-left" },
                 {   "width": "18%", "targets":  [3], "className": "text-left" },
-                {   "width": "7%", "targets":   [4], "className": "text-left" },
-                {   "width": "7%", "targets":  [5], "className": "text-left" },
+                {   "width": "18%", "targets":  [4], "className": "text-left" },
+                {   "width": "7%", "targets":   [5], "className": "text-left" },
                 {   "width": "15%", "targets":  [6], "className": "text-left" }
                 ], 
 
             columns: [
-                {data: 'name', name: 'name'},
-                {data: 'nation', name: 'nation'},
-                {data: 'number', name: 'number'},
-                {data: 'tanggal', name: 'tanggal'},
-                {data: 'undername', name: 'undername'},
-                {data: 'status', name: 'status'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
-                ]
+                {data: 'SrNo',
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
+            {data: 'name', name: 'name'},
+            {data: 'nation', name: 'nation'},
+            {data: 'number', name: 'number'},
+            {data: 'tanggal', name: 'tanggal'},
+            {data: 'status', name: 'status'},
+            {data: 'action', name: 'action', orderable: false, searchable: false}
+            ]
         });
     }
 </script>
@@ -193,11 +197,11 @@
                 <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                     <thead>
                         <tr style="font-size: 12px;">
+                            <th>No</th>
                             <th>Perusahaan</th>
                             <th>Negara</th>
                             <th>No Surat</th>
                             <th>Tanggal</th>
-                            <th>Jenis</th>
                             <th>Status</th>
                             <th>Act</th>
                         </tr>
