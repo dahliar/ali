@@ -270,7 +270,6 @@ class PresenceController extends Controller
             DB::raw('(CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian'), 
             DB::raw('(STR_TO_DATE(p.start,"%Y-%m-%d")) as presenceToday'),
             'os.name as orgStructure',
-            'sp.name as jabatan',
             'wp.name as bagian'
         )
         ->leftJoin('presences as p', function($join) use ($presenceDate){
