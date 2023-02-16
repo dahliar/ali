@@ -82,9 +82,8 @@
             {   "width": "10%", "targets":  [2], "className": "text-left" },
             {   "width": "10%", "targets":  [3], "className": "text-end" },
             {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "5%", "targets":  [5], "className": "text-end" },
-            {   "width": "7%", "targets":  [6], "className": "text-end" },
-            {   "width": "8%", "targets":  [7], "className": "text-end" },
+            {   "width": "10%", "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [7], "className": "text-end" },
             {   "width": "15%", "targets":  [8], "className": "text-center" }
             ], 
 
@@ -95,7 +94,6 @@
             {data: 'hargaSatuan', name: 'hargaSatuan'},
             {data: 'netweight', name: 'netweight'},
             {data: 'worker', name: 'worker'},
-            {data: 'countIsPaid', name: 'countIsPaid'},
             {data: 'statusText', name: 'statusText'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
             ]
@@ -170,7 +168,6 @@
                                 <th>Harga/Kg</th>
                                 <th>Berat</th>
                                 <th>Pekerja</th>
-                                <th>Bayar</th>
                                 <th>Tahap</th>
                                 <th>Act</th>
                             </tr>

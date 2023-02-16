@@ -61,7 +61,6 @@ class BoronganController extends Controller
                 END) AS statusText'),
             'b.hargaSatuan as hargaSatuan',
             'b.netweight as netweight',
-            DB::raw('sum(db.isPaid) as jumlahPaid'),
             DB::raw('(b.hargaSatuan * b.netweight) AS total'),
             'b.worker as worker')
         ->leftjoin('detail_borongans as db', 'db.boronganId', '=', 'b.id')
