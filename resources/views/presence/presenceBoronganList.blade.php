@@ -77,18 +77,21 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-end" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "15%", "targets":  [7], "className": "text-center" }
-            ], 
-
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "20%", "targets":  [1], "className": "text-left"   },
+                {   "width": "10%", "targets":  [2], "className": "text-left" },
+                {   "width": "10%", "targets":  [3], "className": "text-end" },
+                {   "width": "10%", "targets":  [4], "className": "text-end" },
+                {   "width": "10%", "targets":  [5], "className": "text-end" },
+                {   "width": "10%", "targets":  [6], "className": "text-end" },
+                {   "width": "15%", "targets":  [7], "className": "text-center" }
+                ], 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'SrNo',
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },
             {data: 'name', name: 'name'},
             {data: 'tanggalKerja', name: 'tanggalKerja'},
             {data: 'hargaSatuan', name: 'hargaSatuan'},
