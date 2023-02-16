@@ -78,12 +78,12 @@
             destroy:true,
             columnDefs: [
                 {   "width": "5%", "targets":   [0], "className": "text-left" },
-                {   "width": "30%", "targets":  [1], "className": "text-left"   },
+                {   "width": "25%", "targets":  [1], "className": "text-left"   },
                 {   "width": "10%", "targets":  [2], "className": "text-left" },
                 {   "width": "20%", "targets":  [3], "className": "text-left" },
                 {   "width": "20%", "targets":  [4], "className": "text-left" },
-                {   "width": "8%", "targets":   [5], "className": "text-left" },
-                {   "width": "12%", "targets":  [6], "className": "text-left" }
+                {   "width": "10%", "targets":   [5], "className": "text-left" },
+                {   "width": "15%", "targets":  [6], "className": "text-left" }
                 ], 
 
             columns: [
