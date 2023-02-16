@@ -83,8 +83,8 @@
             {   "width": "10%", "targets":  [3], "className": "text-end" },
             {   "width": "10%", "targets":  [4], "className": "text-end" },
             {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [7], "className": "text-end" },
-            {   "width": "15%", "targets":  [8], "className": "text-center" }
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
+            {   "width": "15%", "targets":  [7], "className": "text-center" }
             ], 
 
             columns: [
