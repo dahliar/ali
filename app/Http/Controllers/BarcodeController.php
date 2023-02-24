@@ -177,16 +177,26 @@ class BarcodeController extends Controller
             'filename'          => $filename,
             'printer'           => $printer
         ];
-        DB::table('codes')->insert($codes);            
+        $codeId = DB::table('codes')->insertGetId($codes);            
 
 
         $arrData = array();
         for ($a=$startFrom; $a<($startFrom+$jumlah); $a++){
             $barcode = $productionDateData.str_pad($a, 4, '0', STR_PAD_LEFT);
+
             $data = [
                 "barcode" => $barcode, 
                 "fullname" => url('/productChecking/'.$barcode).' - '.$name.' '.$barcode
             ];
+
+
+            DB::table('code_usages')->insert([
+                'codeId' => $codeId,
+                'fullcode' => $barcode,
+                'packagingDate' => $transactionDate
+            ]);     
+
+
             $arrData[$a] = $data;
         }
 

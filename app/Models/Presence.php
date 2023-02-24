@@ -239,8 +239,8 @@ class Presence extends Model
 
 
     function simpanPresenceTunggal($empid, $start, $end, $isLembur, $shift){
-        $ramadhanStart = Carbon::parse("2022-04-03 00:00:00"); 
-        $ramadhanEnd = Carbon::parse("2022-05-01 23:59:59"); 
+        $ramadhanStart = Carbon::parse("2023-03-22 00:00:00"); 
+        $ramadhanEnd = Carbon::parse("2023-04-21 23:59:59"); 
         $dataJam=null;
         if (($start->gte($ramadhanStart)) and ($start->lte($ramadhanEnd))) {
             $dataJam = $this->hitungPresenceHarianRamadhan($start, $end, $shift);

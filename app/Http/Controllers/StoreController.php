@@ -818,46 +818,18 @@ class StoreController extends Controller
             'sh.jenis as jenis',
             'sh.userId as userPeubah',
             'sh.informasiTransaksi as informasiTransaksi',
-            DB::raw('concat(
-                sp.nameBahasa," ",
-                b.name," Grade ",
-                g.name," ",
-                f.name," Size ",
-                s.name," Packing ",
-                weightbase," Kg/", p.shortname
-            ) as itemName'),
-            'sh.amount as realAmount',
-            DB::RAW('concat(sh.amount, " * ", i.weightbase, " Kg/", p.shortname) as amount'),
-            DB::raw('concat(((sh.amount+sh.prevAmount)*i.weightbase)," Kg") as afterAmount'),
-            DB::raw('concat((sh.prevAmount*i.weightbase)," Kg") as prevAmount')
+            DB::raw('vid.name as itemName'),
+            'sh.amount as amount',
+            DB::raw('concat(sh.amount*vid.weightbase) as realAmount')
         )
-        ->join('items as i', 'i.id', '=', 'sh.itemId')
-        ->join('freezings as f', 'i.freezingid', '=', 'f.id')
-        ->join('grades as g', 'i.gradeid', '=', 'g.id')
-        ->join('packings as p', 'i.packingid', '=', 'p.id')
-        ->join('shapes as b', 'i.sizeid', '=', 'b.id')
-        ->join('sizes as s', 'i.sizeid', '=', 's.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
+        ->join('view_item_details as vid', 'vid.itemId', '=', 'sh.itemId')
         ->whereBetween('sh.created_at', [$start." 00:00:00", $end." 23:59:59"])
-        ->orderBy('sp.name')
-        ->orderBy('g.name', 'desc')
-        ->orderBy('s.name', 'asc')
-        ->orderBy('f.name');
+        ->orderBy('sh.created_at', 'desc');
         if ($species>0){
-            $query->where('sp.id','=', $species);
+            $query->where('vid.speciesId','=', $species);
         }
         $query->get();
         return datatables()->of($query)
-        ->editColumn('realAmount', function ($row) {
-            $html = '';
-            switch($row->jenis){
-                case('1') : $html = '<i class="fas fa-plus"></i> '.$row->realAmount;break;
-                case('2') : $html =  '<i class="fas fa-minus"></i> '.$row->realAmount;break;
-                case('3') : $html =  '<i class="fas fa-dolly-flatbed"></i> '.$row->realAmount;break;
-            }
-            return $html;
-        })
-        ->rawColumns(['realAmount'])
         ->addIndexColumn()->toJson();
     }
 

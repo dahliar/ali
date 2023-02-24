@@ -15,6 +15,9 @@ use Auth;
 
 class DashboardController extends Controller
 {
+    public function slash(){
+        return view('welcome');
+    }
     public function infophp()
     {
         //$pdf = Pdf::loadview("userMapping.info");

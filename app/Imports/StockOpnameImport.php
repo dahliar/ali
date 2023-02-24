@@ -5,6 +5,8 @@ namespace App\Imports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
+use App\Http\Controllers\TransactionController;
+
 
 use DB;
 
@@ -29,6 +31,8 @@ class StockOpnameImport implements ToCollection, WithStartRow
     {
         $a=0;
         $mesej = "";
+        $tran = new TransactionController();
+
         foreach ($collection as $row) 
         {
             if ($row[11] == 1){
@@ -37,15 +41,7 @@ class StockOpnameImport implements ToCollection, WithStartRow
                     ->where('id', $row[0])
                     ->update(['amount' => $row[10]]);
 
-                    $data = [
-                        'userId'                => auth()->user()->name,
-                        'jenis'                 => 3,
-                        'informasiTransaksi'    => "Stock Opname tanggal ".$this->stockOpnameDate,
-                        'itemId'                =>  $row[0],
-                        'prevAmount'            =>  $row[7],
-                        'amount'                =>  $row[10]               
-                    ];
-                    DB::table('stock_histories')->insert($data);
+                    $tran->stockChangeLog(3, "Stock Opname tanggal ".$this->stockOpnameDate, $row[0], $row[10]);
                 }
                 catch(\Exception $e){
                     $mesej.=$row[0].", ";
