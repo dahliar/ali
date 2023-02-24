@@ -192,17 +192,35 @@
 						@endif
 					</ul>
 				</li>
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="menuQR" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-fish"></i> QR Code
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="menuQR">
+						<li>
+							<a class="dropdown-item" href="{{ url('barcodeList')}}"><i class="fas fa-qrcode"></i>Generate QR </a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('scanList')}}"><i class="fas fa-barcode"></i> Daftar Barcode / QRCode</a>
+						</li>
+					</ul>
+				</li>
 				<li>
 					<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i> Barang Pendukung Produksi</a>
 				</li>
-				<li>
-					<a class="dropdown-item" href="{{ url('barcodeList')}}"><i class="fas fa-qrcode"></i> QR Code </a>
-				</li>
+
 				@if (Session::get('accessLevel') <= 30)
 				<li>
 					<a class="dropdown-item" href="{{ url('opname')}}"><i class="fas fa-dolly-flatbed"></i> Opname </a>
 				</li>
 				@endif
+				<li>
+					<a class="dropdown-item" href="{{ url('historyPerubahanStock')}}"><i class="fas fa-history"></i> History Perubahan stock </a>
+				</li>
+
+
+
+
 			</ul>
 		</li>				
 		@if (Session::get('accessLevel') <= 30)
