@@ -19,7 +19,9 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
+    function tambahSpecies(){
+        window.open('{{ url("speciesCreate") }}', '_self');
+    }
     function listItem(speciesId){
         window.open(('{{ url("itemList") }}' + "/"+ speciesId), '_self');
     }
@@ -100,6 +102,8 @@
                         <li class="breadcrumb-item active">Master data spesies dan barang</li>
                     </ol>
                 </nav>
+                <button onclick="tambahSpecies()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Species"><i class="fa fa-plus" style="font-size:20px"></i>
+                </button>
             </div>
         </div>
         <div class="card card-header">

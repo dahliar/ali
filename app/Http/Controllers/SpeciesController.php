@@ -49,6 +49,49 @@ class SpeciesController extends Controller
 
     }
 
+    public function createSpecies()
+    {
+        $families = Family::orderBy('name', 'asc')->get();
+        return view('species.speciesCreate', compact('families'));
+    }
+
+    public function storeSpecies(Request $request)
+    {
+        $validated = $request->validate(
+            [
+                'name' => [
+                    'required', 
+                    Rule::unique('Species')->where(function ($query) use ($request) {
+                        return $query->where('name', $request->name);
+                    })
+                    
+                ],
+                'nameBahasa' => [
+                    'required', 
+                    Rule::unique('Species')->where(function ($query) use ($request) {
+                        return $query->where('nameBahasa', $request->nameBahasa);
+                    })
+                ],
+                'family' => ['required', 'gt:0']
+
+            ],[
+                'speciesEn.unique' => 'Nama (English) harus unik, ":input" sudah digunakan',
+                'speciesId.unique' => 'Nama (Bahasa) harus unik, ":input" sudah digunakan',
+            ]
+        );
+
+        $data = [
+            'name' => $request->name,
+            'nameBahasa' => $request->nameBahasa,
+            'familyid' => $request->family,
+            'isActive' =>  1
+        ];
+        DB::table('species')->insert($data);
+        return redirect('speciesList/')
+        ->with('status','Species berhasil ditambahkan.');
+
+    }
+
     public function create($familyId)
     {
         //$oneItem = $this->item->getOneItem($speciesId);

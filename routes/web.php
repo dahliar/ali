@@ -29,6 +29,7 @@ use App\Http\Controllers\UndernameController;
 use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\LeaveController;
+use App\Http\Controllers\StockController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -75,6 +76,10 @@ Route::GET('infophp', [DashboardController::class, 'infophp'])->middleware('auth
 Route::get('unauthorized', function () {
     return view('partial.noAccess');
 });
+
+
+
+
 
 /*
 *   Route Transaksi Penjualan
@@ -218,6 +223,9 @@ Route::post('approveStockSubtractChange',[StoreController::class, 'stockSubtract
 
 //SPECIES
 Route::get('speciesList',[SpeciesController::class, 'index'])->middleware(['auth', 'authorized'])->name('speciesList');
+Route::get('speciesCreate',[SpeciesController::class, 'createSpecies'])->middleware(['auth', 'authorized']);
+Route::post('speciesStore',[SpeciesController::class, 'storeSpecies'])->middleware(['auth']);
+
 Route::GET('getAllSpecies/{familyId}', [SpeciesController::class, 'getAllSpecies'])->middleware(['auth']);
 Route::GET('getAllSpeciesSize/{speciesId}', [SpeciesController::class, 'getAllSpeciesSize'])->middleware(['auth']);
 Route::GET('getAllSpeciesItem/{speciesId}', [SpeciesController::class, 'getAllSpeciesItem'])->middleware(['auth']);
@@ -640,6 +648,30 @@ Route::post('cutiHolidayDateAdddayDateStore',[LeaveController::class, 'cutiHolid
 Route::post('cutiHolidayDateDestroy',[LeaveController::class, 'destroy'])->middleware('auth');
 
 Route::get('getAllHolidays',[LeaveController::class, 'getAllHolidays'])->middleware('auth');
+
+
+
+/*
+*   Stock masuk gudang
+*   Tally masuk barang
+*
+*/
+Route::get('scanList',[StockController::class, 'index'])->middleware(['auth', 'authorized']);
+
+Route::get('scanMasuk',[StockController::class, 'create'])->middleware(['auth', 'authorized']);
+Route::get('scanKeluar',[StockController::class, 'createKeluar'])->middleware(['auth', 'authorized']);
+Route::get('scanEditBarcode/{barcodeId}',[StockController::class, 'show'])->middleware(['auth', 'authorized']);
+
+Route::post('scanStoreMasuk',[StockController::class, 'storeMasuk'])->middleware(['auth']);
+Route::post('scanStoreKeluar',[StockController::class, 'storeKeluar'])->middleware(['auth']);
+
+Route::get('checkStatusBarcodeBarang',[StockController::class, 'checkStatusBarcodeBarang'])->middleware(['auth']);
+Route::GET('getItemsForScanPage/{speciesId}', [StockController::class, 'getItemsForScanPage'])->middleware(['auth']);
+Route::GET('getAllBarcodeData', [StockController::class, 'getAllBarcodeData'])->middleware(['auth']);
+
+
+
+
 
 
 
