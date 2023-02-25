@@ -15,7 +15,7 @@ class StockController extends Controller
     public function index()
     {
         $species = Species::orderBy('name')->get();
-        return view('stock.stockList', compact('species'));
+        return view('stock.stocklist', compact('species'));
     }
     public function create()
     {
