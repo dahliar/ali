@@ -98,6 +98,7 @@ class StockController extends Controller
             }
         }
 
+        /*
         $query = DB::table('code_usages as cu')
         ->join('codes as c', 'c.id', '=', 'cu.codeId')
         ->whereIn('cu.fullcode', $arr)
@@ -116,6 +117,7 @@ class StockController extends Controller
 
             $tran->stockChangeLog(2, "Scan barcode masuk barang ".$item->itemId." tanggal ".$tanggal, $item->itemId, $item->jumlah);
         }
+        */
 
         $species = Species::orderBy('name')->get();
         return redirect('scanList')
