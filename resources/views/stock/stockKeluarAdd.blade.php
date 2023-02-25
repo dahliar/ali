@@ -95,7 +95,6 @@
 </script>
 
 <div class="container-fluid">
-    20230221002050001
     <div class="row">
         <div class="modal-content">
             <div class="modal-header">
