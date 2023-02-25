@@ -194,14 +194,14 @@
 				</li>
 				<li class="dropdown dropend">
 					<a class="dropdown-item dropdown-toggle" href="#" id="menuQR" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="fas fa-fish"></i> QR Code
+						<i class="fas fa-fish"></i> Bar/QR Code
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="menuQR">
 						<li>
-							<a class="dropdown-item" href="{{ url('barcodeList')}}"><i class="fas fa-qrcode"></i>Generate QR </a>
+							<a class="dropdown-item" href="{{ url('barcodeList')}}"><i class="fas fa-qrcode"></i>Generate Bar/QR Code </a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="{{ url('scanList')}}"><i class="fas fa-barcode"></i> Daftar Barcode / QRCode</a>
+							<a class="dropdown-item" href="{{ url('scanList')}}"><i class="fas fa-barcode"></i> Daftar Bar/QR Code</a>
 						</li>
 					</ul>
 				</li>
