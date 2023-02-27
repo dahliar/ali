@@ -61,14 +61,14 @@ class SpeciesController extends Controller
             [
                 'name' => [
                     'required', 
-                    Rule::unique('Species')->where(function ($query) use ($request) {
+                    Rule::unique('species')->where(function ($query) use ($request) {
                         return $query->where('name', $request->name);
                     })
                     
                 ],
                 'nameBahasa' => [
                     'required', 
-                    Rule::unique('Species')->where(function ($query) use ($request) {
+                    Rule::unique('species')->where(function ($query) use ($request) {
                         return $query->where('nameBahasa', $request->nameBahasa);
                     })
                 ],
