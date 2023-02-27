@@ -199,8 +199,10 @@
                 <div class="col-md-4 text-end">
                     <a onclick="functionStockMasuk()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tally masuk storage"><i class="fas fa-plus"> </i>
                     </a>
-                    <a onclick="functionStockKeluar()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tally keluar storage"><i class="fas fa-minus"> </i>
-                    </a>
+                        <!--
+                        <a onclick="functionStockKeluar()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tally keluar storage"><i class="fas fa-minus"> </i>
+                        </a>
+                    -->
                 </div>
             </div>
         </div>
