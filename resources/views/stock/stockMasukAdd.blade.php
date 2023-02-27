@@ -131,7 +131,7 @@
                     </div>
                 </div>   
             </div>
-            <form id="formScanStore" action="scanStoreMasuk" method="post" name="formScanStore">
+            <form id="formScanStore" action="{{url('scanStoreMasuk')}}" method="post" name="formScanStore">
                 {{ csrf_field() }}
                 <div class="modal-body">
                     <div class="row form-group">
