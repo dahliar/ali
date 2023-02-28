@@ -181,6 +181,8 @@ class BarcodeController extends Controller
 
 
         $arrData = array();
+        $expireDate = \Carbon\Carbon::parse($transactionDate)->addYears(2);
+
         for ($a=$startFrom; $a<($startFrom+$jumlah); $a++){
             $barcode = $productionDateData.str_pad($a, 4, '0', STR_PAD_LEFT);
 
@@ -189,12 +191,11 @@ class BarcodeController extends Controller
                 "fullname" => url('/productChecking/'.$barcode).' - '.$name.' '.$barcode
             ];
 
-
             DB::table('code_usages')->insert([
                 'codeId' => $codeId,
                 'fullcode' => $barcode,
                 'packagingDate' => $transactionDate,
-                'expireDate' => $transactionDate
+                'expireDate' => $expireDate
             ]);     
 
 
