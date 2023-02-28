@@ -152,7 +152,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-md-3">
-                        <span class="label">Loading Date</span>
+                        <span class="label">Expire Date</span>
                     </div>
                     <div class="col-md-1 text-center">
                         <span class="label">:</span>
