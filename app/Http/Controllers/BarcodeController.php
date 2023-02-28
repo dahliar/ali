@@ -193,7 +193,8 @@ class BarcodeController extends Controller
             DB::table('code_usages')->insert([
                 'codeId' => $codeId,
                 'fullcode' => $barcode,
-                'packagingDate' => $transactionDate
+                'packagingDate' => $transactionDate,
+                'expireDate' => $transactionDate
             ]);     
 
 
@@ -221,6 +222,7 @@ class BarcodeController extends Controller
             'productionDate as productionDate',
             'packagingDate as packagingDate',
             'loadingDate as loadingDate',
+            'expireDate as expireDate',
             'c.id as id',
             'cu.fullcode as fullcode',
             'i.name as item',
