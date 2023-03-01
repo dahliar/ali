@@ -8,7 +8,6 @@
 @include('partial.footer')
 @endsection
 
-
 @section('content')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -24,6 +23,63 @@
     function tambahDetail(id){
         window.open(('{{ url("detailtransactionAdd") }}'+"/"+id), '_self');
     }
+
+    function functionUbahHarga(id){
+        document.getElementById("modalDetailId").value = id;
+        document.getElementById("modalHarga").value = 0;
+        $('#modalUbahHarga').modal('show');
+    }
+
+    function simpanPerubahanHarga(){
+        var detailId = document.getElementById("modalDetailId").value;
+        var harga = document.getElementById("modalHarga").value;
+        $.ajax({
+            url: '{{ url("storePerubahanHargaDetailTransaksi") }}',
+            type: "POST",
+            data: {
+                "_token":"{{ csrf_token() }}",
+                detailId : detailId,
+                harga: harga
+            },
+            dataType: "json",
+            success:function(data){
+                if(data.isError==="0"){
+                    swal.fire('info',data.message,'info');
+                    $('#modalUbahHarga').modal('hide');
+                    myFunction({{ $transactionId }});
+                }
+                else{
+                    swal.fire('warning',data.message,'warning');
+                }
+            }
+        });
+    }
+
+    /*
+    function functionStockKeluar(id){
+        Swal.fire({
+            title: 'Scan keluar barang?',
+            text: "Scan Produk.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, ke laman scan keluar.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.open(('{{ url("scanKeluar") }}'+"/"+id), '_blank');
+            } else {
+                Swal.fire(
+                    'Batal scanning masuk!',
+                    "Scan Produk.",
+                    'info'
+                    );
+            }
+        })
+
+    }
+    */
+
     function deleteItem(detailTransaction){
         Swal.fire({
             title: "Hapus item penjualan?",
@@ -58,28 +114,26 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "35%", "targets":  [1], "className": "text-left" },
-            {   "width": "5%", "targets":   [2], "className": "text-end" },
-            {   "width": "5%", "targets":   [3], "className": "text-center" },
-            {   "width": "10%", "targets":  [4], "className": "text-end" },
-            {   "width": "10%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "15%", "targets":  [7], "className": "text-end" },
-            {   "width": "5%", "targets":   [8], "className": "text-center" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "30%", "targets":  [1], "className": "text-left" },
+                {   "width": "5%", "targets":   [2], "className": "text-center" },
+                {   "width": "15%", "targets":  [3], "className": "text-end" },
+                {   "width": "10%", "targets":  [4], "className": "text-end" },
+                {   "width": "10%", "targets":  [5], "className": "text-end" },
+                {   "width": "15%", "targets":  [6], "className": "text-end" },
+                {   "width": "10%", "targets":   [7], "className": "text-center" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'itemName', name: 'itemName'},
-            {data: 'itemId', name: 'itemId'},
-            {data: 'pshortname', name: 'pshortname'},
-            {data: 'price', name: 'price'},
-            {data: 'amount', name: 'amount'},
-            {data: 'weight', name: 'weight'},
-            {data: 'harga', name: 'harga'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'itemName', name: 'itemName'},
+                {data: 'pshortname', name: 'pshortname'},
+                {data: 'price', name: 'price'},
+                {data: 'amount', name: 'amount'},
+                {data: 'weight', name: 'weight'},
+                {data: 'harga', name: 'harga'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 
@@ -118,22 +172,30 @@
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb primary-color my-auto">
-                        <li class="breadcrumb-item">
-                            <a class="white-text" href="{{ url('/home') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item">
-                            <a class="white-text" href="{{ url('/transactionList') }}">Transaksi Penjualan</a>
-                        </li>
-                        <li class="breadcrumb-item active">Detil Transaksi Penjualan</li>
-                    </ol>
-                </nav>
+                <div class="col-md-8 text-end">
 
-                @if ($tranStatus == 1)
-                <button onclick="tambahDetail({{$transactionId}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Transaksi"><i class="fa fa-plus" style="font-size:20px"></i>
-                </button>
-                @endif
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb primary-color my-auto">
+                            <li class="breadcrumb-item">
+                                <a class="white-text" href="{{ url('/home') }}">Home</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a class="white-text" href="{{ url('/transactionList') }}">Transaksi Penjualan</a>
+                            </li>
+                            <li class="breadcrumb-item active">Detil Transaksi Penjualan</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-4 text-end">
+                    @if ($tranStatus == 1)
+                    <button onclick="tambahDetail({{$transactionId}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah detil by Total"><i class="fa fa-plus"> Item satuan </i>
+                    </button>
+                        <!--
+                        <a onclick="functionStockKeluar({{$transactionId}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah detil by scan storage"><i class="fas fa-barcode"> Item Barcode </i>
+                        </a>
+                    -->
+                    @endif
+                </div>
             </div>
         </div>
         <div class="card card-body">
@@ -142,10 +204,9 @@
                     <tr>
                         <th>No</th>
                         <th>Nama Barang</th>
-                        <th>ID</th>
                         <th>Packing</th>
                         <th>Harga</th>
-                        <th>Jumlah Pack</th>
+                        <th>Jumlah</th>
                         <th>Berat</th>
                         <th>Total</th>
                         <th>Aksi</th>
@@ -157,4 +218,53 @@
         </div>
     </div>
 </body>
+
+<div class="modal fade" id="modalUbahHarga" tabindex="-1" aria-labelledby="modalUbahHarga" aria-hidden="true">
+    <form id="formUbahHarga" method="POST" name="formUbahHarga">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeePresenceHarianModal">Harga jual</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-group my-auto">
+                        <div class="col-md-1 text-end">
+                        </div>
+                        <div class="col-md-4 my-auto">
+                            <span class="label">ID Detail Transaksi</span>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" id="modalDetailId" name="modalDetailId" class="form-control text-end" readonly>
+                        </div>
+                        <div class="col-md-1 text-end">
+                        </div>
+                    </div>     
+                    <div class="row form-group my-auto">
+                        <div class="col-md-1 text-end">
+                        </div>
+                        <div class="col-md-4 my-auto">
+                            <span class="label">Harga</span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text" id="modalMarker" name="modalMarker">{{$marker}}</span>
+                                <input type="number" id="modalHarga" name="modalHarga" class="form-control text-end" value="0">
+                                <span class="input-group-text">per Kg</span>
+
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-end">
+                        </div>
+                    </div>                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="simpanPerubahanHarga()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 @endsection

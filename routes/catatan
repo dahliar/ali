@@ -48,7 +48,12 @@ weightbase," Kg/", p.shortname
 ) as itemName')
 
 
-
+    Current route name : {{ Route::currentRouteName() }} <br>
+    Current route URI  : {{ request()->route()->uri }}<br>
+    Current fullpath   : {{ url()->current() }}<br>
+    PUBLIC {{public_path()}}<br>
+    BASE {{base_path()}}<br>
+    {{app_path()}}<br>
 
 
 
@@ -129,3 +134,8 @@ form name
         })
     };
 
+{data: 'SrNo',
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
+            },

@@ -104,9 +104,9 @@
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <a class="white-text" href="{{ url('scanList')}}">Scanner</a>
+                            <a class="white-text" href="{{ url('scanList')}}">Scan Transaction</a>
                         </li>
-                        <li class="breadcrumb-item active">Scan barang masuk ke storage</li>
+                        <li class="breadcrumb-item active">Barang masuk</li>
                     </ol>
                 </nav>
             </div>

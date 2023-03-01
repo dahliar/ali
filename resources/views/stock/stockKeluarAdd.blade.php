@@ -104,50 +104,72 @@
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
                         <li class="breadcrumb-item active">
-                            <a class="white-text" href="{{ url('scanList')}}">Scanner</a>
+                            <a class="white-text" href="{{ url('scanList')}}">Scan Transaction</a>
                         </li>
-                        <li class="breadcrumb-item active">Scan barang keluar dari storage</li>
+                        <li class="breadcrumb-item active">Barang Keluar</li>
                     </ol>
                 </nav>
             </div>
             <div class="modal-body">
-                <div class="row form-group m-2">
-                    <div class="col-md-2 text-md-end my-auto">
-                        <span id="spanPacker">Scan a barcode*</span>
-                    </div>
-                    <div class="col-md-3">
-                        <input id="scannedCode" name="scannedCode" type="text" class="form-control" placeholder="kode barcode ter-scan" autofocus>
-                    </div>
-                </div>   
-                <div class="row form-group m-2">
-                    <div class="col-md-2 text-md-end my-auto">
-                        <span id="spanPacker">Total Scanned</span>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="input-group">
-                            <input type="text" name="totalScanned" id="totalScanned" class="form-control" disabled>
-                            <span class="input-group-text"> MC</span>
+                <form id="formScanStore" action="{{url('scanStoreKeluar')}}" method="post" name="formScanStore">
+                    {{ csrf_field() }}
+                    <div class="row form-group m-2">
+                        <input type="hidden" name="transactionId" id="transactionId" class="form-control" value="{{$transaction->id}}" readonly>
+                    </div>   
+                    <div class="row form-group m-2">
+                        <div class="col-md-2 text-md-end my-auto">
+                            <span id="spanPacker">Perusahaan</span>
                         </div>
-                    </div>
-                </div>   
-            </div>
-            <form id="formScanStore" action="scanStoreKeluar" method="post" name="formScanStore">
-                {{ csrf_field() }}
-                <div class="modal-body">
-                    <div class="row form-group">
-                        <div class="table table-responsive">  
-                            <table class="table" id="dynamic_field">
+                        <div class="col-md-3">
+                            <input type="hidden" name="companyId" id="companyId" class="form-control" value="{{$transaction->companyId}}" readonly>
+                            <input type="text" name="companyName" id="companyName" class="form-control" value="{{$transaction->companyName}}" readonly>
+                        </div>
+                    </div>   
+                    <div class="row form-group m-2">
+                        <div class="col-md-2 text-md-end my-auto">
+                            <span id="spanPacker">PI Number</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="text" name="pinum" id="pinum" class="form-control" value="{{$transaction->pinum}}" readonly>
+                            </div>
+                        </div>
+                    </div>   
 
-                            </table>   
+                    <div class="row form-group m-2">
+                        <div class="col-md-2 text-md-end my-auto">
+                            <span id="spanPacker">Scan a barcode*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="scannedCode" name="scannedCode" type="text" class="form-control" placeholder="kode barcode ter-scan" autofocus>
+                        </div>
+                    </div>   
+                    <div class="row form-group m-2">
+                        <div class="col-md-2 text-md-end my-auto">
+                            <span id="spanPacker">Total Scanned</span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="text" name="totalScanned" id="totalScanned" class="form-control" disabled>
+                                <span class="input-group-text"> MC</span>
+                            </div>
+                        </div>
+                    </div>   
+                    <div class="modal-body">
+                        <div class="row form-group">
+                            <div class="table table-responsive">  
+                                <table class="table" id="dynamic_field">
+
+                                </table>   
+                            </div>
                         </div>
                     </div>
+                    <div class="modal-footer" style="justify-content: center;">
+                        <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
+                        <input type="reset" value="Reset" class="btn btn-secondary">
+                    </div>
+                </form>
                 </div>
-                <div class="modal-footer" style="justify-content: center;">
-                    <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
-                    <input type="reset" value="Reset" class="btn btn-secondary">
-                </div>
-            </form>
         </div>
     </div>
-</div>
-@endsection
+    @endsection

@@ -12,6 +12,9 @@ class DetailTransaction extends Model
     use HasFactory;
     protected $primaryKey = 'id';
     
+    protected $fillable = [
+        'transactionId',
+    ];
     public function deleteOneItemDetail($detailTransaction){
         //delete record di tabel detailTransaction dengan id $detailTransaction->id
         DB::table('detail_transactions')->delete($detailTransaction->id);
@@ -56,7 +59,10 @@ class DetailTransaction extends Model
             return $html;
         })
         ->editColumn('price', function ($row) {
-            $html = $row->valuta.' '.number_format($row->price, 2, ',', '.').' /Kg';
+            $html="-";
+            if ($row->price >0 ){
+                $html = $row->valuta.' '.number_format($row->price, 2, ',', '.').' /Kg';
+            }
             return $html;
         })
         ->editColumn('harga', function ($row) {
@@ -65,6 +71,9 @@ class DetailTransaction extends Model
         })
         ->addColumn('action', function ($row) {
             $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Harga" onclick="functionUbahHarga('."'".$row->id."'".')">
+            <i class="fas fa-dollar-sign" style="font-size:20px"></i>
+            </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus Detail" onclick="deleteItem('."'".$row->id."'".')">
             <i class="fa fa-trash" style="font-size:20px"></i>
             </button>

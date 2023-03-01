@@ -114,6 +114,10 @@ Route::GET('getAllTransactionDocuments', [TransactionController::class, 'getAllT
 
 Route::GET('getFileDownload/{filepath}', [InvoiceController::class, 'getFileDownload'])->middleware(['auth']);
 
+Route::POST('storePerubahanHargaDetailTransaksi',[DetailTransactionController::class, 'storePerubahanHargaDetailTransaksi'])->middleware(['auth']);
+
+
+
 
 /*
 *   Route Transaksi Penjualan Lokal
@@ -657,17 +661,36 @@ Route::get('getAllHolidays',[LeaveController::class, 'getAllHolidays'])->middlew
 *
 */
 Route::get('scanList',[StockController::class, 'index'])->middleware(['auth', 'authorized']);
+Route::get('scanDetailBarcodeTransactionList/{transactionId}',[StockController::class, 'indexTransactionBarcode'])->middleware(['auth', 'authorized']);
+Route::get('transactionBarcodeList/{transactionId}',[StockController::class, 'indexTransactionBarcodeList'])->middleware(['auth', 'authorized']);
+Route::get('scanRekapMasuk',[StockController::class, 'indexScanMasuk'])->middleware(['auth', 'authorized']);
+Route::get('scanRekapMasukHari/{storageDate}',[StockController::class, 'indexScanMasukHari'])->middleware(['auth', 'authorized']);
+Route::get('scanRekapMasukHariBarcodeList/{storageDate}/{itemId}',[StockController::class, 'indexScanMasukHariBarcodeList'])->middleware(['auth', 'authorized']);
+
+
+
+
+Route::get('scanTransactionList',[StockController::class, 'indexTransaction'])->middleware(['auth', 'authorized']);
 
 Route::get('scanMasuk',[StockController::class, 'create'])->middleware(['auth', 'authorized']);
-Route::get('scanKeluar',[StockController::class, 'createKeluar'])->middleware(['auth', 'authorized']);
+Route::get('scanKeluar/{transactionId}',[StockController::class, 'createKeluar'])->middleware(['auth', 'authorized']);
 Route::get('scanEditBarcode/{barcodeId}',[StockController::class, 'show'])->middleware(['auth', 'authorized']);
 
 Route::post('scanStoreMasuk',[StockController::class, 'storeMasuk'])->middleware(['auth']);
 Route::post('scanStoreKeluar',[StockController::class, 'storeKeluar'])->middleware(['auth']);
 
+
+
+
 Route::get('checkStatusBarcodeBarang',[StockController::class, 'checkStatusBarcodeBarang'])->middleware(['auth']);
 Route::GET('getItemsForScanPage/{speciesId}', [StockController::class, 'getItemsForScanPage'])->middleware(['auth']);
 Route::GET('getAllBarcodeData', [StockController::class, 'getAllBarcodeData'])->middleware(['auth']);
+Route::GET('getAllBarcodeTransactionData', [StockController::class, 'getAllBarcodeTransactionData'])->middleware(['auth']);
+Route::GET('getAllBarcodeExportTransaction', [StockController::class, 'getAllBarcodeExportTransaction'])->middleware(['auth']);
+Route::GET('getAllBarcodeItemDetail/{transactionId}', [StockController::class, 'getAllBarcodeItemDetail'])->middleware(['auth']);
+Route::GET('getScanMasukHarian', [StockController::class, 'getScanMasukHarian'])->middleware(['auth']);
+Route::GET('getScanMasukHarianTanggal', [StockController::class, 'getScanMasukHarianTanggal'])->middleware(['auth']);
+Route::GET('getBarcodeListTanggalItem', [StockController::class, 'getBarcodeListTanggalItem'])->middleware(['auth']);
 
 
 

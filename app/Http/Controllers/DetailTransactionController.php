@@ -10,6 +10,7 @@ use App\Models\Packing;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use DB;
+use Illuminate\Support\Facades\Validator;
 
 class DetailTransactionController extends Controller
 {
@@ -25,8 +26,17 @@ class DetailTransactionController extends Controller
 
     public function index($transactionId)
     {
-        $tranStatus=Transaction::select('status')->where('id', $transactionId)->value('status');
-        return view('detail.detailList', compact('transactionId', 'tranStatus'));
+        $t=Transaction::where('id', $transactionId);
+        $tranStatus =   $t->value('status');
+        $marker="";
+
+        switch ($t->value('valutaType')){
+            case 1 : $marker = "Rp"; break;
+            case 2 : $marker = "USD"; break;
+            case 3 : $marker = "Rmb"; break;
+        }
+
+        return view('detail.detailList', compact('transactionId', 'tranStatus', 'marker'));
     }
 
     /**
@@ -74,44 +84,47 @@ class DetailTransactionController extends Controller
             Rule::exists('transactions', 'id')->where('id', $request->transactionId),], 
             'species' => 'required|integer|gt:0', 
             'item' => 'required|integer|gt:0', 
-            'amount' => 'required|numeric|gt:0',
-            'harga' => 'required|numeric|gt:0',
+            'amount' => 'required|numeric|gt:0'
         ],[
             'species.gt'=> 'Pilih satu Species',
             'item.gt'=> 'Pilih jenis Item',
-            'amount.gt' => 'Amount harus lebih dari 0', 
-            'harga.gt' => 'Harga harus lebih dari 0', 
-            'harga.integer' => 'Harga harus berupa angka',
+            'amount.gt' => 'Amount harus lebih dari 0'
         ]);
 
-        //1. insert ke detailTransaction
-        //2. update jumlah stock di tabel items
-        
-        $data = [
-            'transactionId' => $request->transactionId,
-            'itemId' => $request->item,
-            'amount' =>  $request->amount,
-            'price' =>  $request->harga,
-            'info' =>  ''
-        ];
-
-        DB::table('detail_transactions')->insert($data);
-        //3. update payment di table transactions
-        $weightbase = DB::table('items')
-        ->select('weightbase')
-        ->where('id', $request->item)
-        ->first();
-
-        $addPayment = ($request->amount * $request->harga * $weightbase->weightbase);
-        $affected = DB::table('transactions')
-        ->where('id', $request->transactionId)
-        ->increment('payment', $addPayment);
+        $inventory = DetailTransaction::firstOrNew(['transactionId' => $request->transactionId, 'itemId' => $request->item]);
+        $inventory->itemId = $request->item;
+        $inventory->amount = ($inventory->amount + $request->amount);
+        $inventory->save();
 
         $transaction = $request->transactionId;
         return redirect()->route('detailtransactionList',
             ['transaction'=>$transaction])
         ->with('status','Item berhasil ditambahkan.');
 
+    }
+
+
+    public function updatePrice($detailTransactionId, $harga){        
+        /*
+        $weightbase = DB::table('items')
+        ->select('weightbase')
+        ->where('id', $itemId)
+        ->first();
+
+        $addPayment = ($amount * $harga * $weightbase);
+        
+        $affected = DB::table('transactions')
+        ->where('id', $transactionId)
+        ->increment('payment', $addPayment);
+        */
+        $dt = DetailTransaction::find(['detailTransactionId' => $detailTransactionId]);
+        $dt->price = $request->amount;
+        $dt->save();
+
+        $transaction = $request->transactionId;
+        return redirect()->route('detailtransactionList',
+            ['transaction'=>$transaction])
+        ->with('status','Item berhasil ditambahkan.');
     }
 
     /**
@@ -182,5 +195,51 @@ class DetailTransactionController extends Controller
 
     public function getAllDetail($transactioId){
         return $this->detailTransaction->getAllDetail($transactioId);
+    }
+    function storePerubahanHargaDetailTransaksi(Request $request){
+
+        $retValue="";
+
+        $validator = Validator::make($request->all(), [
+            'detailId' => ['required',
+            Rule::exists('detail_transactions', 'id')->where('id', $request->detailId),], 
+            'harga' => 'required|integer|gt:0'
+        ]);
+
+        if ($validator->fails()) {
+            $retValue = [
+                'message'       => "Data gagal disimpan, cek harga dulu",
+                'isError'       => "1"
+            ];
+            return $retValue;
+        }
+
+        $dt = DetailTransaction::where('id', $request->detailId)->first();
+        $dt->price = $request->harga;
+
+        $transactionId = $dt->transactionId;
+        $dt->save();
+
+        $totalPayment = DB::table('transactions as t')
+        ->where('t.id', $transactionId)
+        ->join('detail_transactions as dt', 'dt.transactionId', '=', 't.id')
+        ->join('items as i', 'i.id', '=', 'dt.itemId')
+        ->select(            
+            DB::raw('(
+                sum(dt.amount * dt.price * i.weightbase)
+            ) as total')
+        )->first()->total;
+
+        $t = Transaction::where('id', $transactionId)->first();
+        $t->payment = $totalPayment;
+        $t->save();
+
+
+        $retValue = [
+            'message'       => "Data berhasil disimpan ",
+            'isError'       => "0"
+        ];
+
+        return $retValue;        
     }
 }

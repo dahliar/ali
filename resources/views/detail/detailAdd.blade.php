@@ -83,7 +83,6 @@
                 $('[name="existingStock"]').val("");
                 $('[name="weightbase"]').val("");
                 $('[name="amount"]').val(0);
-                $('[name="harga"]').val(0);
                 swal.fire('warning','Choose Species first!','info');
             }
         });
@@ -212,18 +211,6 @@
                             <div class="input-group">
                                 <input id="amount" value="{{ old('amount',0) }}" name="amount" type="number" class="form-control text-end" step="0.01">
                                 <span class="input-group-text">MC / Bag</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row form-group mb-2">
-                        <div class="col-md-2 text-end">
-                            <span class="label">Harga*</span>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="input-group">
-                                <span class="input-group-text">{{$marker}}</span>
-                                <input id="harga" value="{{ old('harga',0) }}" name="harga" type="number" class="form-control text-end" step="0.01">
-                                <span class="input-group-text">per Kg</span>
                             </div>
                         </div>
                     </div>

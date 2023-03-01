@@ -203,6 +203,15 @@
 						<li>
 							<a class="dropdown-item" href="{{ url('scanList')}}"><i class="fas fa-barcode"></i> Daftar Bar/QR Code</a>
 						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('scanMasuk')}}"><i class="fas fa-satellite-dish"></i> Scan barang - Masuk</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('scanTransactionList')}}"><i class="fas fa-satellite-dish"></i> Scan barang - Keluar</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('scanRekapMasuk')}}"><i class="fas fa-clipboard-list"></i> Rekapitulasi scan masuk</a>
+						</li>
 					</ul>
 				</li>
 				<li>
@@ -217,9 +226,6 @@
 				<li>
 					<a class="dropdown-item" href="{{ url('historyPerubahanStock')}}"><i class="fas fa-history"></i> History Perubahan stock </a>
 				</li>
-
-
-
 
 			</ul>
 		</li>				

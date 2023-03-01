@@ -1,8 +1,4 @@
 <!--BELUM-->
-@php
-$pageId = -1;
-@endphp
-
 <head>
 	<meta charset="utf-8">
 	<title>ALISeafood Online</title>
