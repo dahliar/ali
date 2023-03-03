@@ -654,10 +654,24 @@ class TransactionController extends Controller
                 } else {
                     $invoice = new InvoiceController();
                     $transactionNum = $invoice->createtransactionnum($transactionId);
+
+                    $totalPayment = DB::table('transactions as t')
+                    ->where('t.id', $transactionId)
+                    ->join('detail_transactions as dt', 'dt.transactionId', '=', 't.id')
+                    ->join('items as i', 'i.id', '=', 'dt.itemId')
+                    ->select(            
+                        DB::raw('(
+                            sum(dt.amount * dt.price * i.weightbase)
+                        ) as total')
+                    )->first()->total;
+
                     $dataTambahan = [
+                        'payment' => $totalPayment,
                         'transactionNum' => $transactionNum,
                         'status' =>  4
                     ];
+
+
                     $data = array_merge($data, $dataTambahan);
                     $action = Transaction::where('id', $transactionId)->update($data);
                     $this->stockLoaded($transactionId);
