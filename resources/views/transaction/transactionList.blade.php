@@ -11,7 +11,9 @@
 
 @section('content')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js" type="text/javascript" ></script>
+
 
 <script type="text/javascript">
     $.ajaxSetup({
@@ -100,14 +102,19 @@
         });
     }
 </script>
-
-
-
 @if(session('status'))
+@if(session('alertStatus') == 0)
+<script type="text/javascript">
+    swal.fire("Success", "{{session('status')}}", "info");
+</script>
+@else
+<script type="text/javascript">
+    swal.fire("Warning", "{{session('status')}}", "warning");
+</script>
+@if(session('alertStatus') == 2)
 <div class="alert alert-success">
     <div class="row form-inline" onclick='$(this).parent().remove();'>
         <div class="col-11">
-            {{ session('status') }}
             @if(session('listBarang'))
             <ol>
                 @foreach(session('listBarang') as $barang)
@@ -123,6 +130,8 @@
         </div>
     </div>
 </div>
+@endif
+@endif
 @endif
 <body>
     {{ csrf_field() }}

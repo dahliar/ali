@@ -220,15 +220,9 @@ class DetailTransactionController extends Controller
         $transactionId = $dt->transactionId;
         $dt->save();
 
-        $totalPayment = DB::table('transactions as t')
-        ->where('t.id', $transactionId)
-        ->join('detail_transactions as dt', 'dt.transactionId', '=', 't.id')
-        ->join('items as i', 'i.id', '=', 'dt.itemId')
-        ->select(            
-            DB::raw('(
-                sum(dt.amount * dt.price * i.weightbase)
-            ) as total')
-        )->first()->total;
+        $transaction = new TransactionController();
+        
+        $totalPayment = $transaction->getExportTotalPayment($transactionId);
 
         $t = Transaction::where('id', $transactionId)->first();
         $t->payment = $totalPayment;

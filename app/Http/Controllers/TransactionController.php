@@ -618,12 +618,14 @@ class TransactionController extends Controller
 
         return redirect('transactionList')
         ->with('status',$retVal['message'])      
+        ->with('alertStatus',$retVal['alertStatus'])      
         ->with('listBarang',$retVal['listBarang']);       
     }
 
     private function updatingTransactionData($jenisTransaction, $transactionId, $transactionNum, $currentStatus, $status, $data, $pinotes){
         //dd($data);
         $listBarang = "";
+        $alertStatus=0;
         switch ($currentStatus){
             case 1 :
             switch ($status){
@@ -633,17 +635,20 @@ class TransactionController extends Controller
                 if($jenisTransaction == 1){
                     $this->updatePinotes($pinotes);
                 }
-                $message = "Update Berhasil";
+                $message = "Update Berhasil; Status tidak berubah";
+                $alertStatus=0;
                 break;
                 case 2: 
                 //dari penawaran ke finished
                 $action = Transaction::where('id', $transactionId)->update($data);
                 $message = "Data lain diupdate. Status tidak berubah, ubah dulu menjadi Sailing atau dalam perjalanan";
+                $alertStatus=1;
                 break;
                 case 3: 
                 //dari penawaran ke canceled
                 $affected = DB::table('transactions')->where('id', $transactionId)->update(['status' => 3]);
                 $message = "Update berhasil: Transaksi dibatalkan";
+                $alertStatus=0;
                 break;
                 case 4: 
                 //dari penawaran ke sailing
@@ -651,49 +656,57 @@ class TransactionController extends Controller
                 if (count($listBarang)>0) {
                     $action = Transaction::where('id', $transactionId)->update($data);
                     $message = "Data lain diupdate. Status tidak berubah karena ada barang dengan jumlah stock yang tidak mencukupi";
+                    $alertStatus=2;
                 } else {
                     $invoice = new InvoiceController();
                     $transactionNum = $invoice->createtransactionnum($transactionId);
 
-                    $totalPayment = DB::table('transactions as t')
-                    ->where('t.id', $transactionId)
+                    $jumlahDetilNol = DB::table('transactions as t')
                     ->join('detail_transactions as dt', 'dt.transactionId', '=', 't.id')
-                    ->join('items as i', 'i.id', '=', 'dt.itemId')
-                    ->select(            
-                        DB::raw('(
-                            sum(dt.amount * dt.price * i.weightbase)
-                        ) as total')
-                    )->first()->total;
+                    ->where('t.id', $transactionId)
+                    ->where('dt.price', '=', 0)
+                    ->count('dt.id');
+                    if ($jumlahDetilNol<=0){
+                        $totalPayment = $this->getExportTotalPayment($transactionId);
 
-                    $dataTambahan = [
-                        'payment' => $totalPayment,
-                        'transactionNum' => $transactionNum,
-                        'status' =>  4
-                    ];
+                        $dataTambahan = [
+                            'payment' => $totalPayment,
+                            'transactionNum' => $transactionNum,
+                            'status' =>  4
+                        ];
 
 
-                    $data = array_merge($data, $dataTambahan);
-                    $action = Transaction::where('id', $transactionId)->update($data);
-                    $this->stockLoaded($transactionId);
+                        $data = array_merge($data, $dataTambahan);
+                        $action = Transaction::where('id', $transactionId)->update($data);
+                        $this->stockLoaded($transactionId);
 
-                    $message = "Update Transaksi pengiriman berhasil diperbaharui.";
+                        $message = "Update Transaksi pengiriman berhasil diperbaharui.";
+                        $alertStatus=0;                        
+                    } else{
+                        $message = "Terdapat detil barang yang harganya masih 0";
+                        $alertStatus=3;
+                    }
                 }
                 break;
                 default : 
                 $message = "Tidak ada perubahan.";
+                $alertStatus=0;
                 break;
             }
             break;
             case 2 :   
             $message = "Transaksi yang sudah selesai tidak dapat dikembalikan."; 
+            $alertStatus=1;
             break;
             case 3 :  
             $message = "Transaksi yang sudah dibatalkan tidak dapat dikembalikan.";  
+            $alertStatus=1;
             break;
             case 4 :
             switch ($status){
                 case 1: 
                 $message = "Status tidak bisa diubah ke Penawaran.";
+                $alertStatus=1;
                 break;
                 case 2: 
                 //sailing ke finished
@@ -704,17 +717,20 @@ class TransactionController extends Controller
                 $data = array_merge($data, $dataTambahan);                
                 $action = Transaction::where('id', $transactionId)->update($data);
                 $message = "Update Berhasil: Transaksi pengiriman berhasil selesai.";
+                $alertStatus=0;
                 break;
                 case 3: 
                 //sailing ke canceled
                 $affected = DB::table('transactions')->where('id', $transactionId)->update(['status' => 3]);
                 $this->transactionCanceled($transactionId);
                 $message = "Update berhasil: Transaksi dibatalkan, data stok dikembalikan.";
+                $alertStatus=0;
                 break;
                 case 4: 
                 //dari sailing ke sailing                
                 $action = Transaction::where('id', $transactionId)->update($data);
                 $message = "Update Berhasil: data pengiriman berhasil diperbaharui.";
+                $alertStatus=0;
                 break;
             }
             break;
@@ -725,7 +741,8 @@ class TransactionController extends Controller
 
         $retVal= [
             'message' => $message,
-            'listBarang' => $listBarang
+            'listBarang' => $listBarang,
+            'alertStatus' => $alertStatus
         ];
         return $retVal;
     }
@@ -976,8 +993,22 @@ class TransactionController extends Controller
         $retVal = $this->updatingTransactionData(2, $request->transactionId, $request->transactionNum, $request->currentStatus, $request->status, $data, "1");
         return redirect('localTransactionList')
         ->with('status',$retVal['message'])      
+        ->with('alertStatus',$retVal['alertStatus'])      
         ->with('listBarang',$retVal['listBarang']);       
 
+    }
+
+    public function getExportTotalPayment($transactionId){
+        $totalPayment = DB::table('transactions as t')
+        ->where('t.id', $transactionId)
+        ->join('detail_transactions as dt', 'dt.transactionId', '=', 't.id')
+        ->join('items as i', 'i.id', '=', 'dt.itemId')
+        ->select(            
+            DB::raw('(
+                sum(dt.amount * dt.price * i.weightbase)
+            ) as total')
+        )->first()->total;
+        return $totalPayment;
     }
 
 }
