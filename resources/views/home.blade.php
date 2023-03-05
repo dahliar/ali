@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-@idddf ($errors->any())
+@if ($errors->any())
 <div class="alert alert-success">
 	<div class="row form-inline" onclick='$(this).parent().remove();'>
 		<div class="col-11">
