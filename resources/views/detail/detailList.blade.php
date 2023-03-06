@@ -250,7 +250,7 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <span class="input-group-text" id="modalMarker" name="modalMarker">{{$marker}}</span>
-                                <input type="number" id="modalHarga" name="modalHarga" class="form-control text-end" value="0">
+                                <input type="number" id="modalHarga" name="modalHarga" class="form-control text-end" value="0" step="0.01">
                                 <span class="input-group-text">per Kg</span>
 
                             </div>
