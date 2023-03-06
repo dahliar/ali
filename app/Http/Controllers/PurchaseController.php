@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Purchase;
 use App\Models\Countries;
 use App\Models\Company;
+use Carbon\Carbon;
+
 
 use Illuminate\Http\Request;
 use DB;
@@ -204,6 +206,7 @@ class PurchaseController extends Controller
             $purchase = Purchase::find($request->purchaseId);
             $purchase->arrivalDate = $request->arrivalDate;
             $purchase->purchaseDate = $request->purchaseDate;
+            $purchase->finishedDate = Carbon::now()->toDateString(),
             $purchase->status = $request->progressStatus;
             $purchase->paymentTerms = $request->paymentTerms;
             $purchase->save();

@@ -753,13 +753,6 @@ class DashboardController extends Controller
 
     }
 
-    /*
-    SELECT 'harian',        null,           ds.employeeId,  ds.uangHarian,  ds.uangLembur,  null as borongan,   null as honorarium, ds.presenceDate     from dailysalaries as ds where ds.presenceDate='2022-04-03'
-    union
-    select 'borongan',      b.name,         db.employeeId,  null,           null,           db.netPayment,      null,               b.tanggalKerja      from borongans b join detail_borongans db on b.id=db.boronganId where b.tanggalKerja='2022-04-03'
-    UNION
-    select 'honorarium',    h.keterangan,   h.employeeId,   null,           null,           null,               h.jumlah,           h.tanggalKerja      from honorariums h where h.tanggalKerja='2022-04-03'
-    */
     public function getPayrollByDateRange(Request $request){
         //dd($request);
         $start=$request->start;
