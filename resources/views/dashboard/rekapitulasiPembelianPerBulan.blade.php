@@ -236,7 +236,7 @@
                             <td style="text-align: right;">{{$paymonth->npwp}}</td>
                             @if($opsi==1)
                             <td style="text-align: right;">{{$paymonth->nomor}}</td>
-                            <td style="text-align: center;">{{$paymonth->tanggal}}</td>
+                            <td style="text-align: center;">{{$paymonth->tanggalFinish}}</td>
                             @endif
                             <td style="text-align: right;">Rp. {{number_format($paymonth->jumlah, 2, ',', '.')}}</td>
                             <td style="text-align: right;">{{$paymonth->persen*10}}%</td>

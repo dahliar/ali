@@ -206,7 +206,7 @@ class PurchaseController extends Controller
             $purchase = Purchase::find($request->purchaseId);
             $purchase->arrivalDate = $request->arrivalDate;
             $purchase->purchaseDate = $request->purchaseDate;
-            $purchase->finishedDate = Carbon::now()->toDateString(),
+            $purchase->finishedDate = Carbon::now()->toDateString();
             $purchase->status = $request->progressStatus;
             $purchase->paymentTerms = $request->paymentTerms;
             $purchase->save();

@@ -634,6 +634,7 @@ class DashboardController extends Controller
                 DB::raw('p.purchasingNum as nomor'),
                 DB::raw('c.npwp as npwp'),
                 DB::raw('p.purchaseDate as tanggal'),
+                DB::raw('p.finishedDate as tanggalFinish'),
                 DB::raw('p.paymentAmount as jumlah'),
                 DB::raw('p.taxPercentage as persen'),
                 DB::raw('p.tax as pajak'),
@@ -644,9 +645,9 @@ class DashboardController extends Controller
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
             ->where('p.status', '=', 2)
-            ->whereMonth('p.purchaseDate', $request->bulan)
-            ->whereYear('p.purchaseDate', $request->tahun)
-            ->orderBy('p.purchaseDate')
+            ->whereMonth('p.finishedDate', $request->bulan)
+            ->whereYear('p.finishedDate', $request->tahun)
+            ->orderBy('p.finishedDate')
             ->orderBy('p.purchasingNum', 'asc');
         } else if($request->opsi == '2'){
             $payroll = $payroll->select(
@@ -662,10 +663,10 @@ class DashboardController extends Controller
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
             ->where('p.status', '=', 2)
-            ->whereMonth('p.purchaseDate', $request->bulan)
-            ->whereYear('p.purchaseDate', $request->tahun)
+            ->whereMonth('p.finishedDate', $request->bulan)
+            ->whereYear('p.finishedDate', $request->tahun)
             ->groupBy("c.id")
-            ->orderBy('p.purchaseDate')
+            ->orderBy('p.finishedDate')
             ->orderBy('c.name');
         }
         $payroll = $payroll->get();
@@ -702,6 +703,7 @@ class DashboardController extends Controller
                 DB::raw('p.purchasingNum as nomor'),
                 DB::raw('c.npwp as npwp'),
                 DB::raw('p.purchaseDate as tanggal'),
+                DB::raw('p.finishedDate as tanggalFinish'),
                 DB::raw('p.paymentAmount as jumlah'),
                 DB::raw('p.taxPercentage as persen'),
                 DB::raw('p.tax as pajak'),
@@ -711,10 +713,10 @@ class DashboardController extends Controller
                 )
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
-            ->whereMonth('p.purchaseDate', $request->bulan)
-            ->whereYear('p.purchaseDate', $request->tahun)
+            ->whereMonth('p.finishedDate', $request->bulan)
+            ->whereYear('p.finishedDate', $request->tahun)
             ->where('p.status', '=', 2)
-            ->orderBy('p.purchaseDate')
+            ->orderBy('p.finishedDate')
             ->orderBy('p.purchasingNum', 'asc');
         } else if($request->opsi == '2'){
             $payroll = $payroll->select(
@@ -729,11 +731,11 @@ class DashboardController extends Controller
                 )
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
-            ->whereMonth('p.purchaseDate', $request->bulan)
-            ->whereYear('p.purchaseDate', $request->tahun)
+            ->whereMonth('p.finishedDate', $request->bulan)
+            ->whereYear('p.finishedDate', $request->tahun)
             ->where('p.status', '=', 2)
             ->groupBy("c.id")
-            ->orderBy('p.purchaseDate')
+            ->orderBy('p.finishedDate')
             ->orderBy('c.name');
         }
         $payroll = $payroll->get();
