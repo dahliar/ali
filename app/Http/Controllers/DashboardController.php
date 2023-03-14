@@ -529,6 +529,8 @@ class DashboardController extends Controller
         return view('dashboard.rekapitulasiGajiPerBulan');
     }
     public function getRekapitulasiGajiPerBulan(Request $request){
+
+        //dd($request);
         $request->validate(
             [
                 'tahun'    => 'required|gt:0',
@@ -756,9 +758,10 @@ class DashboardController extends Controller
     }
 
     public function getPayrollByDateRange(Request $request){
-        //dd($request);
-        $start=$request->start;
-        $end=$request->end;
+        $start = \Carbon\Carbon::parse($request->start);
+        $end = \Carbon\Carbon::parse($request->end);
+        //dump($start->startOfDay());
+        //dd($end->endOfDay());
         $opsi=$request->opsi;
 
         $harian = DB::table('dailysalaries as ds')

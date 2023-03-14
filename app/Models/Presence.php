@@ -100,7 +100,7 @@ class Presence extends Model
 
     }
 
-    function hitungPresenceHarianRamadhan($start, $end, $shift){
+    function OLDhitungPresenceHarianRamadhan($start, $end, $shift){
         //hitung jam kerja
         $dateAcuan = $start->toDateString();
         $masuk=$this->getMasukKerjaDanShift($start, $dateAcuan);
@@ -157,7 +157,83 @@ class Presence extends Model
         return $dataJam;
 
     }
+    function hitungPresenceHarianRamadhan($start, $end, $shift){
+        $jamKerja=0;
+        $jamLembur=0;
 
+        if ($shift == 1){
+        //hitung jam kerja
+            $dateAcuan = $start->toDateString();
+            $masuk=$this->getMasukKerjaDanShift($start, $dateAcuan);
+            $isLembur=false;
+            $keluar = $end;
+            if ($end->gte(Carbon::parse($dateAcuan." 16:15:00"))){
+                $keluar=Carbon::parse($dateAcuan." 16:00:00");
+                $isLembur=true;
+            }
+
+            if ($masuk->lte(Carbon::parse($dateAcuan." 16:15:00"))){
+                $menitKerja = $masuk->diffInMinutes($keluar); 
+                $jamKerja = $masuk->diffInHours($keluar); 
+
+                $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
+                if ($selisihMenitSisa > 30){
+                    $jamKerja+=1;
+                }
+
+                if ($start->lte(Carbon::parse($dateAcuan." 12:00:00")) and $end->gte(Carbon::parse($dateAcuan." 13:00:00"))) {
+                    $jamKerja-=1;
+                }
+            }
+
+        //hitung jam lembur
+            if($isLembur)
+            {
+                $masuk=$this->getMasukKerjaDanShift($start, $dateAcuan);
+
+                if($start->lte(Carbon::parse($dateAcuan." 16:15:00"))){
+                    $masuk = Carbon::parse($dateAcuan." 16:00:00");
+                }
+                $keluar=$end;
+
+                $menitKerja = $masuk->diffInMinutes($keluar); 
+                $jamLembur = $masuk->diffInHours($keluar); 
+
+                $selisihMenitSisa = $menitKerja - ($jamLembur * 60);
+                if ($selisihMenitSisa >= 30){
+                    $jamLembur+=1;
+                }
+            }
+        } else if ($shift == 2){
+            //hitung jam kerja
+            $dateAcuan = $start->toDateString();
+            $masuk=$this->getMasukKerjaDanShift($start, $dateAcuan);
+            $keluar = $end;
+
+            $jamKerja=0;
+            $jamLembur=0;
+
+            $menitKerja = $masuk->diffInMinutes($keluar); 
+            $jamKerja = $masuk->diffInHours($keluar); 
+
+            $selisihMenitSisa = $menitKerja - ($jamKerja * 60);
+            if ($selisihMenitSisa > 30){
+                $jamKerja+=1;
+            }
+
+            if ($jamKerja > 7){
+                $jamLembur = $jamKerja - 7;
+            }
+        }
+
+        $dataJam=[
+            'jamKerja'=>$jamKerja, 
+            'jamLembur'=>$jamLembur
+        ];
+
+        return $dataJam;
+
+    }
 
     function hitungPresenceHarian($start, $end, $shift){
         $jamKerja=0;

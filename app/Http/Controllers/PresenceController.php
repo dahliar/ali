@@ -30,6 +30,14 @@ class PresenceController extends Controller
     {
         return view('presence.presenceHarianList');
     }
+    public function indexScanMasuk()
+    {
+        return view('presence.presenceHarianScanMasuk');
+    }
+    public function indexScanKeluar()
+    {
+        return view('presence.presenceHarianScanKeluar');
+    }
     public function createImport()
     {
         return view('presence.presenceHarianImport');
@@ -344,6 +352,51 @@ class PresenceController extends Controller
         return redirect('presenceHarianHistory')->with('status', $message);
     }
 
+    public function submitPresensiMasukKartuPegawai(Request $request){
+        $start = Carbon::now();
+        $nip = $request->barcode;
+        $shift=1;
 
-    
+        $dateAcuan = $start->toDateString();
+        if ($start->lte(Carbon::parse($dateAcuan." 16:00:00"))) {
+            $shift=1;
+        }
+        else{
+            $shift=2;
+        }
+
+        $query = DB::table('employees as e')
+        ->select('e.id as empid','u.name as name','e.nip as nip','sp.name as spname','wp.name as wpname','os.name as osname')
+        ->where('e.nip','=', $nip)
+        ->where('mapping.isactive', 1)
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+        ->first();
+        $retValue="";
+        if ($query){
+            $presence = new Presence();
+            $presence->employeeId   = $query->empid;
+            $presence->start        = $start;
+            $presence->shift        = $shift;
+            $presence->save();
+            $retValue = [
+                'message'       => $query->name." : ".$query->osname."<br>".$start,
+                'isError'       => "1"
+            ];
+
+        } else {
+            $retValue = [
+                'message'       => "Ada kesalahan, NIP barcode tidak ditemukan",
+                'isError'       => "0"
+            ];
+
+        }
+        //dd($retValue);
+        return $retValue;        
+    }
+
+
 }

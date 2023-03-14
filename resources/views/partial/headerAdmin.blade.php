@@ -127,6 +127,14 @@
 							<a class="dropdown-item" href="{{ url('honorariumList')}}"><i class="fas fa-tasks"></i> Presensi Honorarium
 							</a>
 						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('presenceHarianScanMasuk')}}"><i class="fas fa-barcode"></i> Scan Presensi Harian Masuk
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('presenceHarianScanKeluar')}}"><i class="fas fa-barcode"></i> Scan Presensi Harian Pulang
+							</a>
+						</li>
 						<li><hr class="dropdown-divider"></li>
 						<li>
 							<a class="dropdown-item" href="{{ url('presenceHarianHistory')}}"><i class="fas fa-tasks"></i> Arsip Presensi Harian

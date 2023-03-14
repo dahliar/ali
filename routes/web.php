@@ -288,6 +288,8 @@ Route::get('/getOneCompany/{company}', function (Company $company) {
 
 //Presensi Harian
 Route::GET('presenceHarianList',[PresenceController::class, 'index'])->middleware('auth', 'authorized');
+Route::GET('presenceHarianScanMasuk',[PresenceController::class, 'indexScanMasuk'])->middleware('auth', 'authorized');
+Route::GET('presenceHarianScanKeluar',[PresenceController::class, 'indexScanKeluar'])->middleware('auth', 'authorized');
 Route::GET('presenceHarianHistory',[PresenceController::class, 'presenceHarianHistory'])->middleware('auth', 'authorized');
 Route::get('getPresenceHarianHistory/{start}/{end}', [PresenceController::class, 'getPresenceHarianHistory'])->middleware('auth');
 
@@ -303,6 +305,7 @@ Route::GET('employeePresenceHarianHistory/{employee}',[PresenceController::class
 Route::get('getEmployeePresenceHarianHistory/{employeeId}/{start}/{end}', [PresenceController::class, 'getEmployeePresenceHarianHistory'])->middleware('auth');
 Route::get('presenceHarianEdit/{presence}',[PresenceController::class, 'presenceHarianEdit'])->middleware('auth', 'authorized');
 Route::POST('presenceHarianUpdate',[PresenceController::class, 'presenceHarianUpdate'])->middleware(['auth']);
+Route::GET('submitPresensiKartuPegawai',[PresenceController::class, 'submitPresensiMasukKartuPegawai'])->middleware(['auth']);
 
 
 
