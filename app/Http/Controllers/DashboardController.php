@@ -310,8 +310,8 @@ class DashboardController extends Controller
     }
     public function getPriceList($species, $start, $end){
         //DB::enableQueryLog();
-        $startStr=$start." 00:00:00";
-        $endStr=$end." 23:59:59";
+        $startStr=Carbon::parse($start)->startOfDay();
+        $endStr=Carbon::parse($end)->endOfDay();
         //dd($species);
 
         $query = DB::table('items as i')
@@ -758,10 +758,8 @@ class DashboardController extends Controller
     }
 
     public function getPayrollByDateRange(Request $request){
-        $start = \Carbon\Carbon::parse($request->start);
-        $end = \Carbon\Carbon::parse($request->end);
-        //dump($start->startOfDay());
-        //dd($end->endOfDay());
+        $start = \Carbon\Carbon::parse($request->start)->startOfDay();
+        $end = \Carbon\Carbon::parse($request->end)->endOfDay();
         $opsi=$request->opsi;
 
         $harian = DB::table('dailysalaries as ds')
@@ -836,8 +834,9 @@ class DashboardController extends Controller
         return view('dashboard.rekapitulasiPresensi');
     }
     public function getRekapitulasiPresensi($start, $end, $opsi){
-        $start=Carbon::parse($start);
-        $end=Carbon::parse($end);
+        $start=Carbon::parse($start)->startOfDay();
+        $end=Carbon::parse($end)->endOfDay();
+
         $query = DB::table('presences as p')
         ->select(
             'e.id as empid',
@@ -850,7 +849,7 @@ class DashboardController extends Controller
             DB::raw('sum(p.jamKerja + p.jamlembur) as totalJam'),
             DB::raw('count(p.id) as hari')
         )
-        ->whereBetween('p.start', [$start->startOfDay(), $end->endOfDay()])
+        ->whereBetween('p.start', [$start, $end])
         ->join('employees as e', 'e.id', '=', 'p.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
