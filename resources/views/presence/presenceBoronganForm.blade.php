@@ -49,8 +49,10 @@
                 document.getElementById("cbval").value = "0";
                 document.getElementById("loading").disabled = true;
                 document.getElementById("loading").checked = false;
+                document.getElementById("bagiHasil").readOnly = true;
             }else{
                 document.getElementById("loading").disabled = false;
+                document.getElementById("bagiHasil").readOnly = false;
             }
         });
         $('#loading').on('change', function() {
@@ -148,7 +150,7 @@
                                     <span class="input-group-text text-end"> Kg</span>
                                 </div>
                             </div>   
-                        </div>         
+                        </div>
                         <div class="row form-group mb-2">
                             <div class="col-md-3 text-end">
                                 <span class="label" id="spanPayment">Jenis</span>
@@ -170,6 +172,18 @@
                                 <input type="hidden" id="cbval" name="cbval" value="0">
                             </div>                    
                         </div>
+                        <div class="row form-group mb-2">
+                            <div class="col-md-3 text-end">
+                                <span class="label">Potongan bagi hasil</span>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input type="number" id="bagiHasil" name="bagiHasil" class="form-control text-end" value="{{old('bagiHasil',0)}}" step="1" min="0" max="20" readonly>
+                                    <span class="input-group-text text-end"> %</span>
+                                </div>
+                            </div>   
+                        </div>         
+
                         <div class="row form-group mb-2">
                             <div class="col-md-3 text-end">
                                 <span class="label">Jumlah Pekerja</span>

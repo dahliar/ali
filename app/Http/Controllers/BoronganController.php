@@ -151,6 +151,69 @@ class BoronganController extends Controller
                 $jmlCewek++;
             }
         }
+        $percentage=$borongan->bagiHasil/100;
+        $dataSalary[]="";
+        if ($borongan->jenis==2){
+            if (($jmlCowok==0) or ($jmlCewek==0)){
+                $price = ($borongan->hargaSatuan * $borongan->netweight) / $borongan->worker;
+                $price=ceil($price/100) * 100;
+                $dataSalary=[
+                    '1'=>$price, 
+                    '2'=>$price
+                ];
+            }else{
+                $dataSalary=$this->hitungBoronganPacking($borongan->netweight, $borongan->hargaSatuan, $jmlCowok, $jmlCewek, $percentage);
+            }            
+        } else {
+            $price = ($borongan->hargaSatuan * $borongan->netweight) / $borongan->worker;
+            $price=ceil($price/100) * 100;
+            $dataSalary=[
+                '1'=>$price, 
+                '2'=>$price
+            ];
+        }
+        $data[]="";
+        foreach($request->boronganWorker as $bw){
+            $price = $dataSalary[$request->boronganGender[$bw]];
+            $data[$a] = [
+                'employeeId' => $bw,
+                'boronganId' => $request->boronganId,
+                'isFullday' => 1,
+                'netPayment' => $price
+            ];
+            $a++;
+        }
+
+        DB::table('detail_borongans')->insert($data);
+        DB::table('borongans')
+        ->where('id', $request->boronganId)
+        ->update(['status' => 1]);
+
+        return redirect('boronganList')
+        ->with('status','Item berhasil ditambahkan.');
+    }
+    /*
+    public function storePekerja(Request $request, Borongan $borongan)
+    {
+
+        $limit=$request->worker;
+        $request->validate([
+            'boronganWorker' => ['required','array',"min:$limit","max:$limit"]
+        ]);
+
+        $a=0;
+        $jmlCowok=0;
+        $jmlCewek=0;
+        dump($borongan);
+        dd($request);
+
+        foreach($request->boronganGender as $gender){
+            if ($gender==1){
+                $jmlCowok++;
+            } else{
+                $jmlCewek++;
+            }
+        }
         $percentage=0.2;
         $dataSalary[]="";
         if ($borongan->jenis==2){
@@ -196,6 +259,7 @@ class BoronganController extends Controller
         return redirect('boronganList')
         ->with('status','Item berhasil ditambahkan.');
     }
+    */
 
     function hitungBoronganPacking($berat, $hargaperkg, $jmlCowok, $jmlCewek, $percentage){
         $x=$berat*$hargaperkg;
@@ -223,6 +287,7 @@ class BoronganController extends Controller
                 'tanggalKerja' => ['required','date','before_or_equal:today'],
                 'hargaSatuan' => ['required','numeric','gte:1'],
                 'jenis' => ['required','gt:0'],
+                'bagiHasil' => ['required','gte:0', 'lte:20'],
                 'netweight' => ['required','numeric','gte:1'],
                 'worker' => ['required','numeric','gte:1']
             ],
@@ -231,6 +296,7 @@ class BoronganController extends Controller
                 'tanggalKerja.*' => "Tanggal harus diisi dan maksimal adalah tanggal hari ini",
                 'jenis.*' => "Pilih salah satu jenis",
                 'hargaSatuan.*' => "Harga satuan harus diisi dan minimal adalah 1",
+                'bagiHasil.*' => "Bagi hasil antara 0-20%",
                 'netweight.*' => "Berat bersih harus diisi dan minimal adalah 1",
                 'worker.*' => "Jumlah Pekerja harus diisi dan minimal adalah 1",
             ]);
@@ -244,6 +310,7 @@ class BoronganController extends Controller
             'loading' => $request->cbval,
             'hargaSatuan' => $request->hargaSatuan,
             'netweight' => $request->netweight,
+            'bagiHasil' => $request->bagiHasil,
             'worker' => $request->worker,
         ];
         DB::table('borongans')->insert($data);
