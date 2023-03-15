@@ -99,7 +99,7 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                    <table style="width: 50%;" class="center table table-striped table-hover table-bordered">
+                    <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th style="width: 5%;text-align: center;"></th>
