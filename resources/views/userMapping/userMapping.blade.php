@@ -115,8 +115,9 @@
                             <tr>
                                 <th style="width: 5%;text-align: center;">No</th>
                                 <th style="width: 5%;text-align: center;">Pilih</th>
-                                <th style="width: 45%;">Aplikasi</th>
-                                <th style="width: 45%;">Page</th>
+                                <th style="width: 30%;">Aplikasi</th>
+                                <th style="width: 30%;">Page</th>
+                                <th style="width: 30%;">Route</th>
                             </tr>
                         </thead>
                         <tbody>
