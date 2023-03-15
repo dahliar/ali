@@ -405,4 +405,73 @@ class Presence extends Model
             DB::table('dailysalaries')->insert($datasalary);
         }
     }
+
+    function simpanPresenceScan($empid, $start, $end, $presenceId, $shift){
+        $ramadhanStart = Carbon::parse("2023-03-22 00:00:00"); 
+        $ramadhanEnd = Carbon::parse("2023-04-21 23:59:59"); 
+        $dataJam=null;
+        if (($start->gte($ramadhanStart)) and ($start->lte($ramadhanEnd))) {
+            $dataJam = $this->hitungPresenceHarianRamadhan($start, $end, $shift);
+        } else{
+            $dataJam = $this->hitungPresenceHarian($start, $end, $shift);
+        }
+        $dataPresensi = [
+            'end'           => $end,
+            'jamKerja'      => $dataJam['jamKerja'],
+            'jamLembur'     => $dataJam['jamLembur'],
+            'isLembur'     => 1
+        ];
+
+        DB::table('presences')
+        ->where('id', '=', $presenceId)
+        ->update($dataPresensi);
+        
+        $honor = DB::table('employeeorgstructuremapping')
+        ->select('uangharian as uh', 'uanglembur as ul')
+        ->where('idemp', $empid)
+        ->where('isactive', 1)
+        ->first();
+
+        $isPegawaiBulanan = DB::table('employees')
+        ->select('employmentStatus as empStatus')
+        ->where('id', '=', $empid)
+        ->first()->empStatus;
+
+        $isSunday=$start->dayOfWeekIso;
+
+        //hitung uang harian proporsional terhadap jam
+        $uh = ceil($honor->uh * ($dataJam['jamKerja']/7) / 100) * 100;
+        if (($isPegawaiBulanan==1) and ($isSunday!=7)){
+            $uh=0;
+        }
+
+        $jamLembur=$dataJam['jamLembur'];
+        $uangLembur=$honor->ul * $dataJam['jamLembur'];
+
+        $dailySalariesExist=DB::table('dailysalaries')
+        ->select(
+            DB::raw('count(id) as jumlah'),
+            'id as dsid'
+        )
+        ->whereDate('presenceDate', '=', $start->toDateString())
+        ->where('employeeId', '=', $empid)
+        ->first();
+
+        $datasalary = [
+            'employeeId'    => $empid,
+            'presenceDate'  => $start->toDateString(),
+            'jamKerja'      => $dataJam['jamKerja'],
+            'jamLembur'     => $jamLembur,
+            'uangharian'    => $uh,
+            'uanglembur'    => $uangLembur
+        ];
+
+        if($dailySalariesExist->jumlah > 0){
+            DB::table('dailysalaries')
+            ->where('id', '=', $dailySalariesExist->dsid)
+            ->update($datasalary);
+        } else {
+            DB::table('dailysalaries')->insert($datasalary);
+        }
+    }
 }

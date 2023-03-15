@@ -365,38 +365,116 @@ class PresenceController extends Controller
             $shift=2;
         }
 
-        $query = DB::table('employees as e')
-        ->select('e.id as empid','u.name as name','e.nip as nip','sp.name as spname','wp.name as wpname','os.name as osname')
-        ->where('e.nip','=', $nip)
-        ->where('mapping.isactive', 1)
+        
+        $cekPresenceExist = DB::table('presences as p')
+        ->select('start', 'name')
+        ->where('e.nip', '=', $request->barcode)
+        ->whereDate('p.start', '=', $start->toDateString())
+        ->join('employees as e', 'e.id', '=', 'p.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-        ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
-        ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
-        ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->first();
-        $retValue="";
-        if ($query){
-            $presence = new Presence();
-            $presence->employeeId   = $query->empid;
-            $presence->start        = $start;
-            $presence->shift        = $shift;
-            $presence->save();
-            $retValue = [
-                'message'       => $query->name." : ".$query->osname."<br>".$start,
-                'isError'       => "1"
-            ];
 
-        } else {
+        if (is_null($cekPresenceExist)){
+            $query = DB::table('employees as e')
+            ->select('e.id as empid','e.isActive as isActive','u.name as name','e.nip as nip','sp.name as spname','wp.name as wpname','os.name as osname')
+            ->where('mapping.isactive', 1)
+            ->where('e.nip', '=', $request->barcode)
+            ->join('users as u', 'u.id', '=', 'e.userid')
+            ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+            ->join('organization_structures as os', 'mapping.idorgstructure', '=', 'os.id')
+            ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
+            ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
+            ->first();
+            $retValue="";
+            if ($query){
+                if ($query->isActive==1){
+                    $presence = new Presence();
+                    $presence->employeeId   = $query->empid;
+                    $presence->start        = $start;
+                    $presence->shift        = $shift;
+                    $presence->save();
+                    $retValue = [
+                        'message'       => $query->name." : ".$query->osname."<br>".$start,
+                        'isError'       => "1"
+                    ];
+                } else {
+                    $retValue = [
+                        'message'       => "Status karyawan ".$query->name." tidak aktif",
+                        'isError'       => "0"
+                    ];
+                }
+
+            } else {
+                $retValue = [
+                    'message'       => "Ada kesalahan, barcode tidak ditemukan atau status karyawan tidak aktif",
+                    'isError'       => "0"
+                ];
+            }
+        } else{
             $retValue = [
-                'message'       => "Ada kesalahan, NIP barcode tidak ditemukan",
+                'message'       => "Presensi ".$cekPresenceExist->name." sudah dilakukan.<br>".$cekPresenceExist->start,
                 'isError'       => "0"
-            ];
-
+            ];            
         }
-        //dd($retValue);
         return $retValue;        
     }
+    public function submitPresensiKeluarKartuPegawai(Request $request){
+        $end = Carbon::now();
+        $nip = $request->barcode;
 
+        $cekBarcode = DB::table('employees as e')
+        ->select('name', 'e.isActive as isActive')
+        ->where('e.nip', '=', $request->barcode)
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->first();
+
+        if ($cekBarcode){
+            if($cekBarcode->isActive == 1){
+                $cekPresenceExist = DB::table('presences as p')
+                ->select('p.id as presenceId','p.start as start','e.isActive as isActive','u.name as name','e.nip as nip', 'e.id as empid', 'p.shift as shift')
+                ->where('e.nip', '=', $request->barcode)
+                ->whereDate('p.start', '=', $end->toDateString())
+                ->join('employees as e', 'e.id', '=', 'p.employeeId')
+                ->join('users as u', 'u.id', '=', 'e.userid')
+                ->orderBy('p.start', 'desc')
+                ->first();
+
+                if (!is_null($cekPresenceExist)){
+                    $retValue="";
+                    if ($cekPresenceExist->isActive==1){
+                        $this->presence->simpanPresenceScan($cekPresenceExist->empid, Carbon::parse($cekPresenceExist->start), $end, $cekPresenceExist->presenceId, $cekPresenceExist->shift);
+
+                        $retValue = [
+                            'message'       => $cekPresenceExist->name."<br>"."Presensi Keluar ".$end,
+                            'isError'       => "1"
+                        ];
+                    } else {
+                        $retValue = [
+                            'message'       => "Status karyawan ".$cekPresenceExist->name." tidak aktif",
+                            'isError'       => "0"
+                        ];
+                    }
+
+                } 
+                else{
+                    $retValue = [
+                        'message'       => "Presensi masuk ".$cekPresenceExist->name." tanggal ".$start->toDateString()." tidak ditemukan",
+                        'isError'       => "0"
+                    ];            
+                }
+            } else{
+                $retValue = [
+                    'message'       => $cekBarcode->name."<br> Status karyawan tidak aktif",
+                    'isError'       => "0"
+                ];     
+            }
+        }else{
+            $retValue = [
+                'message'       => "Barcode tidak ditemukan",
+                'isError'       => "0"
+            ];         
+        }
+        return $retValue;     
+    }
 
 }

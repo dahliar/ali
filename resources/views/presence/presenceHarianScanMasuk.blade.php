@@ -19,7 +19,7 @@
             var found1=false;
 
             $.ajax({
-                url: '{{ url("submitPresensiKartuPegawai") }}',
+                url: '{{ url("submitScanPresensiMasuk") }}',
                 type: "get",
                 data: {
                     barcode: barcode
@@ -27,17 +27,19 @@
                 dataType: "json",
                 success:function(data){
                     if (data['isError']==1){
-                        Swal.fire(
-                            'Presensi berhasil dilakukan!',
-                            data['message'],
-                            'info'
-                            );
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Presensi berhasil dilakukan!',
+                            text: data['message'],
+                            timer: 5000
+                        });
                     } else {
-                        Swal.fire(
-                            "Gagal scan dan input",
-                            data['message'],
-                            'warning'
-                            );
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Gagal scan dan input',
+                            text: data['message'],
+                            timer: 5000
+                        });
                     }
                 }
             });

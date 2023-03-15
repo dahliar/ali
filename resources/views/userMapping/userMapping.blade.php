@@ -138,8 +138,9 @@
                                     -->
 
                                 </td>
-                                <td style="width: 45%;">{{$page->applicationName}}</td>
-                                <td style="width: 45%;">{{$page->pageName}}</td>
+                                <td style="width: 30%;">{{$page->applicationName}}</td>
+                                <td style="width: 30%;">{{$page->pageName}}</td>
+                                <td style="width: 30%;">{{$page->route}}</td>
                                 @php $no+=1;    @endphp                                    
                             </tr>
                             @endforeach

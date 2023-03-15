@@ -225,6 +225,7 @@ class UserPageMappingController extends Controller
             'p.id as nomorAplikasi',
             'a.id as applicationId',
             'p.id as pageId',
+            'p.route as route',
             'upm.pageId as upmPageId'
         )
         ->leftJoin('user_page_mappings as upm', function($join) use ($uid){

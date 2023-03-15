@@ -19,25 +19,27 @@
             var found1=false;
 
             $.ajax({
-                url: '{{ url("submitPresensiKartuPegawai") }}',
+                url: '{{ url("submitScanPresensiKeluar") }}',
                 type: "get",
                 data: {
                     barcode: barcode
                 },
                 dataType: "json",
                 success:function(data){
-                    if (data['found']==0){
-                        Swal.fire(
-                            'Batal disimpan!',
-                            "Penyimpanan dibatalkan.",
-                            'info'
-                            );
+                    if (data['isError']==1){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Presensi berhasil dilakukan!',
+                            text: data['message'],
+                            timer: 5000
+                        });
                     } else {
-                        Swal.fire(
-                            "Gagal scan dan input",
-                            data['message'],
-                            'warning'
-                            );
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Gagal scan dan input',
+                            text: data['message'],
+                            timer: 5000
+                        });
                     }
                 }
             });
@@ -49,6 +51,9 @@
 </script>
 
 <div class="container-fluid">
+    201619820001<br>
+    201619840001<br>
+    202220000001<br>
     <div class="row">
         <div class="modal-content">
             <div class="modal-header">

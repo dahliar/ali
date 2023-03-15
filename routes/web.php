@@ -305,7 +305,8 @@ Route::GET('employeePresenceHarianHistory/{employee}',[PresenceController::class
 Route::get('getEmployeePresenceHarianHistory/{employeeId}/{start}/{end}', [PresenceController::class, 'getEmployeePresenceHarianHistory'])->middleware('auth');
 Route::get('presenceHarianEdit/{presence}',[PresenceController::class, 'presenceHarianEdit'])->middleware('auth', 'authorized');
 Route::POST('presenceHarianUpdate',[PresenceController::class, 'presenceHarianUpdate'])->middleware(['auth']);
-Route::GET('submitPresensiKartuPegawai',[PresenceController::class, 'submitPresensiMasukKartuPegawai'])->middleware(['auth']);
+Route::GET('submitScanPresensiMasuk',[PresenceController::class, 'submitPresensiMasukKartuPegawai'])->middleware(['auth']);
+Route::GET('submitScanPresensiKeluar',[PresenceController::class, 'submitPresensiKeluarKartuPegawai'])->middleware(['auth']);
 
 
 
