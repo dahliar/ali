@@ -227,6 +227,7 @@
         </div>  
         Laman ini akan menampilkan data 
         <ol>
+            <li>Hanya untuk data gaji harian, lembur, borongan dan honorarium pegawai <b>Harian dan Borongan</b></li>
             <li>Dalam rentang tanggal terpilih</li>
             <li>Data gaji yang dihitung <b>tidak</b> memperhatikan proses generate gaji</li>
         </ol>
