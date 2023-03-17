@@ -252,7 +252,7 @@
 					</a>
 					<a class="dropdown-item" href="{{ url('rekapitulasiGajiPerBulan')}}"><i class="fas fa-store"></i> Rekapitulasi gaji berdasar payroll
 					</a>
-					<a class="dropdown-item" href="{{ url('checkPayrollByDateRange')}}"><i class="fas fa-store"></i> Rekapitulasi gaji berdasar tanggal
+					<a class="dropdown-item" href="{{ url('salaryByDateRange')}}"><i class="fas fa-store"></i> Rekapitulasi gaji berdasar tanggal
 					</a>
 					<a class="dropdown-item" href="{{ url('rekapitulasiPembelianPerBulan')}}"><i class="fas fa-store"></i> Rekapitulasi Pembelian Per-bulan
 					</a>

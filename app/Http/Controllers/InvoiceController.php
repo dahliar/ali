@@ -172,14 +172,6 @@ class InvoiceController extends Controller
         //file disimpan di folder storage/docs/
         $pdf->save($filepath);
 
-        /*update transaction set piFileGenerated menjadi 1
-        $data = [
-            'piFileGenerated' => 1
-        ];
-        $action = Transaction::where('id', $transaction->id)
-        ->update($data);
-        */
-
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
@@ -504,15 +496,9 @@ class InvoiceController extends Controller
             }
 
         }
-        //return view('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
-
         
         $pdf = PDF::loadview('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
         $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.now().'.pdf';
         return $pdf->download($filename);
-        
-
     }
-
-
 }

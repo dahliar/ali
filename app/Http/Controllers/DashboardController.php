@@ -959,4 +959,178 @@ class DashboardController extends Controller
         ->addIndexColumn()->toJson();
     }
 
+    public function salaryByDateRange(){
+        return view ('salary.salaryByDateRange');
+
+    }
+
+    public function getSalaryByDateRange($opsi,$start,$end){
+        $start = \Carbon\Carbon::parse($start)->startOfDay();
+        $end = \Carbon\Carbon::parse($end)->endOfDay();
+        $opsi=$opsi;
+
+        $harian = DB::table('dailysalaries as ds')
+        ->select('e.id as empid', 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal')
+        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('ds.presenceDate')
+        ->whereBetween('ds.presenceDate', [$start, $end]);
+
+        $borongan = DB::table('borongans as b')
+        ->join('detail_borongans as db', 'db.boronganId', 'b.id')
+        ->join('employees as e', 'e.id', '=', 'db.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('b.tanggalKerja')
+        ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
+    )
+        ->whereBetween('b.tanggalKerja', [$start, $end]);
+
+        $honorarium = DB::table('honorariums as h')
+        ->join('employees as e', 'e.id', '=', 'h.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('h.tanggalKerja')
+        ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal'
+    )
+        ->whereBetween('h.tanggalKerja', [$start, $end])
+        ->union($harian)
+        ->union($borongan);
+
+        if ($opsi==1){
+            $third = DB::table($honorarium)
+            ->select(
+                'name as nama',
+                'empid',
+                DB::raw('sum(uh) as uh'),
+                DB::raw('sum(ul) as ul'),
+                DB::raw('sum(borongan) as borongan'),
+                DB::raw('sum(honorarium) as honorarium'),
+                DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total'),
+                'tanggal'
+            )
+            ->groupBy('empid')
+            ->groupBy('tanggal')
+            ->having(DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium))'), '>', 0)
+            ->orderBy('name')
+            ->orderBy('tanggal')
+            ->get();
+        } else{
+            $third = DB::table($honorarium)
+            ->select(
+                'name as nama',
+                'empid',
+                DB::raw('sum(uh) as uh'),
+                DB::raw('sum(ul) as ul'),
+                DB::raw('sum(borongan) as borongan'),
+                DB::raw('sum(honorarium) as honorarium'),
+                DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total')
+            )
+            ->groupBy('empid')
+            ->having(DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium))'), '>', 0)
+            ->orderBy('name')
+            ->get();
+        }
+
+        return datatables()->of($third)
+        ->editColumn('uh', function ($row) {
+            $html = "Rp. ".number_format($row->uh, 2, ',', '.');
+            return $html;
+        })
+        ->editColumn('ul', function ($row) {
+            $html = "Rp. ".number_format($row->ul, 2, ',', '.');
+            return $html;
+        })
+        ->editColumn('borongan', function ($row) {
+            $html = "Rp. ".number_format($row->borongan, 2, ',', '.');
+            return $html;
+        })
+        ->editColumn('honorarium', function ($row) {
+            $html = "Rp. ".number_format($row->honorarium, 2, ',', '.');
+            return $html;
+        })
+        ->editColumn('total', function ($row) {
+            $html = "Rp. ".number_format($row->total, 2, ',', '.');
+            return $html;
+        })
+        ->addIndexColumn()->toJson();
+    }
+    public function cetakSalaryByDateRange($opsi, $start, $end){
+        $start = \Carbon\Carbon::parse($start)->startOfDay();
+        $end = \Carbon\Carbon::parse($end)->endOfDay();
+        $opsi=$opsi;
+
+        $harian = DB::table('dailysalaries as ds')
+        ->select('e.id as empid', 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal')
+        ->join('employees as e', 'e.id', '=', 'ds.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('ds.presenceDate')
+        ->whereBetween('ds.presenceDate', [$start, $end]);
+
+        $borongan = DB::table('borongans as b')
+        ->join('detail_borongans as db', 'db.boronganId', 'b.id')
+        ->join('employees as e', 'e.id', '=', 'db.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('b.tanggalKerja')
+        ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
+    )
+        ->whereBetween('b.tanggalKerja', [$start, $end]);
+
+        $honorarium = DB::table('honorariums as h')
+        ->join('employees as e', 'e.id', '=', 'h.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->orderBy('u.name')
+        ->orderBy('h.tanggalKerja')
+        ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal'
+    )
+        ->whereBetween('h.tanggalKerja', [$start, $end])
+        ->union($harian)
+        ->union($borongan);
+
+        if ($opsi==1){
+            $third = DB::table($honorarium)
+            ->select(
+                'name as nama',
+                'empid',
+                DB::raw('sum(uh) as uh'),
+                DB::raw('sum(ul) as ul'),
+                DB::raw('sum(borongan) as borongan'),
+                DB::raw('sum(honorarium) as honorarium'),
+                DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total'),
+                'tanggal'
+            )
+            ->groupBy('empid')
+            ->groupBy('tanggal')
+            ->having(DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium))'), '>', 0)
+            ->orderBy('name')
+            ->orderBy('tanggal')
+            ->get();
+        } else{
+            $third = DB::table($honorarium)
+            ->select(
+                'name as nama',
+                'empid',
+                DB::raw('sum(uh) as uh'),
+                DB::raw('sum(ul) as ul'),
+                DB::raw('sum(borongan) as borongan'),
+                DB::raw('sum(honorarium) as honorarium'),
+                DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium)) as total')
+            )
+            ->groupBy('empid')
+            ->having(DB::raw('(sum(uh)+sum(ul)+sum(borongan)+sum(honorarium))'), '>', 0)
+            ->orderBy('name')
+            ->get();
+        }
+        $start=$start->toDateString();
+        $end=$end->toDateString();
+        $pdf = PDF::loadView('salary.rekapSalaryByDateRange', compact('third','start','end', 'opsi'));
+        $filename = 'Daftar gaji rentang '.$start.' - '.$end.'.pdf';
+        //$filepath = '../storage/app/docs/'.$filename;
+        return $pdf->download($filename);
+
+    }
+
 }

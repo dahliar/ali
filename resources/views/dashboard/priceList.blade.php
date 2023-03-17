@@ -48,9 +48,6 @@
 
         });
     }
-
-    $(document).ready(function() {
-    });
 </script>
 
 @if (session('status'))

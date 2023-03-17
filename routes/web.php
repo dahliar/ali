@@ -500,6 +500,16 @@ Route::post('getRekapitulasiPembelianPerBulan', [DashboardController::class, 'ge
 Route::post('cetakRekapPembelianPerBulan', [DashboardController::class, 'cetakRekapPembelianPerBulan'])->middleware(['auth', 'authorized']);
 
 Route::get('checkPayrollByDateRange',[DashboardController::class, 'checkPayrollByDateRange'])->middleware(['auth', 'authorized']);
+
+Route::get('salaryByDateRange',[DashboardController::class, 'salaryByDateRange'])->middleware(['auth', 'authorized']);
+Route::get('getSalaryByDateRange/{opsi}/{start}/{end}', [DashboardController::class, 'getSalaryByDateRange'])->middleware(['auth']);
+Route::get('cetakSalaryByDateRange/{opsi}/{start}/{end}', [DashboardController::class, 'cetakSalaryByDateRange'])->middleware(['auth', 'authorized']);
+
+
+
+
+
+
 Route::post('getPayrollByDateRange', [DashboardController::class, 'getPayrollByDateRange'])->middleware(['auth']);
 
 Route::get('rekapitulasiPresensi',[DashboardController::class, 'rekapitulasiPresensi'])->name('rekapitulasiPresensi')->middleware(['auth', 'authorized']);
