@@ -973,6 +973,7 @@ class DashboardController extends Controller
         ->select('e.id as empid', 'u.name as name', 'ds.uangHarian as uh', 'ds.uangLembur as ul', DB::raw('0 as borongan'), DB::raw('0 as honorarium'), 'ds.presenceDate as tanggal')
         ->join('employees as e', 'e.id', '=', 'ds.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
+        ->whereIn('e.status', [2,3])
         ->orderBy('u.name')
         ->orderBy('ds.presenceDate')
         ->whereBetween('ds.presenceDate', [$start, $end]);
@@ -981,6 +982,8 @@ class DashboardController extends Controller
         ->join('detail_borongans as db', 'db.boronganId', 'b.id')
         ->join('employees as e', 'e.id', '=', 'db.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
+        ->whereIn('e.status', [2,3])
+
         ->orderBy('u.name')
         ->orderBy('b.tanggalKerja')
         ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), 'db.netPayment', DB::raw('0 as honorarium'), 'b.tanggalKerja as tanggal'
@@ -990,6 +993,8 @@ class DashboardController extends Controller
         $honorarium = DB::table('honorariums as h')
         ->join('employees as e', 'e.id', '=', 'h.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
+        ->whereIn('e.status', [2,3])
+
         ->orderBy('u.name')
         ->orderBy('h.tanggalKerja')
         ->select('e.id as empid', 'u.name as name', DB::raw('0 as uh'), DB::raw('0 as ul'), DB::raw('0 as borongan'), 'h.jumlah as honorarium', 'h.tanggalKerja as tanggal'
