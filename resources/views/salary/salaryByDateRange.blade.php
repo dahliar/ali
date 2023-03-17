@@ -161,8 +161,8 @@
                 </div>                       
                 <div class="col-md-2">
                     <select id="opsi" name="opsi" class="form-select" >
-                        <option value="1" selected>Detil per tanggal</option>
-                        <option value="2">Rekap</option>
+                        <option value="1">Detil per tanggal</option>
+                        <option value="2" selected>Rekap</option>
                     </select>
                 </div>
                 <div class="col-md-2">
