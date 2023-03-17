@@ -202,7 +202,7 @@
                             <th>Total</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="font-size: 10px;">
                     </tbody>
                 </table>
             </div>
@@ -220,7 +220,7 @@
                             <th>Total</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style="font-size: 10px;">
                     </tbody>
                 </table> 
             </div>
