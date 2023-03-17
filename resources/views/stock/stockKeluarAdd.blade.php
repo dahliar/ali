@@ -12,6 +12,28 @@
 @section('content')
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
+    function sortTable() {
+        var table, rows, switching, i, x, y, shouldSwitch;
+        table = document.getElementById("dynamic_field");
+        switching = true;
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 0; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[1];
+                y = rows[i + 1].getElementsByTagName("TD")[1];
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            }
+        }
+    }
     function myFunction(){
         Swal.fire({
             title: 'Simpan data pemrosesan?',
@@ -71,6 +93,7 @@
                             i++;  
                             $('#dynamic_field').append('<tr id="row'+i+'" class="dynamic-added border border-light"><td class="col-md-1">'+i+'</td><td class="col-md-2">'+barcode+'</td><td class="col-md-2"><input type="hidden" id="barcode[]" name="barcode[]" value="'+barcode+'"></td><td class="col-md-6">'+data['name']+'</td><td class="col-md-1 text-center"><button type="button" id="'+i+'" class="btn btn_remove"><i class="fa fa-trash"></i></button></td></tr>'); 
                             document.getElementById("totalScanned").value=i;
+                            sortTable();
                         } else {
                             Swal.fire(
                                 "Gagal scan dan input",
@@ -169,7 +192,7 @@
                         <input type="reset" value="Reset" class="btn btn-secondary">
                     </div>
                 </form>
-                </div>
+            </div>
         </div>
     </div>
     @endsection
