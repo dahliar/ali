@@ -123,17 +123,27 @@
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb primary-color my-auto">
-                        <li class="breadcrumb-item">
-                            <a class="white-text" href="{{ url('/home') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active">Transaksi Lokal</li>
-                    </ol>
-                </nav>
-                <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Transaksi">
-                    <i class="fa fa-plus"></i> Transaksi
-                </button>
+                <div class="col-md-6 text-end">
+
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb primary-color my-auto">
+                            <li class="breadcrumb-item">
+                                <a class="white-text" href="{{ url('/home') }}">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Transaksi Lokal</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-6 text-end">
+
+                    <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Transaksi">
+                        <i class="fa fa-plus"></i> Transaksi
+                    </button>
+                    <button onclick="window.location='{{ url('scanTransactionList')}}'" target="_blank" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Penambahan barang via scan barcode">
+                        <i class="fa fa-plus"></i> Scan Barcode
+                    </button>
+                </div>
+
             </div>
         </div>
         <div class="card card-header">
