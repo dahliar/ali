@@ -9,6 +9,250 @@
 @endsection
 
 @section('content')
+
+<style>
+/* Googlefont Poppins CDN Link */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'Poppins', sans-serif;
+}
+.home-section{
+	position: relative;
+	/*background: #f5f5f5;*/
+	min-height: 60vh;
+	left: 0px;
+	transition: all 0.5s ease;
+}
+.home-section nav{
+	display: flex;
+	justify-content: space-between;
+	height: 80px;
+	background: #fff;
+	display: flex;
+	align-items: center;
+	position: fixed;
+	width: calc(100% - 240px);
+	left: 240px;
+	z-index: 100;
+	padding: 0 20px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+	transition: all 0.5s ease;
+}
+.home-section nav .sidebar-button{
+	display: flex;
+	align-items: center;
+	font-size: 24px;
+	font-weight: 500;
+}
+.home-section nav .profile-details{
+	display: flex;
+	align-items: center;
+	background: #F5F6FA;
+	border: 2px solid #EFEEF1;
+	border-radius: 6px;
+	height: 50px;
+	min-width: 190px;
+	padding: 0 15px 0 2px;
+}
+nav .profile-details img{
+	height: 40px;
+	width: 40px;
+	border-radius: 6px;
+	object-fit: cover;
+}
+nav .profile-details .admin_name{
+	font-size: 15px;
+	font-weight: 500;
+	color: #333;
+	margin: 0 10px;
+	white-space: nowrap;
+}
+nav .profile-details i{
+	font-size: 25px;
+	color: #333;
+}
+.home-section .home-content{
+	position: relative;
+	padding-top: 0px;
+}
+.home-content .overview-boxes{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	padding: 0 20px;
+	margin-bottom: 26px;
+}
+.overview-boxes .box{
+	height: 80px;
+	display: flex;
+	align-items: center;
+	justify-content: left;
+	width: calc(100% / 4 - 15px);
+	background: #fff;
+	padding: 15px 14px;
+	border-radius: 12px;
+	box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+.overview-boxes .box-topic{
+	font-size: 20px;
+	font-weight: 500;
+}
+.home-content .box .number{
+	display: inline-block;
+	font-size: 14px;
+	margin-top: -6px;
+	font-weight: 500;
+}
+.home-content .box .indicator{
+	display: flex;
+	align-items: center;
+}
+.home-content .box .indicator i{
+	height: 20px;
+	width: 20px;
+	background: #8FDACB;
+	line-height: 20px;
+	text-align: center;
+	border-radius: 50%;
+	color: #fff;
+	font-size: 20px;
+	margin-right: 5px;
+}
+.box .indicator i.down{
+	background: #e87d88;
+}
+.home-content .box .indicator .text{
+	font-size: 12px;
+}
+.home-content .box .cart{
+	display: inline-block;
+	font-size: 32px;
+	height: 50px;
+	width: 50px;
+	background: #cce5ff;
+	line-height: 50px;
+	text-align: center;
+	color: #66b0ff;
+	border-radius: 12px;
+	margin: -15px 0 0 6px;
+}
+.home-content .box .cart.two{
+	color: #2BD47D;
+	background: #C0F2D8;
+}
+.home-content .box .cart.three{
+	color: #ffc233;
+	background: #ffe8b3;
+}
+.home-content .box .cart.four{
+	color: #e05260;
+	background: #f7d4d7;
+}
+.home-content .total-order{
+	font-size: 20px;
+	font-weight: 500;
+}
+.home-content .sales-boxes{
+	display: flex;
+	justify-content: space-between;
+	/* padding: 0 20px; */
+}
+
+/* left box */
+.home-content .sales-boxes .recent-sales{
+	width: 65%;
+	background: #fff;
+	padding: 20px 30px;
+	margin: 0 20px;
+	border-radius: 12px;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.home-content .sales-boxes .sales-details{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.sales-boxes .box .title{
+	font-size: 24px;
+	font-weight: 500;
+	/* margin-bottom: 10px; */
+}
+.sales-boxes .sales-details li.topic{
+	font-size: 20px;
+	font-weight: 500;
+}
+.sales-boxes .sales-details li{
+	list-style: none;
+	margin: 8px 0;
+}
+.sales-boxes .sales-details li a{
+	font-size: 18px;
+	color: #333;
+	font-size: 400;
+	text-decoration: none;
+}
+.sales-boxes .box .button{
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+}
+.sales-boxes .box .button a{
+	color: #fff;
+	background: #0A2558;
+	padding: 4px 12px;
+	font-size: 15px;
+	font-weight: 400;
+	border-radius: 4px;
+	text-decoration: none;
+	transition: all 0.3s ease;
+}
+.sales-boxes .box .button a:hover{
+	background:  #0d3073;
+}
+.right-side{
+	margin-left:5%;
+}
+
+/* Right box */
+.home-content .sales-boxes .top-sales{
+	width: 35%;
+	background: #fff;
+	padding: 20px 30px;
+	margin: 0 20px 0 0;
+	border-radius: 12px;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.sales-boxes .top-sales li{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 10px 0;
+}
+.sales-boxes .top-sales li a img{
+	height: 40px;
+	width: 40px;
+	object-fit: cover;
+	border-radius: 12px;
+	margin-right: 10px;
+	background: #333;
+}
+.sales-boxes .top-sales li a{
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+}
+.sales-boxes .top-sales li .product,
+.price{
+	font-size: 17px;
+	font-weight: 400;
+	color: #333;
+}
+
+</style>
 @if ($errors->any())
 <div class="alert alert-success">
 	<div class="row form-inline" onclick='$(this).parent().remove();'>
@@ -25,98 +269,164 @@
 	</div>
 </div>
 @endif
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
 <body>
-	<div class="container-fluid">
-		<div>
-			<table class="mx-auto 	table table-striped table-hover table-bordered data-table"  style="width: 70%;">
-				<thead>
-					<th class="align-middle" style="width: 40%;">No</th>
-					<th class="align-middle" style="width: 20%;text-align: center;">Jenis</td>
-					</thead>
-					<tbody style="font-size: 12px;">
-						<tr>
-							<td class="align-middle"><b>Penambahan Stock Belum Approve</b></td>
-							<td style="text-align: right;"><b>{{$tambah}} inputan</b></td>
-						</tr>
-						<tr>
-							<td class="align-middle"><b>Pengurangan Stock Belum Approve</b></td>
-							<td style="text-align: right;"><b>{{$kurang}} inputan</b></td>
-						</tr>
-						<tr>
-							<td class="align-middle"><b>Transaksi Penjualan Export</b></td>
-							<td>
-								<div class="row">
-									<div class="col-md-4 text-left">
-										Offering 
-									</div>
-									<div class="col-md-1">:</div>
-									<div class="col-md-7 text-end">
-										{{$datas['offeringExport']}} Transaksi
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-4 text-left">
-										Sailing 
-									</div>
-									<div class="col-md-1">:</div>
-									<div class="col-md-7 text-end">
-										{{$datas['sailingExport']}} Transaksi
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="align-middle"><b>Transaksi Penjualan Lokal</b></td>
-							<td>
-								<div class="row">
-									<div class="col-md-4 text-left">
-										Offering 
-									</div>
-									<div class="col-md-1">:</div>
-									<div class="col-md-7 text-end">
-										{{$datas['offeringLocal']}} Transaksi
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-4 text-left">
-										Sailing 
-									</div>
-									<div class="col-md-1">:</div>
-									<div class="col-md-7 text-end">
-										{{$datas['sailingLocal']}} Transaksi
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="align-middle"><b>Transaksi Pembelian</b></td>
-							<td>
-								<div class="row">
-									<div class="col-md-4 text-left">
-										On Progress 
-									</div>
-									<div class="col-md-1">:</div>
-									<div class="col-md-7 text-end">
-										{{$datas['pembelian']}} Transaksi
-									</div>
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td class="align-middle"><b>Total Stock Packed</b></td>
-							<td style="text-align: right;"><b>{{number_format($datas['jumlahPacked'], 2, ',', '.').' Kg'}}</b></td>
-						</tr>
-						<tr>
-							<td class="align-middle"><b>Total Stock Unpacked</b></td>
-							<td style="text-align: right;"><b>{{number_format($datas['jumlahUnpacked'], 2, ',', '.').' Kg'}}</b></td>
-						</tr>
-						<tr>
-							<td class="align-middle"><b>Total Stock Sailing</b></td>
-							<td style="text-align: right;"><b>{{number_format($datas['totalSailing'], 2, ',', '.').' Kg'}}</b></td>
-						</tr>
-					</tbody>
-				</table> 
+	<section class="home-section">
+		<div class="home-content">
+			<div class="overview-boxes">
+				<div class="box">
+					<div class="right-side">
+						<div class="box-topic">Stock</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('itemStockList')}}'" target="_blank">
+						<i class="fas fa-box"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Packed</div>
+						<div class="number">{{number_format($datas['jumlahPacked'], 2, ',', '.').' Kg'}}</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-secondary" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('itemStockList')}}'" target="_blank">
+						<i class="fas fa-box-open"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Unpacked</div>
+						<div class="number">{{number_format($datas['jumlahUnpacked'], 2, ',', '.').' Kg'}}</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-success" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('itemStockList')}}'" target="_blank">
+						<i class="fab fa-docker"></i>
+					</button>
+
+					<div class="right-side">
+						<div class="box-topic">Sailing</div>
+						<div class="number">{{number_format($datas['totalSailing'], 2, ',', '.').' Kg'}}</div>
+					</div>
+				</div>
 			</div>
+
+			<div class="overview-boxes">
+				<div class="box">
+					<div class="right-side">
+						<div class="box-topic">Transaction - Export</div>
+					</div>
+				</div>
+				
+				<div class="box">
+					<button class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-container="body" onclick="window.location='{{ url('transactionList')}}'" target="_blank">
+						<i class="fas fa-file-alt"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Offering</div>
+						<div class="number">{{$datas['offeringExport']}} transaction</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('transactionList')}}'" target="_blank">
+						<i class="fas fa-file-signature"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Sailing</div>
+						<div class="number">{{$datas['sailingExport']}} transaction</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-success" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('transactionList')}}'" target="_blank">
+						<i class="fas fa-tasks"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Total (year)</div>
+						<div class="number">X transaction</div>
+					</div>
+				</div>
+			</div>
+			<div class="overview-boxes">
+				<div class="box">
+					<div class="right-side">
+						<div class="box-topic">Transaction - Lokal</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('localTransactionList')}}'" target="_blank">
+						<i class="fas fa-file-alt"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Offering</div>
+						<div class="number">{{$datas['offeringLocal']}} transaction</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('localTransactionList')}}'" target="_blank">
+						<i class="fas fa-file-signature"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Sailing</div>
+						<div class="number">{{$datas['sailingLocal']}} transaction</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-success" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('localTransactionList')}}'" target="_blank">
+						<i class="fas fa-tasks"></i>
+					</button>
+
+					<div class="right-side">
+						<div class="box-topic">Total (year)</div>
+						<div class="number">X transaction</div>
+					</div>
+				</div>
+			</div>
+			<div class="overview-boxes">
+				<div class="box">
+					<div class="right-side">
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-success" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('purchaseList')}}'" target="_blank">
+						<i class="fas fa-shopping-cart"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Purchase</div>
+						<div class="number">{{$datas['pembelian']}} transaction</div>
+					</div>
+				</div>
+				
+				<div class="box">
+					<button class="btn btn-info" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('itemStockApprovalPenambahan')}}'" target="_blank">
+						<i class="fas fa-plus-circle"></i>
+					</button>
+
+					<div class="right-side">
+						<div class="box-topic">Penambahan Stock</div>
+						<div class="number">{{$tambah}} belum approve</div>
+					</div>
+				</div>
+				<div class="box">
+					<button class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('itemStockApprovalPengurangan')}}'" target="_blank">
+						<i class="fas fa-minus-circle"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Pengurangan Stock</div>
+						<div class="number">{{$kurang}} belum approve</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+	</html>
+
+
+	<body>
+		<div class="container-fluid">
 			<div class="card card-header">
 				<form action="{{url('home')}}" method="get">
 					{{ csrf_field() }}
