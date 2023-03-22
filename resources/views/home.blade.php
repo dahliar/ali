@@ -345,8 +345,8 @@ nav .profile-details i{
 						<i class="fas fa-tasks"></i>
 					</button>
 					<div class="right-side">
-						<div class="box-topic">Total (year)</div>
-						<div class="number">X transaction</div>
+						<div class="box-topic">Total {{$datas['currentYear']}}</div>
+						<div class="number">{{$datas['allExport']}}  transaction</div>
 					</div>
 				</div>
 			</div>
@@ -380,14 +380,15 @@ nav .profile-details i{
 					</button>
 
 					<div class="right-side">
-						<div class="box-topic">Total (year)</div>
-						<div class="number">X transaction</div>
+						<div class="box-topic">Total  {{$datas['currentYear']}}</div>
+						<div class="number">{{$datas['allLocal']}}  transaction</div>
 					</div>
 				</div>
 			</div>
 			<div class="overview-boxes">
 				<div class="box">
 					<div class="right-side">
+						<div class="box-topic">Purchase</div>
 					</div>
 				</div>
 				<div class="box">
@@ -395,11 +396,28 @@ nav .profile-details i{
 						<i class="fas fa-shopping-cart"></i>
 					</button>
 					<div class="right-side">
-						<div class="box-topic">Purchase</div>
+						<div class="box-topic">Unfinish</div>
 						<div class="number">{{$datas['pembelian']}} transaction</div>
 					</div>
 				</div>
-				
+				<div class="box">
+				</div>
+				<div class="box">
+					<button class="btn btn-success" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('purchaseList')}}'" target="_blank">
+						<i class="fas fa-shopping-cart"></i>
+					</button>
+					<div class="right-side">
+						<div class="box-topic">Total {{$datas['currentYear']}}</div>
+						<div class="number">{{$datas['allPembelian']}} transaction</div>
+					</div>
+				</div>
+			</div>
+			<div class="overview-boxes">
+				<div class="box">
+					<div class="right-side">
+						<div class="box-topic">Stock</div>
+					</div>
+				</div>				
 				<div class="box">
 					<button class="btn btn-info" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('itemStockApprovalPenambahan')}}'" target="_blank">
 						<i class="fas fa-plus-circle"></i>
@@ -419,6 +437,9 @@ nav .profile-details i{
 						<div class="number">{{$kurang}} belum approve</div>
 					</div>
 				</div>
+				<div class="box">
+				</div>
+
 			</div>
 		</section>
 	</body>

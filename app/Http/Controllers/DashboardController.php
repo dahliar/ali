@@ -39,6 +39,11 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
+        $date = Carbon::parse(now())->locale('id');
+        $date->settings(['formatFunction' => 'translatedFormat']);
+        $month=$date->format('F');
+        $currentYear = $date->format('Y');
+
         $tambah = DB::table('stores')
         ->where('isApproved', '=', '0')
         ->count();
@@ -57,6 +62,11 @@ class DashboardController extends Controller
         ->where('jenis', '=', '1')
         ->count();
 
+        $allExport = DB::table('transactions')
+        ->where('jenis', '=', '1')
+        ->whereYear('transactionDate', '=', $currentYear)
+        ->count();
+
         $sailingLocal = DB::table('transactions')
         ->where('status', '=', '4')
         ->where('jenis', '=', '2')
@@ -67,8 +77,17 @@ class DashboardController extends Controller
         ->where('jenis', '=', '2')
         ->count();
 
+        $allLocal = DB::table('transactions')
+        ->where('jenis', '=', '2')
+        ->whereYear('transactionDate', '=', $currentYear)
+        ->count();
+
+
         $pembelian = DB::table('purchases')
         ->where('status', '=', '1')
+        ->count();
+        $allPembelian = DB::table('purchases')
+        ->whereYear('purchaseDate', '=', $currentYear)
         ->count();
         
 
@@ -91,12 +110,17 @@ class DashboardController extends Controller
         $datas = [
             'sailingExport' => $sailingExport, 
             'offeringExport' => $offeringExport, 
+            'allExport' => $allExport, 
             'sailingLocal' => $sailingLocal, 
             'offeringLocal' => $offeringLocal,
+            'allLocal' => $allLocal,
             'pembelian' => $pembelian,
+            'allPembelian' => $allPembelian,
             'totalSailing' => $totalSailing,
             'jumlahPacked' => $totalStock->jumlahPacked,
-            'jumlahUnpacked' => $totalStock->jumlahUnpacked
+            'jumlahUnpacked' => $totalStock->jumlahUnpacked,
+            'currentYear' => $currentYear,
+            'currentMonth' => $month
         ];
 
 
@@ -284,10 +308,6 @@ class DashboardController extends Controller
             ->whereMonth('e.birthdate', date('m'))
             ->orderBy(DB::raw('DAY(e.birthdate)'))
             ->get();
-
-            $date = Carbon::parse(now())->locale('id');
-            $date->settings(['formatFunction' => 'translatedFormat']);
-            $month=$date->format('F');
 
             return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','datas'));
         }
