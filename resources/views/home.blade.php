@@ -22,57 +22,9 @@
 .home-section{
 	position: relative;
 	/*background: #f5f5f5;*/
-	min-height: 60vh;
+	min-height: 50vh;
 	left: 0px;
 	transition: all 0.5s ease;
-}
-.home-section nav{
-	display: flex;
-	justify-content: space-between;
-	height: 80px;
-	background: #fff;
-	display: flex;
-	align-items: center;
-	position: fixed;
-	width: calc(100% - 240px);
-	left: 240px;
-	z-index: 100;
-	padding: 0 20px;
-	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-	transition: all 0.5s ease;
-}
-.home-section nav .sidebar-button{
-	display: flex;
-	align-items: center;
-	font-size: 24px;
-	font-weight: 500;
-}
-.home-section nav .profile-details{
-	display: flex;
-	align-items: center;
-	background: #F5F6FA;
-	border: 2px solid #EFEEF1;
-	border-radius: 6px;
-	height: 50px;
-	min-width: 190px;
-	padding: 0 15px 0 2px;
-}
-nav .profile-details img{
-	height: 40px;
-	width: 40px;
-	border-radius: 6px;
-	object-fit: cover;
-}
-nav .profile-details .admin_name{
-	font-size: 15px;
-	font-weight: 500;
-	color: #333;
-	margin: 0 10px;
-	white-space: nowrap;
-}
-nav .profile-details i{
-	font-size: 25px;
-	color: #333;
 }
 .home-section .home-content{
 	position: relative;
@@ -84,10 +36,10 @@ nav .profile-details i{
 	justify-content: space-between;
 	flex-wrap: wrap;
 	padding: 0 20px;
-	margin-bottom: 26px;
+	margin-bottom: 6px;
 }
 .overview-boxes .box{
-	height: 80px;
+	height: 60px;
 	display: flex;
 	align-items: center;
 	justify-content: left;
@@ -98,160 +50,18 @@ nav .profile-details i{
 	box-shadow: 0 5px 10px rgba(0,0,0,0.1);
 }
 .overview-boxes .box-topic{
-	font-size: 20px;
+	font-size: 14px;
 	font-weight: 500;
 }
 .home-content .box .number{
 	display: inline-block;
-	font-size: 14px;
+	font-size: 12px;
 	margin-top: -6px;
 	font-weight: 500;
-}
-.home-content .box .indicator{
-	display: flex;
-	align-items: center;
-}
-.home-content .box .indicator i{
-	height: 20px;
-	width: 20px;
-	background: #8FDACB;
-	line-height: 20px;
-	text-align: center;
-	border-radius: 50%;
-	color: #fff;
-	font-size: 20px;
-	margin-right: 5px;
-}
-.box .indicator i.down{
-	background: #e87d88;
-}
-.home-content .box .indicator .text{
-	font-size: 12px;
-}
-.home-content .box .cart{
-	display: inline-block;
-	font-size: 32px;
-	height: 50px;
-	width: 50px;
-	background: #cce5ff;
-	line-height: 50px;
-	text-align: center;
-	color: #66b0ff;
-	border-radius: 12px;
-	margin: -15px 0 0 6px;
-}
-.home-content .box .cart.two{
-	color: #2BD47D;
-	background: #C0F2D8;
-}
-.home-content .box .cart.three{
-	color: #ffc233;
-	background: #ffe8b3;
-}
-.home-content .box .cart.four{
-	color: #e05260;
-	background: #f7d4d7;
-}
-.home-content .total-order{
-	font-size: 20px;
-	font-weight: 500;
-}
-.home-content .sales-boxes{
-	display: flex;
-	justify-content: space-between;
-	/* padding: 0 20px; */
-}
-
-/* left box */
-.home-content .sales-boxes .recent-sales{
-	width: 65%;
-	background: #fff;
-	padding: 20px 30px;
-	margin: 0 20px;
-	border-radius: 12px;
-	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-}
-.home-content .sales-boxes .sales-details{
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-.sales-boxes .box .title{
-	font-size: 24px;
-	font-weight: 500;
-	/* margin-bottom: 10px; */
-}
-.sales-boxes .sales-details li.topic{
-	font-size: 20px;
-	font-weight: 500;
-}
-.sales-boxes .sales-details li{
-	list-style: none;
-	margin: 8px 0;
-}
-.sales-boxes .sales-details li a{
-	font-size: 18px;
-	color: #333;
-	font-size: 400;
-	text-decoration: none;
-}
-.sales-boxes .box .button{
-	width: 100%;
-	display: flex;
-	justify-content: flex-end;
-}
-.sales-boxes .box .button a{
-	color: #fff;
-	background: #0A2558;
-	padding: 4px 12px;
-	font-size: 15px;
-	font-weight: 400;
-	border-radius: 4px;
-	text-decoration: none;
-	transition: all 0.3s ease;
-}
-.sales-boxes .box .button a:hover{
-	background:  #0d3073;
 }
 .right-side{
 	margin-left:5%;
 }
-
-/* Right box */
-.home-content .sales-boxes .top-sales{
-	width: 35%;
-	background: #fff;
-	padding: 20px 30px;
-	margin: 0 20px 0 0;
-	border-radius: 12px;
-	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-}
-.sales-boxes .top-sales li{
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin: 10px 0;
-}
-.sales-boxes .top-sales li a img{
-	height: 40px;
-	width: 40px;
-	object-fit: cover;
-	border-radius: 12px;
-	margin-right: 10px;
-	background: #333;
-}
-.sales-boxes .top-sales li a{
-	display: flex;
-	align-items: center;
-	text-decoration: none;
-}
-.sales-boxes .top-sales li .product,
-.price{
-	font-size: 17px;
-	font-weight: 400;
-	color: #333;
-}
-
 </style>
 @if ($errors->any())
 <div class="alert alert-success">
