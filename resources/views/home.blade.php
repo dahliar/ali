@@ -143,7 +143,7 @@
 				</div>
 				<div class="box">
 					<button class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('transactionList')}}'" target="_blank">
-						<i class="fas fa-file-signature"></i>
+						<i class="fab fa-docker"></i>
 					</button>
 					<div class="right-side">
 						<div class="box-topic">Sailing</div>
@@ -177,7 +177,7 @@
 				</div>
 				<div class="box">
 					<button class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('localTransactionList')}}'" target="_blank">
-						<i class="fas fa-file-signature"></i>
+						<i class="fab fa-docker"></i>
 					</button>
 					<div class="right-side">
 						<div class="box-topic">Sailing</div>
@@ -214,7 +214,7 @@
 				</div>
 				<div class="box">
 					<button class="btn btn-success" data-toggle="tooltip" data-placement="top" data-container="body"onclick="window.location='{{ url('purchaseList')}}'" target="_blank">
-						<i class="fas fa-shopping-cart"></i>
+						<i class="fas fa-tasks"></i>
 					</button>
 					<div class="right-side">
 						<div class="box-topic">Total {{$datas['currentYear']}}</div>
