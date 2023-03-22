@@ -38,6 +38,7 @@ class PurchaseController extends Controller
             'n.name as nation', 
             'p.purchasedate as purchasedate',
             'p.arrivaldate as arrivaldate',
+            'p.dueDate as dueDate',
             'p.paymentAmount as paymentAmount',
             'p.status as statusCheck',
             DB::raw('(CASE WHEN p.status ="0" THEN "New Submission"
@@ -120,6 +121,12 @@ class PurchaseController extends Controller
                     'before_or_equal:purchaseDate',
                     'after:-1 month'
                 ],
+                'dueDate'   => [
+                    'required',
+                    'date',
+                    'after:purchaseDate'
+                ],
+                'downPayment' => ['required','gte:0'],
                 'taxPercentage' => ['required','gt:0']
             ],
             [
@@ -127,6 +134,7 @@ class PurchaseController extends Controller
                 'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
                 'company.gt'=>'Pilih salah satu perusahaan',
                 'purchaseDate.after' => 'Maksimal 1 bulan yang lalu',
+                'dueDate.after' => 'Harus lebih dari tanggal penerimaan',
                 'arrivalDate.after' => 'Maksimal 1 bulan yang lalu'
             ]
         );
@@ -141,6 +149,8 @@ class PurchaseController extends Controller
             'paymentTerms' => $request->paymentTerms,
             'purchaseDate' => $request->purchaseDate,
             'arrivalDate' => $request->arrivalDate,
+            'dueDate' => $request->dueDate,
+            'downPayment' => $request->downPayment,
             'taxIncluded' => $company->taxIncluded,
             'taxPercentage' => $request->taxPercentage,
             'status' =>  1
@@ -154,8 +164,6 @@ class PurchaseController extends Controller
         $purchase = Purchase::find($lastPurchaseIdStored);
         $purchase->purchasingNum = $purchaseNum;
         $purchase->save();
-
-        //$companyName=Company::select('name')->where('id', $request->company)->value('name');
 
         return redirect('purchaseList')
         ->with('status','Transaksi pembelian ke '.$company->name.' berhasil ditambahkan.');

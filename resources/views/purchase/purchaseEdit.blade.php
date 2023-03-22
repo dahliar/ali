@@ -148,6 +148,16 @@
                                 </div>
                             </div>
                             <div class="row form-group">
+                                <div class="col-md-3 my-auto">
+                                    <span class="label">Tanggal Batas Bayar*</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <input type="date" id="dueDate" name="dueDate" class="form-control text-end" value="{{ old('dueDate', $purchase->dueDate) }}"  @if($purchase->status != 1) readonly @endif>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
                                 <div class="col-md-3 text-md-right">
                                     <span class="label" id="spanPayment">Mata Uang Transaksi*</span>
                                 </div>
@@ -168,6 +178,16 @@
                                     <div class="input-group">
                                         <input id="taxPercentage" name="taxPercentage" type="number"  step="0.01" class="form-control text-end" value="{{old('taxPercentage', ($purchase->taxPercentage)) }}" disabled>
                                         <span class="input-group-text col-md-2">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-3 my-auto">
+                                    <span class="label">Down Payment</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group">
+                                        <input id="downPayment" name="downPayment" type="text" class="form-control text-end" value="@php echo number_format($purchase->downPayment, 2, ',', '.') @endphp" disabled>
                                     </div>
                                 </div>
                             </div>

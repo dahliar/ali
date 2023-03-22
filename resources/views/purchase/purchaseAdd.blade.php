@@ -159,7 +159,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
-                                <input type="date" id="dueDate" name="dueDate" class="form-control text-end" value="{{ old('dueDate', date('Y-m-d'))}}" min="{{ old('dueDate', date('Y-m-d'))}}" max="{{ old('dueDate', date('Y-m-d', strtotime('+2 month')))}}">
+                                <input type="date" id="dueDate" name="dueDate" class="form-control text-end" value="{{ old('dueDate', date('Y-m-d'))}}" min="{{ old('dueDate', date('Y-m-d'))}}">
                             </div>
                         </div>
                     </div>                
@@ -190,14 +190,25 @@
                     </div>
                     <div class="row form-group">
                         <div class="col-md-3 text-md-end">
-                            <span class="label">File Invoice</span>
+                            <span class="label">Down Payment*</span>
                         </div>
-                        <div class="col-md-8">
-                            <div class="input-group">
-                                <input class="form-control" type="file" id="imageurl" name="imageurl">
-                            </div>
+                        <div class="col-md-3">
+                            <input id="downPayment" name="downPayment" type="number"  step="1" class="form-control text-end" value="{{old('downPayment',0)}}">
                         </div>
                     </div>
+
+                        <!--
+                        <div class="row form-group">
+                            <div class="col-md-3 text-md-end">
+                                <span class="label">File Invoice</span>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input class="form-control" type="file" id="imageurl" name="imageurl">
+                                </div>
+                            </div>
+                        </div>
+                    -->
                     <div class="row form-group">
                         <div class="col-md-3 text-md-end">
                             <span class="label">Catatan Transaksi</span>

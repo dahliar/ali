@@ -57,13 +57,14 @@
             destroy:true,
             columnDefs: [
             {   "width": "3%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
+            {   "width": "23%", "targets":  [1], "className": "text-left"   },
             {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "20%", "targets":  [3], "className": "text-left" },
+            {   "width": "15%", "targets":  [3], "className": "text-left" },
             {   "width": "8%",  "targets":  [4], "className": "text-end" },
-            {   "width": "12%", "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-left" },
-            {   "width": "15%", "targets":  [7], "className": "text-left" }
+            {   "width": "8%",  "targets":  [5], "className": "text-end" },
+            {   "width": "10%", "targets":  [6], "className": "text-end" },
+            {   "width": "8%", "targets":  [7], "className": "text-left" },
+            {   "width": "15%", "targets":  [8], "className": "text-left" }
             ], 
 
             columns: [
@@ -72,6 +73,7 @@
             {data: 'nation', name: 'nation'},
             {data: 'nosurat', name: 'nosurat'},
             {data: 'arrivaldate', name: 'arrivaldate'},
+            {data: 'dueDate', name: 'dueDate'},
             {data: 'paymentAmount', name: 'paymentAmount'},
             {data: 'status', name: 'status'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
@@ -150,18 +152,19 @@
         <div class="card card-body">
             <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                 <thead>
-                    <tr>
+                    <tr style="font-size:14px; text-align: center;">
                         <th>No</th>
                         <th>Perusahaan</th>
                         <th>Negara</th>
                         <th>No Surat</th>
                         <th>Datang</th>
-                        <th>Bayar</th>
+                        <th>Jatuh Tempo</th>
+                        <th>Total</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody style="font-size:14px">
+                <tbody style="font-size:12px">
                 </tbody>
             </table>                
         </div>
