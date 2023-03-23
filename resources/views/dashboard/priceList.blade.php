@@ -10,6 +10,9 @@
 
 
 @section('content')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
+<script src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js" type="text/javascript" ></script>
+
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
@@ -84,7 +87,7 @@
                     <select class="form-select w-100" id="selectSpecies">
                         <option value="-1">----</option>
                         @foreach ($speciesList as $species)
-                        <option value="{{ $species->id }}">{{ $species->name }}</option>
+                        <option value="{{ $species->id }}">{{ $species->name }} - {{ $species->nameBahasa }}</option>
                         @endforeach
                         <option value="0" selected>All Species</option>
                     </select>

@@ -329,34 +329,24 @@ class DashboardController extends Controller
         return view('dashboard.priceList', compact('speciesList'));
     }
     public function getPriceList($species, $start, $end){
-        //DB::enableQueryLog();
         $startStr=Carbon::parse($start)->startOfDay();
         $endStr=Carbon::parse($end)->endOfDay();
-        //dd($species);
 
-        $query = DB::table('items as i')
+        $query = DB::table('view_item_details as vid')
         ->select(
-            DB::raw('concat(sp.name," ",g.name," ",s.name," ",f.name) as itemName'),
+            DB::raw('vid.name as itemName'),
             DB::raw('ifnull(min(dp.price),0) as minPrice'),
             DB::raw('ifnull(avg(dp.price),0) as avgPrice'),
             DB::raw('ifnull(max(dp.price),0) as maxPrice')
         )
-        ->leftjoin('detail_purchases as dp', 'i.id', '=', 'dp.itemId')
+        ->leftjoin('detail_purchases as dp', 'vid.itemId', '=', 'dp.itemId')
         ->join('purchases as pur', 'dp.purchasesId', '=', 'pur.id')
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('species as sp', 's.speciesId', '=', 'sp.id')
-        ->join('grades as g', 'i.gradeId', '=', 'g.id')
-        ->join('packings as p', 'i.packingId', '=', 'p.id')
-        ->join('freezings as f', 'i.freezingId', '=', 'f.id')
-        ->where('i.isActive','=', 1)
         ->whereBetween('pur.purchaseDate', [$startStr, $endStr])
-        ->groupBy('i.id')
-        ->orderBy('sp.name', 'desc')
-        ->orderBy('g.name', 'asc')
-        ->orderBy('s.name', 'asc');
+        ->groupBy('vid.itemId')
+        ->orderBy('vid.name', 'asc');
 
         if ($species>0){
-            $query->where('sp.id','=', $species);
+            $query->where('vid.speciesId','=', $species);
         }
 
 
@@ -463,6 +453,12 @@ class DashboardController extends Controller
         return view('dashboard.rekapitulasiGaji');
     }
     public function getRekapitulasiGaji(Request $request){
+        $request->validate([
+            'tahun' => ['required','gt:0']
+        ],
+        [
+            'tahun.*'  => 'Pilih tahun dulu'
+        ]);
         $dt = Carbon::create($request->tahun, 5, 2, 12, 0, 0);
         $tahun = $request->tahun;
 

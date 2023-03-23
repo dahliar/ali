@@ -37,19 +37,19 @@
         data.addColumn('number', 'Harian');
         data.addColumn('number', 'Borongan');
         var arrValue = [ 
-        ["Januari",0,0,0],
-        ["Februari",0,0,0],
-        ["Maret",0,0,0],
-        ["April",0,0,0],
-        ["Mei",0,0,0],
-        ["Juni",0,0,0],
-        ["Juli",0,0,0],
-        ["Agustus",0,0,0],
-        ["September",0,0,0],
-        ["Oktober",0,0,0],
-        ["November",0,0,0],
-        ["Desember",0,0,0],
-        ];
+            ["Januari",0,0,0],
+            ["Februari",0,0,0],
+            ["Maret",0,0,0],
+            ["April",0,0,0],
+            ["Mei",0,0,0],
+            ["Juni",0,0,0],
+            ["Juli",0,0,0],
+            ["Agustus",0,0,0],
+            ["September",0,0,0],
+            ["Oktober",0,0,0],
+            ["November",0,0,0],
+            ["Desember",0,0,0],
+            ];
 
         for (var i = 0; i < payroll.length; i++) {
             arrValue[payroll[i].bulan-1][payroll[i].status] = Number(payroll[i].total);
@@ -76,7 +76,22 @@
     }
 </script>
 @endisset
-
+@if ($errors->any())
+<div class="alert alert-success">
+    <div class="row form-inline" onclick='$(this).parent().remove();'>
+        <div class="col-11">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        <div class="col-md-1 text-center">
+            <span class="label"><strong >x</strong></span>
+        </div>
+    </div>
+</div>
+@endif
 <body>
     <div class="container-fluid">
         <div class="modal-content">
@@ -123,8 +138,8 @@
         </div>
         <div class="card card-body">
             <div class="row form-group">
-             @if(!empty($payroll))
-             <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
+               @if(!empty($payroll))
+               <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
                 <thead style="text-align: center;">
                     <tr>
                         <th style="width: 20%;">Bulan</th>
