@@ -206,7 +206,7 @@
 						<i class="fas fa-shopping-cart"></i>
 					</button>
 					<div class="right-side">
-						<div class="box-topic">Unfinish</div>
+						<div class="box-topic">On Progress</div>
 						<div class="number">{{$datas['pembelian']}} transaction</div>
 					</div>
 				</div>
