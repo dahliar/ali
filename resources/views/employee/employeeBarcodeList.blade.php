@@ -17,53 +17,10 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    function employeePresenceHistory(id){
-        window.open(('{{ url("employeePresenceHarianHistory") }}'+"/"+id), '_blank');
-    }
-    function slipGajiPegawai(id){
-        alert("belum");
-        var mapForm = document.createElement("form");
-        mapForm.target = "_blank";    
-        mapForm.method = "POST";
-        mapForm.action = "{{url("slipGajiKaryawan")}}";
-
-        var mapInput = document.createElement("input");
-        mapInput.type = "text";
-        mapInput.name = "empid";
-        mapInput.value = id;
-
-        mapForm.appendChild(mapInput);
-
-        document.body.appendChild(mapForm);
-        mapForm.submit();
-    }
-    function employeePaperList(id){
-        window.open(('{{ url("employeePaperList") }}'+"/"+id), '_self');
-    }
-    function editEmployee(id){
-        window.open(('{{ url("employeeEdit") }}'+"/"+id), '_self');
-    }
-    function editPassword(id){
-        window.open(('{{ url("passedit") }}'+"/"+id), '_self');
-    }
-    function editPemetaan(id){
-        window.open(('{{ url("employeeMappingEdit") }}'+"/"+id), '_self');
-    }
-    function historyPemetaan(id){
-        window.open(('{{ url("employeeMappingHistory") }}'+"/"+id), '_self');
-    }
-
-    function tambahTransaksi(){
-        window.open(('{{ url("employeeAdd") }}'), '_self');
-    }
-
-    function barcodeList(){
-        window.open(('{{ url("employeeBarcodeList") }}'), '_self');
-    }
 
     function myFunction(){
         $('#datatable').DataTable({
-            ajax:'{{ url("getAllEmployees") }}',
+            ajax:'{{ url("getEmployeesBarcode") }}',
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -85,8 +42,8 @@
                 {data: 'username', name: 'username'},
                 {data: 'gender', name: 'gender'},
                 {data: 'jenisPenggajian', name: 'jenisPenggajian'},
-                {data: 'statusKepegawaian', name: 'statusKepegawaian'},
-                {data: 'action', name: 'action', orderable: false, searchable: false}
+                {data: 'nik', name: 'nip'},
+                {data: 'nipBarcode', name: 'nipBarcode'}
                 ]
         });
     }
@@ -120,16 +77,9 @@
                             <li class="breadcrumb-item">
                                 <a class="white-text" href="{{ url('/home') }}">Home</a>
                             </li>
-                            <li class="breadcrumb-item active">Pegawai</li>
+                            <li class="breadcrumb-item active">Barcode Pegawai</li>
                         </ol>
                     </nav>
-                </div>
-                <div class="col-md-6 text-end">
-
-                    <button onclick="barcodeList()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Employee Barcode List"><i class="fas fa-barcode" style="font-size:20px"></i>
-                    </button>
-                    <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Pegawai"><i class="fa fa-plus" style="font-size:20px"></i>
-                    </button>
                 </div>
             </div>
             <div class="modal-body">
@@ -142,8 +92,8 @@
                                 <th>Username</th>
                                 <th>JK</th>
                                 <th>Karyawan</th>
-                                <th>Bekerja</th>
-                                <th>Aksi</th>
+                                <th>NIK</th>
+                                <th>Barcode</th>
                             </tr>
                         </thead>
                         <tbody>

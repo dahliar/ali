@@ -429,6 +429,7 @@ Route::GET('getDailySalariesDetail',[SalaryController::class, 'getDailySalariesD
 */
 
 Route::GET('employeeList',[EmployeeController::class, 'index'])->name('employeeList')->middleware('auth', 'authorized');
+Route::GET('employeeBarcodeList',[EmployeeController::class, 'indexBarcodeList'])->middleware('auth', 'authorized');
 
 
 Route::GET('employeeAdd',[EmployeeController::class, 'create'])->middleware('auth', 'authorized');
@@ -440,6 +441,7 @@ Route::POST('employeeStore',[EmployeeController::class, 'store'])->name('employe
 Route::POST('employeeUpdate',[EmployeeController::class, 'update'])->name('employeeUpdate')->middleware('auth');
 Route::POST('employeeMappingUpdate',[EmployeeController::class, 'updateMapping'])->name('employeeMappingUpdate')->middleware('auth');
 Route::get('getAllEmployees',[EmployeeController::class, 'getAllEmployees'])->middleware('auth');
+Route::get('getEmployeesBarcode',[EmployeeController::class, 'getEmployeesBarcode'])->middleware('auth');
 Route::get('getAllActiveEmployees',[EmployeeController::class, 'getAllActiveEmployees'])->middleware('auth');
 
 

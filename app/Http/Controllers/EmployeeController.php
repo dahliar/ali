@@ -16,6 +16,7 @@ use App\Models\WorkPosition;
 use App\Http\Controllers\AdministrationController;
 use DB;
 use Auth;
+use Milon\Barcode\DNS1D;
 
 use Illuminate\Http\Request;
 
@@ -33,6 +34,10 @@ class EmployeeController extends Controller
     public function index()
     {
         return view('employee.employeeList');
+    }
+    public function indexBarcodeList()
+    {
+        return view('employee.employeeBarcodeList');
     }
     public function index2()
     {
@@ -452,6 +457,47 @@ class EmployeeController extends Controller
             return $html;
         })
         ->rawColumns(['statusKepegawaian', 'action'])
+        ->addIndexColumn()->toJson();
+    }
+
+    public function getEmployeesBarcode(){
+        $query = DB::table('employees as e')
+        ->select(
+            'e.id as id', 
+            'u.name as name', 
+            'e.nik as nik', 
+            'e.phone as phone',
+            DB::raw('
+                (CASE WHEN e.gender="1" THEN "L" WHEN e.gender="2" THEN "P" END) AS gender
+                '),
+            'e.nip as nip', 
+            'u.username as username', 
+            'e.isActive as isActive', 
+            'e.startDate as startDate',
+            'al.name as accessLevel',
+            DB::raw('
+                (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian
+                ')
+        )
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('access_levels as al', 'al.level', '=', 'u.accessLevel')
+        ->where('isActive', '=', 1)
+        ->orderBy('u.name');
+        $query->get();
+
+
+        return datatables()->of($query)
+        ->addColumn('nipBarcode', function ($row) {
+            $html = '';
+            if ($row->isActive==1){
+                $html.='<img src="data:image/png;base64,' . DNS1D::getBarcodePNG($row->nip, 'C128',1,33,array(1,1,1), true) . '" alt="barcode"   />';
+            }
+            return $html;
+        })
+
+        
+
+        ->rawColumns(['action', 'nipBarcode'])
         ->addIndexColumn()->toJson();
     }
 
