@@ -222,6 +222,7 @@ class Presence extends Model
             }
 
             if ($jamKerja > 7){
+                $jamKerja = 7;
                 $jamLembur = $jamKerja - 7;
             }
         }
