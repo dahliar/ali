@@ -248,28 +248,23 @@ class StockController extends Controller
             'cu.packagingDate as packagingDate', 
             'cu.storageDate as storageDate', 
             'cu.loadingDate as loadingDate',
-            'sp.name as speciesName',
-            'i.name as itemName'
+            'vid.speciesName as speciesName',
+            'vid.itemName as itemName'
         )
         ->join('code_usages as cu', 'c.id', '=', 'cu.codeId')
-        ->join('items as i', 'c.itemId', '=', 'i.id')
-        ->join('sizes as s', 'i.sizeId', '=', 's.id')
-        ->join('species as sp', 'sp.id', '=', 's.speciesId')
+        ->join('view_item_details as vid', 'c.itemId', '=', 'vid.itemId')
         ->whereBetween('c.productionDate', [$request->start, $request->end]);
 
         if ($request->status >= 0){
             $query=$query->where('cu.status', '=', $request->status);
         }
-        if ($request->itemId >= 0){
-            $query=$query->where('i.id', '=', $request->itemId);
-        }
         if ($request->speciesId >= 0){
-            $query=$query->where('s.speciesId', '=', $request->speciesId);
+            $query=$query->where('vid.speciesId', '=', $request->speciesId);
+            if ($request->itemId >= 0){
+                $query=$query->where('vid.itemId', '=', $request->itemId);
+            }
         }
-
         $query->orderBy('cu.fullcode')->get();
-
-        //dd($query);
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
