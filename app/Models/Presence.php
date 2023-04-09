@@ -199,6 +199,10 @@ class Presence extends Model
                 $menitKerja = $masuk->diffInMinutes($keluar); 
                 $jamLembur = $masuk->diffInHours($keluar); 
 
+                if($keluar->gte(Carbon::parse($dateAcuan." 18:00:00"))){
+                    $jamLembur=$jamLembur-1;
+                }
+
                 $selisihMenitSisa = $menitKerja - ($jamLembur * 60);
                 if ($selisihMenitSisa >= 30){
                     $jamLembur+=1;
@@ -224,6 +228,9 @@ class Presence extends Model
             if ($jamKerja > 7){
                 $jamKerja = 7;
                 $jamLembur = $jamKerja - 7;
+            }
+            if($keluar->gte(Carbon::parse($dateAcuan." 18:00:00"))){
+                $jamLembur=$jamLembur-1;
             }
         }
 

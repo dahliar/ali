@@ -127,13 +127,14 @@
             destroy:true,
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
-                {   "width": "35%", "targets":  [1], "className": "text-left"   },
-                {   "width": "10%", "targets":  [2], "className": "text-center" },
-                {   "width": "10%", "targets":  [3], "className": "text-end" },
-                {   "width": "10%", "targets":  [4], "className": "text-end" },
+                {   "width": "15%", "targets":  [1], "className": "text-left"   },
+                {   "width": "30%", "targets":  [2], "className": "text-left"   },
+                {   "width": "10%", "targets":  [3], "className": "text-left"   },
+                {   "width": "5%", "targets":  [4], "className": "text-center" },
                 {   "width": "10%", "targets":  [5], "className": "text-end" },
                 {   "width": "10%", "targets":  [6], "className": "text-end" },
-                {   "width": "10%", "targets":  [7], "className": "text-center" }
+                {   "width": "10%", "targets":  [7], "className": "text-end" },
+                {   "width": "5%", "targets":  [8], "className": "text-center" }
                 ], 
             columns: [
             {
@@ -142,10 +143,11 @@
                     return meta.row + 1;
                 }
             },
+            {data: 'speciesName', name: 'speciesName'},
+            {data: 'itemName', name: 'itemName'},
             {data: 'fullcode', name: 'fullcode'},
             {data: 'status', name: 'status'},
             {data: 'productionDate', name: 'productionDate'},
-            {data: 'packagingDate', name: 'packagingDate'},
             {data: 'storageDate', name: 'storageDate'},
             {data: 'loadingDate', name: 'loadingDate'},
             {data: 'action', name: 'action'}
@@ -277,10 +279,11 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Kode Barcode</th>
+                            <th>Species</th>
+                            <th>Item</th>
+                            <th>Barcode</th>
                             <th>Status</th>
                             <th>Produksi</th>
-                            <th>Packing</th>
                             <th>Storing</th>
                             <th>Loading</th>
                             <th>Aksi</th>

@@ -236,6 +236,7 @@ class StockController extends Controller
 
 
     public function getAllBarcodeData(Request $request){
+        //dd($request);
         $query = DB::table('codes as c')
         ->select(
             'c.id as id', 
@@ -246,18 +247,29 @@ class StockController extends Controller
                 WHEN cu.status ="1" then "Stored" WHEN cu.status ="2" then "Loaded" END) AS status'),
             'cu.packagingDate as packagingDate', 
             'cu.storageDate as storageDate', 
-            'cu.loadingDate as loadingDate'
+            'cu.loadingDate as loadingDate',
+            'sp.name as speciesName',
+            'i.name as itemName'
         )
         ->join('code_usages as cu', 'c.id', '=', 'cu.codeId')
-        ->where('c.itemId', '=', $request->itemId)
-        ->where('c.itemId', '=', $request->itemId)
+        ->join('items as i', 'c.itemId', '=', 'i.id')
+        ->join('sizes as s', 'i.sizeId', '=', 's.id')
+        ->join('species as sp', 'sp.id', '=', 's.speciesId')
         ->whereBetween('c.productionDate', [$request->start, $request->end]);
 
         if ($request->status >= 0){
             $query=$query->where('cu.status', '=', $request->status);
         }
+        if ($request->itemId >= 0){
+            $query=$query->where('i.id', '=', $request->itemId);
+        }
+        if ($request->speciesId >= 0){
+            $query=$query->where('s.speciesId', '=', $request->speciesId);
+        }
 
         $query->orderBy('cu.fullcode')->get();
+
+        //dd($query);
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
