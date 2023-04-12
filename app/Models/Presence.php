@@ -15,91 +15,125 @@ class Presence extends Model
     use HasFactory;
     protected $guarded = [];
 
-    function presenceCalculator(Collection $collection, $isLembur){
-        $a=0;
-        $text = "";
-        foreach ($collection as $row) 
-        {
-            if($row[11]==1){
-                try{ 
-                    $start = \Carbon\Carbon::parse($row[7].' '.$row[8].'.00');
-                    $end = \Carbon\Carbon::parse($row[9].' '.$row[10].'.00');
-                    $shift = $row[12];
-                    if($end->gte($start)){
-                        $this->simpanPresenceTunggal($row[0], $start, $end, $isLembur, $shift);
+    /*
+        A. Alur perhitungan presensi Import Excell
+            1. presenceCalculator(Collection $collection, $isLembur)
+            2. simpanPresenceTunggal($empid, $start, $end, $isLembur, $shift)
+            3. Ke D
+
+        B. Alur perhitungan presensi input satuan
+            1. storePresenceHarianEmployee($empid, $start, $end, $isLembur, $shift)
+            2. simpanPresenceTunggal($empid, $start, $end, $isLembur, $shift)
+            3. Ke D
+        
+        C. Alur presensi scan, update dan simpan data
+            1. simpanPresenceScan($empid, $start, $end, $presenceId, $shift)
+            2. ke D
+
+        D. Simpan presensi tunggal
+            1. Ramadhan is NO   : hitungPresenceHarian($start, $end, $shift)
+            2. Ramadhan is YES  : hitungPresenceHarianRamadhan($start, $end, $shift)
+
+            3. getMasukKerjaDanShift($start, $dateAcuan)
+    */
+
+
+
+
+
+            function presenceCalculator(Collection $collection, $isLembur){
+                $a=0;
+                $text = "";
+                foreach ($collection as $row) 
+                {
+                    if($row[11]==1){
+                        try{ 
+                            $start = \Carbon\Carbon::parse($row[7].' '.$row[8].'.00');
+                            $end = \Carbon\Carbon::parse($row[9].' '.$row[10].'.00');
+                            $shift = $row[12];
+                            if($end->gte($start)){
+                                $this->simpanPresenceTunggal($row[0], $start, $end, $isLembur, $shift);
+                            }
+                        }
+                        catch(\Exception $e){
+                            $text.=$row[7].' '.$row[8]." - ".$row[1].", ";
+                        }
                     }
                 }
-                catch(\Exception $e){
-                    $text.=$row[7].' '.$row[8]." - ".$row[1].", ";
-                }
+
+                return $text;
             }
-        }
 
-        return $text;
-    }
+            function storePresenceHarianEmployee($empid, $start, $end, $isLembur, $shift){
+                $start = \Carbon\Carbon::parse($start);
+                $end = \Carbon\Carbon::parse($end);
+                $retValue="";
 
-    function storePresenceHarianEmployee($empid, $start, $end, $isLembur, $shift){
-        $start = \Carbon\Carbon::parse($start);
-        $end = \Carbon\Carbon::parse($end);
-        $retValue="";
+                if($end->gte($start)){
+                    $this->simpanPresenceTunggal($empid, $start, $end, $isLembur, $shift);
+                    $retValue = [
+                        'message'       => "Data berhasil disimpan ",
+                        'isError'       => "0"
+                    ];
 
-        if($end->gte($start)){
-            $this->simpanPresenceTunggal($empid, $start, $end, $isLembur, $shift);
-            $retValue = [
-                'message'       => "Data berhasil disimpan ",
-                'isError'       => "0"
-            ];
+                }else{
+                    $retValue = [
+                        'message'       => "Tanggal dan jam pulang harus lebih dari tanggal dan jam masuk",
+                        'isError'       => "1"
+                    ];
+                }
+                return $retValue;        
+            }
 
-        }else{
-            $retValue = [
-                'message'       => "Tanggal dan jam pulang harus lebih dari tanggal dan jam masuk",
-                'isError'       => "1"
-            ];
-        }
-        return $retValue;        
-    }
+            function getMasukKerjaDanShift($start, $dateAcuan){
+                $masuk=null;
 
-    function getMasukKerjaDanShift($start, $dateAcuan){
-        $masuk=null;
+                if ($start->lte(Carbon::parse($dateAcuan." 15:00:00"))){
+                    if ($start->lte(Carbon::parse($dateAcuan." 08:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 08:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 09:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 09:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 10:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 10:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 11:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 11:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 12:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 12:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 13:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 13:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 14:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 14:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 15:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 15:00:00");
+                    } 
+                }
+                else {
+                    if ($start->lte(Carbon::parse($dateAcuan." 15:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 15:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 16:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 16:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 17:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 17:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 18:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 18:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 19:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 19:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 20:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 20:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 21:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 21:00:00");
+                    } else if ($start->lte(Carbon::parse($dateAcuan." 22:15:00"))){
+                        $masuk=Carbon::parse($dateAcuan." 22:00:00");
+                    } else {
+                        $masuk=$start;
+                    }
+                }
 
-        if ($start->lte(Carbon::parse($dateAcuan." 08:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 08:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 09:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 09:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 10:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 10:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 11:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 11:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 12:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 12:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 13:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 13:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 14:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 14:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 15:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 15:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 16:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 16:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 17:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 17:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 18:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 18:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 19:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 19:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 20:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 20:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 21:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 21:00:00");
-        } else if ($start->lte(Carbon::parse($dateAcuan." 22:15:00"))){
-            $masuk=Carbon::parse($dateAcuan." 22:00:00");
-        } else {
-            $masuk=$start;
-        }
+                return $masuk;
 
-        return $masuk;
+            }
 
-    }
-
+/*
     function OLDhitungPresenceHarianRamadhan($start, $end, $shift){
         //hitung jam kerja
         $dateAcuan = $start->toDateString();
@@ -157,6 +191,7 @@ class Presence extends Model
         return $dataJam;
 
     }
+    */
     function hitungPresenceHarianRamadhan($start, $end, $shift){
         $jamKerja=0;
         $jamLembur=0;
@@ -199,10 +234,6 @@ class Presence extends Model
                 $menitKerja = $masuk->diffInMinutes($keluar); 
                 $jamLembur = $masuk->diffInHours($keluar); 
 
-                if($keluar->gte(Carbon::parse($dateAcuan." 18:00:00"))){
-                    $jamLembur=$jamLembur-1;
-                }
-
                 $selisihMenitSisa = $menitKerja - ($jamLembur * 60);
                 if ($selisihMenitSisa >= 30){
                     $jamLembur+=1;
@@ -224,13 +255,13 @@ class Presence extends Model
             if ($selisihMenitSisa > 30){
                 $jamKerja+=1;
             }
+            if ($start->lte(Carbon::parse($dateAcuan." 18:00:00")) and $end->gte(Carbon::parse($dateAcuan." 19:00:00"))) {
+                $jamKerja-=1;
+            }
 
             if ($jamKerja > 7){
-                $jamKerja = 7;
                 $jamLembur = $jamKerja - 7;
-            }
-            if($keluar->gte(Carbon::parse($dateAcuan." 18:00:00"))){
-                $jamLembur=$jamLembur-1;
+                $jamKerja = 7;
             }
         }
 
@@ -308,6 +339,7 @@ class Presence extends Model
             }
 
             if ($jamKerja > 7){
+                $jamKerja = 7;
                 $jamLembur = $jamKerja - 7;
             }
         }
@@ -320,7 +352,6 @@ class Presence extends Model
         return $dataJam;
 
     }
-
 
     function simpanPresenceTunggal($empid, $start, $end, $isLembur, $shift){
         $ramadhanStart = Carbon::parse("2023-03-22 00:00:00"); 
