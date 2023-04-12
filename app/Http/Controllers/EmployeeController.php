@@ -283,6 +283,7 @@ class EmployeeController extends Controller
         $request->validate([
             'email'                 => ['email'],
             'phone'                 => ['required'],
+            'fullname'              => ['required', 'string'],
             'accessLevel'           => ['required', 'gte:curUserAccessLevel'],
             'address'               => ['required', 'string'],
             'gender'                => ['required', 'integer', 'gt:0'],
@@ -300,7 +301,7 @@ class EmployeeController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $userUpdate = $this->employee->userUpdate($request->accessLevel, $request->email, $request->userid);
+            $userUpdate = $this->employee->userUpdate($request->fullname, $request->accessLevel, $request->email, $request->userid);
             $employeeUpdate = $this->employee->employeeUpdate(
                 $request->phone, 
                 $request->address,
@@ -322,7 +323,7 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             DB::rollback();
             return redirect('employeeList')
-            ->with('status','Data gagal diperbaharui');
+            ->with('status',$e.' Data gagal diperbaharui');
         }
 
     }

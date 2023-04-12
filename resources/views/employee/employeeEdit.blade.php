@@ -83,7 +83,7 @@
                                 <label class="form-label">Nama*</label>
                             </div>
                             <div class="col-md-8">
-                                <input id="name" name="name" type="text" class="form-control" required autocomplete="off" value="{{$choosenUser->name}}" disabled="true">
+                                <input id="fullname" name="fullname" type="text" class="form-control" required autocomplete="off" value="{{old('fullname', $choosenUser->name)}}">
                                 <input id="userid" name="userid" type="hidden" value="{{$choosenUser->id}}" readonly>
                                 <input id="employeeId" name="employeeId" type="hidden" value="{{$employee->id}}" readonly>
                             </div>
