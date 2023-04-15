@@ -441,7 +441,7 @@
 					var view = new google.visualization.DataView(chartdata);
 					var options = {
 						pieHole: 0.4,
-						title: 'Transaksi jual tahun 2002',
+						title: 'Transaksi jual tahun {{$tahun}}',
 					};
 
 					var chart = new google.visualization.PieChart(document.getElementById('chartTransaksi'));
@@ -563,7 +563,7 @@
 					}
 					var options = {
 						chart: {
-							title: 'Transaksi Penjualan tahun 2022',
+							title: 'Transaksi Penjualan tahun {{$tahun}}',
 							subtitle: 'transaksi satuan USD'
 						},
 						height: 500,
@@ -604,7 +604,7 @@
 					}
 					var options = {
 						chart: {
-							title: 'Transaksi Penjualan tahun 2022',
+							title: 'Transaksi Penjualan tahun {{$tahun}}',
 							subtitle: 'transaksi satuan Rupiah'
 						},
 						height: 500,
@@ -645,7 +645,7 @@
 					}
 					var options = {
 						chart: {
-							title: 'Transaksi Pembelian tahun 2022',
+							title: 'Transaksi Pembelian tahun {{$tahun}}',
 							subtitle: 'transaksi satuan Rupiah'
 						},
 						height: 500,
@@ -703,7 +703,7 @@
 				</div>
 			</div>
 			<div class="card card-body">
-				<span class="white-text"><h2>Transaksi Penjualan tahun 2022</h2></span>
+				<span class="white-text"><h2>Transaksi Penjualan tahun {{$tahun}}</h2></span>
 				<div class="row">
 					<div class="col-md-6">
 						<div id="chartTransactionUSDLine"></div>
@@ -727,7 +727,7 @@
 				</div>
 			</div>
 			<div class="card card-body">
-				<span class="white-text"><h2>Transaksi Pembelian tahun 2022</h2></span>
+				<span class="white-text"><h2>Transaksi Pembelian tahun {{$tahun}}</h2></span>
 				<div class="row">
 					<div class="col-md-6">
 						<div id="drawPurchaseRupiahLine"></div>
