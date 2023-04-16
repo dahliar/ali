@@ -109,11 +109,26 @@
                     <div class="col-md-3 text-end">
                         <span class="label">Tanggal Awal</span>
                     </div>
-                    <div class="col-md-6">
-                        <input type="date" id="start" name="start" class="form-control text-end" value="{{old('start', date('Y-m-d', strtotime('-1 week')))}}">
+                    <div class="col-md-3">
+                        <input type="date" id="startDate" name="startDate" class="form-control text-end" value="{{old('startDate')}}">
                     </div>
                 </div>
-
+                <div class="row form-group">
+                    <div class="col-md-3 text-end">
+                        <span class="label">Tanggal Akhir</span>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" id="endDate" name="endDate" class="form-control text-end" value="{{old('endDate')}}">
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-3 text-end">
+                        <span class="label">Tanggal penggajian</span>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="date" id="payDate" name="payDate" class="form-control text-end" value="{{old('payDate')}}">
+                    </div>
+                </div>
             </div>                   
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btn-submit" name="btn-submit" onclick="myFunction()">Simpan</button>
@@ -127,12 +142,11 @@
         <ol>
             <li>Harian</li>
             <li>Borongan</li>
-            <!--<li>Lembur Pegawai Bulanan</li>-->
             <li>Honorarium</li>
         </ol>
-        <li>Pilih tanggal batas awal dan batas akhir</li>
-        <li>Pastikan tidak ada tanggal yang terlewat dari batas sebelumnya</li>
-        <li>Jika sudah selesai, cek pada setiap laman penggajian untuk melakukan pencetakan slip penggajian dan menandai jika sudah dilakukan pembayaran</li>
+        <li>Pilih tanggal awal proses generate, tanggal tersebut akan masuk kedalam perhitungan.</li>
+        <li>Pilih tanggal akhir proses generate, tanggal tersebut akan masuk kedalam perhitungan.</li>
+        <li>Pilih pembayaran minggu tersebut.</li>
     </ol>
 </body>
 @endsection

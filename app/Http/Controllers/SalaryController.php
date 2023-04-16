@@ -74,7 +74,7 @@ class SalaryController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function storeBasisStartDate(Request $request)
     {
         $request->validate(
             [
@@ -117,6 +117,53 @@ class SalaryController extends Controller
         $harian = $this->salaryHarianGenerate($start, $end, $pid, 2);
         $borongan = $this->salaryBoronganGenerate($start, $end, $pid);
         $honorarium = $this->honorariumGenerate($start, $end, $pid, 2);
+        $val = array($harian, $borongan, $honorarium);
+        return redirect()->route('generateGaji')->with('val', $val);        
+    }
+
+    public function store(Request $request)
+    {
+        /*
+        Kode    : 16 April 2023.
+        Fungsi  :   melakukan generate gaji berbasis range tanggal awal-akhir yang akan digenerate
+        Input   :   tanggal awal, tanggal akhir, tanggal  
+        */
+       // dd($request);
+        $request->validate(
+            [
+                'startDate' => 'required|date|before:today',
+                'endDate' => 'required|date|before_or_equal:today|after:startDate',
+                'payDate' => 'required|date|after:endDate'
+            ]
+        );
+        $startDate=Carbon::parse($request->startDate);
+        $endDate=Carbon::parse($request->endDate);
+        $payDate=Carbon::parse($request->payDate);
+
+        $data = [
+            'payDate' => $payDate, 
+            'jenis' => 2, 
+            'creator' =>auth()->user()->id
+        ];
+
+        $payrollExist=DB::table('payrolls as p')
+        ->select(
+            DB::raw('max(p.id) as pid'),
+        )
+        ->where('payDate', '=', $payDate)
+        ->where('p.jenis', '=', 2)
+        ->first();
+
+        $pid="";
+        if($payrollExist->pid == null){
+            $pid = DB::table('payrolls')->insertGetId($data);
+        } else{
+            $pid = $payrollExist->pid;
+        }
+
+        $harian = $this->salaryHarianGenerate($startDate, $endDate, $pid, 2);
+        $borongan = $this->salaryBoronganGenerate($startDate, $endDate, $pid);
+        $honorarium = $this->honorariumGenerate($startDate, $endDate, $pid, 2);
         $val = array($harian, $borongan, $honorarium);
         return redirect()->route('generateGaji')->with('val', $val);        
     }

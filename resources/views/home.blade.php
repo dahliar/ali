@@ -424,9 +424,6 @@
 					chart.draw(view, options);
 				}
 
-
-
-
 				function drawTransactions() {
 					var data = [];
 					var header=["Transaksi", "Jumlah"];
