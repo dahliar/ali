@@ -288,13 +288,6 @@
 						</li>
 					</ul>
 				</li>
-
-
-
-
-
-
-
 				@if (Session::get('accessLevel') <= 30)
 				<li class="dropdown dropend">
 					<a class="dropdown-item dropdown-toggle" href="#" id="navbarPenggajian" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

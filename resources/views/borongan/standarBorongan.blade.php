@@ -95,7 +95,7 @@
                 </nav>
             </div>
             <div class="col-md-6 text-end">
-                <button onclick="window.location='{{ url('standarBoronganTambah')}}'" target="_blank" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Penambahan barang via scan barcode">
+                <button onclick="window.location='{{ url('standarBoronganTambah')}}'" target="_blank" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Standar Gaji Borongan">
                     <i class="fa fa-plus"></i> Standar Harga
                 </button>
             </div>  
