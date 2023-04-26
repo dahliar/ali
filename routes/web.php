@@ -212,6 +212,7 @@ Route::get('getFreezingsForPacking/{sizeId}/{gradeId}/{weightbase}/{packingId}/{
 
 
 
+
 //Approval
 Route::get('itemStockApprovalPenambahan',[StoreController::class, 'indexApprovalPenambahan'])->middleware(['auth', 'authorized']);
 Route::get('itemStockApprovalPengurangan',[StoreController::class, 'indexApprovalPengurangan'])->middleware(['auth', 'authorized']);
@@ -412,6 +413,24 @@ Route::GET('getBoronganSalariesForPrint/{borongan}',[SalaryController::class, 'g
 Route::GET('checkCetakGajiPegawaiBorongan/{borongan}',[SalaryController::class, 'checkCetakGajiPegawaiBorongan'])->middleware('auth', 'authorized');
 Route::POST('markBoronganIsPaid',[SalaryController::class, 'markBoronganIsPaid'])->middleware('auth');
 Route::GET('printSalaryBoronganList/{borongan}',[SalaryController::class, 'printSalaryBoronganList'])->middleware('auth', 'authorized');
+
+
+Route::GET('standarBorongan',[BoronganController::class, 'indexStandarBorongan'])->middleware('auth', 'authorized');
+Route::GET('standarBoronganTambah',[BoronganController::class, 'standarBoronganAdd'])->middleware('auth', 'authorized');
+Route::GET('standarBoronganEdit/{id}',[BoronganController::class, 'standarBoronganEdit'])->middleware('auth', 'authorized');
+Route::GET('standarBoronganApproval',[BoronganController::class, 'standarBoronganApproval'])->middleware('auth', 'authorized');
+Route::POST('standarBoronganStore',[BoronganController::class, 'standarBoronganStore'])->middleware('auth');
+Route::POST('standarBoronganUpdate',[BoronganController::class, 'standarBoronganUpdate'])->middleware('auth');
+
+Route::GET('getBoronganStandardList/{jenis}',[BoronganController::class, 'getBoronganStandardList'])->middleware('auth');
+Route::GET('getStandarBoronganPrice/{jenisId}',[BoronganController::class, 'getStandarBoronganPrice'])->middleware('auth');
+Route::GET('getStandarBoronganApproval',[BoronganController::class, 'getStandarBoronganApproval'])->middleware('auth');
+Route::post('approveStandarChange',[BoronganController::class, 'approveStandarChange'])->middleware(['auth']);
+
+
+
+
+
 
 //Penggajian Honorarium
 Route::GET('salaryHonorariumList',[SalaryController::class, 'indexHonorarium'])->middleware('auth', 'authorized');

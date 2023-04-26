@@ -273,6 +273,28 @@
 				<li class="dropdown dropend">
 					<a class="dropdown-item" href="{{ url('speciesList')}}"><i class="fas fa-fish"></i> Species</a>
 				</li>
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarPenggajian" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-wallet"></i> Penggajian
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarPenggajian">
+						<li>
+							<a class="dropdown-item" href="{{ url('standarBorongan')}}"><i class="fas fa-folder-open"></i> Standar Borongan
+							</a>
+							<a class="dropdown-item" href="{{ url('standarBoronganApproval')}}"><i class="fas fa-folder-open"></i> Approval Standar Borongan
+							</a>
+
+
+						</li>
+					</ul>
+				</li>
+
+
+
+
+
+
+
 				@if (Session::get('accessLevel') <= 30)
 				<li class="dropdown dropend">
 					<a class="dropdown-item dropdown-toggle" href="#" id="navbarPenggajian" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

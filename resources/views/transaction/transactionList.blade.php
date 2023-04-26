@@ -155,9 +155,7 @@
                     <button onclick="window.location='{{ url('scanTransactionList')}}'" target="_blank" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Penambahan barang via scan barcode">
                         <i class="fa fa-plus"></i> Scan Barcode
                     </button>
-                </div>
-
-                
+                </div>                
             </div>
         </div>
         <div class="card card-header">
