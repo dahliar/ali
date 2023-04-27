@@ -484,6 +484,7 @@ class BoronganController extends Controller
         ->join('borongan_types as bt', 'bt.id', '=', 'bsh.jenis')
         ->join('users as u', 'u.id', '=', 'bsh.createdBy')
         ->where('bsh.isApproved', '=', 0)
+        ->whereDate('bsh.created_at', '>=', now()->subDays(7)->setTime(0, 0, 0)->toDateTimeString())
         ->orderBy('bsh.created_at')
         ->get(); 
 
