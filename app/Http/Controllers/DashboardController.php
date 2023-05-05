@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
 use App\Models\Species;
+use App\Models\Company;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Auth;
@@ -632,18 +634,19 @@ class DashboardController extends Controller
     }
 
     public function rekapitulasiPembelianPerBulan(){
-        return view('dashboard.rekapitulasiPembelianPerBulan');
+        $companies = Company::all();
+        return view('dashboard.rekapitulasiPembelianPerBulan', compact('companies'));
     }
     public function getRekapitulasiPembelianPerBulan(Request $request){
         $request->validate(
             [
-                'tahun'    => 'required|gt:0',
-                'bulan'    => 'required|gt:0'
+                'bulanTahun'    => 'required|before_or_equal:now',
             ],[
-                'tahun.*'  => 'Pilih tahun',
-                'bulan.*'  => 'Pilih bulan'
+                'bulanTahun.required'  => 'Pilih bulan dan tahun dulu',
+                'bulan.before_or_equal'  => 'Maksimal bulan berjalan'
             ]
         );
+        $tanggal = \Carbon\Carbon::create($request->bulanTahun);
 
         $payroll = DB::table('purchases as p');
         if($request->opsi == '1'){
@@ -663,8 +666,8 @@ class DashboardController extends Controller
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
             ->where('p.status', '=', 2)
-            ->whereMonth('p.finishedDate', $request->bulan)
-            ->whereYear('p.finishedDate', $request->tahun)
+            ->whereMonth('p.finishedDate', $tanggal->month)
+            ->whereYear('p.finishedDate', $tanggal->year)
             ->orderBy('p.finishedDate')
             ->orderBy('p.purchasingNum', 'asc');
         } else if($request->opsi == '2'){
@@ -681,24 +684,32 @@ class DashboardController extends Controller
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
             ->where('p.status', '=', 2)
-            ->whereMonth('p.finishedDate', $request->bulan)
-            ->whereYear('p.finishedDate', $request->tahun)
+            ->whereMonth('p.finishedDate', $tanggal->month)
+            ->whereYear('p.finishedDate', $tanggal->year)
             ->groupBy("c.id")
             ->orderBy('p.finishedDate')
             ->orderBy('c.name');
         }
+
+        if ($request->company > 0){
+            $payroll=$payroll->where('c.id', '=', $request->company);
+        }
         $payroll = $payroll->get();
 
-        $tahun = $request->tahun;
-        $bulan = $request->bulan;
         $opsi = $request->opsi;
 
-        return view('dashboard.rekapitulasiPembelianPerBulan', compact('opsi','tahun','bulan', 'payroll'));
+        $bulanTahun = $request->bulanTahun;
+        $companies = Company::all();
+        $companyChoosen = $request->company;
+
+        return view('dashboard.rekapitulasiPembelianPerBulan', compact('opsi','bulanTahun', 'payroll', 'companies', 'companyChoosen'));
     }
 
     public function cetakRekapPembelianPerBulan(Request $request){
+        $tanggal = \Carbon\Carbon::create($request->bulanTahun);
+
         $bulan="";
-        switch($request->bulan){
+        switch($tanggal->month){
             case 1 : $bulan="Januari";break;
             case 2 : $bulan="Februari";break;
             case 3 : $bulan="Maret";break;
@@ -712,7 +723,6 @@ class DashboardController extends Controller
             case 11 : $bulan="November";break;
             case 12 : $bulan="Desember";break;
         }
-
         $payroll = DB::table('purchases as p');
 
         if($request->opsi == '1'){
@@ -731,8 +741,8 @@ class DashboardController extends Controller
                 )
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
-            ->whereMonth('p.finishedDate', $request->bulan)
-            ->whereYear('p.finishedDate', $request->tahun)
+            ->whereMonth('p.finishedDate', $tanggal->month)
+            ->whereYear('p.finishedDate', $tanggal->year)
             ->where('p.status', '=', 2)
             ->orderBy('p.finishedDate')
             ->orderBy('p.purchasingNum', 'asc');
@@ -749,15 +759,18 @@ class DashboardController extends Controller
                 )
             )
             ->join('companies as c', 'p.companyId', '=', 'c.id')
-            ->whereMonth('p.finishedDate', $request->bulan)
-            ->whereYear('p.finishedDate', $request->tahun)
+            ->whereMonth('p.finishedDate', $tanggal->month)
+            ->whereYear('p.finishedDate', $tanggal->year)
             ->where('p.status', '=', 2)
             ->groupBy("c.id")
             ->orderBy('p.finishedDate')
             ->orderBy('c.name');
         }
+        if ($request->company > 0){
+            $payroll=$payroll->where('c.id', '=', $request->company);
+        }
         $payroll = $payroll->get();
-        $monthYear = $bulan.' '.$request->tahun;
+        $monthYear = $bulan.' '.$tanggal->year;
         $opsi = $request->opsi;
 
         //return view('invoice.rekapPembelianPerBulan', compact('opsi','monthYear', 'payroll'));
