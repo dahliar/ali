@@ -547,17 +547,16 @@ class DashboardController extends Controller
         return view('dashboard.rekapitulasiGajiPerBulan');
     }
     public function getRekapitulasiGajiPerBulan(Request $request){
-
-        //dd($request);
         $request->validate(
             [
-                'tahun'    => 'required|gt:0',
-                'bulan'    => 'required|gt:0'
+                'bulanTahun'    => 'required|before_or_equal:now',
             ],[
-                'tahun.*'  => 'Pilih tahun',
-                'bulan.*'  => 'Pilih bulan'
+                'bulanTahun.required'  => 'Pilih bulan dan tahun dulu',
+                'bulan.before_or_equal'  => 'Maksimal bulan berjalan'
             ]
         );
+        $tanggal = \Carbon\Carbon::create($request->bulanTahun);
+
 
         $payroll = DB::table('detail_payrolls as dp')
         ->select(
@@ -571,21 +570,24 @@ class DashboardController extends Controller
         ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
         ->join('employees as e', 'e.id', '=', 'dp.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->whereMonth('p.payDate', $request->bulan)
-        ->whereYear('p.payDate', $request->tahun)
+        ->whereMonth('p.payDate', $tanggal->month)
+        ->whereYear('p.payDate', $tanggal->year)
         ->groupBy('dp.employeeId')
         ->orderBy('u.name')
         ->get();
 
-        $tahun = $request->tahun;
-        $bulan = $request->bulan;
+        $tahun = $tanggal->month;
+        $bulan = $tanggal->year;
+        $bulanTahun = $request->bulanTahun;
 
-        return view('dashboard.rekapitulasiGajiPerBulan', compact('tahun','bulan', 'payroll'));
+        return view('dashboard.rekapitulasiGajiPerBulan', compact('bulanTahun', 'payroll'));
     }
 
     public function cetakRekapGajiBulanan(Request $request){
+        $tanggal = \Carbon\Carbon::create($request->bulanTahun);
+
         $bulan="";
-        switch($request->bulan){
+        switch($tanggal->month){
             case 1 : $bulan="Januari";break;
             case 2 : $bulan="Februari";break;
             case 3 : $bulan="Maret";break;
@@ -612,17 +614,14 @@ class DashboardController extends Controller
         ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
         ->join('employees as e', 'e.id', '=', 'dp.employeeId')
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->whereMonth('p.payDate', $request->bulan)
-        ->whereYear('p.payDate', $request->tahun)
+        ->whereMonth('p.payDate', $tanggal->month)
+        ->whereYear('p.payDate', $tanggal->year)
         ->orderBy('u.name')
         ->groupBy('dp.employeeId')
         ->get();
 
 
-        $monthYear = $bulan.' '.$request->tahun;
-
-        //return view('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'));
-
+        $monthYear = $bulan.' '.$tanggal->year;
 
         $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll'))->setPaper('a4', 'landscape');
         $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';

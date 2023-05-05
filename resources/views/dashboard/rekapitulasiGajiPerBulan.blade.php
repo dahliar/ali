@@ -18,31 +18,27 @@
     });
 
     function cetak(){
-        $bulan = document.getElementById("bulan").value;
-        $tahun = document.getElementById("tahun").value;
-        $valBulan = document.getElementById("valBulan").value;
-        $valTahun = document.getElementById("valTahun").value;
+        $bulanTahun = document.getElementById("bulanTahun").value;
+        $valBulanTahun = document.getElementById("valBulanTahun").value;
         
-        if (($bulan=="-1") || ($tahun=="-1")) {
+        if ($bulanTahun=="") {
             Swal.fire(
                 'Pilihan kosong!',
                 "Pilih data dulu",
                 'warning'
                 );
         } else {
-            if (($bulan!=$valBulan) || ($tahun!=$valTahun)){
+            if ($valBulanTahun!=$bulanTahun){
                 Swal.fire(
                     'Terdapat perubahan opsi pilihan.',
                     "Cari data dulu!",
                     'info'
                     );
-
             }
             else {
                 openWindowWithPost('{{ url("cetakRekapGajiBulanan") }}', {
                     '_token': "{{ csrf_token() }}" ,
-                    bulan: $bulan,
-                    tahun: $tahun
+                    bulanTahun: $bulanTahun
                 });
             }
         }
@@ -103,60 +99,13 @@
             <form action="{{url('getRekapitulasiGajiPerBulan')}}" method="get">
                 {{ csrf_field() }}
                 <div class="row form-group">
-                    <div class="col-md-3">
-                        @if(empty($tahun))
-                        <input type="hidden" name="valTahun" id="valTahun" value="-1">
-                        <select id="tahun" name="tahun" class="form-select" >
-                            <option value="-1" selected>--Pilih Tahun--</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                        </select>
+                    <div class="col-md-2">
+                        @if(!empty($bulanTahun))
+                        <input type="month" name="bulanTahun" id="bulanTahun" class="form-control" value={{$bulanTahun}} max="{{date('Y-m')}}">
+                        <input type="hidden" name="valBulanTahun" id="valBulanTahun" value={{$bulanTahun}}>
                         @else
-                        <input type="hidden" name="valTahun" id="valTahun" value="{{$tahun}}">
-
-                        <select id="tahun" name="tahun" class="form-select" >
-                            <option value="-1" selected>--Pilih Tahun--</option>
-                            <option value="2022" @if($tahun == 2022) selected @endif>2022</option>
-                            <option value="2023" @if($tahun == 2023) selected @endif>2023</option>
-                        </select>
-                        @endif
-                    </div>
-                    <div class="col-md-3">
-                        @if(empty($bulan))
-                        <input type="hidden" name="valBulan" id="valBulan" value="-1">
-
-                        <select id="bulan" name="bulan" class="form-select" >
-                            <option value="-1" selected>--Pilih Bulan--</option>
-                            <option value="1">Januari</option>
-                            <option value="2">Februari</option>
-                            <option value="3">Maret</option>
-                            <option value="4">April</option>
-                            <option value="5">Mei</option>
-                            <option value="6">Juni</option>
-                            <option value="7">Juli</option>
-                            <option value="8">Agustus</option>
-                            <option value="9">September</option>
-                            <option value="10">Oktober</option>
-                            <option value="11">November</option>
-                            <option value="12">Desember</option>
-                        </select>
-                        @else
-                        <input type="hidden" name="valBulan" id="valBulan" value="{{$bulan}}">
-                        <select id="bulan" name="bulan" class="form-select" >
-                            <option value="-1" selected>--Pilih Bulan--</option>
-                            <option value="1" @if($bulan == 1) selected @endif>Januari</option>
-                            <option value="2" @if($bulan == 2) selected @endif>Februari</option>
-                            <option value="3" @if($bulan == 3) selected @endif>Maret</option>
-                            <option value="4" @if($bulan == 4) selected @endif>April</option>
-                            <option value="5" @if($bulan == 5) selected @endif>Mei</option>
-                            <option value="6" @if($bulan == 6) selected @endif>Juni</option>
-                            <option value="7" @if($bulan == 7) selected @endif>Juli</option>
-                            <option value="8" @if($bulan == 8) selected @endif>Agustus</option>
-                            <option value="9" @if($bulan == 9) selected @endif>September</option>
-                            <option value="10" @if($bulan == 10) selected @endif>Oktober</option>
-                            <option value="11" @if($bulan == 11) selected @endif>November</option>
-                            <option value="12" @if($bulan == 12) selected @endif>Desember</option>
-                        </select>
+                        <input type="month" name="bulanTahun" id="bulanTahun" class="form-control" max="{{date('Y-m')}}">
+                        <input type="hidden" name="valBulanTahun" id="valBulanTahun" value="0000-00">
                         @endif
                     </div>
                     <div class="col-md-2">
