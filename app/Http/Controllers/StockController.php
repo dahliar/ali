@@ -173,6 +173,63 @@ class StockController extends Controller
         ->with('status','Item berhasil ditambahkan.');
     }
 
+    public function scanStoreBarcodeKeluar(Request $request){
+        //dd($request);
+        $tanggal = Carbon::now()->toDateString();
+
+        $query = DB::table("code_usages as cu")
+        ->where('cu.fullcode', '=', $request->barcode)
+        ->join('codes as c', 'c.id', '=', 'cu.codeId')
+        ->join('view_item_details as vid', 'vid.itemId', '=', 'c.itemId')
+        ->select('vid.name as name', 'cu.status as status', 'vid.itemId as itemId')->first();
+
+        $message = "";
+        $itemId = -1;
+        $itemName = -1;
+
+        if (!$query){
+            $message = "Barcode tidak ditemukan";
+        } else{
+            $itemId = $query->itemId;
+            $itemName = $query->name;
+
+            $updateCU = DB::table('code_usages as cu')
+            ->where('cu.fullcode', '=', $request->barcode);
+            $status = $query->status;
+            $message = "Barcode tidak ditemukan";
+
+
+            switch ($query->status){
+                case 0 : 
+                $message = "Update: Package, Simpan Storage dan Loading";
+                $updateCU->update([
+                    'cu.status' => 2, 
+                    'cu.packagingDate' => $tanggal, 
+                    'cu.storageDate' => $tanggal, 
+                    'cu.loadingDate' => $tanggal, 
+                    'cu.transactionId' => $request->transactionId
+                ]);
+                break;
+                case 1 : 
+                $message = "Update: Loading";
+                $updateCU->update([
+                    'cu.status' => 2, 
+                    'cu.storageDate' => $tanggal, 
+                    'cu.loadingDate' => $tanggal, 
+                    'cu.transactionId' => $request->transactionId
+                ]);
+                break;
+                case 2 : 
+                $message = "Barang telah terloading";
+                break;
+
+            }
+        }
+
+        return response()->json(["name" => $itemName, "message" => $message, "itemId" => $itemId]);
+
+    }
+
 
     public function checkStatusBarcodeBarang(Request $request)
     {
@@ -338,6 +395,9 @@ class StockController extends Controller
             </button>
             <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Scan barang - keluar" onclick="functionStockKeluar('."'".$row->id."'".')">
             <i class="fas fa-satellite-dish"></i>
+            </button>
+            <button data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Scan barang - keluar V2" onclick="functionStockKeluarV2('."'".$row->id."'".')">
+            <i class="fas fa-satellite-dish"></i>
             </button>';
             return $html;
         })
@@ -372,6 +432,25 @@ class StockController extends Controller
         $pinum = $transaction->pinum;
 
         return view('stock.stockKeluarAdd', compact('transaction'));
+    }
+    public function createKeluarV2($id)
+    {
+
+        $transaction = DB::table('transactions as t')
+        ->select(
+            't.id as id',
+            'c.id as companyId',
+            'c.name as companyName',
+            't.pinum as pinum'
+        )
+        ->join('companies as c', 'c.id', '=', 't.companyId')
+        ->where('t.id', '=', $id)
+        ->first();
+
+        $company = $transaction->companyName;
+        $pinum = $transaction->pinum;
+
+        return view('stock.stockKeluarAddV2', compact('transaction'));
     }
     public function getAllBarcodeItemDetail($transactionId){
         $query = DB::table('detail_transactions as dt')

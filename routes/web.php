@@ -54,11 +54,10 @@ use App\Models\Undername;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
-
-
 
 Route::get('home', [DashboardController::class, 'index'])->middleware(['auth','authorized']);
 
@@ -709,10 +708,13 @@ Route::get('scanTransactionList',[StockController::class, 'indexTransaction'])->
 
 Route::get('scanMasuk',[StockController::class, 'create'])->middleware(['auth', 'authorized']);
 Route::get('scanKeluar/{transactionId}',[StockController::class, 'createKeluar'])->middleware(['auth', 'authorized']);
+Route::get('scanKeluarV2/{transactionId}',[StockController::class, 'createKeluarV2'])->middleware(['auth', 'authorized']);
 Route::get('scanEditBarcode/{barcodeId}',[StockController::class, 'show'])->middleware(['auth', 'authorized']);
 
 Route::post('scanStoreMasuk',[StockController::class, 'storeMasuk'])->middleware(['auth']);
 Route::post('scanStoreKeluar',[StockController::class, 'storeKeluar'])->middleware(['auth']);
+Route::post('scanStoreKeluarV2',[StockController::class, 'storeKeluarV2'])->middleware(['auth']);
+Route::get('scanStoreBarcodeKeluar',[StockController::class, 'scanStoreBarcodeKeluar'])->middleware(['auth']);
 
 
 

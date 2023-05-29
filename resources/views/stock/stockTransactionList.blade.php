@@ -50,6 +50,28 @@
         })
 
     }
+    function functionStockKeluarV2(id){
+        Swal.fire({
+            title: 'Scan keluar barang V2?',
+            text: "Scan Produk.",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, ke laman scan keluar.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.open(('{{ url("scanKeluarV2") }}'+"/"+id), '_self');
+            } else {
+                Swal.fire(
+                    'Batal scanning keluar!',
+                    "Scan Produk.",
+                    'info'
+                    );
+            }
+        })
+
+    }
     function myFunction(){
         var e = document.getElementById("statusTransaksi");
         var statusTransaksi = e.options[e.selectedIndex].value;       

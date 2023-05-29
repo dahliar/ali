@@ -13,6 +13,9 @@
 			<li>Pembuatan Surat keterangan Kerja</li>
 			<li>Pembuatan Surat peringatan dan log data </li>
 		</ol>
+
+
+		
 	</body>
 	<footer>
 	</footer>

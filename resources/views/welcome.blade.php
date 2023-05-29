@@ -35,11 +35,6 @@
                 <a class="text-secondary text-decoration-none" href="{{ route('login') }}">ALI IS</a>
                 @endauth
                 @endif
-                    <!--
-                    <a class="text-secondary text-decoration-none" href="https://stock.aliseafood.co.id/login">Stock IS</a>
-                    <a class="text-secondary text-decoration-none" href="https://staff.aliseafood.co.id/login">HRMIS</a>
-                -->
-                 | 
                 <a class="text-secondary text-decoration-none" target="_blank" href="https://aliseafood.co.id/">Official website</a>
             </div>
         </div>
