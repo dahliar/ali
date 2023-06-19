@@ -109,7 +109,7 @@ class UserPageMappingController extends Controller
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
         ->where('eosm.isactive', 1)
         ->where('e.isActive', '=', 1)
-        ->where('u.accessLevel', '<=', 40)
+        ->where('u.accessLevel', '<=', 60)
         ->orderBy('u.name');
         $query->get();
 

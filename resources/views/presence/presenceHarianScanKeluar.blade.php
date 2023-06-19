@@ -1,14 +1,5 @@
 @extends('layouts.layout')
 
-@section('header')
-@include('partial.header')
-@endsection
-
-@section('footer')
-@include('partial.footer')
-@endsection
-
-
 @section('content')
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
@@ -49,49 +40,41 @@
         });
     })
 </script>
-
 <div class="container-fluid">
-    201619820001<br>
-    201619840001<br>
-    202220000001<br>
     <div class="row">
         <div class="modal-content">
             <div class="modal-header">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb primary-color my-auto">
-                        <li class="breadcrumb-item">
-                            <a class="white-text" href="{{ url('/home') }}">Home</a>
-                        </li>
-                        <li class="breadcrumb-item active">
-                            <a class="white-text" href="">Presensi Keluar</a>
-                        </li>
-                        <li class="breadcrumb-item active">Scan Kartu Pegawai</li>
-                    </ol>
-                </nav>
-            </div>
-            <div class="modal-body">
-                <form id="formScanStore" action="{{url('scanStoreMasuk')}}" method="post" name="formScanStore">
-                    {{ csrf_field() }}
-                    <div class="row form-group m-2">
-                        <div class="col-md-2 text-md-end my-auto">
-                            <span id="spanPacker">Scan kartu pegawai*</span>
-                        </div>
-                        <div class="col-md-3">
-                            <input id="scannedCode" name="scannedCode" type="text" class="form-control" placeholder="kode barcode ter-scan" autofocus>
-                        </div>
-                    </div>   
+                <div class="col-md-9">
+                    <nav aria-label="breadcrumb" class="navbar navbar-expand-lg navbar-light">
+                        <ol class="breadcrumb primary-color">
+                            <li class="breadcrumb-item">
+                                <a class="white-text" href="{{ url('/home') }}">Home</a>
+                            </li>
+                            <li class="breadcrumb-item active">Presensi Keluar</li>
+                        </ol>
+                    </nav>
                 </div>
+            </div>
+            <div class="modal-content">
                 <div class="modal-body">
-                    <div class="row form-group">
-                        <div class="table table-responsive">  
-                            <table class="table" id="dynamic_field">
-
-                            </table>   
-                        </div>
+                    {{ csrf_field() }}
+                    <div class="col-md-12 text-center">
+                        <input id="scannedCode" name="scannedCode" type="text" class="form-control text-center" placeholder="Scan barcode pegawai" autofocus>
                     </div>
                 </div>
             </div>
-        </form>
+            <div class="col-md-12 text-center">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <a href="{{url('home')}}" class="btn btn-primary btn-lg" type="button">Kembali ke halaman utama</a>
+                <br>
+                <br>
+            </div>  
+
+        </div>
     </div>
 </div>
 @endsection

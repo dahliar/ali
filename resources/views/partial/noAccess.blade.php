@@ -29,6 +29,14 @@
 		<h4 class="w3-center w3-animate-right">Anda tidak memiliki hak akses ke halaman tersebut {{session('message')}}, kontak Administrator.</h4>
 		<hr class="w3-border-white w3-animate-left" style="margin:auto;width:50%">
 		<h3 class="w3-center w3-animate-right"><a href="home">Klik ini untuk kembali ke halaman utama.</a></h3>
+		<h3 class="w3-center w3-animate-right">atau</h3>
+		<h3 class="w3-center w3-animate-right">
+			<form method="POST" action="{{ url('logout') }}">
+				@csrf
+				<a class="dropdown-item" href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();"><i class="fas fa-sign-out-alt"></i> {{ __('Log Out') }}
+				</a>
+			</form>	
+		</h3>
 	</div>
 </body>
 </html>

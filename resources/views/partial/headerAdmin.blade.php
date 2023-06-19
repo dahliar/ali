@@ -26,7 +26,8 @@
 </style>
 
 <body>
-	<ul class="navbar-nav me-auto mb-2 mb-lg-0">		
+	<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		@if (Session::get('accessLevel') <= 40)
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 				<i class="fas fa-file-contract"></i> Transaksi
@@ -54,7 +55,6 @@
 				</li>
 			</ul>
 		</li>
-
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarHr" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 				<i class="fas fa-layer-group"></i> Human Resources
@@ -174,6 +174,34 @@
 			</ul>
 		</li>
 		@endif
+		@endif
+
+		@if (Session::get('accessLevel') == 60)
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" href="#" id="navbarHr" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+				<i class="fas fa-layer-group"></i> Presensi
+			</a>
+			<ul class="dropdown-menu" aria-labelledby="navbarHr">
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarPresensi" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-tasks" onclick=""></i> Presensi
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarPresensi">
+						<li>
+							<a class="dropdown-item" href="{{ url('presenceHarianScanMasuk')}}"><i class="fas fa-barcode"></i> Scan Presensi Harian Masuk
+							</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('presenceHarianScanKeluar')}}"><i class="fas fa-barcode"></i> Scan Presensi Harian Pulang
+							</a>
+						</li>
+						<li><hr class="dropdown-divider"></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		@endif
+		@if (Session::get('accessLevel') <= 40)
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="#" id="navbarBarang" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 				<i class="fas fa-warehouse"></i> Inventory
@@ -325,6 +353,7 @@
 				</li>
 			</ul>
 		</li>
+		@endif
 		@endif
 	</ul>
 </body>

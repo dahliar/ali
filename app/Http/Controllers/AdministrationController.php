@@ -83,6 +83,7 @@ class AdministrationController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'employeeId'    => [
                 'required', 
@@ -98,7 +99,6 @@ class AdministrationController extends Controller
         ->where('isActive', 1)
         ->where('id', $request->paperworkTypeId)
         ->first();
-
 
         switch($paperwork->kode){
             case "SKB":   //Surat Keterangan bekerja
@@ -131,7 +131,7 @@ class AdministrationController extends Controller
                 'masaBerlaku'       => $paperwork->masaBerlaku
             ]);
             break;
-            case "SPD":   //Surat Dinas Perusahaan
+            case "SDP":   //Surat Dinas Perusahaan
             return redirect()->route('administrasiFormSuratPerjalanan', [
                 'employeeId'        => $request->employeeId,
                 'name'              => $request->name,
@@ -591,26 +591,25 @@ class AdministrationController extends Controller
         return view('administration.administrasiList');
     }
 
-    public function cetakSuratPengangkatanPegawaiBulanan($empId, $mappingId)
+    public function cetakSuratKeputusanPegawaiBaru($empId, $mappingId, $employmentStatus, $nama, $nip, $startdate, $empStatus)
     {
-        /*
         $now    = Carbon::now();
         $until  = Carbon::now()->addMonths(120);
 
         $paperwork = DB::table('paperwork_types')
         ->where('isActive', 1)
-        ->where('kode', "SDM")
+        ->where('kode', "SPB")
         ->first();
 
         $paper = [
             'employeeId'        => $empId,
             'paperworkTypeId'   => $paperwork->id,
-            'name'              => "Surat Pengangkatan Pegawai Tetap",
+            'name'              => "Surat Pengangkatan Pegawai",
             'startdate'         => $now,
             'enddate'           => $until
         ];
         $paperworkId = DB::table('paperworks')->insertGetId($paper);
-        $paperworkNum = self::generatePaperNumber($paperworkId, "SDM");
+        $paperworkNum = self::generatePaperNumber($paperworkId, "SPB");
         $paperwork = self::cetakSuratKeterangan($empId, $paperworkId, $paperworkNum);
 
         $text = DB::table('employeeorgstructuremapping as eos')
@@ -618,23 +617,21 @@ class AdministrationController extends Controller
         ->join('organization_structures as os', 'eos.idorgstructure', '=', 'os.id')
         ->join('structural_positions as sp', 'os.idstructuralpos', '=', 'sp.id')
         ->join('work_positions as wp', 'os.idworkpos', '=', 'wp.id')
-        ->whereIn('eos.id', [$mappingid, $newid])->get();
+        ->where('eos.id', '=',$mappingId)->first();
 
         $data = [
-            'eid'                   => $eid,
+            'eid'                   => $empId,
             'nama'                  => $nama,
             'nip'                   => $nip,
-            'oldJabatan'            => $text[0]->jabatan,
-            'oldLevel'              => $text[0]->level,
-            'oldBagian'             => $text[0]->bagian,
-            'newJabatan'            => $text[1]->jabatan,
-            'newLevel'              => $text[1]->level,
-            'newBagian'             => $text[1]->bagian,
-            'tanggalBerlaku'        => $tanggalBerlaku,
+            'jabatan'            => $text->jabatan,
+            'level'              => $text->level,
+            'bagian'             => $text->bagian,
+            'startdate'        => $startdate,
+            'empStatus'        => $empStatus
         ];
 
-        $pdf = PDF::loadView('administration.suratPegawaiTetap', compact('data', 'paperworkNum'));
-        $filename = 'Surat Keputusan Mutasi Pegawai '.$data['nip'].' '.Carbon::now()->format('Ymd His').'.pdf';
+        $pdf = PDF::loadView('administration.suratPegawaiBaru', compact('data', 'paperworkNum'));
+        $filename = 'Surat Keputusan Pegawai '.$data['nip'].' '.Carbon::now()->format('Ymd His').'.pdf';
 
         $filepath = storage_path('/app/paperworks/'.$filename);
         $pdf->save($filepath);
@@ -642,7 +639,6 @@ class AdministrationController extends Controller
         $affected = DB::table('paperworks')
         ->where('id', $paperworkId)
         ->update(['filepath' => $filename]);
-        */
 
         return true;
     }

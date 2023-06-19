@@ -103,7 +103,7 @@ class EmployeeController extends Controller
 
 
         //bagian proses insert kedalam table Users
-        
+
         $user = User::create([
             'name' => $request->name,
             'accessLevel' => $request->accessLevel,
@@ -146,14 +146,18 @@ class EmployeeController extends Controller
             'uanglembur'        => $request->uangLembur
         ];
         $mappingId = $this->employee->orgStructureStore($mapping);
+        
 
-        //Bikin SK Pegawai Bulanan
-        /*
-        if($request->employmentStatus == 3){
-            $adm = new AdministrationController();
-            $adm->cetakSuratPengangkatanPegawaiBulanan($empid, $mappingId);
+        $empStatusString ="";
+        switch ($request->employmentStatus){
+            case('1') : $empStatusString ="Tetap";break;
+            case('2') : $empStatusString ="Kontrak Harian";break;
+            case('3') : $empStatusString ="Kontrak Borongan";break;
         }
-        */
+
+        $adm = new AdministrationController();
+
+        $adm->cetakSuratKeputusanPegawaiBaru($empid, $mappingId, $request->employmentStatus, $request->name, $nip, $request->startdate, $empStatusString);
 
         return redirect('employeeList')
         ->with('status','Item berhasil ditambahkan.');

@@ -470,19 +470,13 @@ class Presence extends Model
     }
 
     function simpanPresenceScan($empid, $start, $end, $presenceId, $shift){
-        $ramadhanStart = Carbon::parse("2024-03-11 00:00:00"); 
-        $ramadhanEnd = Carbon::parse("2024-04-09 23:59:59"); 
-        $dataJam=null;
-        if (($start->gte($ramadhanStart)) and ($start->lte($ramadhanEnd))) {
-            $dataJam = $this->hitungPresenceHarianRamadhan($start, $end, $shift);
-        } else{
-            $dataJam = $this->hitungPresenceHarian($start, $end, $shift);
-        }
+        $dataJam = $this->hitungPresenceHarian($start, $end, $shift);
         $dataPresensi = [
             'end'           => $end,
             'jamKerja'      => $dataJam['jamKerja'],
             'jamLembur'     => $dataJam['jamLembur'],
-            'isLembur'     => 1
+            'isLembur'      => 1,
+            'status'        => 2
         ];
 
         DB::table('presences')

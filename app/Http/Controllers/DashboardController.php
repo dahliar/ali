@@ -41,281 +41,286 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
-        $date = Carbon::parse(now())->locale('id');
-        $date->settings(['formatFunction' => 'translatedFormat']);
-        $month=$date->format('F');
-        $currentYear = $date->format('Y');
-
-        $tambah = DB::table('stores')
-        ->where('isApproved', '=', '0')
-        ->count();
-
-        $kurang = DB::table('stock_subtracts')
-        ->where('isApproved', '=', '0')
-        ->count();
-
-        $sailingExport = DB::table('transactions')
-        ->where('status', '=', '4')
-        ->where('jenis', '=', '1')
-        ->count();
-
-        $offeringExport = DB::table('transactions')
-        ->where('status', '=', '1')
-        ->where('jenis', '=', '1')
-        ->count();
-
-        $allExport = DB::table('transactions')
-        ->where('jenis', '=', '1')
-        ->whereYear('transactionDate', '=', $currentYear)
-        ->count();
-
-        $sailingLocal = DB::table('transactions')
-        ->where('status', '=', '4')
-        ->where('jenis', '=', '2')
-        ->count();
-
-        $offeringLocal = DB::table('transactions')
-        ->where('status', '=', '1')
-        ->where('jenis', '=', '2')
-        ->count();
-
-        $allLocal = DB::table('transactions')
-        ->where('jenis', '=', '2')
-        ->whereYear('transactionDate', '=', $currentYear)
-        ->count();
-
-
-        $pembelian = DB::table('purchases')
-        ->where('status', '=', '1')
-        ->count();
-        $allPembelian = DB::table('purchases')
-        ->whereYear('purchaseDate', '=', $currentYear)
-        ->count();
-        
-
-        $totalSailing = DB::table('detail_transactions as dt')
-        ->select(
-            DB::raw('sum(dt.amount*weightbase) as amount')
-        )
-        ->join('items as i', 'dt.itemId', '=', 'i.id')
-        ->join('transactions as t','dt.transactionId', '=', 't.id')
-        ->where('t.status','=',4)
-        ->first()->amount;
-
-        $totalStock = DB::table('items as i')
-        ->select(
-            DB::raw('sum(i.amount*weightbase) as jumlahPacked'),
-            DB::raw('sum(amountUnpacked) as jumlahUnpacked')            
-        )
-        ->where('i.isActive','=', 1)->first();
-
-        $datas = [
-            'sailingExport' => $sailingExport, 
-            'offeringExport' => $offeringExport, 
-            'allExport' => $allExport, 
-            'sailingLocal' => $sailingLocal, 
-            'offeringLocal' => $offeringLocal,
-            'allLocal' => $allLocal,
-            'pembelian' => $pembelian,
-            'allPembelian' => $allPembelian,
-            'totalSailing' => $totalSailing,
-            'jumlahPacked' => $totalStock->jumlahPacked,
-            'jumlahUnpacked' => $totalStock->jumlahUnpacked,
-            'currentYear' => $currentYear,
-            'currentMonth' => $month
-        ];
-
-
-        if ($request->has('tahun')){
-            $request->validate([
-                'tahun' => 'required|numeric|gt:0',
-            ],[
-                'tahun.*'=> 'Pilih tahun dulu'
-            ]);
-            $tahun = $request->tahun;
-
-            $employees = DB::table('employees as e')
-            ->select(
-                DB::raw('
-                    (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
-                    '),
-                DB::raw('count(e.id) as status')
-            )
-            ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-            ->where('mapping.isActive', '1')
-            ->groupBy('employmentStatus')
-            ->get();
-
-            $employeesGender = DB::table('employees as e')
-            ->select(
-                DB::raw('
-                    (CASE WHEN e.gender="1" THEN "Laki-laki" WHEN e.gender="2" THEN "Perempuan" END) AS gender
-                    '),
-                DB::raw('count(e.id) as jumlahGender')
-            )
-            ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
-            ->where('mapping.isActive', '1')
-            ->groupBy('e.gender')
-            ->get();
-
-            $employeesGenderByTypes = DB::table('employees as e')
-            ->select(
-                DB::raw('
-                    (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
-                    '),
-                DB::raw('
-                    (
-                    select count(e2.id) from employees e2
-                    where e2.gender=1
-                    and e2.employmentStatus=e.employmentStatus
-                    and e2.isActive=1
-
-                    ) AS jumlahGenderLaki
-                    '),
-                DB::raw('
-                    (
-                    select count(e2.id) from employees e2
-                    where e2.gender=2
-                    and e2.employmentStatus=e.employmentStatus
-                    and e2.isActive=1
-                    ) AS jumlahGenderPerempuan
-                    ')
-            )
-            ->where('e.isActive', 1)
-            ->groupBy('e.employmentStatus')
-            ->orderBy('e.employmentStatus')
-            ->get();
-
-            $transactions = DB::table('transactions as t')
-            ->select(
-                DB::raw('
-                    (CASE WHEN t.jenis="1" THEN "Ekspor" WHEN t.jenis="2" THEN "Lokal" END) AS jenis
-                    '),
-                DB::raw('count(t.id) as jumlahJenis')
-            )
-            ->whereIn('t.status', [2,4])
-            ->groupBy('t.jenis')
-            ->whereYear('t.transactionDate', $tahun)
-            ->get();
-
-            $stocks = DB::table('items as i')
-            ->select(
-                'sp.nameBahasa as name',
-                DB::raw('sum(i.amount * i.weightbase) as jumlahSpecies'),
-                DB::raw('"blue" as kedua')
-            )
-            ->join('sizes as s', 's.id', '=', 'i.sizeId')
-            ->join('species as sp', 'sp.id', '=', 's.speciesId')
-            ->where('i.isActive', '=', '1')
-            ->groupBy('sp.id')
-            ->orderBy('sp.nameBahasa')
-            ->get();
-
-
-
-
-            $transactionRupiah = DB::table('transactions as t')
-            ->select(
-                'c.name as name',
-                DB::raw('sum(t.payment) as amount')
-            )
-            ->join('companies as c', 'c.id', '=', 't.companyId')
-            ->where('t.valutaType', '=', '1')
-            ->whereYear('t.loadingDate', $tahun)
-            ->groupBy('c.id')
-            ->orderBy('c.name')
-            ->get();
-
-            $transactionUSD = DB::table('transactions as t')
-            ->select(
-                'c.name as name',
-                DB::raw('sum(t.payment) as amount')
-            )
-            ->join('companies as c', 'c.id', '=', 't.companyId')
-            ->where('t.valutaType', '=', '2')
-            ->whereYear('t.loadingDate', $tahun)
-            ->groupBy('c.id')
-//            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-            ->get();
-
-
-
-            $transactionUSDLine = DB::table('transactions as t')
-            ->select(
-                DB::raw('MONTH(t.loadingDate) as bulan'),
-                DB::raw('sum(t.payment) as amount')
-            )
-            ->where('t.valutaType', '=', '2')
-            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-            ->whereYear('t.loadingDate', $tahun)
-            ->groupBy(DB::raw('MONTH(t.loadingDate)'))
-            ->get();
-            
-            $transactionRupiahLine = DB::table('transactions as t')
-            ->select(
-                DB::raw('MONTH(t.loadingDate) as bulan'),
-                DB::raw('sum(t.payment) as amount')
-            )
-            ->where('t.valutaType', '=', '1')
-            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
-            ->whereYear('t.loadingDate', $tahun)
-            ->groupBy(DB::raw('MONTH(t.loadingDate)'))
-            ->get();
-
-
-
-
-            $goods = DB::table('goods as g')
-            ->select(
-                'g.name as name',
-                'g.amount as amount',
-                'g.minimalAmount as minimal'
-            )
-            ->whereRaw('g.amount <= g.minimalAmount')
-            ->orderBy('g.name')
-            ->get();
-
-            $purchases = DB::table('purchases as p')
-            ->select(
-                'c.name as name',
-                DB::raw('sum(p.paymentAmount) as amount')
-            )
-            ->join('companies as c', 'c.id', '=', 'p.companyId')
-            ->groupBy('c.id')
-            ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
-            ->whereYear('p.purchaseDate', $tahun)
-            ->get();
-
-
-            $purchaseRupiahLine = DB::table('purchases as p')
-            ->select(
-                DB::raw('MONTH(p.purchaseDate) as bulan'),
-                DB::raw('sum(p.paymentAmount) as amount')
-            )
-            ->where('p.valutaType', '=', '1')
-            ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
-            ->whereYear('p.purchaseDate', $tahun)
-            ->groupBy(DB::raw('MONTH(p.purchaseDate)'))
-            ->get();
-
-            $birthday = DB::table('employees as e')
-            ->select(
-                'u.name as name',
-                'e.birthdate as birthdate',
-                DB::raw('concat(
-                    TIMESTAMPDIFF(YEAR, e.birthdate, curdate()),
-                    " Y") as usia')
-            )
-            ->join('users as u', 'u.id', '=', 'e.userid')
-            ->whereMonth('e.birthdate', date('m'))
-            ->orderBy(DB::raw('DAY(e.birthdate)'))
-            ->get();
-
-            return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','datas'));
+        if (Auth::user()->accessLevel==60){
+            return view('presence.homePresensi');
         }
         else{
+            $date = Carbon::parse(now())->locale('id');
+            $date->settings(['formatFunction' => 'translatedFormat']);
+            $month=$date->format('F');
+            $currentYear = $date->format('Y');
 
-            return view('home', compact('tambah', 'kurang', 'datas'));
+            $tambah = DB::table('stores')
+            ->where('isApproved', '=', '0')
+            ->count();
+
+            $kurang = DB::table('stock_subtracts')
+            ->where('isApproved', '=', '0')
+            ->count();
+
+            $sailingExport = DB::table('transactions')
+            ->where('status', '=', '4')
+            ->where('jenis', '=', '1')
+            ->count();
+
+            $offeringExport = DB::table('transactions')
+            ->where('status', '=', '1')
+            ->where('jenis', '=', '1')
+            ->count();
+
+            $allExport = DB::table('transactions')
+            ->where('jenis', '=', '1')
+            ->whereYear('transactionDate', '=', $currentYear)
+            ->count();
+
+            $sailingLocal = DB::table('transactions')
+            ->where('status', '=', '4')
+            ->where('jenis', '=', '2')
+            ->count();
+
+            $offeringLocal = DB::table('transactions')
+            ->where('status', '=', '1')
+            ->where('jenis', '=', '2')
+            ->count();
+
+            $allLocal = DB::table('transactions')
+            ->where('jenis', '=', '2')
+            ->whereYear('transactionDate', '=', $currentYear)
+            ->count();
+
+
+            $pembelian = DB::table('purchases')
+            ->where('status', '=', '1')
+            ->count();
+            $allPembelian = DB::table('purchases')
+            ->whereYear('purchaseDate', '=', $currentYear)
+            ->count();
+
+
+            $totalSailing = DB::table('detail_transactions as dt')
+            ->select(
+                DB::raw('sum(dt.amount*weightbase) as amount')
+            )
+            ->join('items as i', 'dt.itemId', '=', 'i.id')
+            ->join('transactions as t','dt.transactionId', '=', 't.id')
+            ->where('t.status','=',4)
+            ->first()->amount;
+
+            $totalStock = DB::table('items as i')
+            ->select(
+                DB::raw('sum(i.amount*weightbase) as jumlahPacked'),
+                DB::raw('sum(amountUnpacked) as jumlahUnpacked')            
+            )
+            ->where('i.isActive','=', 1)->first();
+
+            $datas = [
+                'sailingExport' => $sailingExport, 
+                'offeringExport' => $offeringExport, 
+                'allExport' => $allExport, 
+                'sailingLocal' => $sailingLocal, 
+                'offeringLocal' => $offeringLocal,
+                'allLocal' => $allLocal,
+                'pembelian' => $pembelian,
+                'allPembelian' => $allPembelian,
+                'totalSailing' => $totalSailing,
+                'jumlahPacked' => $totalStock->jumlahPacked,
+                'jumlahUnpacked' => $totalStock->jumlahUnpacked,
+                'currentYear' => $currentYear,
+                'currentMonth' => $month
+            ];
+
+
+            if ($request->has('tahun')){
+                $request->validate([
+                    'tahun' => 'required|numeric|gt:0',
+                ],[
+                    'tahun.*'=> 'Pilih tahun dulu'
+                ]);
+                $tahun = $request->tahun;
+
+                $employees = DB::table('employees as e')
+                ->select(
+                    DB::raw('
+                        (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
+                        '),
+                    DB::raw('count(e.id) as status')
+                )
+                ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+                ->where('mapping.isActive', '1')
+                ->groupBy('employmentStatus')
+                ->get();
+
+                $employeesGender = DB::table('employees as e')
+                ->select(
+                    DB::raw('
+                        (CASE WHEN e.gender="1" THEN "Laki-laki" WHEN e.gender="2" THEN "Perempuan" END) AS gender
+                        '),
+                    DB::raw('count(e.id) as jumlahGender')
+                )
+                ->join('employeeorgstructuremapping as mapping', 'mapping.idemp', '=', 'e.id')
+                ->where('mapping.isActive', '1')
+                ->groupBy('e.gender')
+                ->get();
+
+                $employeesGenderByTypes = DB::table('employees as e')
+                ->select(
+                    DB::raw('
+                        (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS empStatus
+                        '),
+                    DB::raw('
+                        (
+                        select count(e2.id) from employees e2
+                        where e2.gender=1
+                        and e2.employmentStatus=e.employmentStatus
+                        and e2.isActive=1
+
+                        ) AS jumlahGenderLaki
+                        '),
+                    DB::raw('
+                        (
+                        select count(e2.id) from employees e2
+                        where e2.gender=2
+                        and e2.employmentStatus=e.employmentStatus
+                        and e2.isActive=1
+                        ) AS jumlahGenderPerempuan
+                        ')
+                )
+                ->where('e.isActive', 1)
+                ->groupBy('e.employmentStatus')
+                ->orderBy('e.employmentStatus')
+                ->get();
+
+                $transactions = DB::table('transactions as t')
+                ->select(
+                    DB::raw('
+                        (CASE WHEN t.jenis="1" THEN "Ekspor" WHEN t.jenis="2" THEN "Lokal" END) AS jenis
+                        '),
+                    DB::raw('count(t.id) as jumlahJenis')
+                )
+                ->whereIn('t.status', [2,4])
+                ->groupBy('t.jenis')
+                ->whereYear('t.transactionDate', $tahun)
+                ->get();
+
+                $stocks = DB::table('items as i')
+                ->select(
+                    'sp.nameBahasa as name',
+                    DB::raw('sum(i.amount * i.weightbase) as jumlahSpecies'),
+                    DB::raw('"blue" as kedua')
+                )
+                ->join('sizes as s', 's.id', '=', 'i.sizeId')
+                ->join('species as sp', 'sp.id', '=', 's.speciesId')
+                ->where('i.isActive', '=', '1')
+                ->groupBy('sp.id')
+                ->orderBy('sp.nameBahasa')
+                ->get();
+
+
+
+
+                $transactionRupiah = DB::table('transactions as t')
+                ->select(
+                    'c.name as name',
+                    DB::raw('sum(t.payment) as amount')
+                )
+                ->join('companies as c', 'c.id', '=', 't.companyId')
+                ->where('t.valutaType', '=', '1')
+                ->whereYear('t.loadingDate', $tahun)
+                ->groupBy('c.id')
+                ->orderBy('c.name')
+                ->get();
+
+                $transactionUSD = DB::table('transactions as t')
+                ->select(
+                    'c.name as name',
+                    DB::raw('sum(t.payment) as amount')
+                )
+                ->join('companies as c', 'c.id', '=', 't.companyId')
+                ->where('t.valutaType', '=', '2')
+                ->whereYear('t.loadingDate', $tahun)
+                ->groupBy('c.id')
+//            ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+                ->get();
+
+
+
+                $transactionUSDLine = DB::table('transactions as t')
+                ->select(
+                    DB::raw('MONTH(t.loadingDate) as bulan'),
+                    DB::raw('sum(t.payment) as amount')
+                )
+                ->where('t.valutaType', '=', '2')
+                ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+                ->whereYear('t.loadingDate', $tahun)
+                ->groupBy(DB::raw('MONTH(t.loadingDate)'))
+                ->get();
+
+                $transactionRupiahLine = DB::table('transactions as t')
+                ->select(
+                    DB::raw('MONTH(t.loadingDate) as bulan'),
+                    DB::raw('sum(t.payment) as amount')
+                )
+                ->where('t.valutaType', '=', '1')
+                ->orderBy(DB::raw('sum(t.payment)'), 'desc')
+                ->whereYear('t.loadingDate', $tahun)
+                ->groupBy(DB::raw('MONTH(t.loadingDate)'))
+                ->get();
+
+
+
+
+                $goods = DB::table('goods as g')
+                ->select(
+                    'g.name as name',
+                    'g.amount as amount',
+                    'g.minimalAmount as minimal'
+                )
+                ->whereRaw('g.amount <= g.minimalAmount')
+                ->orderBy('g.name')
+                ->get();
+
+                $purchases = DB::table('purchases as p')
+                ->select(
+                    'c.name as name',
+                    DB::raw('sum(p.paymentAmount) as amount')
+                )
+                ->join('companies as c', 'c.id', '=', 'p.companyId')
+                ->groupBy('c.id')
+                ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
+                ->whereYear('p.purchaseDate', $tahun)
+                ->get();
+
+
+                $purchaseRupiahLine = DB::table('purchases as p')
+                ->select(
+                    DB::raw('MONTH(p.purchaseDate) as bulan'),
+                    DB::raw('sum(p.paymentAmount) as amount')
+                )
+                ->where('p.valutaType', '=', '1')
+                ->orderBy(DB::raw('sum(p.paymentAmount)'), 'desc')
+                ->whereYear('p.purchaseDate', $tahun)
+                ->groupBy(DB::raw('MONTH(p.purchaseDate)'))
+                ->get();
+
+                $birthday = DB::table('employees as e')
+                ->select(
+                    'u.name as name',
+                    'e.birthdate as birthdate',
+                    DB::raw('concat(
+                        TIMESTAMPDIFF(YEAR, e.birthdate, curdate()),
+                        " Y") as usia')
+                )
+                ->join('users as u', 'u.id', '=', 'e.userid')
+                ->whereMonth('e.birthdate', date('m'))
+                ->orderBy(DB::raw('DAY(e.birthdate)'))
+                ->get();
+
+                return view('home', compact('employeesGenderByTypes', 'month','birthday','purchaseRupiahLine','transactionRupiahLine','transactionUSDLine','purchases','transactionRupiah','transactionUSD','employees','transactions','stocks','employeesGender','goods', 'tahun', 'tambah', 'kurang','datas'));
+            }
+            else{
+
+                return view('home', compact('tambah', 'kurang', 'datas'));
+            }
         }
     }
 

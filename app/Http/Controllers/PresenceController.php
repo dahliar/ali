@@ -412,7 +412,7 @@ class PresenceController extends Controller
             }
         } else{
             $retValue = [
-                'message'       => "Presensi ".$cekPresenceExist->name." sudah dilakukan.<br>".$cekPresenceExist->start,
+                'message'       => "Presensi ".$cekPresenceExist->name." sudah dilakukan pada ".$cekPresenceExist->start,
                 'isError'       => "0"
             ];            
         }
@@ -431,7 +431,7 @@ class PresenceController extends Controller
         if ($cekBarcode){
             if($cekBarcode->isActive == 1){
                 $cekPresenceExist = DB::table('presences as p')
-                ->select('p.id as presenceId','p.start as start','e.isActive as isActive','u.name as name','e.nip as nip', 'e.id as empid', 'p.shift as shift')
+                ->select('p.id as presenceId','p.start as start','p.end as end','e.isActive as isActive','u.name as name','e.nip as nip', 'e.id as empid', 'p.shift as shift', 'p.status as status')
                 ->where('e.nip', '=', $request->barcode)
                 ->whereDate('p.start', '=', $end->toDateString())
                 ->join('employees as e', 'e.id', '=', 'p.employeeId')
@@ -442,12 +442,19 @@ class PresenceController extends Controller
                 if (!is_null($cekPresenceExist)){
                     $retValue="";
                     if ($cekPresenceExist->isActive==1){
-                        $this->presence->simpanPresenceScan($cekPresenceExist->empid, Carbon::parse($cekPresenceExist->start), $end, $cekPresenceExist->presenceId, $cekPresenceExist->shift);
-
-                        $retValue = [
-                            'message'       => $cekPresenceExist->name."<br>"."Presensi Keluar ".$end,
-                            'isError'       => "1"
-                        ];
+                        if ($cekPresenceExist->status==1){
+                            $this->presence->simpanPresenceScan($cekPresenceExist->empid, Carbon::parse($cekPresenceExist->start), $end, $cekPresenceExist->presenceId, $cekPresenceExist->shift);
+                            $retValue = [
+                                'message'       => $cekPresenceExist->name."<br>"."Presensi Keluar ".$end,
+                                'isError'       => "1"
+                            ];
+                        }
+                        else{
+                            $retValue = [
+                                'message'       => $cekPresenceExist->name." telah presensi Keluar pada ".$cekPresenceExist->end,
+                                'isError'       => "0"
+                            ];
+                        }
                     } else {
                         $retValue = [
                             'message'       => "Status karyawan ".$cekPresenceExist->name." tidak aktif",
