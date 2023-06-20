@@ -520,6 +520,7 @@ class AdministrationController extends Controller
             'startdate'         => $now,
             'enddate'           => $until
         ];
+        
         $paperworkId = DB::table('paperworks')->insertGetId($paper);
         $paperworkNum = self::generatePaperNumber($paperworkId, "SMP");
         $paperwork = self::cetakSuratKeterangan($data['eid'], $paperworkId, $paperworkNum);
