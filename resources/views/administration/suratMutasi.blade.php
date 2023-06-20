@@ -140,7 +140,7 @@
             <td width="25%" align="left">KETIGA</td>
             <td width="5%" align="center">:</td>
             <td width="75%" align="left" style="text-align:justify;">
-                Apabila terdapat kekeliruan pada keputusan ini maka akan diadakan perubahan
+                Apabila terdapat kekeliruan pada keputusan ini maka akan dilakukan perubahan
                 sebagaimana mestinya.
             </td>
         </tr>
