@@ -28,11 +28,9 @@
                 },
                 dataType: "json",
                 success:function(data){
-                    Swal.fire(
-                        "Scanned",
-                        data['message'],
-                        'warning'
-                        );
+                    var d = new Date();
+                    document.getElementById("spanTime").textContent= d.getDate()+'-'+(d.getMonth()+1)+'-'+d.getFullYear()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+                    document.getElementById("spanInformasi").textContent=data['message'];
                 }
             });
             document.getElementById("scannedCode").value="";
@@ -68,7 +66,7 @@
                         <div class="col-md-2 text-md-end my-auto">
                             <span id="spanPacker">Perusahaan</span>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-8">
                             <input type="hidden" name="companyId" id="companyId" class="form-control" value="{{$transaction->companyId}}" readonly>
                             <input type="text" name="companyName" id="companyName" class="form-control" value="{{$transaction->companyName}}" readonly>
                         </div>
@@ -77,19 +75,34 @@
                         <div class="col-md-2 text-md-end my-auto">
                             <span id="spanPacker">PI Number</span>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-8">
                             <div class="input-group">
                                 <input type="text" name="pinum" id="pinum" class="form-control" value="{{$transaction->pinum}}" readonly>
                             </div>
                         </div>
                     </div>   
-
                     <div class="row form-group m-2">
                         <div class="col-md-2 text-md-end my-auto">
                             <span id="spanPacker">Scan a barcode*</span>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-8">
                             <input id="scannedCode" name="scannedCode" type="text" class="form-control" placeholder="kode barcode ter-scan" autofocus>
+                        </div>
+                    </div> 
+                    <div class="row form-group m-2">
+                        <div class="col-md-2 text-md-end my-auto">
+                            <span id="spanPacker">Last Scan</span>
+                        </div>
+                        <div class="col-md-8 text-md-left">
+                            <span id="spanTime"></span>
+                        </div>
+                    </div>   
+                    <div class="row form-group m-2">
+                        <div class="col-md-2 text-md-end my-auto">
+                            <span id="spanPacker">Informasi</span>
+                        </div>
+                        <div class="col-md-8 text-md-left">
+                            <span id="spanInformasi"></span>
                         </div>
                     </div>   
                 </form>
