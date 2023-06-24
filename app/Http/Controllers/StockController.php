@@ -188,7 +188,7 @@ class StockController extends Controller
         $itemName = -1;
 
         if (!$query){
-            $message = "Barcode tidak ditemukan";
+            $message = "Barcode tidak ditemukan: ".$request->barcode;
         } else{
             $itemId = $query->itemId;
             $itemName = $query->name;
@@ -196,12 +196,12 @@ class StockController extends Controller
             $updateCU = DB::table('code_usages as cu')
             ->where('cu.fullcode', '=', $request->barcode);
             $status = $query->status;
-            $message = "Barcode tidak ditemukan";
+            $message = "Barcode tidak ditemukan: ".$request->barcode;
 
 
             switch ($query->status){
                 case 0 : 
-                $message = "Update: Package, Simpan Storage dan Loading";
+                $message = "Update: Package, Simpan Storage dan Loading: ".$request->barcode;
                 $updateCU->update([
                     'cu.status' => 2, 
                     'cu.packagingDate' => $tanggal, 
@@ -220,7 +220,7 @@ class StockController extends Controller
                 ]);
                 break;
                 case 2 : 
-                $message = "Barang telah terloading";
+                $message = "Barang telah terloading: ".$request->barcode;
                 break;
 
             }
