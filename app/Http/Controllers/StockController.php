@@ -80,6 +80,7 @@ class StockController extends Controller
         $barcode = DB::table('code_usages as cu')
         ->join('codes as c', 'c.id', '=', 'cu.codeId')
         ->join('view_item_details as vid', 'vid.itemId', '=', 'c.itemId')
+        ->where('cu.id', $id)
         ->select(
             'cu.id as id',
             'c.productionDate as productionDate',
@@ -296,12 +297,18 @@ class StockController extends Controller
         //dd($request);
         $query = DB::table('codes as c')
         ->select(
-            'c.id as id', 
+            'cu.id as id', 
             'c.productionDate as productionDate', 
             'c.itemId as itemId', 
             'cu.fullcode as fullcode',
-            DB::raw('(CASE WHEN cu.status ="0" THEN "Created"
-                WHEN cu.status ="1" then "Stored" WHEN cu.status ="2" then "Loaded" END) AS status'),
+            'cu.status as status',
+            DB::raw('(CASE WHEN 
+                cu.status ="0" THEN "Created"
+                WHEN cu.status ="1" then "Stored" 
+                WHEN cu.status ="2" then "Loaded" 
+                WHEN cu.status ="3" then "Hilang" 
+                WHEN cu.status ="4" then "Dihapus" 
+                END) AS statusText'),
             'cu.packagingDate as packagingDate', 
             'cu.storageDate as storageDate', 
             'cu.loadingDate as loadingDate',
@@ -324,12 +331,22 @@ class StockController extends Controller
         $query->orderBy('cu.fullcode')->get();
 
         return datatables()->of($query)
+        ->addColumn('speciesName', function ($row) {
+            return ($row->speciesName ." - ". $row->itemName);
+        })
         ->addColumn('action', function ($row) {
-            $html = '           
+            $html = '
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit data barcode" onclick="editBarcode('."'".$row->id."'".')">
             <i class="fas fa-edit"></i>
             </button>            
             ';
+            if ($row->status < 2){
+                $html .= '
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Hapus barcode" onclick="hapusBarcode('."'".$row->id."'".', '."'".$row->itemId."'".')">
+                <i class="fas fa-trash"></i>
+                </button>            
+                ';
+            }
             return $html;
         })
         ->rawColumns(['action'])
@@ -545,8 +562,13 @@ class StockController extends Controller
         ->select(
             'c.id as id',
             'cu.fullcode as fullcode',
-            DB::raw('(CASE WHEN cu.status ="0" THEN "Created"
-                WHEN cu.status ="1" then "Stored" WHEN cu.status ="2" then "Loaded" END) AS status'),
+            DB::raw('(CASE WHEN 
+                cu.status ="0" THEN "Created"
+                WHEN cu.status ="1" then "Stored" 
+                WHEN cu.status ="2" then "Loaded" 
+                WHEN cu.status ="3" then "Hilang" 
+                WHEN cu.status ="4" then "Dihapus" 
+                END) AS status'),
             'c.productionDate as productionDate',
             'cu.packagingDate as packagingDate',
             'cu.storageDate as storageDate',
@@ -572,6 +594,43 @@ class StockController extends Controller
         })
         ->rawColumns(['action'])
         ->toJson();
+    }
+
+
+    public function updateHapusBarcode(Request $request)
+    {        
+        $barcode = DB::table('code_usages as cu')
+        ->join('codes as c', 'c.id', '=', 'cu.codeId')
+        ->select(
+            'cu.id as id',
+            'c.itemId as itemId',
+            'cu.fullcode as barcode',
+            'cu.status as status'
+        )
+        ->where('cu.id', $request->barcodeId)
+        ->first();
+
+        //update data barang
+        //update history perubahan barang
+        if ($barcode->status == 1){
+            DB::table('items')
+            ->where('id', $request->itemId)
+            ->decrement('amount', 1);
+            $data = [
+                'userId'    => auth()->user()->name,
+                'jenis'     => 2,
+                'informasiTransaksi' => "Hapus barcode ".$barcode->barcode,
+                'itemId'    =>  $request->itemId,
+                'amount'    =>  1             
+            ];
+            DB::table('stock_histories')->insert($data);
+        }
+
+        $query = DB::table('code_usages as cu')
+        ->where('cu.id', $request->barcodeId)
+        ->update(['cu.status' => 4]);
+        return true;        
+
     }
 
 }

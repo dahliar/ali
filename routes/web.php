@@ -729,6 +729,7 @@ Route::GET('getScanMasukHarian', [StockController::class, 'getScanMasukHarian'])
 Route::GET('getScanMasukHarianTanggal', [StockController::class, 'getScanMasukHarianTanggal'])->middleware(['auth']);
 Route::GET('getBarcodeListTanggalItem', [StockController::class, 'getBarcodeListTanggalItem'])->middleware(['auth']);
 
+Route::POST('updateHapusBarcode',[StockController::class, 'updateHapusBarcode'])->middleware(['auth']);
 
 
 

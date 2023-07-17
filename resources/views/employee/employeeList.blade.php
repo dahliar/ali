@@ -134,6 +134,7 @@
             </div>
             <div class="modal-body">
                 <div class="row form-inline">
+
                     <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                         <thead>
                             <tr>
@@ -148,7 +149,9 @@
                         </thead>
                         <tbody>
                         </tbody>
-                    </table>                
+                    </table>       
+
+
                 </div>
             </div>    
         </div>

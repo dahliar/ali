@@ -23,6 +23,46 @@
     function editBarcode(id){
         window.open(('{{ url("scanEditBarcode") }}'+"/"+id), '_self');
     }
+    function hapusBarcode(barcodeId, itemId){
+        Swal.fire({
+            title: 'Hapus data barcode?',
+            text: "Data terhapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus saja!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '{{ url("updateHapusBarcode") }}',
+                    type: "POST",
+                    data : {
+                        "_token":"{{ csrf_token() }}",
+                        "barcodeId":barcodeId,
+                        "itemId":itemId
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Barcode dihapus!',
+                            "Data tidak dapat dikembalikan.",
+                            'info'
+                            );
+                        showDatatable();
+                    }
+                });
+
+                
+            } else {
+                Swal.fire(
+                    'Batal hapus barcode!',
+                    "Data barcode tetap tersimpan.",
+                    'info'
+                    );
+            }
+        })
+    }
     function functionStockMasuk(){
         Swal.fire({
             title: 'Scan masuk barang?',
@@ -127,14 +167,13 @@
             destroy:true,
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
-                {   "width": "15%", "targets":  [1], "className": "text-left"   },
-                {   "width": "30%", "targets":  [2], "className": "text-left"   },
-                {   "width": "10%", "targets":  [3], "className": "text-left"   },
-                {   "width": "5%", "targets":  [4], "className": "text-center" },
-                {   "width": "10%", "targets":  [5], "className": "text-end" },
-                {   "width": "10%", "targets":  [6], "className": "text-end" },
-                {   "width": "10%", "targets":  [7], "className": "text-end" },
-                {   "width": "5%", "targets":  [8], "className": "text-center" }
+                {   "width": "40%", "targets":  [1], "className": "text-left"   },
+                {   "width": "10%", "targets":  [2], "className": "text-left"   },
+                {   "width": "5%", "targets":  [3], "className": "text-center" },
+                {   "width": "10%", "targets":  [4], "className": "text-center" },
+                {   "width": "10%", "targets":  [5], "className": "text-center" },
+                {   "width": "10%", "targets":  [6], "className": "text-center" },
+                {   "width": "10%", "targets":  [7], "className": "text-center" }
                 ], 
             columns: [
             {
@@ -144,9 +183,8 @@
                 }
             },
             {data: 'speciesName', name: 'speciesName'},
-            {data: 'itemName', name: 'itemName'},
             {data: 'fullcode', name: 'fullcode'},
-            {data: 'status', name: 'status'},
+            {data: 'statusText', name: 'statusText'},
             {data: 'productionDate', name: 'productionDate'},
             {data: 'storageDate', name: 'storageDate'},
             {data: 'loadingDate', name: 'loadingDate'},
@@ -280,7 +318,6 @@
                         <tr>
                             <th>No</th>
                             <th>Species</th>
-                            <th>Item</th>
                             <th>Barcode</th>
                             <th>Status</th>
                             <th>Produksi</th>

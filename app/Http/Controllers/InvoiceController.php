@@ -38,7 +38,7 @@ class InvoiceController extends Controller
     }
 
     public function getPurchaseNumber($purchaseId){
-        $bagian="PURCHASE-ALI";
+        $bagian="PURCHASE-ALS";
         $month = date('m');
         $year = date('Y');
         $isActive=1;
@@ -72,7 +72,7 @@ class InvoiceController extends Controller
 
 
     public function createtransactionnum($transactionId){
-        $bagian="INV-ALI";
+        $bagian="INV-ALS";
         $month = date('m');
         $year = date('Y');
         $isActive=1;
@@ -106,7 +106,7 @@ class InvoiceController extends Controller
 
 
     public function createpinum($transactionId){
-        $bagian="PI-ALI";
+        $bagian="PI-ALS";
         $month = date('m');
         $year = date('Y');
         $isActive=1;
@@ -175,7 +175,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'PI-ALI')
+        ->where('bagian','=', 'PI-ALS')
         ->where('transactionId','=', $transaction->id)
         ->first()->id;
 
@@ -220,7 +220,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'INV-ALI')
+        ->where('bagian','=', 'INV-ALS')
         ->where('transactionId','=', $transaction->id)
         ->first()->id;
 
@@ -259,7 +259,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'INV-ALI')
+        ->where('bagian','=', 'INV-ALS')
         ->where('transactionId','=', $transaction->id)
         ->first()->id;
 
@@ -295,7 +295,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'PURCHASE-ALI')
+        ->where('bagian','=', 'PURCHASE-ALS')
         ->where('purchaseId','=', $purchase->id)
         ->first()->id;
 

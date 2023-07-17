@@ -456,14 +456,14 @@ class AdministrationController extends Controller
 
     public function generatePaperNumber($paperworkId, $paperworkType){
         /*  format nomor surat
-        *   Surat Keterangan  Bekerja           No. 123/ALI-ADM/SKB/Bulan/Tahun
-        *   Surat Peringatan                    No. 123/ALI-ADM/SPP/Bulan/Tahun
-        *   Surat Pemutusan Hubungan Kerja      No. 123/ALI-ADM/PHK/Bulan/Tahun
-        *   Surat Mutasi Pegawai                No. 123/ALI-ADM/SMP/Bulan/Tahun
-        *   Surat Pengangkatan Pegawai Baru     No. 123/ALI-ADM/SPB/Bulan/Tahun
-        *   Surat Dinas Perusahaan              No. 123/ALI-ADM/SDP/Bulan/Tahun
+        *   Surat Keterangan  Bekerja           No. 123/ALS-ADM/SKB/Bulan/Tahun
+        *   Surat Peringatan                    No. 123/ALS-ADM/SPP/Bulan/Tahun
+        *   Surat Pemutusan Hubungan Kerja      No. 123/ALS-ADM/PHK/Bulan/Tahun
+        *   Surat Mutasi Pegawai                No. 123/ALS-ADM/SMP/Bulan/Tahun
+        *   Surat Pengangkatan Pegawai Baru     No. 123/ALS-ADM/SPB/Bulan/Tahun
+        *   Surat Dinas Perusahaan              No. 123/ALS-ADM/SDP/Bulan/Tahun
         */ 
-        $bagian="ALI-ADM";
+        $bagian="ALS-ADM";
         $month = date('m');
         $year = date('Y');
         $isActive=1;

@@ -40,10 +40,11 @@
             destroy:true,
             columnDefs: [
             {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "30%", "targets":   [1], "className": "text-left" },
-            {   "width": "30%", "targets":  [2], "className": "text-left" },
-            {   "width": "20%", "targets":  [3], "className": "text-left" },
-            {   "width": "5%", "targets":  [4], "className": "text-left" }
+            {   "width": "25%", "targets":   [1], "className": "text-left" },
+            {   "width": "15%", "targets":  [2], "className": "text-left" },
+            {   "width": "25%", "targets":  [3], "className": "text-left" },
+            {   "width": "15%", "targets":  [4], "className": "text-center" },
+            {   "width": "10%", "targets":  [5], "className": "text-center" }
             ], 
 
             columns: [
@@ -51,6 +52,7 @@
             {data: 'tanggal', name: 'tanggal'},
             {data: 'jam', name: 'jam'},
             {data: 'salary', name: 'salary'},
+            {data: 'isGenerated', name: 'isGenerated'},
             {data: 'action', name: 'action', orderable: false, searchable: false}
 
             ]
@@ -123,6 +125,7 @@
                                 <th>Tanggal</th>
                                 <th>Jam</th>
                                 <th>Jumlah</th>
+                                <th>Sudah Generate</th>
                                 <th>Action</th>
                             </tr>
                         </thead>

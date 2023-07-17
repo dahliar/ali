@@ -117,6 +117,8 @@
                                 <option value="0" @if($barcode->status == 0) selected @endif>Cetak</option>
                                 <option value="1" @if($barcode->status == 1) selected @endif>Storage</option>
                                 <option value="2" @if($barcode->status == 2) selected @endif>Load</option>
+                                <option value="3" @if($barcode->status == 3) selected @endif>Hilang</option>
+                                <option value="4" @if($barcode->status == 4) selected @endif>Dihapus</option>
                                 <option value="99" @if($barcode->status == 99) selected @endif>Delete</option>
                             </select>
                         </div>

@@ -77,31 +77,30 @@ class PresenceController extends Controller
     }
     public function presenceHarianUpdate(Request $request)
     {
-        //dd($request);
         $request->validate(
             [
+                'isGenerated'       => 'required|lt:1',
                 'progressStatus'    => 'required|gt:0',
                 'start'             => 'required|date|before_or_equal:tomorrow',
                 'end'               => 'required|date|after_or_equal:start'
             ],[
+                'isGenerated.lt'    => 'Data sudah digenerate, tidak bisa diubah',
                 'progressStatus.*'  => 'Pilih salah satu jenis perubahan',
                 'start.*'           => 'Jam masuk wajib diisi dan tidak boleh lebih dari hari ini',
-                'end.*'           => 'Jam keluar wajib diisi, tidak boleh lebih dari hari ini, dan tidak boleh kurang dari jam masuk',
+                'end.*'             => 'Jam keluar wajib diisi, tidak boleh lebih dari hari ini, dan tidak boleh kurang dari jam masuk',
             ]
         );
+
         $deleted = DB::table('presences')
         ->where('id', '=', $request->presenceId)
         ->delete();
         $deleted = DB::table('dailysalaries')
         ->where('id', '=', $request->dailysalariesid)
         ->delete();
-
-
         $message="Data berhasil dihapus";
         if($request->progressStatus == 1){
-            $this->presence->storePresenceHarianEmployee($request->empid, $request->start, $request->end, $request->lembur);
+            $this->presence->storePresenceHarianEmployee($request->empid, $request->start, $request->end, $request->lembur,1);
             $message="Data berhasil diubah";
-
         }
 
         return redirect('employeePresenceHarianHistory/'.$request->empid)->with('status', $message);
@@ -130,7 +129,8 @@ class PresenceController extends Controller
             'p.start as start',
             'p.end as end',
             'p.jamKerja as jamKerja',
-            'p.jamLembur as jamLembur'
+            'p.jamLembur as jamLembur',
+            'ds.isGenerated as isGenerated',
         )
         ->join('dailysalaries as ds', 'e.id', '=', 'ds.employeeId')
         ->join('presences as p', 'ds.employeeId', '=', 'p.employeeId')
@@ -169,7 +169,7 @@ class PresenceController extends Controller
             </div>';
             return $html;
         })
-        ->addColumn('jam', function ($row) {
+        ->addColumn('speciesName', function ($row) {
             $html = '
             <div class="row form-group">
             <span class="col-3">Kerja</span>
@@ -184,14 +184,23 @@ class PresenceController extends Controller
         })
         ->addColumn('action', function ($row) {
             $html='';
-            if (Auth::user()->accessLevel <= 40){
-                $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Ubah Presensi" onclick="editPresence('."'".$row->pid."'".')">
-                <i class="fa fa-edit" style="font-size:20px"></i>
-                </button>';
+            if ($row->isGenerated == 0){
+                if (Auth::user()->accessLevel <= 40){
+                    $html .= '<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Ubah Presensi" onclick="editPresence('."'".$row->pid."'".')">
+                    <i class="fa fa-edit" style="font-size:20px"></i>
+                    </button>';
+                }
+                return $html;
+            }
+        })
+        ->addColumn('isGenerated', function ($row) {
+            $html='<i class="fas fa-check-circle"></i>';
+            if ($row->isGenerated == 0){
+                $html = '<i class="fas fa-times-circle"></i>';
             }
             return $html;
         })
-        ->rawColumns(['salary', 'action', 'jam', 'tanggal', 'posisi'])
+        ->rawColumns(['salary', 'action', 'jam', 'tanggal', 'posisi', 'isGenerated'])
         ->addIndexColumn()->toJson();
     }    
 

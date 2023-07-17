@@ -60,6 +60,7 @@
                         <input type="hidden" id="empid" name="empid" class="form-control" value="{{$presence->employeeId}}">
                         <input type="hidden" id="presenceId" name="presenceId" class="form-control" value="{{$presence->id}}">
                         <input type="hidden" id="dailysalariesid" name="dailysalariesid" class="form-control" value="{{$dailysalaries->id}}">
+                        <input type="hidden" id="isGenerated" name="isGenerated" class="form-control" value="{{$dailysalaries->isGenerated}}">
 
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
@@ -141,8 +142,8 @@
                         </div>
                         @if ($dailysalaries->isGenerated!=1)
                         <div class="row form-group">
-                            <div class="col-md-2 text-md-right">
-                                <span class="label" id="spanPayment">Status Pembelian*</span>
+                            <div class="col-md-2 text-md-end">
+                                <span class="label" id="spanPayment">Jenis Perubahan*</span>
                             </div>
                             <div class="col-md-8">
                                 <select id="progressStatus" name="progressStatus" class="form-select">
