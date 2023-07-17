@@ -700,6 +700,9 @@ Route::get('transactionBarcodeList/{transactionId}',[StockController::class, 'in
 Route::get('scanRekapMasuk',[StockController::class, 'indexScanMasuk'])->middleware(['auth', 'authorized']);
 Route::get('scanRekapMasukHari/{storageDate}',[StockController::class, 'indexScanMasukHari'])->middleware(['auth', 'authorized']);
 Route::get('scanRekapMasukHariBarcodeList/{storageDate}/{itemId}',[StockController::class, 'indexScanMasukHariBarcodeList'])->middleware(['auth', 'authorized']);
+Route::get('scanRekapKeluar',[StockController::class, 'indexScanKeluar'])->middleware(['auth', 'authorized']);
+Route::get('scanRekapKeluarHari/{transactionId}/{loadingDate}',[StockController::class, 'indexScanKeluarHari'])->middleware(['auth', 'authorized']);
+Route::get('scanRekapKeluarBarcodeList/{transactionId}/{loadingDate}/{itemId}',[StockController::class, 'indexScanKeluarBarcodeList'])->middleware(['auth', 'authorized']);
 
 
 
@@ -728,10 +731,13 @@ Route::GET('getAllBarcodeItemDetail/{transactionId}', [StockController::class, '
 Route::GET('getScanMasukHarian', [StockController::class, 'getScanMasukHarian'])->middleware(['auth']);
 Route::GET('getScanMasukHarianTanggal', [StockController::class, 'getScanMasukHarianTanggal'])->middleware(['auth']);
 Route::GET('getBarcodeListTanggalItem', [StockController::class, 'getBarcodeListTanggalItem'])->middleware(['auth']);
+Route::GET('getScanKeluarBarcodeList', [StockController::class, 'getScanKeluarBarcodeList'])->middleware(['auth']);
+
 
 Route::POST('updateHapusBarcode',[StockController::class, 'updateHapusBarcode'])->middleware(['auth']);
 
-
+Route::GET('getScanKeluarData', [StockController::class, 'getScanKeluarData'])->middleware(['auth']);
+Route::GET('getScannedKeluarTransaksiHari', [StockController::class, 'getScannedKeluarTransaksiHari'])->middleware(['auth']);
 
 
 

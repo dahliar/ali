@@ -59,14 +59,52 @@ class StockController extends Controller
     {
         return view('stock.stockRecapMasuk');    
     }
+    public function indexScanKeluar()
+    {
+        return view('stock.stockRecapKeluar');    
+    }
     public function indexScanMasukHari($storageDate)
     {
         return view('stock.stockRecapMasukHari', compact('storageDate'));    
     }
+    public function indexScanKeluarHari($transactionId, $loadingDate)
+    {
+        $transaction =  DB::table('transactions as t')
+        ->select(
+            't.id as id',
+            't.transactionNum as transactionNum',
+            't.pinum as pinum',
+            't.loadingDate as loadingDate',
+            'c.name as companyName'
+        )
+        ->join('companies as c', 'c.id', '=', 't.companyId')
+        ->where('t.id', '=', $transactionId)
+        ->first();
+        return view('stock.stockRecapKeluarHari', compact('transaction','loadingDate'));    
+    }
+
+
+
     public function indexScanMasukHariBarcodeList($storageDate, $itemId)
     {
         $itemName = DB::table('view_item_details')->select('name as itemName')->where('itemId', '=', $itemId)->first()->itemName;
         return view('stock.stockRecapMasukHariBarcodeList', compact('storageDate', 'itemId', 'itemName'));    
+    }
+    public function indexScanKeluarBarcodeList($transactionId, $loadingDate, $itemId)
+    {
+        $transaction =  DB::table('transactions as t')
+        ->select(
+            't.id as id',
+            't.transactionNum as transactionNum',
+            't.pinum as pinum',
+            't.loadingDate as loadingDate',
+            'c.name as companyName'
+        )
+        ->join('companies as c', 'c.id', '=', 't.companyId')
+        ->where('t.id', '=', $transactionId)
+        ->first();
+        $itemName = DB::table('view_item_details')->select('name as itemName')->where('itemId', '=', $itemId)->first()->itemName;
+        return view('stock.stockRecapKeluarBarcodeList', compact('transaction', 'loadingDate', 'itemId', 'itemName'));    
     }
 
     public function create()
@@ -527,6 +565,7 @@ class StockController extends Controller
         ->rawColumns(['action'])
         ->toJson();
     }
+
     public function getScanMasukHarianTanggal(Request $request){
         $query = DB::table('code_usages as cu')
         ->select(
@@ -556,8 +595,41 @@ class StockController extends Controller
         ->rawColumns(['action'])
         ->toJson();
     }
+    public function getScannedKeluarTransaksiHari(Request $request){
+        $query = DB::table('code_usages as cu')
+        ->select(
+            't.id as transactionId',
+            't.loadingDate as loadingDate', 
+            'c.itemId as itemId', 
+            'vid.name as itemName', 
+            'vid.speciesName as speciesName', 
+            DB::raw('count(cu.id) as jumlahBarcode')
+        )
+        ->join('codes as c', 'c.id', '=', 'cu.codeId')
+        ->join('transactions as t', 't.id', '=', 'cu.transactionId')
+        ->join('view_item_details as vid', 'vid.itemId', '=', 'c.itemId')
+        ->where('t.loadingDate','=', $request->tanggal)
+        ->where('cu.transactionId','=', $request->transactionId)
+        ->groupBy('c.itemId')
+        ->orderBy('vid.speciesName')
+        ->orderBy('vid.itemName')
+        ->get();  
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '           
+            <button  data-rowid="'.$row->itemId.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar barcode" onclick="barcodeList('."'".$row->transactionId."'".",'".$row->loadingDate."'".",'".$row->itemId."'".')">
+            <i class="fas fa-list"></i>
+            </button>            
+            ';
+            return $html;
+        })
+        ->rawColumns(['action'])
+        ->toJson();
+    }
+    
+
     public function getBarcodeListTanggalItem(Request $request){
-        //dd($request);
         $query =  DB::table('codes as c')
         ->select(
             'c.id as id',
@@ -596,6 +668,48 @@ class StockController extends Controller
         ->toJson();
     }
 
+    public function getScanKeluarBarcodeList(Request $request){
+
+        //dd($request);
+        $query =  DB::table('codes as c')
+        ->select(
+            'c.id as id',
+            'cu.fullcode as fullcode',
+            DB::raw('(CASE WHEN 
+                cu.status ="0" THEN "Created"
+                WHEN cu.status ="1" then "Stored" 
+                WHEN cu.status ="2" then "Loaded" 
+                WHEN cu.status ="3" then "Hilang" 
+                WHEN cu.status ="4" then "Dihapus" 
+                END) AS status'),
+            'c.productionDate as productionDate',
+            'cu.packagingDate as packagingDate',
+            'cu.storageDate as storageDate',
+            't.loadingDate as loadingDate',
+            'cu.expireDate as expiringDate',
+            'vid.nameBahasa as name'
+        )
+        ->join('code_usages as cu', 'cu.codeId', '=', 'c.id')
+        ->join('transactions as t', 't.id', '=', 'cu.transactionId')
+        ->join('view_item_details as vid', 'c.itemId', '=', 'vid.itemId')
+        ->where('cu.transactionId', '=', $request->transactionId)
+        ->where('t.loadingDate', '=', $request->tanggal)
+        ->where('c.itemId', '=', $request->itemId)
+        ->orderBy('cu.fullcode', 'asc')
+        ->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '           
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Something something">
+            <i class="fas fa-list"></i>
+            </button>            
+            ';
+            return $html;
+        })
+        ->rawColumns(['action'])
+        ->toJson();
+    }
 
     public function updateHapusBarcode(Request $request)
     {        
@@ -631,6 +745,51 @@ class StockController extends Controller
         ->update(['cu.status' => 4]);
         return true;        
 
+    }
+
+
+    public function getScanKeluarData(Request $request){
+        $query = DB::table('codes as c')
+        ->select(
+            't.loadingDate as loadingDate',
+            'cu.transactionId as transactionId',
+            't.transactionNum as transactionNum',
+            't.pinum as pinum',
+            'com.name as companyName',
+            DB::raw('count(cu.id) as jumlahBarcode'),
+        )
+        ->join('code_usages as cu', 'c.id', '=', 'cu.codeId')
+        ->join('transactions as t', 't.id', '=', 'cu.transactionId')
+        ->join('companies as com', 'com.id', '=', 't.companyId')
+        ->where('cu.status','=', 2)
+        ->whereBetween('cu.loadingDate', [$request->start, $request->end])
+        ->whereNotNull('cu.loadingDate')
+        ->groupBy('cu.transactionId')
+        ->orderBy('cu.loadingDate')->get();
+
+        return datatables()->of($query)
+        ->addColumn('number', function ($row) {
+            $html = '
+            <div class="row form-group">
+            <span class="col-4">PI</span>
+            <span class="col-8 text-end">'.$row->pinum.'</span>
+            </div>
+            <div class="row form-group">
+            <span class="col-4">INV</span>
+            <span class="col-8 text-end">'.$row->transactionNum.'</span>
+            </div>';
+            return $html;
+        })
+        ->addColumn('action', function ($row) {
+            $html = '           
+            <button  data-rowid="'.$row->loadingDate.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar barang" onclick="barcodeItemList('."'".$row->transactionId."'".', '."'".$row->loadingDate."'".')">
+            <i class="fas fa-list"></i>
+            </button>            
+            ';
+            return $html;
+        })
+        ->rawColumns(['action', 'number'])
+        ->toJson();
     }
 
 }

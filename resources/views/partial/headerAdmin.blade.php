@@ -246,7 +246,10 @@
 							<a class="dropdown-item" href="{{ url('scanTransactionList')}}"><i class="fas fa-satellite-dish"></i> Scan barang - Keluar</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="{{ url('scanRekapMasuk')}}"><i class="fas fa-clipboard-list"></i> Rekapitulasi scan masuk</a>
+							<a class="dropdown-item" href="{{ url('scanRekapMasuk')}}"><i class="fas fa-clipboard-list"></i> Rekapitulasi Scan Masuk</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('scanRekapKeluar')}}"><i class="fas fa-clipboard-list"></i> Rekapitulasi Scan Keluar</a>
 						</li>
 					</ul>
 				</li>
