@@ -308,6 +308,7 @@ class PresenceController extends Controller
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
             $html = '';
+            /*
             if (is_null($row->presenceToday)){
                 $html.='
                 <button type="button" class="btn" onclick="presenceForTodayModal('."'".$row->id."'".')" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Presensi '.$row->name.' Hari ini">
@@ -315,7 +316,11 @@ class PresenceController extends Controller
                 </button>
                 ';
             }
-            $html.='<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Arsip Presensi '.$row->name.'" onclick="employeePresenceHarianHistory('."'".$row->id."'".')">
+            */
+            $html.='<button type="button" class="btn" onclick="presenceForTodayModal('."'".$row->id."'".')" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Presensi '.$row->name.' Hari ini">
+            <i class="fa fa-check" style="font-size:20px"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Arsip Presensi '.$row->name.'" onclick="employeePresenceHarianHistory('."'".$row->id."'".')">
             <i class="fa fa-history" style="font-size:20px"></i>
             </button>';
             return $html;
