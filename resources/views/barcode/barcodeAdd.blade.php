@@ -197,6 +197,23 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 text-md-end">
+                            <span class="label" id="companyName">Supplier*</span>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="company" name="company" class="form-select">
+                                <option value="-1">--Choose One--</option>
+                                @foreach ($companies as $company)
+                                @if ( $company->id == old('company'))
+                                <option value="{{ $company->id }}" selected>{{ $company->name }}</option>
+                                @else
+                                <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>   
                     <div class="row form-group mb-2">
                         <div class="col-md-2 text-end">
                         </div>

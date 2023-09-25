@@ -400,11 +400,16 @@ class EmployeeController extends Controller
             'e.isActive as isActive', 
             'e.startDate as startDate',
             'al.name as accessLevel',
-            DB::raw('concat(
-                TIMESTAMPDIFF(YEAR, startDate, curdate()), 
+            'startDate as tanggalMulai',
+            'endDate as tanggalAkhir',
+            DB::raw('
+                concat(
+                TIMESTAMPDIFF(YEAR, startDate, IFNULL(endDate, curdate())), 
                 " Y + ",
-                (TIMESTAMPDIFF(MONTH, startDate, curdate()) - (TIMESTAMPDIFF(YEAR, startDate, curdate()) * 12)), 
-                " M") as lamaKerja'),
+                (TIMESTAMPDIFF(MONTH,startDate,IFNULL(endDate,curdate()))-(
+                TIMESTAMPDIFF(YEAR,startDate,IFNULL(endDate,curdate())) * 12)), 
+                " M")
+                as lamaKerja'),
             DB::raw('
                 (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian
                 ')

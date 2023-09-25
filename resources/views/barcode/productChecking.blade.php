@@ -161,6 +161,17 @@
                         <span class="label">{{$product->expireDate}}</span>
                     </div>
                 </div>
+                <div class="row form-group">
+                    <div class="col-md-3">
+                        <span class="label">Supplier</span>
+                    </div>
+                    <div class="col-md-1 text-center">
+                        <span class="label">:</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="label">{{$product->companyName}}</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

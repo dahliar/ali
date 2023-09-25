@@ -26,8 +26,10 @@ class BarcodeController extends Controller
     }
     public function create()
     {
+
+        $companies = Company::orderBy('name')->get();
         $species = Species::orderBy('name')->get();
-        return view('barcode.barcodeAdd', compact('species'));
+        return view('barcode.barcodeAdd', compact('species', 'companies'));
     }
 
     public function barcodeList()
@@ -132,6 +134,7 @@ class BarcodeController extends Controller
                 'transactionDate' => 'required|date|before_or_equal:today',
                 'jumlahBarcode' => 'required|gt:0|lte:100',
                 'printer' => 'required|gt:0',
+                'company' => 'required|gt:0',
             ],
             [
                 'jumlahBarcode.required'=> 'Jumlah barcode minimal 1'
@@ -175,20 +178,22 @@ class BarcodeController extends Controller
             'startFrom'         => $startFrom,
             'itemId'            => $item,
             'filename'          => $filename,
-            'printer'           => $printer
+            'printer'           => $printer,
+            'companyId'         => $request->company
         ];
         $codeId = DB::table('codes')->insertGetId($codes);            
 
 
         $arrData = array();
         $expireDate = \Carbon\Carbon::parse($transactionDate)->addYears(2);
+        $supplier = str_pad($request->company, 6, '0', STR_PAD_LEFT);
 
         for ($a=$startFrom; $a<($startFrom+$jumlah); $a++){
             $barcode = $productionDateData.str_pad($a, 4, '0', STR_PAD_LEFT);
 
             $data = [
                 "barcode" => $barcode, 
-                "fullname" => url('/productChecking/'.$barcode).' - '.$name.' '.$barcode
+                "fullname" => url('/productChecking/'.$barcode).' - '.$name.' '.$barcode.' '.$supplier
             ];
 
             DB::table('code_usages')->insert([
@@ -224,6 +229,7 @@ class BarcodeController extends Controller
             'packagingDate as packagingDate',
             'loadingDate as loadingDate',
             'expireDate as expireDate',
+            'comp.name as companyName',
             'c.id as id',
             'cu.fullcode as fullcode',
             'i.name as item',
@@ -233,6 +239,7 @@ class BarcodeController extends Controller
             'g.name as grade',
             'sp.name as species',
         )
+        ->join('companies as comp', 'comp.id', '=', 'c.companyId')
         ->join('items as i', 'i.id', '=', 'c.itemId')
         ->join('sizes as s', 'i.sizeId', '=', 's.id')
         ->join('shapes as sh', 'i.shapeId', '=', 'sh.id')
