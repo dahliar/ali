@@ -1436,8 +1436,8 @@ class SalaryController extends Controller
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
-        ->where('eosm.isactive', 1)
-        ->where('e.isactive', '=', 1)        
+        //->where('eosm.isactive', 1)
+        //->where('e.isactive', '=', 1)        
         ->where('dp.idPayroll', '=', $payrollId);
 
         //bulanan

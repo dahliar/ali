@@ -53,7 +53,7 @@ class BoronganController extends Controller
                 END) AS employmentStatus'),
         )
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->where('employmentStatus', 3)
+        ->whereIn('employmentStatus', [2, 3])
         ->where('isActive', '=', 1)
         ->orderBy('u.name')
         ->get();

@@ -131,7 +131,7 @@
                 </div>
                 <div class="modal-content">
                     <div class="modal-body">
-                        <table style="width: 40%;  margin-left: auto; margin-right: auto;" class="center table table-striped table-hover table-bordered">
+                        <table style="width: 100%;  margin-left: auto; margin-right: auto;" class="center table table-striped table-hover table-bordered">
                             <thead>
                                 <tr>
                                     <th style="width: 5%;">No</th>

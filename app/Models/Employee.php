@@ -44,7 +44,6 @@ class Employee extends Model
     public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender, $startdate){
         $copy = Employee::get()->where('id', $id)->toArray();
         EmployeeHistory::insert($copy);
-
         $affected = DB::table('employees')
         ->where('id', $id)
         ->update([
@@ -58,7 +57,8 @@ class Employee extends Model
             'jenjangPendidikan' => $pendidikan,
             'bidangPendidikan'  => $bidangPendidikan,
             'bankid'            => $bankid,
-            'startdate'         => $startdate
+            'startdate'         => $startdate,
+            'endDate'           => Carbon::now()->toDateString()
         ]);
         return $affected;
     }
