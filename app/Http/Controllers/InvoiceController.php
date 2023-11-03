@@ -276,6 +276,7 @@ class InvoiceController extends Controller
 
     public function cetakNotaPembelian(Purchase $purchase)
     {
+        //dump($purchase);
         $purchaseDetails = $this->invoice->getOnePurchaseDetail($purchase->id);
         $company = Company::where('id',$purchase->companyId)->first();
         $valutaType = "";
@@ -292,10 +293,11 @@ class InvoiceController extends Controller
         //file disimpan di folder storage/docs/
         $pdf->save($filepath);
 
+
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'PURCHASE-ALS')
+        ->where('bagian','=', 'PURCHASE-ALI')
         ->where('purchaseId','=', $purchase->id)
         ->first()->id;
 
