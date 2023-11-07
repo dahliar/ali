@@ -210,7 +210,7 @@ class AdministrationController extends Controller
             'p.enddate as enddate',
             'p.filepath as filename',
             DB::raw('concat(
-                (TIMESTAMPDIFF(DAY, curdate(), enddate)), 
+                (TIMESTAMPDIFF(DAY, curdate(), p.enddate)), 
                 " hari") as hariMasaBerlaku'),
         )
         ->join('paperwork_types as pt', 'pt.id', '=', 'p.paperworkTypeId')
