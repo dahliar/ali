@@ -38,7 +38,7 @@ class InvoiceController extends Controller
     }
 
     public function getPurchaseNumber($purchaseId){
-        $bagian="PURCHASE-ALS";
+        $bagian="PURCHASE-ALI";
         $month = date('m');
         $year = date('Y');
         $isActive=1;
@@ -276,7 +276,7 @@ class InvoiceController extends Controller
 
     public function cetakNotaPembelian(Purchase $purchase)
     {
-        //dump($purchase);
+        //dd($purchase);
         $purchaseDetails = $this->invoice->getOnePurchaseDetail($purchase->id);
         $company = Company::where('id',$purchase->companyId)->first();
         $valutaType = "";
