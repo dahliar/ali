@@ -132,7 +132,6 @@ class EmployeeController extends Controller
             'bankid'                => $request->bankid,
             'jenjangPendidikan'     => $request->pendidikan,
             'bidangPendidikan'      => $request->bidangPendidikan
-
         ];
         $empid = $this->employee->employeeStore($employee);
 
@@ -468,6 +467,9 @@ class EmployeeController extends Controller
         })
         ->rawColumns(['statusKepegawaian', 'action'])
         ->addIndexColumn()->toJson();
+
+        //return datatables()->of($query)->toJson();
+
     }
 
     public function getEmployeesBarcode(){

@@ -354,7 +354,7 @@ class InvoiceController extends Controller
         ->join('users as u', 'u.id', '=', 'e.userid')
         ->join('employeeorgstructuremapping as eosm', 'e.id', '=', 'eosm.idemp')
         ->join('organization_structures as os', 'os.id', '=', 'eosm.idorgstructure')
-        ->where('eosm.isactive', 1)
+        //->where('eosm.isactive', 1)
         ->where('e.id', '=', $detail_payroll->employeeId)->first();
         $payroll=DB::table('payrolls as p')->where('p.id', '=', $detail_payroll->idPayroll)->first();
         $salaries=DB::table('salaries as s')->where('s.idPayroll', '=', $payroll->id)->get();
