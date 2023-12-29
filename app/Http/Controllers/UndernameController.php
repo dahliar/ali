@@ -299,7 +299,7 @@ class UndernameController extends Controller
             $request->validate(
                 [
                     'shipper' => 'required',
-                    'pebFile' => ['required','image', 'max:2048'],
+                    'pebFile' => ['required', 'mimes:jpg,jpeg,png,pdf','max:2048'],
                     'pebNum' => 'required',
                     'pebDate' => 'required|date|after_or_equal:transactionDate',
                     'shipperAddress' => 'required',
@@ -338,7 +338,6 @@ class UndernameController extends Controller
                 [
                     'pebFile.required' => 'File invoice harus ada',
                     'pebFile.max' => 'Ukuran file maksimal adalah 2 MB',
-                    'pebFile.image' => 'File invoice harus berupa image',
                     'pebNum.*' => 'Nomor PEB wajib diisi',
                     'pebDate.*' => 'Tanggal PEB setelah atau sama dengan tanggal Transaksi',
                     'rekening.gt'=> 'Pilih salah satu rekening',

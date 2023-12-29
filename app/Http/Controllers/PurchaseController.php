@@ -133,7 +133,7 @@ class PurchaseController extends Controller
                 ],
                 'downPayment' => ['required','gte:0'],
                 'taxPercentage' => ['required','gt:0'],
-                'imageurl' => ['required','image', 'max:2048']
+                'imageurl' => ['required', 'mimes:jpg,jpeg,png,pdf','max:2048'],
             ],
             [
                 'company.gt'=> 'Pilih salah satu perusahaan',
@@ -143,8 +143,7 @@ class PurchaseController extends Controller
                 'dueDate.after' => 'Tanggal deadline bayar harus lebih dari tanggal penerimaan',
                 'arrivalDate.after' => 'Maksimal 1 bulan yang lalu',
                 'imageurl.required' => 'File invoice harus ada',
-                'imageurl.max' => 'Ukuran file maksimal adalah 1 MB',
-                'imageurl.image' => 'File invoice harus berupa image'
+                'imageurl.max' => 'Ukuran file maksimal adalah 1 MB'
             ]
         );
 

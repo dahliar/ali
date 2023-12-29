@@ -248,7 +248,7 @@ class TransactionController extends Controller
 
         if (($request->status==2) and ($request->currentStatus==4)){
             $request->validate([
-                'pebFile' => ['required','image', 'max:2048'],
+                'pebFile' => ['required', 'mimes:jpg,jpeg,png,pdf','max:2048'],
                 'pebNum' => 'required',
                 'pebDate' => 'required|date|after_or_equal:transactionDate',
                 'shipper' => 'required',
@@ -283,7 +283,6 @@ class TransactionController extends Controller
             ],[
                 'pebFile.required' => 'File PEB harus ada',
                 'pebFile.max' => 'Ukuran file maksimal adalah 2 MB',
-                'pebFile.image' => 'File invoice harus berupa image',
                 'pebNum.*' => 'Nomor PEB wajib diisi',
                 'pebDate.*' => 'Tanggal PEB setelah atau sama dengan tanggal Transaksi',
                 'rekening.gt'=> 'Pilih salah satu rekening',
@@ -762,7 +761,7 @@ class TransactionController extends Controller
 
     }
 
-        public function createtransactionnum($transactionId){
+    public function createtransactionnum($transactionId){
         $bagian="INV-ALS";
         $month = date('m');
         $year = date('Y');
@@ -795,7 +794,7 @@ class TransactionController extends Controller
         return $tnum;
     }
 
-        public function createpinum($transactionId){
+    public function createpinum($transactionId){
         $bagian="PI-ALS";
         $month = date('m');
         $year = date('Y');

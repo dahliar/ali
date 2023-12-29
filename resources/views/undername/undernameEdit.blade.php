@@ -178,7 +178,7 @@
                         </div>
                         <div class="col-md-4">
                             <div class="input-group">
-                                <input class="form-control" type="file" id="pebFile" name="pebFile" accept="image/*">
+                                <input class="form-control" type="file" id="pebFile" name="pebFile" accept="image/jpeg,image/jpg,image/png,application/pdf">
                             </div>
                             <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
                         </div>
