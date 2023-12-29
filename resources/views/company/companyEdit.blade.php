@@ -89,7 +89,7 @@
 
         <div class="card card-body">
             <div class="col-12">
-                <form id="companyForm" action="{{route('companyUpdate')}}"  method="get" name="companyForm">
+                <form id="companyForm" action="{{route('companyUpdate')}}"  method="post" name="companyForm" enctype="multipart/form-data">
                     @csrf
                     <div class="d-grid gap-1">
                         <div class="row form-group">
@@ -128,12 +128,58 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
+                                <span class="label" id="npwp">KTP</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="ktp" name="ktp" class="form-control" value="{{ old('ktp', $company->npwp) }}" placeholder="KTP">
+                            </div>
+                            @if($company->ktpFile)
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <a href="{{ url('getFileDownload').'/'.$company->ktpFile }}" target="_blank">{{$company->ktpFile}}</a>
+                                </div>
+                            </div>
+                            @endif  
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-2 text-md-end">
+                                <span class="label">Upload File KTP Baru</span>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input class="form-control" type="file" id="ktpFile" name="ktpFile" accept="image/jpeg,image/jpg,image/png,application/pdf">
+                                </div>
+                                <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                            </div>
+                        </div> 
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
                                 <span class="label" id="npwp">NPWP</span>
                             </div>
                             <div class="col-md-4">
                                 <input id="npwpnum" name="npwpnum" class="form-control" value="{{ old('npwpnum', $company->npwp) }}" placeholder="NPWP Number">
                             </div>
+                            @if($company->npwpFile)
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <a href="{{ url('getFileDownload').'/'.$company->npwpFile }}" target="_blank">{{$company->npwpFile}}</a>
+                                </div>
+                            </div>       
+                            @endif  
                         </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-2 text-md-end">
+                                <span class="label">Upload File NPWP Baru</span>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <input class="form-control" type="file" id="npwpFile" name="npwpFile" accept="image/jpeg,image/jpg,image/png,application/pdf">
+                                </div>
+                                <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                            </div>
+                        </div>  
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                                 <span class="label" id="spanBank">Pajak terhitung</span>

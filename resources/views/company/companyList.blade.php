@@ -19,7 +19,9 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
+    function getFileDownload(filepath){
+        window.open(('{{ url("getFileDownload") }}'+"/"+filepath), '_blank');
+    };
 
     function editCompany(id){
         window.open(('{{ url("companyEdit") }}'+"/"+id), '_self');
@@ -34,22 +36,22 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "20%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%",  "targets": [2], "className": "text-left" },
-            {   "width": "55%", "targets":  [3], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "35%", "targets":  [1], "className": "text-left"   },
+                {   "width": "20%", "targets":  [2], "className": "text-left" },
+                {   "width": "20%", "targets":  [3], "className": "text-left" },
+                {   "width": "10%", "targets":  [4], "className": "text-left" },
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nation', name: 'nation'},
-            {data: 'address', name: 'address'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'ktp', name: 'ktp'},
+                {data: 'npwp', name: 'npwp'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
 
 
-            ]
+                ]
         });
     }
 
@@ -99,8 +101,8 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nama</th>
-                                    <th>Negara</th>
-                                    <th>Alamat</th>
+                                    <th>KTP</th>
+                                    <th>NPWP</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>

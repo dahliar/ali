@@ -17,15 +17,7 @@
             confirmButtonText: 'Ya, Simpan saja.'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Data perusahaan disimpan',
-                    text: "Simpan data perusahaan",
-                    icon: 'info',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ok disimpan.'
-                }).then((result) => {
-                    document.getElementById("companyForm").submit();
-                })
+                document.getElementById("companyForm").submit();
             } else {
                 Swal.fire(
                     'Batal disimpan!',
@@ -91,7 +83,7 @@
 
     <div class="card card-body">
         <div class="col-12">
-            <form id="companyForm" action="{{route('companyStore')}}"  method="get" name="companyForm">
+            <form id="companyForm" action="{{route('companyStore')}}"  method="post" name="companyForm" enctype="multipart/form-data">
                 @csrf
                 <div class="d-grid gap-1">
                     <div class="row form-group">
@@ -138,6 +130,39 @@
                             Biarkan kosong jika tidak memiliki NPWP
                         </div>
                     </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label" id="npwp">No KTP</span>
+                        </div>
+                        <div class="col-md-4">
+                            <input id="ktp" name="ktp" class="form-control" value="{{ old('ktp') }}" placeholder="Nomor KTP">
+                        </div>
+                        <div class="col-md-6">
+                            Biarkan kosong jika tidak memiliki KTP
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Upload File KTP</span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input class="form-control" type="file" id="ktpFile" name="ktpFile" accept="image/jpeg,image/jpg,image/png,application/pdf">
+                            </div>
+                            <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                        </div>
+                    </div>  
+                    <div class="row form-group">
+                        <div class="col-md-2 text-end">
+                            <span class="label">Upload File NPWP</span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input class="form-control" type="file" id="npwpFile" name="npwpFile" accept="image/jpeg,image/jpg,image/png,application/pdf">
+                            </div>
+                            <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                        </div>
+                    </div>  
                     <div class="row form-group">
                         <div class="col-md-2 text-end">
                             <span class="label" id="spanBank">Pajak terhitung</span>

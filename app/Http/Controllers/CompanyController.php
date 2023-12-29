@@ -25,20 +25,52 @@ class CompanyController extends Controller
             'com.id as id', 
             'com.name as name',
             'com.address as address',
-            'cn.name as nation'
+            'cn.name as nation',
+            'com.ktpFile as ktpFile',
+            'com.npwpFile as npwpFile',
+            'com.npwp as npwp',
+            'com.ktp as ktp',
         )
         ->join('countries as cn', 'cn.id', '=', 'com.nation')
         ->get();  
         return datatables()->of($query)
-        ->addColumn('action', function ($row) {
+        ->editColumn('ktp', function ($row) {
+            $html="";
+            if ($row->ktpFile) {
+                $html = $html.'
+                <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Download" onclick="getFileDownload('."'".$row->ktpFile."'".')"><i class="fas fa-image"></i>
+                </button> ';
+            }
+            $html = $html.'<span class="text-left">'.$row->ktp.'</span>';
+            return $html;
+        })
+        ->editColumn('npwp', function ($row) {
+            $html="";
+            if ($row->ktpFile) {
+                $html = $html.'
+                <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Download" onclick="getFileDownload('."'".$row->npwpFile."'".')"><i class="fas fa-image"></i>
+                </button> ';
+            }
+            $html = $html.'<span class="text-left">'.$row->ktp.'</span>';
+            return $html;
+        })
+        ->editColumn('name', function ($row) {
             $html = '
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Company" onclick="editCompany('."'".$row->id."'".')">
+            <div class="row form-group">
+            <span class="col-12 text-left">'.$row->name." - ".$row->nation.'</span>
+            </div>
+            ';
+            return $html;
+        })
+        ->addColumn('action', function ($row) {
+            $html = '<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Company" onclick="editCompany('."'".$row->id."'".')">
             <i class="fa fa-edit" style="font-size:20px"></i>
-            </button>
-            '
+            </button>'
             ;
             return $html;
-        })->addIndexColumn()->toJson();
+        })
+        ->rawColumns(['name','action', 'ktp', 'npwp'])
+        ->addIndexColumn()->toJson();
     }
 
     /**
@@ -66,22 +98,21 @@ class CompanyController extends Controller
             'name' => 'required|max:100|unique:companies',
             'address' => 'required|max:4000',
             'taxIncluded' => 'required|gte:0',
-            'countryId' => 'required|gt:0'
+            'countryId' => 'required|gt:0',
+            'ktpFile' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
+            'npwpFile' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
+            'ktp' => 'max:16'
         ]);
-
         $company = [
             'name'      => $request->name,
             'nation'    => $request->countryId,
             'address'   =>  $request->address,
             'taxIncluded' =>  $request->taxIncluded,
-            'npwp'      => $request->npwpnum
+            'npwp'      => $request->npwpnum,
+            'ktp'      => $request->ktp,
         ];
 
         $companyId = DB::table('companies')->insertGetId($company);
-        //insert dlu ke tabel company
-        //ambil idnya
-        //masukin ke $companyId=lastInsert
-        //insert kontak
 
         if ($request->has('contactName') or $request->has('phone') or $request->has('email'))
         {
@@ -99,6 +130,28 @@ class CompanyController extends Controller
 
             DB::table('contacts')->insert($contact);
         }
+
+
+        $file="";
+        $filename="";
+        if($request->hasFile('ktpFile')){
+            $file = $request->ktpFile;
+            $filename = "KTP Perusahaan ".$companyId." ".$request->name.".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filename);
+            DB::table('companies')
+            ->where('id', '=', $companyId)
+            ->update(['ktpFile' => $filename]);
+        }
+
+        if($request->hasFile('npwpFile')){
+            $file = $request->npwpFile;
+            $filename = "NPWP Perusahaan ".$companyId." ".$request->name.".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filename);
+            DB::table('companies')
+            ->where('id', '=', $companyId)
+            ->update(['npwpFile' => $filename]);
+        }
+
         return redirect('companyList')
         ->with('status','Data company berhasil ditambahkan.');
     }
@@ -146,22 +199,23 @@ class CompanyController extends Controller
         $request->validate([
             'address' => 'required|max:4000',
             'taxIncluded' => 'required|gte:0',
-            'countryId' => 'required|gt:0'
+            'countryId' => 'required|gt:0',
+            'ktpFile' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
+            'npwpFile' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
+            'ktp' => 'max:16'
         ]);
 
         $company = [
             'nation'    => $request->countryId,
             'address'   =>  $request->address,
             'taxIncluded' =>  $request->taxIncluded,
-            'npwp'      => $request->npwpnum
+            'npwp'      => $request->npwpnum,
+            'ktp'      => $request->ktp
+
         ];
 
         Company::where('id', $request->companyId)
         ->update($company);
-        //insert dlu ke tabel company
-        //ambil idnya
-        //masukin ke $companyId=lastInsert
-        //insert kontak
 
         if ($request->has('contactName') or $request->has('phone') or $request->has('email'))
         {
@@ -203,6 +257,28 @@ class CompanyController extends Controller
                 ['name', 'phone', 'email']
             );
         }
+
+
+        $file="";
+        $filename="";
+        if($request->hasFile('ktpFile')){
+            $file = $request->ktpFile;
+            $filename = "KTP Perusahaan ".$request->companyId." ".$request->name.".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filename);
+            DB::table('companies')
+            ->where('id', '=', $request->companyId)
+            ->update(['ktpFile' => $filename]);
+        }
+
+        if($request->hasFile('npwpFile')){
+            $file = $request->npwpFile;
+            $filename = "NPWP Perusahaan ".$request->companyId." ".$request->name.".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filename);
+            DB::table('companies')
+            ->where('id', '=', $request->companyId)
+            ->update(['npwpFile' => $filename]);
+        }
+
         return redirect('companyList')
         ->with('status','Data company berhasil diperbaharui .');
     }

@@ -261,8 +261,8 @@ Route::get('companyList',[CompanyController::class, 'index'])->middleware(['auth
 Route::get('companyAdd',[CompanyController::class, 'create'])->middleware(['auth', 'authorized']);
 //Route::get('companyView',[CompanyController::class, 'show'])->middleware(['auth']);
 Route::get('companyEdit/{company}',[CompanyController::class, 'edit'])->middleware(['auth', 'authorized']);
-Route::get('companyStore',[CompanyController::class, 'store'])->middleware(['auth'])->name('companyStore');
-Route::get('companyUpdate',[CompanyController::class, 'update'])->middleware(['auth'])->name('companyUpdate');
+Route::post('companyStore',[CompanyController::class, 'store'])->middleware(['auth'])->name('companyStore');
+Route::post('companyUpdate',[CompanyController::class, 'update'])->middleware(['auth'])->name('companyUpdate');
 Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middleware(['auth']);
 
 //to get size for all species
