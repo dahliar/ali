@@ -29,121 +29,10 @@ class InvoiceController extends Controller
 
 
     public function getFileDownload($filename){
-        //$headers = ['Content-Type: application/pdf'];
-        //$fileName = $filepath;
-        //return Storage::download('docs/'.$filepath, $fileName, $headers);
         $filepath = storage_path('app/docs/'. $filename);
         $headers = ['Content-Type: application/pdf'];
         return \Response::download($filepath, $filename, $headers);
     }
-
-    public function getPurchaseNumber($purchaseId){
-        $bagian="PURCHASE-ALI";
-        $month = date('m');
-        $year = date('Y');
-        $isActive=1;
-
-        $result = DB::table('document_numbers as dn')
-        ->where('year', $year)
-        ->where('bagian', $bagian)
-        ->where('purchaseId','!=', null)
-        ->max('nomor');
-
-        if ($result>0){
-            $nomor=$result+1;
-        }
-        else{
-            $nomor=1;
-        }
-
-        $data = [
-            'nomor'=>$nomor,
-            'purchaseId'=>$purchaseId,
-            'bagian'=>$bagian,
-            'month'=>$month,
-            'year'=>$year,
-            'isActive'=>$isActive
-        ];
-        $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
-        DB::table('document_numbers')->insert($data);
-
-        return $tnum;
-    }
-
-
-    public function createtransactionnum($transactionId){
-        $bagian="INV-ALS";
-        $month = date('m');
-        $year = date('Y');
-        $isActive=1;
-
-        $result = DB::table('document_numbers as dn')
-        ->where('year', $year)
-        ->where('bagian', $bagian)
-        ->where('transactionId','!=', null)
-        ->max('nomor');
-
-        if ($result>0){
-            $nomor=$result+1;
-        }
-        else{
-            $nomor=1;
-        }
-
-        $data = [
-            'nomor'=>$nomor,
-            'transactionId'=>$transactionId,
-            'bagian'=>$bagian,
-            //'documentType'=>$documentType,
-            'month'=>$month,
-            'year'=>$year,
-            'isActive'=>$isActive
-        ];
-        $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
-        DB::table('document_numbers')->insert($data);
-        return $tnum;
-    }
-
-
-    public function createpinum($transactionId){
-        $bagian="PI-ALS";
-        $month = date('m');
-        $year = date('Y');
-        $isActive=1;
-
-        $result = DB::table('document_numbers as dn')
-        ->where('year', $year)
-        ->where('bagian', $bagian)
-        ->orderBy('id', 'desc')
-        ->first();
-
-        //var_dump($nomor);
-        if ($result){
-            $nomor=($result->nomor)+1;
-        }
-        else{
-            $nomor=1;
-        }
-
-        $data = [
-            'nomor'=>$nomor,
-            'transactionId'=>$transactionId,
-            'bagian'=>$bagian,
-            'month'=>$month,
-            //'documentType'=>$documentType,
-            'year'=>$year,
-            'isActive'=>$isActive
-        ];
-        $pinum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
-        DB::table('document_numbers')->insert($data);
-        DB::table('transactions')
-        ->where('id', $transactionId)
-        ->update(['pinum' => $pinum]);
-
-        return $pinum;
-    }
-
-
 
     public function cetak_pi(Transaction $transaction)
     {
@@ -175,7 +64,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'PI-ALS')
+        ->wherein('bagian', ['PI-ALI','PI-ALS'])
         ->where('transactionId','=', $transaction->id)
         ->first()->id;
 
@@ -220,7 +109,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'INV-ALS')
+        ->wherein('bagian', ['INV-ALI','INV-ALS'])
         ->where('transactionId','=', $transaction->id)
         ->first()->id;
 
@@ -259,7 +148,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'INV-ALS')
+        ->wherein('bagian', ['INV-ALI','INV-ALS'])
         ->where('transactionId','=', $transaction->id)
         ->first()->id;
 
@@ -297,7 +186,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->where('bagian','=', 'PURCHASE-ALI')
+        ->wherein('bagian', ['PURCHASE-ALI','PURCHASE-ALS'])
         ->where('purchaseId','=', $purchase->id)
         ->first()->id;
 

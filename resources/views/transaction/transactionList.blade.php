@@ -34,7 +34,9 @@
     function documentList(id){
         window.open(('{{ url("transactionDocument") }}'+"/"+id), '_blank');
     }
-
+    function getFileDownload(filepath){
+        window.open(('{{ url("getFileDownload") }}'+"/"+filepath), '_blank');
+    };
     function cetakPI(id){
         window.open(('{{ url("transaction/pi") }}'+"/"+id), '_blank');
     }
@@ -77,28 +79,18 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-                {   "width": "5%", "targets":   [0], "className": "text-left" },
-                {   "width": "25%", "targets":  [1], "className": "text-left"   },
-                {   "width": "10%", "targets":  [2], "className": "text-left" },
-                {   "width": "18%", "targets":  [3], "className": "text-left" },
-                {   "width": "17%", "targets":  [4], "className": "text-left" },
-                {   "width": "10%", "targets":  [5], "className": "text-left" },
-                {   "width": "15%", "targets":  [6], "className": "text-left" }
+                {   "width": "30%", "targets": [0], "className": "text-left"   },
+                {   "width": "20%", "targets": [1], "className": "text-left" },
+                {   "width": "20%", "targets": [2], "className": "text-left" },
+                {   "width": "30%", "targets": [3], "className": "text-left" }
                 ], 
 
             columns: [
-                {data: 'SrNo',
-                render: function (data, type, row, meta) {
-                    return meta.row + 1;
-                }
-            },
-            {data: 'name', name: 'name'},
-            {data: 'nation', name: 'nation'},
-            {data: 'number', name: 'number'},
-            {data: 'tanggal', name: 'tanggal'},
-            {data: 'status', name: 'status'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'name', name: 'name'},
+                {data: 'number', name: 'number'},
+                {data: 'tanggal', name: 'tanggal'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 </script>
@@ -211,12 +203,9 @@
                 <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
                     <thead>
                         <tr style="font-size: 12px;">
-                            <th>No</th>
                             <th>Perusahaan</th>
-                            <th>Negara</th>
                             <th>No Surat</th>
                             <th>Tanggal</th>
-                            <th>Status</th>
                             <th>Act</th>
                         </tr>
                     </thead>

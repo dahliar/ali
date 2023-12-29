@@ -113,7 +113,7 @@
         </div>
 
         <div class="card card-body">
-            <form id="purchaseForm" action="{{route('purchaseStore')}}"  method="get" name="purchaseForm" enctype="multipart/form-data">
+            <form id="purchaseForm" action="{{route('purchaseStore')}}"  method="POST" name="purchaseForm" enctype="multipart/form-data">
                 @csrf
                 <div class="d-grid gap-1">
                     <div class="row form-group">
@@ -196,19 +196,17 @@
                             <input id="downPayment" name="downPayment" type="number"  step="1" class="form-control text-end" value="{{old('downPayment',0)}}">
                         </div>
                     </div>
-
-                        <!--
-                        <div class="row form-group">
-                            <div class="col-md-3 text-md-end">
-                                <span class="label">File Invoice</span>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <input class="form-control" type="file" id="imageurl" name="imageurl">
-                                </div>
-                            </div>
+                    <div class="row form-group">
+                        <div class="col-md-3 text-md-end">
+                            <span class="label">File Invoice</span>
                         </div>
-                    -->
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input class="form-control" type="file" id="imageurl" name="imageurl" accept="image/*">
+                            </div>
+                            <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                        </div>
+                    </div>
                     <div class="row form-group">
                         <div class="col-md-3 text-md-end">
                             <span class="label">Catatan Transaksi</span>

@@ -1,3 +1,21 @@
+TO DO List:
+1. DONE     - PEB di Undername EDIT
+2. DONE     - View PEB di Undername List
+2. DONE     - PEB di Transaction EDIT
+4. DONE     - View PEB di Transaction List 
+3. DONE     - Upload nota pembelian di Purchase Add
+4. DONE     - Edit nota pembelian di Purchase Edit
+5. DONE     - PI dan IPL di Transaction List, jadikan daftar dokumen
+5. DONE     - PI dan IPL di Undername List, jadikan daftar dokumen
+
+
+
+
+
+
+
+
+
 1. 	Problem : Attempt to read property "accessLevel" on null (View: /Users/dahliar/DocumentRoot/ali/resources/views/partial/headerAdmin.blade.php)
 	Solusi	: cek di route, method kirim get atau post
 

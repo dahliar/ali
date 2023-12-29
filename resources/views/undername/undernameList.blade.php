@@ -28,12 +28,18 @@
     function tambahTransaksiUndername(){
         window.open(('{{ url("undernameAdd") }}'), '_self');
     }
-
+    function getFileDownload(filepath){
+        window.open(('{{ url("getFileDownload") }}'+"/"+filepath), '_blank');
+    };
     function cetakPI(id){
         window.open(('{{ url("undername/pi") }}'+"/"+id), '_blank');
     }
     function cetakIPL(id){
         window.open(('{{ url("undername/ipl") }}'+"/"+id), '_blank');
+    }
+
+    function documentList(id){
+        window.open(('{{ url("undernameDocument") }}'+"/"+id), '_blank');
     }
 
     function myFunction(){
@@ -68,20 +74,16 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-                {   "width": "25%", "targets":  [0], "className": "text-left"   },
-                {   "width": "10%", "targets": [1], "className": "text-left" },
+                {   "width": "30%", "targets": [0], "className": "text-left"   },
+                {   "width": "20%", "targets": [1], "className": "text-left" },
                 {   "width": "20%", "targets": [2], "className": "text-left" },
-                {   "width": "20%", "targets":  [3], "className": "text-left" },
-                {   "width": "12%", "targets":   [4], "className": "text-left" },
-                {   "width": "13%", "targets":  [5], "className": "text-left" }
+                {   "width": "30%", "targets": [3], "className": "text-left" }
                 ], 
 
             columns: [
                 {data: 'name', name: 'name'},
-                {data: 'nation', name: 'nation'},
                 {data: 'number', name: 'number'},
                 {data: 'tanggal', name: 'tanggal'},
-                {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
                 ]
         });
@@ -174,10 +176,8 @@
                     <thead>
                         <tr style="font-size: 12px;">
                             <th>Perusahaan</th>
-                            <th>Negara</th>
-                            <th>No Surat</th>
+                            <th>Dokumen & Status</th>
                             <th>Tanggal</th>
-                            <th>Status</th>
                             <th>Act</th>
                         </tr>
                     </thead>

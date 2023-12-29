@@ -34,6 +34,10 @@
         window.open(('{{ url("purchaseDocument") }}'+"/"+id), '_blank');
     }
 
+    function getFileDownload(filepath){
+        window.open(('{{ url("getFileDownload") }}'+"/"+filepath), '_blank');
+    };
+
     function myFunction(){
         var e = document.getElementById("negara");
         var negara = e.options[e.selectedIndex].value;       
@@ -56,28 +60,28 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "3%",  "targets":  [0], "className": "text-center" },
-            {   "width": "23%", "targets":  [1], "className": "text-left"   },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "15%", "targets":  [3], "className": "text-left" },
-            {   "width": "8%",  "targets":  [4], "className": "text-end" },
-            {   "width": "8%",  "targets":  [5], "className": "text-end" },
-            {   "width": "10%", "targets":  [6], "className": "text-end" },
-            {   "width": "8%", "targets":  [7], "className": "text-left" },
-            {   "width": "15%", "targets":  [8], "className": "text-left" }
-            ], 
+                {   "width": "3%",  "targets":  [0], "className": "text-center" },
+                {   "width": "23%", "targets":  [1], "className": "text-left"   },
+                {   "width": "10%", "targets":  [2], "className": "text-left" },
+                {   "width": "15%", "targets":  [3], "className": "text-left" },
+                {   "width": "8%",  "targets":  [4], "className": "text-end" },
+                {   "width": "8%",  "targets":  [5], "className": "text-end" },
+                {   "width": "10%", "targets":  [6], "className": "text-end" },
+                {   "width": "8%", "targets":  [7], "className": "text-left" },
+                {   "width": "15%", "targets":  [8], "className": "text-left" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'name', name: 'name'},
-            {data: 'nation', name: 'nation'},
-            {data: 'nosurat', name: 'nosurat'},
-            {data: 'arrivaldate', name: 'arrivaldate'},
-            {data: 'dueDate', name: 'dueDate'},
-            {data: 'paymentAmount', name: 'paymentAmount'},
-            {data: 'status', name: 'status'},
-            {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'nation', name: 'nation'},
+                {data: 'nosurat', name: 'nosurat'},
+                {data: 'arrivaldate', name: 'arrivaldate'},
+                {data: 'dueDate', name: 'dueDate'},
+                {data: 'paymentAmount', name: 'paymentAmount'},
+                {data: 'status', name: 'status'},
+                {data: 'action', name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 </script>

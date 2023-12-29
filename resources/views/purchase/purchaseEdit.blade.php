@@ -106,12 +106,12 @@
         <div class="card card-body">
             <div class="row">
                 <div class="col-1"></div>
-                <div class="col-10">
-                    <form id="purchaseForm" action="{{url('purchaseUpdate')}}"  method="post" name="purchaseForm">
+                <div class="col-10">                    
+                    <form id="purchaseForm" action="{{url('purchaseUpdate')}}"  method="POST" name="purchaseForm" enctype="multipart/form-data">
                         @csrf
                         <div class="d-grid gap-1">
                             <div class="row form-group">
-                                <div class="col-md-3 text-md-right">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label" id="companyName">No Pembelian</span>
                                 </div>
                                 <div class="col-md-8">
@@ -120,7 +120,7 @@
                                 </div>
                             </div>      
                             <div class="row form-group">
-                                <div class="col-md-3 text-md-right">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label" id="companyName">Supplier</span>
                                 </div>
                                 <div class="col-md-8">
@@ -128,7 +128,7 @@
                                 </div>
                             </div>      
                             <div class="row form-group">
-                                <div class="col-md-3 my-auto">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label">Tanggal Penerimaan Barang*</span>
                                 </div>
                                 <div class="col-md-3">
@@ -138,7 +138,7 @@
                                 </div>
                             </div>               
                             <div class="row form-group">
-                                <div class="col-md-3 my-auto">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label">Tanggal Transaksi*</span>
                                 </div>
                                 <div class="col-md-3">
@@ -148,7 +148,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3 my-auto">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label">Tanggal Batas Bayar*</span>
                                 </div>
                                 <div class="col-md-3">
@@ -158,7 +158,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3 text-md-right">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label" id="spanPayment">Mata Uang Transaksi*</span>
                                 </div>
                                 <div class="col-md-3">
@@ -171,7 +171,7 @@
                                 </div>                    
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3 my-auto">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label">Persen Pajak</span>
                                 </div>
                                 <div class="col-md-3">
@@ -182,7 +182,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3 my-auto">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label">Down Payment</span>
                                 </div>
                                 <div class="col-md-3">
@@ -192,7 +192,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3 my-auto">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label">Jumlah</span>
                                 </div>
                                 <div class="col-md-3">
@@ -202,7 +202,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3 my-auto">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label">Pajak</span>
                                 </div>
                                 <div class="col-md-3">
@@ -212,7 +212,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3 text-md-right">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label" id="spanPayment">Potongan Pajak*</span>
                                 </div>
                                 <div class="col-md-3">
@@ -221,9 +221,30 @@
                                         <option value="1" @if($purchase->taxIncluded == 1) selected @endif>Ya</option>
                                     </select>
                                 </div>                    
-                            </div>                
+                            </div>
                             <div class="row form-group">
-                                <div class="col-md-3 text-md-right">
+                                <div class="col-md-3 text-md-end">
+                                    <span class="label">File Invoice</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <a href="{{ url('getFileDownload').'/'.$purchase->realInvoiceFilePath }}" target="_blank">{{$purchase->realInvoiceFilePath}}</a>
+                                    </div>
+                                </div>
+                            </div>        
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-end">
+                                    <span class="label">Upload File Invoice Baru</span>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <input class="form-control" type="file" id="imageurlBaru" name="imageurlBaru" accept="image/*">
+                                    </div>
+                                    <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                                </div>
+                            </div>  
+                            <div class="row form-group">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label" id="spanPayment">Status Pembelian*</span>
                                 </div>
                                 <div class="col-md-3">
@@ -244,7 +265,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-md-3 text-md-right">
+                                <div class="col-md-3 text-md-end">
                                     <span class="label">Catatan Transaksi</span>
                                 </div>
                                 <div class="col-md-8">
@@ -252,8 +273,6 @@
                                 </div>  
                             </div>
                         </div>
-
-                        
 
                         @if(Auth::user()->accessLevel<=1)
                         <div class="row form-group">

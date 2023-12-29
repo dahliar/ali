@@ -25,19 +25,11 @@
             confirmButtonText: 'Ya, Simpan saja.'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire({
-                    title: 'Transaksi disimpan',
-                    text: "Simpan transaksi penjualan",
-                    icon: 'info',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ok disimpan.'
-                }).then((result) => {
-                    document.getElementById("transactionForm").submit();
-                })
+                document.getElementById("transactionForm").submit();
             } else {
                 Swal.fire(
                     'Batal disimpan!',
-                    "Pembuatan transaksi dibatalkan",
+                    "Update transaksi dibatalkan",
                     'info'
                     );
             }
@@ -157,25 +149,23 @@
     <div class="container-fluid">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="row">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb primary-color">
-                            <li class="breadcrumb-item">
-                                <a class="white-text" href="{{ url('/home') }}">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active">
-                                <a class="white-text" href="{{ url('transactionList')}}">Transaksi</a>
-                            </li>
-                            <li class="breadcrumb-item active">Edit</li>
-                        </ol>
-                    </nav>
-                </div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb primary-color">
+                        <li class="breadcrumb-item">
+                            <a class="white-text" href="{{ url('/home') }}">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <a class="white-text" href="{{ url('transactionList')}}">Transaksi</a>
+                        </li>
+                        <li class="breadcrumb-item active">Edit</li>
+                    </ol>
+                </nav>
             </div>
         </div>
         <div class="card card-body">
-            <form id="transactionForm" action="{{url('transactionUpdate')}}"  method="POST" name="transactionForm">
+            <form id="transactionForm" action="{{url('transactionUpdate')}}"  method="POST" name="transactionForm" enctype="multipart/form-data">
                 @csrf
-                <div class="d-grid gap-1">
+                <div class="d-grid gap-2">
                     <input id="isEdit" name="isEdit"  class="form-control"  value="isEdit" type="hidden" readonly>
                     <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
 
@@ -195,7 +185,49 @@
                             <input id="pinum" name="pinum"  class="form-control"  value="{{ $transaction->pinum}}" readonly>
                             <input id="transactionId" name="transactionId"  class="form-control"  value="{{$transaction->id}}" type="hidden" readonly>
                         </div>
-                    </div>                   
+                    </div>      
+                    <div class="row form-group">
+                        <div class="col-md-3 text-md-end">
+                            <span class="label" id="spanLabel">Nomor PEB</span>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="pebNum" name="pebNum" class="form-control"
+                            value="{{ old('pebNum', $transaction->pebNum) }}" placeholder="Nomor PEB">
+                            <span style="font-size:9px" class="label">Wajib diisi ketika dilakukan penyelesaian transaksi</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-3 text-md-end">
+                            <span class="label">Tanggal PEB*</span>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="date" id="pebDate" name="pebDate" class="form-control text-end" value="{{ old('pebDate', $transaction->pebDate) }}">
+                            <span style="font-size:9px" class="label">Wajib diisi ketika dilakukan penyelesaian transaksi</span>
+                        </div>
+                    </div>     
+                    @if($transaction->pebFile)
+                    <div class="row form-group">
+                        <div class="col-md-3 text-md-end">
+                            <span class="label">File PEB</span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <a href="{{ url('getFileDownload').'/'.$transaction->pebFile }}" target="_blank">{{$transaction->pebFile}}</a>
+                            </div>
+                        </div>
+                    </div>       
+                    @endif                    
+                    <div class="row form-group">
+                        <div class="col-md-3 text-md-end">
+                            <span class="label">Upload File PEB Baru</span>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input class="form-control" type="file" id="pebFile" name="pebFile" accept="image/*">
+                            </div>
+                            <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                        </div>
+                    </div>          
                     <div class="row form-group">
                         <div class="col-3 text-end">
                             <span class="label" id="spanLabel">Shipper*</span>
@@ -457,13 +489,22 @@
                             </select>
                         </div>                    
                     </div>
+                    @php
+                    $valuta="";
+                    switch($transaction->valutaType){
+                        case("1") : $valuta = "Rupiah";     break;
+                        case("2") : $valuta = "US Dollar";  break;
+                        case("3") : $valuta = "Rmb";        break;
+                    }
+                    @endphp
+
                     <div class="row form-group">
                         <div class="col-3 text-end">
                             <span class="label" id="spanPayment">Payment Amount*</span>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
-                                <span name="spanAm" id="spanAm" class="input-group-text">-</span>
+                                <span name="spanAm" id="spanAm" class="input-group-text">{{$valuta}}</span>
 
                                 <input id="payment" name="payment" type="number" step="0.01" value="{{ $transaction->payment }}" class="form-control text-end" placeholder="use commas">
                             </div>
@@ -475,7 +516,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
-                                <span name="spanAd" id="spanAd" class="input-group-text">-</span>
+                                <span name="spanAd" id="spanAd" class="input-group-text">{{$valuta}}</span>
 
                                 <input id="advance" name="advance" type="number" step="0.01" value="{{ $transaction->advance }}" class="form-control text-end" placeholder="use commas">
                             </div>
@@ -499,7 +540,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="row form-group">
                         <div class="col-3 text-end">
                             <span class="label">Status</span>
@@ -508,7 +549,6 @@
                             <input id="currentStatus" name="currentStatus" type="hidden" value="{{ $transaction->status }}">
                             @if ($transaction->status == 1)
                             <select id="status" name="status" class="form-select" >
-                                <option value="-1">--Choose One--</option>
                                 <option value="1" @if($transaction->status == 1) selected @endif>Penawaran</option>
                                 <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
                                 <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
@@ -523,7 +563,6 @@
                             @endif
                             @if($transaction->status == 4)
                             <select id="status" name="status" class="form-select">
-                                <option value="-1">--Choose One--</option>
                                 <option value="4" @if($transaction->status == 4) selected @endif>Sailing</option>
                                 <option value="2" @if($transaction->status == 2) selected @endif>Selesai Pembayaran</option>
                                 <option value="3" @if($transaction->status == 3) selected @endif>Batal</option>

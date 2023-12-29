@@ -213,6 +213,7 @@ class SpeciesController extends Controller
                 'baseprice' => 'required|numeric|gt:0',
                 'weightbase' => 'required|numeric|gt:0',
                 'amount' => 'required|numeric|gte:0',
+                'image' => 'required|file|size:512'
             ]
         );
 

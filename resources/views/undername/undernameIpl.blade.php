@@ -190,8 +190,7 @@
             </table>
 
             @php
-            $totalAmount=0;
-            $totalNetWeight=0;
+            $totalPrice=0;
             $totalGrossWeight=0;
             $totalTransactionPrice=0;
 
@@ -207,33 +206,28 @@
                 <thead style="text-align: center;">
                     <tr >
                         <th width="40%">Goods Description</th>
-                        <th width="12%">Quantity</th>
-                        <th width="15%">Net Weight</th>
-                        <th width="16%">Unit Price ({{$paymentValuta}})</th>
-                        <th width="17%">Total ({{$paymentValuta}})</th>
+                        <th width="20%">Amount</th>
+                        <th width="20%">Unit Price ({{$paymentValuta}})</th>
+                        <th width="20%">Total ({{$paymentValuta}})</th>
                     </tr>
                 </thead>
                 <tbody style="font-size:12px">
                     @foreach ($undername_details as $detail)
                     @php
-                    $totalAmount            +=$detail->amount;
-                    $totalNetWeight         +=$detail->netweight;
-                    $totalGrossWeight       +=$detail->grossweight;
-                    $totalTransactionPrice  +=$detail->totalPrice;
+                    $totalPrice             +=($detail->amount * $detail->price);
+                    $totalGrossWeight       +=$detail->amount;
+                    $totalTransactionPrice  +=$totalPrice;
                     @endphp            
                     <tr >
-                        <td width="40%">{{$detail->goods}}</td>
-                        <td width="12%" style="text-align: right;">
-                            {{$detail->quantity}}
-                        </td>
+                        <td width="40%">{{$detail->item}}</td>
                         <td width="15%" style="text-align: right;">
-                            {{number_format($detail->netweight, 2, ',', '.').' Kg'}}
+                            {{number_format($detail->amount, 2, ',', '.').' Kg'}}
                         </td>
                         <td width="16%" style="text-align: right;">
                             {{number_format($detail->price, 2, ',', '.')}}
                         </td>
                         <td width="17%" style="text-align: right;">
-                            {{number_format($detail->totalPrice, 2, ',', '.')}}
+                            {{number_format($totalPrice, 2, ',', '.')}}
                         </td>
                     </tr>
                     @endforeach
@@ -241,13 +235,11 @@
                 <tfoot style="font-size:12px">
                     <tr >
                         <td width="40%"><b>TOTAL</b></td>
-                        <td width="12%"></td>
-                        <td width="15%" style="text-align: right;">
-                            {{number_format($totalNetWeight, 2, ',', '.').' Kg'}}
+                        <td width="20%" style="text-align: right;">
+                            {{number_format($totalGrossWeight, 2, ',', '.').' Kg'}}
                         </td>
-                        <td width="16%" style="text-align: right;">
-                        </td>
-                        <td width="17%" style="text-align: right;">
+                        <td width="20%"></td>
+                        <td width="20%" style="text-align: right;">
                             {{number_format($totalTransactionPrice, 2, ',', '.')}}
                         </td>
                     </tr>

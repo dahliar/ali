@@ -7,9 +7,11 @@ use App\Models\Countries;
 use App\Models\Company;
 use Carbon\Carbon;
 
-
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use DB;
+use File;
+
 
 class PurchaseController extends Controller
 {
@@ -41,6 +43,7 @@ class PurchaseController extends Controller
             'p.dueDate as dueDate',
             'p.paymentAmount as paymentAmount',
             'p.status as statusCheck',
+            'p.realInvoiceFilePath as realInvoiceFilePath',
             DB::raw('(CASE WHEN p.status ="0" THEN "New Submission"
                 WHEN p.status ="1" then "On Progress"
                 WHEN p.status ="2" then "Finished"
@@ -69,16 +72,18 @@ class PurchaseController extends Controller
             return number_format($row->paymentAmount, 2);
         })
         ->addColumn('action', function ($row) {
-            $html='
+            $html='<button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Download" onclick="getFileDownload('."'".$row->realInvoiceFilePath."'".')"><i class="fas fa-file-invoice-dollar"></i>
+            </button>
             <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar beli item" onclick="purchaseItems('."'".$row->id."'".')">
-            <i class="fa fa-list"></i>
-            </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit data pembelian " onclick="purchaseEdit('."'".$row->id."'".')">
-            <i class="fa fa-edit"></i>
-            </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Document List" onclick="documentList('."'".$row->id."'".')"><i class="fa fa-file-pdf"></i> Dokumen
-            </button>
+            <i class="fa fa-list"></i></button>
             ';
+            if($row->statusCheck != 3){
+                $html=$html.'<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit data pembelian " onclick="purchaseEdit('."'".$row->id."'".')"><i class="fa fa-edit"></i></button>
+                <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Document List" onclick="documentList('."'".$row->id."'".')"><i class="fa fa-file-pdf"></i>
+                </button>
+                ';
+            }
+
             return $html;
         })
         ->toJson();
@@ -127,15 +132,19 @@ class PurchaseController extends Controller
                     'after:purchaseDate'
                 ],
                 'downPayment' => ['required','gte:0'],
-                'taxPercentage' => ['required','gt:0']
+                'taxPercentage' => ['required','gt:0'],
+                'imageurl' => ['required','image', 'max:2048']
             ],
             [
                 'company.gt'=> 'Pilih salah satu perusahaan',
                 'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
                 'company.gt'=>'Pilih salah satu perusahaan',
                 'purchaseDate.after' => 'Maksimal 1 bulan yang lalu',
-                'dueDate.after' => 'Harus lebih dari tanggal penerimaan',
-                'arrivalDate.after' => 'Maksimal 1 bulan yang lalu'
+                'dueDate.after' => 'Tanggal deadline bayar harus lebih dari tanggal penerimaan',
+                'arrivalDate.after' => 'Maksimal 1 bulan yang lalu',
+                'imageurl.required' => 'File invoice harus ada',
+                'imageurl.max' => 'Ukuran file maksimal adalah 1 MB',
+                'imageurl.image' => 'File invoice harus berupa image'
             ]
         );
 
@@ -157,12 +166,19 @@ class PurchaseController extends Controller
         ];
 
         $lastPurchaseIdStored = $this->purchase->storeOnePurchase($data);
+        $file="";
+        $filename="";
+        if($request->hasFile('imageurl')){
+            $file = $request->imageurl;
+            $filename = "Purchase Invoice ".$request->purchaseDate." ".$lastPurchaseIdStored.".".$file->getClientOriginalExtension();
+            $file->move(base_path("/storage/app/docs/"), $filename);
+        }
 
         //create Purchase Number
-        $this->inv = new InvoiceController();
-        $purchaseNum = $this->inv->getPurchaseNumber($lastPurchaseIdStored);
+        $purchaseNum = $this->getPurchaseNumber($lastPurchaseIdStored);
         $purchase = Purchase::find($lastPurchaseIdStored);
         $purchase->purchasingNum = $purchaseNum;
+        $purchase->realInvoiceFilePath = $filename;
         $purchase->save();
 
         return redirect('purchaseList')
@@ -201,23 +217,65 @@ class PurchaseController extends Controller
      */
         public function update(Request $request)
         {
-            $request->validate(
-                [
-                    'progressStatus' => 'required|gt:0',
-                    'purchaseDate' => 'required|date|before_or_equal:today',
-                    'arrivalDate' => 'required|date|before_or_equal:purchaseDate'
-                ],
-                [
-                ]
-            );
+            if (!$request->exists('imageurlBaru')){
+                $request->validate(
+                    [
+                        'progressStatus' => 'required|gt:0',
+                        'purchaseDate.before_or_equal' => 'Maksimal 1 bulan yang lalu',
+                        'dueDate.after' => 'Tanggal deadline bayar harus lebih dari tanggal penerimaan',
+                        'arrivalDate.after_or_equal' => 'Maksimal 1 bulan yang lalu',
+                    ],
+                    [                
+                        'purchaseDate.after' => 'Maksimal 1 bulan yang lalu',
+                        'dueDate.after' => 'Tanggal deadline bayar harus lebih dari tanggal penerimaan',
+                        'arrivalDate.after' => 'Maksimal 1 bulan yang lalu',
+                    ]
+                );
+                $purchase = Purchase::find($request->purchaseId);
+                $purchase->arrivalDate = $request->arrivalDate;
+                $purchase->purchaseDate = $request->purchaseDate;
+                $purchase->dueDate = $request->dueDate;
+                $purchase->finishedDate = Carbon::now()->toDateString();
+                $purchase->status = $request->progressStatus;
+                $purchase->paymentTerms = $request->paymentTerms;
+                $purchase->save();
+            } else{
+                $request->validate(
+                    [
+                        'progressStatus' => 'required|gt:0',
+                        'purchaseDate' => 'required|date|before_or_equal:today',
+                        'arrivalDate' => 'required|date|before_or_equal:purchaseDate',
+                        'dueDate' => 'required|date|after:purchaseDate',
+                        'imageurlBaru' => ['required','image', 'max:2048']
+                    ],
+                    [
+                        'purchaseDate.before_or_equal' => 'Maksimal 1 bulan yang lalu',
+                        'dueDate.after' => 'Tanggal deadline bayar harus lebih dari tanggal penerimaan',
+                        'arrivalDate.after_or_equal' => 'Maksimal 1 bulan yang lalu',
+                        'imageurl.required' => 'File invoice harus ada',
+                        'imageurl.max' => 'Ukuran file maksimal adalah 1 MB',
+                        'imageurl.image' => 'File invoice harus berupa image'
+                    ]
+                );
 
-            $purchase = Purchase::find($request->purchaseId);
-            $purchase->arrivalDate = $request->arrivalDate;
-            $purchase->purchaseDate = $request->purchaseDate;
-            $purchase->finishedDate = Carbon::now()->toDateString();
-            $purchase->status = $request->progressStatus;
-            $purchase->paymentTerms = $request->paymentTerms;
-            $purchase->save();
+                $purchase = Purchase::find($request->purchaseId);
+                $file="";
+                $filename="";
+                if($request->hasFile('imageurlBaru')){
+                    $file = $request->imageurlBaru;
+                    $filename = "Purchase Invoice ".$request->purchaseDate." ".$purchase->id.".".$file->getClientOriginalExtension();
+                    $file->move(base_path("/storage/app/docs/"), $filename);
+                }
+                $purchase->arrivalDate = $request->arrivalDate;
+                $purchase->purchaseDate = $request->purchaseDate;
+                $purchase->dueDate = $request->dueDate;
+                $purchase->finishedDate = Carbon::now()->toDateString();
+                $purchase->status = $request->progressStatus;
+                $purchase->realInvoiceFilePath = $filename;
+                $purchase->paymentTerms = $request->paymentTerms;
+                $purchase->save();
+            }
+
 
             return redirect('purchaseList')
             ->with('status','Transaksi pembelian ke '.$request->companyName.' berhasil diperbaharui.');
@@ -264,6 +322,38 @@ class PurchaseController extends Controller
             })
             ->rawColumns(['action', 'tanggal'])
             ->addIndexColumn()->toJson();
+        }
+        public function getPurchaseNumber($purchaseId){
+            $bagian="PURCHASE-ALS";
+            $month = date('m');
+            $year = date('Y');
+            $isActive=1;
+
+            $result = DB::table('document_numbers as dn')
+            ->where('year', $year)
+            ->where('bagian', $bagian)
+            ->where('purchaseId','!=', null)
+            ->max('nomor');
+
+            if ($result>0){
+                $nomor=$result+1;
+            }
+            else{
+                $nomor=1;
+            }
+
+            $data = [
+                'nomor'=>$nomor,
+                'purchaseId'=>$purchaseId,
+                'bagian'=>$bagian,
+                'month'=>$month,
+                'year'=>$year,
+                'isActive'=>$isActive
+            ];
+            $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
+            DB::table('document_numbers')->insert($data);
+
+            return $tnum;
         }
 
     }

@@ -8,7 +8,6 @@ use App\Models\Rekening;
 use App\Models\Countries;
 use App\Models\TransactionNote;
 use App\Models\Forwarder;
-use App\Models\Undername;
 use App\Models\Liner;
 use App\Models\Bank;
 
@@ -40,16 +39,6 @@ class TransactionController extends Controller
         return view('transaction.transactionListTesting', compact('nations'));
     }
 
-    public function indexUndername()
-    {
-        $nations = Countries::where('isActive',1)->get();
-        return view('undername.undernameList', compact('nations'));
-    }
-
-    public function getAllUndernameTransaction(Request $request){
-        return $this->transaction->getAllUndernameTransactionData($request);
-    }
-
     public function getAllExportTransaction(Request $request){
         return $this->transaction->getAllExportTransactionData($request);
     }
@@ -78,19 +67,6 @@ class TransactionController extends Controller
 
         return view('transaction.transactionAdd', compact('countryRegister', 'companies', 'rekenings', 'forwarders', 'liners'));
     }
-    public function createUndername()
-    {
-        $companies = Company::all();
-        $banks = Bank::all();
-        $liners = Liner::orderBy('name', 'ASC')->get();
-        $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
-        $countryRegister = Countries::where('isActive',1)->get();
-
-        //$notes = TransactionNote::where('transactionId',$transaction->id)->get();
-
-        return view('undername.undernameAdd', compact('countryRegister', 'companies', 'banks', 'forwarders', 'liners'));
-    }
-
 
     /**
      * Store a newly created resource in storage.
@@ -195,14 +171,7 @@ class TransactionController extends Controller
         
         $lastTransactionIdStored = DB::table('transactions')->insertGetId($data);
         //create PI Number
-        $this->inv = new InvoiceController();
-        $pinum = $this->inv->createpinum($lastTransactionIdStored);
-
-
-        //ketika transaksi adalah undername
-        if ($request->undername==2){
-            $tnum = $this->transaction->whenUndernameIsTrue($lastTransactionIdStored);
-        }
+        $pinum = $this->createpinum($lastTransactionIdStored);
 
         if (!empty($request->pinotes)){
             $a=0;
@@ -221,262 +190,6 @@ class TransactionController extends Controller
         ->with('status','Transaksi pengiriman berhasil ditambahkan.');
     }
 
-    public function undernameStore(Request $request)
-    {   
-        //21 validasi inputan wajib
-        //2 default value dari inputan : swiftcode, valuta
-        //3 inputan default: userId, creationDate, status
-
-        $request->validate(
-            [
-                'shipper' => 'required',
-                'pinum' => 'required|unique:undernames',
-                'transactionNum' => 'required|unique:undernames',
-                'shipperAddress' => 'required',
-                'company' => 'required|gt:0',
-                'companydetail' => 'required',                
-                'countryId' => 'required|gt:0',
-                'packer' => 'required',
-                'loadingPort' => 'required',
-                'orderType' => 'required',                
-                'destinationPort' => 'required',                
-                'containerType' => 'required|gt:0',                
-                'containerParty' => 'required',
-                'forwarder' => 'required|gt:0',
-
-                'containerNumber' => 'required',
-                'containerSeal' => 'required',
-                'containerVessel' => 'required',
-                'liner' => 'required|gt:0',
-                'bl' => 'required',
-
-                'transactionDate' => 'required|date|before_or_equal:today',
-                'loadingDate' => 'required|date',
-                'departureDate' => 'required|date|after_or_equal:loadingDate',
-                'arrivalDate' => 'required|date|after:departureDate',
-
-                'paymentTo' => 'required|gt:0',
-                'bank' => 'required|gt:0',
-                'paymentBankAddress' => 'required',
-                'account' => 'required',
-                'paymentAccountName' => 'required',
-                'swiftcode' => 'required',
-                'valutaType' => 'required|gt:0',
-                'paymentAmount' => 'required|gte:0',
-                'advanceAmount' => 'required|gte:0',
-                'paymentStatus' => 'required|gt:0',
-            ],
-            [
-                'rekening.gt'=> 'Pilih salah satu rekening',
-                'liner.*'=> 'Pilih salah satu Liner',
-                'bl.*'=> 'Nomor BL harus diisi',
-                'company.gt'=> 'Pilih salah satu perusahaan',
-                'containerType.gt'=> 'Pilih salah satu jenis pengiriman',
-                'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
-                'pinum.unique'=> 'Nomor pinum harus unik',
-                'transactionNum.unique'=> 'Nomor transaksi harus unik',
-                'countryId.gt'=>'Pilih salah satu negara',
-                'forwarder.gt'=>'Pilih forwarder',
-                'undernamePayment.*'=>'Pilih status jenis undername',
-                'paymentStatus.*'=>'Pilih status pembayaran',
-                'pinum.*'=> 'Nomor PI harus diisi',
-                'transactionNum.*'=> 'Nomor transaksi harus diisi',
-                'companydetail.*' => 'Detail perusahaan harus diisi',  
-                'packer.*' => 'Nama perusahaan packer harus diisi',
-                'loadingPort.*' => 'Port loading harus diisi',
-                'destinationPort.*' => 'Port tujuan harus diisi',
-                'containerNumber.*' => 'Nomor kontainer harus diisi',
-                'containerSeal.*' => 'Nomor seal harus diisi',
-                'containerVessel.*' => 'Nama vessel harus diisi',
-                'liner.*' => 'Liner harus dipilih',
-                'bl.*' => 'Nomor Bill of Lading harus diisi',
-            ]
-        );
-
-        //dd($request->liner);
-
-        $data = [
-            'userId' => auth()->user()->id,
-            'jenis' => 1,
-            'shipper' =>  $request->shipper,
-            'shipperAddress' =>  $request->shipperAddress,
-            'companyId' =>  $request->company,
-            'companydetail' =>  $request->companydetail,
-            'transactionNum' => $request->transactionNum,
-            'pinum' => $request->pinum,
-            'status' =>  1,
-            'packer' => $request->packer,
-            'loadingport' =>  $request->loadingPort,
-            'destinationport' =>  $request->destinationPort,
-            'orderType' => $request->orderType,
-            'countryId' => $request->countryId,
-            'packer' =>  $request->packer,
-            'containerType' =>  $request->containerType,
-            'containerParty' =>  $request->containerParty,
-
-            'forwarderid' => $request->forwarder,
-            'containerNumber' =>  $request->containerNumber,
-            'containerSeal' =>  $request->containerSeal,
-            'containerVessel' =>  $request->containerVessel,
-
-            'linerId' => $request->liner,
-            'bl' => $request->bl,
-            'transactionDate' => $request->transactionDate,
-            'departureDate' =>  $request->departureDate,
-            'loadingDate' =>  $request->loadingDate,
-            'arrivalDate' => $request->arrivalDate,
-            
-            'paymentTo' => $request->paymentTo,
-            'paymentBank' => $request->bank,
-            'paymentBankAddress' => $request->paymentBankAddress,
-            'paymentAccount' => $request->account,
-            'paymentAccountName' => $request->paymentAccountName,
-            'paymentSwiftcode' => $request->swiftcode,
-            'paymentValuta' =>  $request->valutaType,
-            'paymentAmount' =>  $request->paymentAmount,
-            'paymentAdvance' =>  $request->advanceAmount,
-            'paymentStatus' =>  $request->paymentStatus
-        ];
-        
-        $lastTransactionIdStored = DB::table('undernames')->insertGetId($data);
-        
-        //create PI Number
-        //$this->inv = new InvoiceController();
-        //$pinum = $this->inv->createpinum($lastTransactionIdStored);
-        //ketika transaksi adalah undername
-        //if ($request->undername==2){
-        //    $tnum = $this->transaction->whenUndernameIsTrue($lastTransactionIdStored);
-        //}
-        return redirect('undernameList')
-        ->with('status','Transaksi Undername berhasil ditambahkan.');
-    }
-    public function undernameUpdate(Request $request)
-    {   
-        $request->validate(
-            [
-                'shipper' => 'required',
-                'pinum' => ['required', Rule::unique('undernames')->ignore($request->undernameId)],
-                'transactionNum' => ['required', Rule::unique('undernames')->ignore($request->undernameId)],
-                'shipperAddress' => 'required',
-                'company' => 'required|gt:0',
-                'companydetail' => 'required',                
-                'countryId' => 'required|gt:0',
-                'packer' => 'required',
-                'loadingPort' => 'required',
-                'orderType' => 'required',                
-                'destinationPort' => 'required',                
-                'containerType' => 'required|gt:0',                
-                'containerParty' => 'required',
-                'forwarder' => 'required|gt:0',
-
-                'containerNumber' => 'required',
-                'containerSeal' => 'required',
-                'containerVessel' => 'required',
-                'liner' => 'required|gt:0',
-                'bl' => 'required',
-
-                'transactionDate' => 'required|date|before_or_equal:today',
-                'loadingDate' => 'required|date',
-                'departureDate' => 'required|date|after_or_equal:loadingDate',
-                'arrivalDate' => 'required|date|after:departureDate',
-
-                'paymentTo' => 'required|gt:0',
-                'bank' => 'required|gt:0',
-                'account' => 'required',
-                'swiftcode' => 'required',
-                'valutaType' => 'required|gt:0',
-                'paymentAmount' => 'required|gte:0',
-                'advanceAmount' => 'required|gte:0',
-                'paymentStatus' => 'required|gt:0',
-                'status' => 'required|gt:0'
-            ],
-            [
-                'rekening.gt'=> 'Pilih salah satu rekening',
-                'liner.*'=> 'Pilih salah satu Liner',
-                'bl.*'=> 'Nomor BL harus diisi',
-                'company.gt'=> 'Pilih salah satu perusahaan',
-                'containerType.gt'=> 'Pilih salah satu jenis pengiriman',
-                'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
-                'pinum.unique'=> 'Nomor pinum harus unik',
-                'transactionNum.unique'=> 'Nomor transaksi harus unik',
-                'countryId.gt'=>'Pilih salah satu negara',
-                'forwarder.gt'=>'Pilih forwarder',
-                'undernamePayment.*'=>'Pilih status jenis undername',
-                'paymentStatus.*'=>'Pilih status pembayaran',
-                'pinum.*'=> 'Nomor PI harus diisi',
-                'transactionNum.*'=> 'Nomor transaksi harus diisi',
-                'companydetail.*' => 'Detail perusahaan harus diisi',  
-                'packer.*' => 'Nama perusahaan packer harus diisi',
-                'loadingPort.*' => 'Port loading harus diisi',
-                'destinationPort.*' => 'Port tujuan harus diisi',
-                'containerNumber.*' => 'Nomor kontainer harus diisi',
-                'containerSeal.*' => 'Nomor seal harus diisi',
-                'containerVessel.*' => 'Nama vessel harus diisi',
-                'liner.*' => 'Liner harus dipilih',
-                'bl.*' => 'Nomor Bill of Lading harus diisi',
-                'status.*'=>'Pilih status transaksi'
-            ]
-        );
-
-        $data = [
-            'userId' => auth()->user()->id,
-            'jenis' => 1,
-            'shipper' =>  $request->shipper,
-            'shipperAddress' =>  $request->shipperAddress,
-            'companyId' =>  $request->company,
-            'companydetail' =>  $request->companydetail,
-            'transactionNum' => $request->transactionNum,
-            'pinum' => $request->pinum,
-            'status' =>  $request->status,
-            'packer' => $request->packer,
-            'loadingport' =>  $request->loadingPort,
-            'destinationport' =>  $request->destinationPort,
-            'orderType' => $request->orderType,
-            'countryId' => $request->countryId,
-
-
-
-            'packer' =>  $request->packer,
-
-            'containerType' =>  $request->containerType,
-            'containerParty' =>  $request->containerParty,
-
-            'forwarderid' => $request->forwarder,
-            'containerNumber' =>  $request->containerNumber,
-            'containerSeal' =>  $request->containerSeal,
-            'containerVessel' =>  $request->containerVessel,
-
-            'linerId' => $request->liner,
-            'bl' => $request->bl,
-
-            'transactionDate' => $request->transactionDate,
-            'departureDate' =>  $request->departureDate,
-            'loadingDate' =>  $request->loadingDate,
-            'arrivalDate' => $request->arrivalDate,
-
-            'paymentTo' => $request->paymentTo,
-            'paymentBank' => $request->bank,
-            'paymentAccount' => $request->account,
-            'paymentSwiftcode' => $request->swiftcode,
-            'paymentValuta' =>  $request->valutaType,
-            'paymentAmount' =>  $request->paymentAmount,
-            'paymentAdvance' =>  $request->advanceAmount,
-            'paymentStatus' =>  $request->paymentStatus
-        ];
-
-        $action = Undername::where('id', $request->undernameId)
-        ->update($data);
-
-        //create PI Number
-        //$this->inv = new InvoiceController();
-        //$pinum = $this->inv->createpinum($lastTransactionIdStored);
-        //ketika transaksi adalah undername
-        //if ($request->undername==2){
-        //    $tnum = $this->transaction->whenUndernameIsTrue($lastTransactionIdStored);
-        //}
-        return redirect('undernameList')
-        ->with('status','Transaksi Undername berhasil ditambahkan.');
-    }
     /**
      * Display the specified resource.
      *
@@ -518,17 +231,6 @@ class TransactionController extends Controller
         return view('transaction.localTransactionDocuments', compact('transaction'));
     }
 
-    public function undernameEdit(Undername $undername)
-    {
-        $companies = Company::all();
-        $banks = Bank::all();
-        $liners = Liner::all();
-        $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
-        $countryRegister = Countries::where('isActive',1)->get();
-
-        return view('undername.undernameEdit', compact('undername', 'countryRegister', 'companies', 'banks', 'forwarders', 'liners'));
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -542,47 +244,100 @@ class TransactionController extends Controller
         //2 default value dari inputan : swiftcode, valuta
         //2 inputan default: userId, status
         //creationDate tidak diupdate
+        $data=[];
 
-        $request->validate([
-            'shipper' => 'required',
-            'shipperAddress' => 'required',
-            'rekening' => 'required|gt:0',
-            'swiftcode' => 'required',
-            'valuta' => 'required',
-            'company' => 'required|gt:0',
-            'companydetail' => 'required',
-            'packer' => 'required',
-            'loadingPort' => 'required',
-            'destinationPort' => 'required',
-            'containerType' => 'required|gt:0',      
-            'countryId' => 'required|gt:0',            
-            'containerParty' => 'required',
-            'containerNumber' => 'required',
-            'containerSeal' => 'required',
-            'containerVessel' => 'required',
-            'valutaType' => 'required|gt:0',
-            'payment' => 'required|gt:0',
-            'advance' => 'required|gte:0',
-            'forwarder' => 'required|gt:0',
-            'liner' => 'required|gt:0',
-            'bl' => 'required',
-            'transactionDate' => 'required|date|before_or_equal:today',
-            'loadingDate' => 'required|date',
-            'departureDate' => 'required|date|after_or_equal:loadingDate',
-            'arrivalDate' => 'required|date|after:departureDate',
-            'shippedDatePlan' => 'required',
-            'paymentPlan' => 'required',
-            'status' => 'required|gt:0'
-        ],[
-            'rekening.gt'=> 'Pilih salah satu rekening',
-            'company.gt'=> 'Pilih salah satu perusahaan',
-            'containerType.gt'=> 'Pilih salah satu jenis pengiriman',
-            'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
-            'status.gt'=> 'Pilih salah satu jenis status',
-        ]);
+        if (($request->status==2) and ($request->currentStatus==4)){
+            $request->validate([
+                'pebFile' => ['required','image', 'max:2048'],
+                'pebNum' => 'required',
+                'pebDate' => 'required|date|after_or_equal:transactionDate',
+                'shipper' => 'required',
+                'shipperAddress' => 'required',
+                'rekening' => 'required|gt:0',
+                'swiftcode' => 'required',
+                'valuta' => 'required',
+                'company' => 'required|gt:0',
+                'companydetail' => 'required',
+                'packer' => 'required',
+                'loadingPort' => 'required',
+                'destinationPort' => 'required',
+                'containerType' => 'required|gt:0',      
+                'countryId' => 'required|gt:0',            
+                'containerParty' => 'required',
+                'containerNumber' => 'required',
+                'containerSeal' => 'required',
+                'containerVessel' => 'required',
+                'valutaType' => 'required|gt:0',
+                'payment' => 'required|gt:0',
+                'advance' => 'required|gte:0',
+                'forwarder' => 'required|gt:0',
+                'liner' => 'required|gt:0',
+                'bl' => 'required',
+                'transactionDate' => 'required|date|before_or_equal:today',
+                'loadingDate' => 'required|date',
+                'departureDate' => 'required|date|after_or_equal:loadingDate',
+                'arrivalDate' => 'required|date|after:departureDate',
+                'shippedDatePlan' => 'required',
+                'paymentPlan' => 'required',
+                'status' => 'required|gt:0'
+            ],[
+                'pebFile.required' => 'File PEB harus ada',
+                'pebFile.max' => 'Ukuran file maksimal adalah 2 MB',
+                'pebFile.image' => 'File invoice harus berupa image',
+                'pebNum.*' => 'Nomor PEB wajib diisi',
+                'pebDate.*' => 'Tanggal PEB setelah atau sama dengan tanggal Transaksi',
+                'rekening.gt'=> 'Pilih salah satu rekening',
+                'company.gt'=> 'Pilih salah satu perusahaan',
+                'containerType.gt'=> 'Pilih salah satu jenis pengiriman',
+                'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
+                'status.gt'=> 'Pilih salah satu jenis status',
+            ]);
+        } else {
+            $request->validate([
+                'shipper' => 'required',
+                'shipperAddress' => 'required',
+                'rekening' => 'required|gt:0',
+                'swiftcode' => 'required',
+                'valuta' => 'required',
+                'company' => 'required|gt:0',
+                'companydetail' => 'required',
+                'packer' => 'required',
+                'loadingPort' => 'required',
+                'destinationPort' => 'required',
+                'containerType' => 'required|gt:0',      
+                'countryId' => 'required|gt:0',            
+                'containerParty' => 'required',
+                'containerNumber' => 'required',
+                'containerSeal' => 'required',
+                'containerVessel' => 'required',
+                'valutaType' => 'required|gt:0',
+                'payment' => 'required|gt:0',
+                'advance' => 'required|gte:0',
+                'forwarder' => 'required|gt:0',
+                'liner' => 'required|gt:0',
+                'bl' => 'required',
+                'transactionDate' => 'required|date|before_or_equal:today',
+                'loadingDate' => 'required|date',
+                'departureDate' => 'required|date|after_or_equal:loadingDate',
+                'arrivalDate' => 'required|date|after:departureDate',
+                'shippedDatePlan' => 'required',
+                'paymentPlan' => 'required',
+                'status' => 'required|gt:0'
+            ],[
+                'pebDate.*' => 'Tanggal PEB sama atau lebih dari tanggal Transaksi',
+                'rekening.gt'=> 'Pilih salah satu rekening',
+                'company.gt'=> 'Pilih salah satu perusahaan',
+                'containerType.gt'=> 'Pilih salah satu jenis pengiriman',
+                'valutaType.gt'=> 'Pilih salah satu jenis valuta pembayaran',
+                'status.gt'=> 'Pilih salah satu jenis status',
+            ]);
+        }
 
         $data = [
             'userId' => auth()->user()->id,
+            'pebNum' =>  $request->pebNum,
+            'pebDate' =>  $request->pebDate,
+            'pebFile' =>  $request->pebFile,
             'companyId' =>  $request->company,
             'companydetail' =>  $request->companydetail,
             'shipper' =>  $request->shipper,
@@ -613,8 +368,20 @@ class TransactionController extends Controller
             'linerId' => $request->liner,
             'bl' => $request->bl
         ];
-
         $retVal = $this->updatingTransactionData(1, $request->transactionId, $request->transactionNum, $request->currentStatus, $request->status, $data, $request->pinotes);
+
+        $file="";
+        $filename="";
+        if($request->hasFile('pebFile')){
+            $file = $request->pebFile;
+            $filename = "PEB T ".$request->transactionDate." ".$request->pebNum." ".$request->transactionId.".".$file->getClientOriginalExtension();
+
+            $file->move(base_path("storage/app/docs/"), $filename);
+        }
+
+        DB::table('transactions')
+        ->where('id', '=', $request->transactionId)
+        ->update(['pebFile' => $filename]);
 
         return redirect('transactionList')
         ->with('status',$retVal['message'])      
@@ -623,7 +390,6 @@ class TransactionController extends Controller
     }
 
     private function updatingTransactionData($jenisTransaction, $transactionId, $transactionNum, $currentStatus, $status, $data, $pinotes){
-        //dd($data);
         $listBarang = "";
         $alertStatus=0;
         switch ($currentStatus){
@@ -658,8 +424,8 @@ class TransactionController extends Controller
                     $message = "Data lain diupdate. Status tidak berubah karena ada barang dengan jumlah stock yang tidak mencukupi";
                     $alertStatus=2;
                 } else {
-                    $invoice = new InvoiceController();
-                    $transactionNum = $invoice->createtransactionnum($transactionId);
+
+                    $transactionNum = $this->createtransactionnum($transactionId);
 
                     $jumlahDetilNol = DB::table('transactions as t')
                     ->join('detail_transactions as dt', 'dt.transactionId', '=', 't.id')
@@ -708,19 +474,17 @@ class TransactionController extends Controller
                 $message = "Status tidak bisa diubah ke Penawaran.";
                 $alertStatus=1;
                 break;
-                case 2: 
-                //sailing ke finished
+                case 2:     //sailing ke finished
                 $dataTambahan = [
                     'transactionNum' => $transactionNum,
                     'status' =>  2
                 ];
                 $data = array_merge($data, $dataTambahan);                
                 $action = Transaction::where('id', $transactionId)->update($data);
-                $message = "Update Berhasil: Transaksi pengiriman berhasil selesai.";
+                $message = "Update Berhasil: Transaksi penjualan selesai.";
                 $alertStatus=0;
                 break;
-                case 3: 
-                //sailing ke canceled
+                case 3: //sailing ke canceled
                 $affected = DB::table('transactions')->where('id', $transactionId)->update(['status' => 3]);
                 $this->transactionCanceled($transactionId);
                 $message = "Update berhasil: Transaksi dibatalkan, data stok dikembalikan.";
@@ -997,6 +761,78 @@ class TransactionController extends Controller
         ->with('listBarang',$retVal['listBarang']);       
 
     }
+
+        public function createtransactionnum($transactionId){
+        $bagian="INV-ALS";
+        $month = date('m');
+        $year = date('Y');
+        $isActive=1;
+
+        $result = DB::table('document_numbers as dn')
+        ->where('year', $year)
+        ->where('bagian', $bagian)
+        ->where('transactionId','!=', null)
+        ->max('nomor');
+
+        if ($result>0){
+            $nomor=$result+1;
+        }
+        else{
+            $nomor=1;
+        }
+
+        $data = [
+            'nomor'=>$nomor,
+            'transactionId'=>$transactionId,
+            'bagian'=>$bagian,
+            //'documentType'=>$documentType,
+            'month'=>$month,
+            'year'=>$year,
+            'isActive'=>$isActive
+        ];
+        $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
+        DB::table('document_numbers')->insert($data);
+        return $tnum;
+    }
+
+        public function createpinum($transactionId){
+        $bagian="PI-ALS";
+        $month = date('m');
+        $year = date('Y');
+        $isActive=1;
+
+        $result = DB::table('document_numbers as dn')
+        ->where('year', $year)
+        ->where('bagian', $bagian)
+        ->orderBy('id', 'desc')
+        ->first();
+
+        //var_dump($nomor);
+        if ($result){
+            $nomor=($result->nomor)+1;
+        }
+        else{
+            $nomor=1;
+        }
+
+        $data = [
+            'nomor'=>$nomor,
+            'transactionId'=>$transactionId,
+            'bagian'=>$bagian,
+            'month'=>$month,
+            //'documentType'=>$documentType,
+            'year'=>$year,
+            'isActive'=>$isActive
+        ];
+        $pinum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
+        DB::table('document_numbers')->insert($data);
+        DB::table('transactions')
+        ->where('id', $transactionId)
+        ->update(['pinum' => $pinum]);
+
+        return $pinum;
+    }
+
 
     public function getExportTotalPayment($transactionId){
         $totalPayment = DB::table('transactions as t')

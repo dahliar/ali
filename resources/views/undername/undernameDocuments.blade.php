@@ -36,7 +36,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: ('{{ url("/transaction/pi/") }}'+"/"+id),
+                    url: ('{{ url("/undername/pi/") }}'+"/"+id),
                     type: "GET",
                     dataType: "json",
                     success:function(data){
@@ -63,7 +63,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: ('{{ url("transaction/ipl") }}'+"/"+id),
+                    url: ('{{ url("undername/ipl") }}'+"/"+id),
                     type: "GET",
                     dataType: "json",
                     success:function(data){
@@ -79,15 +79,15 @@
         })
     }
 
-    function myFunction(transactionId){
+    function myFunction(undernameId){
         $('#datatable').DataTable({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             ajax:{
-                url: '{{ url("getAllTransactionDocuments") }}',
+                url: '{{ url("getAllUndernameDocuments") }}',
                 data: function (d){
-                    d.transactionId = transactionId
+                    d.undernameId = undernameId
                 }
             },
             dataType: 'json',            
@@ -116,7 +116,7 @@
         });
     }
     $(document).ready(function() {
-        myFunction({{$transaction->id}});
+        myFunction({{$undername->id}});
     });
 
 </script>
@@ -158,12 +158,12 @@
                     </ol>
                 </nav>
                 <div>
-                    <button onclick="tambahPI({{$transaction->id}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak PI Baru">
+                    <button onclick="tambahPI({{$undername->id}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak PI Baru">
                         <i class="fa fa-plus"></i> Cetak PI Baru
                     </button>
 
-                    @if ($transaction->status==2)
-                    <button onclick="tambahIPL({{$transaction->id}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Invoice Baru">
+                    @if ($undername->status==2)
+                    <button onclick="tambahIPL({{$undername->id}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Invoice Baru">
                         <i class="fa fa-plus"></i> Cetak Invoice Baru
                     </button>
                     @else
