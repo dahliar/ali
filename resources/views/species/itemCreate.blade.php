@@ -311,7 +311,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <input class="form-control" type="file" id="imageurl" name="imageurl">
+                                    <input class="form-control" type="file" id="imageurl" name="imageurl" accept="image/jpeg,image/jpg,image/png">
                                 </div>
                             </div>
                         </div>

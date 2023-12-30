@@ -213,18 +213,9 @@ class SpeciesController extends Controller
                 'baseprice' => 'required|numeric|gt:0',
                 'weightbase' => 'required|numeric|gt:0',
                 'amount' => 'required|numeric|gte:0',
-                'image' => 'required|file|size:512'
+                'imageurl' => 'file|max:1024'
             ]
         );
-
-        $file="";
-        $filename="";
-        if($request->hasFile('imageurl')){
-            $file = $request->imageurl;
-            $filename = $request->shape.$request->size.$request->grade.$request->packing.$request->freezing.$request->weightbase.".".$file->getClientOriginalExtension();
-
-            $file->move(base_path("/public/images/items/"), $filename);
-        }
 
         $data = [
             'name' => $request->name,
@@ -236,10 +227,20 @@ class SpeciesController extends Controller
             'amount' =>  $request->amount,
             'baseprice' => $request->baseprice,
             'weightbase' => $request->weightbase,
-            'isActive' =>  1,
-            'imageurl' => "images/items/".$filename
+            'isActive' =>  1
         ];
         $itemId=DB::table('items')->insertGetId($data);
+
+        $file="";
+        $filename="";
+        if($request->hasFile('imageurl')){
+            $file = $request->imageurl;
+            $filename = $request->shape.$request->size.$request->grade.$request->packing.$request->freezing.$request->weightbase.".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filename);
+            DB::table('items')
+            ->where('id', '=', $itemId)
+            ->update(['imageurl' => $filename]);
+        }
         $this->transaction = new TransactionController();
         $this->transaction->stockChangeLog(1, "Input Item baru", $itemId, $request->amount);
         return redirect('itemList/'.$request->speciesId)
