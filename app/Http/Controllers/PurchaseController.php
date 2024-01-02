@@ -133,7 +133,7 @@ class PurchaseController extends Controller
                 ],
                 'downPayment' => ['required','gte:0'],
                 'taxPercentage' => ['required','gt:0'],
-                'imageurl' => ['required', 'mimes:jpg,jpeg,png,pdf','max:2048'],
+                'imageurl' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
             ],
             [
                 'company.gt'=> 'Pilih salah satu perusahaan',
@@ -142,13 +142,14 @@ class PurchaseController extends Controller
                 'purchaseDate.after' => 'Maksimal 1 bulan yang lalu',
                 'dueDate.after' => 'Tanggal deadline bayar harus lebih dari tanggal penerimaan',
                 'arrivalDate.after' => 'Maksimal 1 bulan yang lalu',
-                'imageurl.required' => 'File invoice harus ada',
                 'imageurl.max' => 'Ukuran file maksimal adalah 1 MB'
             ]
         );
 
         $company=Company::select('name', 'taxIncluded')->where('id', $request->company)
         ->first();
+
+
 
         $data = [
             'userId' => auth()->user()->id,
