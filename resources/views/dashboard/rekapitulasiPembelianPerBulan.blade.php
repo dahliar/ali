@@ -216,12 +216,12 @@
                             <td style="text-align: left;">{{$paymonth->name}}</td>
                             <td style="text-align: left;">
 
-                                @if ($paymonth->npwp)
+                                @isset ($paymonth->npwp)
                                 NPWP : {{$paymonth->npwp}}<br>
-                                @endif
-                                @if ($paymonth->ktp)
+                                @endisset
+                                @isset ($paymonth->ktp)
                                 KTP : {{$paymonth->ktp}}
-                                @endif
+                                @endisset
 
                             </td>
                             @if($opsi==1)
