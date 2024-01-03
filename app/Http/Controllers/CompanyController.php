@@ -51,7 +51,7 @@ class CompanyController extends Controller
                 <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Download" onclick="getFileDownload('."'".$row->npwpFile."'".')"><i class="fas fa-image"></i>
                 </button> ';
             }
-            $html = $html.'<span class="text-left">'.$row->ktp.'</span>';
+            $html = $html.'<span class="text-left">'.$row->npwp.'</span>';
             return $html;
         })
         ->editColumn('name', function ($row) {
