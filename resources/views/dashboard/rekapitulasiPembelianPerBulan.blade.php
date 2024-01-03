@@ -215,9 +215,12 @@
                             <td style="text-align: center;">{{$no}}</td>
                             <td style="text-align: left;">{{$paymonth->name}}</td>
                             <td style="text-align: left;">
+                                @isset($paymonth->npwp)
                                 NPWP : {{$paymonth->npwp}}<br>
+                                @endisset
+                                @isset($paymonth->ktp)
                                 KTP : {{$paymonth->ktp}}
-
+                                @endisset
                             </td>
                             @if($opsi==1)
                             <td style="text-align: right;">{{$paymonth->nomor}}</td>
