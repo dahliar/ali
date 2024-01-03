@@ -214,7 +214,7 @@
                         <tr>
                             <td style="text-align: center;">{{$no}}</td>
                             <td style="text-align: left;">{{$paymonth->name}}</td>
-                            <td style="text-align: right;">{{$paymonth->npwp}}</td>
+                            <td style="text-align: left;">NPWP : {{$paymonth->npwp}}<br>KTP : {{$paymonth->ktp}}</td>
                             @if($opsi==1)
                             <td style="text-align: right;">{{$paymonth->nomor}}</td>
                             <td style="text-align: center;">{{$paymonth->tanggalFinish}}</td>
