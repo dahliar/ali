@@ -459,6 +459,10 @@ class DashboardController extends Controller
     public function rekapitulasiGaji(){
         return view('dashboard.rekapitulasiGaji');
     }
+
+    public function jurnalPembelia (){
+        return view('dashboard.jurnalPembelian');
+    }
     public function getRekapitulasiGaji(Request $request){
         $request->validate([
             'tahun' => ['required','gt:0']
@@ -655,14 +659,15 @@ class DashboardController extends Controller
         $payroll = DB::table('purchases as p');
         if($request->opsi == '1'){
             $payroll = $payroll->select(
-                DB::raw('c.name as name'),
-                DB::raw('p.purchasingNum as nomor'),
-                DB::raw('c.npwp as npwp'),
-                DB::raw('p.purchaseDate as tanggal'),
-                DB::raw('p.finishedDate as tanggalFinish'),
-                DB::raw('p.paymentAmount as jumlah'),
-                DB::raw('p.taxPercentage as persen'),
-                DB::raw('p.tax as pajak'),
+                'c.name as name',
+                'p.purchasingNum as nomor',
+                'c.npwp as npwp',
+                'c.ktp as ktp',
+                'p.purchaseDate as tanggal',
+                'p.finishedDate as tanggalFinish',
+                'p.paymentAmount as jumlah',
+                'p.taxPercentage as persen',
+                'p.tax as pajak',
                 DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
                     WHEN p.taxIncluded="1" THEN "Ya"
                     END) as taxIncluded'
@@ -676,10 +681,11 @@ class DashboardController extends Controller
             ->orderBy('p.purchasingNum', 'asc');
         } else if($request->opsi == '2'){
             $payroll = $payroll->select(
-                DB::raw('c.name as name'),
-                DB::raw('c.npwp as npwp'),
+                'c.name as name',
+                'c.npwp as npwp',
+                'c.ktp as ktp',
                 DB::raw('sum(p.paymentAmount) as jumlah'),
-                DB::raw('p.taxPercentage as persen'),
+                'p.taxPercentage as persen',
                 DB::raw('sum(p.tax) as pajak'),
                 DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
                     WHEN p.taxIncluded="1" THEN "Ya"
@@ -731,14 +737,15 @@ class DashboardController extends Controller
 
         if($request->opsi == '1'){
             $payroll = $payroll->select(
-                DB::raw('c.name as name'),
-                DB::raw('p.purchasingNum as nomor'),
-                DB::raw('c.npwp as npwp'),
-                DB::raw('p.purchaseDate as tanggal'),
-                DB::raw('p.finishedDate as tanggalFinish'),
-                DB::raw('p.paymentAmount as jumlah'),
-                DB::raw('p.taxPercentage as persen'),
-                DB::raw('p.tax as pajak'),
+                'c.name as name',
+                'p.purchasingNum as nomor',
+                'c.npwp as npwp',
+                'c.ktp as ktp',
+                'p.purchaseDate as tanggal',
+                'p.finishedDate as tanggalFinish',
+                'p.paymentAmount as jumlah',
+                'p.taxPercentage as persen',
+                'p.tax as pajak',
                 DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
                     WHEN p.taxIncluded="1" THEN "Ya"
                     END) as taxIncluded'
@@ -752,11 +759,12 @@ class DashboardController extends Controller
             ->orderBy('p.purchasingNum', 'asc');
         } else if($request->opsi == '2'){
             $payroll = $payroll->select(
-                DB::raw('c.name as name'),
-                DB::raw('c.npwp as npwp'),
+                'c.name as name',
+                'c.npwp as npwp',
+                'c.ktp as ktp',
                 DB::raw('sum(p.paymentAmount) as jumlah'),
-                DB::raw('p.taxPercentage as persen'),
-                DB::raw('sum(p.tax) as pajak'),
+                'p.taxPercentage as persen',
+                'sum(p.tax) as pajak',
                 DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
                     WHEN p.taxIncluded="1" THEN "Ya"
                     END) as taxIncluded'
