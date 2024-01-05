@@ -531,13 +531,15 @@ Route::get('cetakSalaryByDateRange/{opsi}/{start}/{end}', [DashboardController::
 
 
 Route::post('getPayrollByDateRange', [DashboardController::class, 'getPayrollByDateRange'])->middleware(['auth']);
-
 Route::get('rekapitulasiPresensi',[DashboardController::class, 'rekapitulasiPresensi'])->name('rekapitulasiPresensi')->middleware(['auth', 'authorized']);
 Route::get('getRekapitulasiPresensi/{start}/{end}/{opsi}', [DashboardController::class, 'getRekapitulasiPresensi'])->middleware(['auth']);
-
 Route::get('historyDetailPenjualan',[DashboardController::class, 'historyDetailPenjualan'])->middleware(['auth', 'authorized']);
 Route::get('getDetailTransactionListHistory/{species}/{start}/{end}', [DashboardController::class, 'getDetailTransactionListHistory'])->middleware(['auth']);
 
+
+
+//jurnal keuangan
+Route::get('jurnal',[DashboardController::class, 'jurnalPembelian'])->name('rekapitulasiGaji')->middleware(['auth', 'authorized']);
 
 
 

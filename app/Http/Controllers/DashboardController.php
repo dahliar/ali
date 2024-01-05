@@ -685,7 +685,7 @@ class DashboardController extends Controller
                 'c.npwp as npwp',
                 'c.ktp as ktp',
                 DB::raw('sum(p.paymentAmount) as jumlah'),
-                'p.taxPercentage as persen',
+                'p.taxPercentage as persen' ,
                 DB::raw('sum(p.tax) as pajak'),
                 DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
                     WHEN p.taxIncluded="1" THEN "Ya"
@@ -764,7 +764,7 @@ class DashboardController extends Controller
                 'c.ktp as ktp',
                 DB::raw('sum(p.paymentAmount) as jumlah'),
                 'p.taxPercentage as persen',
-                'sum(p.tax) as pajak',
+                DB::raw('sum(p.tax) as pajak'),
                 DB::raw('(CASE   WHEN p.taxIncluded=0 THEN "Tidak"
                     WHEN p.taxIncluded="1" THEN "Ya"
                     END) as taxIncluded'
