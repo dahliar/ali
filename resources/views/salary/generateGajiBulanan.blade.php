@@ -26,11 +26,14 @@
             $month = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
             $monthPresent   = $date.getMonth();
             $monthBefore   = $monthPresent-1;
+            if ($monthPresent == 0){
+                $monthBefore   = 11;
+            }
+
             
             $yearPresent = $date.getFullYear();
-            $yearBefore = $date.getFullYear();
-            if ($monthBefore==-1){
-                $monthBefore==11;
+            $yearBefore = $yearPresent;
+            if ($monthBefore==11){
                 $yearBefore = $yearBefore-1;
             }
 
