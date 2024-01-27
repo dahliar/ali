@@ -193,7 +193,7 @@ class SalaryController extends Controller
                 switch($salary->jenis){
                     case(1): //bulanan
                     $affected = DB::table('monthly_salaries as ms')
-                    ->where('ms.salaryId', '=', $salary->id)
+                    ->where('ms.salaryId', $salary->id)
                     ->delete();
                     break;
                     case(2): //harian
@@ -224,7 +224,7 @@ class SalaryController extends Controller
                     break;
                 }
                 $affected = DB::table('salaries as s')
-                ->where('s.id', '=', $salary->id)
+                ->where('s.id', $salary->id)
                 ->delete();
             }
 
