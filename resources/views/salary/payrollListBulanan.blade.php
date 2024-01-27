@@ -11,6 +11,7 @@
 @section('content')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 <script src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js" type="text/javascript" ></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <script type="text/javascript">
@@ -23,6 +24,78 @@
     function printPayrollList($payrollId){
         window.open(('{{ url("printPayrollListBulanan") }}' + "/"+ $payrollId), '_blank');
     }
+    function deletePayrollList($payrollId){
+        Swal.fire({
+            title: 'Hapus catatan penggajian?',
+            text: "Tindakan ini akan menghapus data penggajian, dan tidak bsa dikembalikan lagi",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus saja.'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Yakin hapus?',
+                    text: "Data tidak bisa dikembalikan",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus saja.'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Penghapusan akan dilakukan',
+                            text: "Penghapusan gaji bulanan",
+                            icon: 'warning',
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'Ok dihapus.'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '{{ url("ubahStatusPenggajianHarian") }}',
+                                    type: "POST",
+                                    data: {
+                                        "_token":"{{ csrf_token() }}",
+                                        payrollId : $payrollId
+                                    },
+                                    dataType: "json",
+                                    success:function(data){
+                                        Swal.fire({
+                                            title: 'Penggajian harian/borongan/honorarium telah dilakukan',
+                                            text: "Data tidak bisa dikembalikan",
+                                            icon: 'warning',
+                                            showCancelButton: false,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Ok'
+                                        });
+                                        showPayrolList();
+                                    }
+                                });
+
+                                
+                            }
+                        })
+                    } else {
+                        Swal.fire(
+                            'Batal dihapus!',
+                            "Penghapusan gaji harian/borongan/honorarium dibatalkan",
+                            'info'
+                            );
+                    }
+                })
+            } else {
+                Swal.fire(
+                    'Batal dihapus!',
+                    "Penghapusan gaji harian/borongan/honorarium dibatalkan",
+                    'info'
+                    );
+            }
+        })
+    }
+
     function showPayrolList(){
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
@@ -38,28 +111,28 @@
             type: 'GET',
             destroy:true,
             columnDefs: [
-            {   "width": "5%",  "targets":  [0], "className": "text-center" },
-            {   "width": "10%", "targets":  [1], "className": "text-left" },
-            {   "width": "10%", "targets":  [2], "className": "text-left" },
-            {   "width": "10%", "targets":  [3], "className": "text-left" },
-            {   "width": "15%", "targets":  [4], "className": "text-end" },
-            {   "width": "15%", "targets":  [5], "className": "text-end" },
-            {   "width": "15%", "targets":  [6], "className": "text-end" },
-            {   "width": "15%", "targets":  [7], "className": "text-end" },
-            {   "width": "5%", "targets":  [8], "className": "text-left" }
-            ], 
+                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "10%", "targets":  [1], "className": "text-left" },
+                {   "width": "10%", "targets":  [2], "className": "text-left" },
+                {   "width": "10%", "targets":  [3], "className": "text-left" },
+                {   "width": "15%", "targets":  [4], "className": "text-end" },
+                {   "width": "15%", "targets":  [5], "className": "text-end" },
+                {   "width": "15%", "targets":  [6], "className": "text-end" },
+                {   "width": "15%", "targets":  [7], "className": "text-end" },
+                {   "width": "5%", "targets":  [8], "className": "text-left" }
+                ], 
 
             columns: [
-            {data: 'DT_RowIndex',   name: 'DT_RowIndex'},
-            {data: 'payDate',       name: 'payDate'},
-            {data: 'generator',     name: 'generator'},
-            {data: 'totalPegawai',  name: 'totalPegawai'},
-            {data: 'harian',        name: 'harian'},
-            {data: 'bulanan',      name: 'bulanan'},
-            {data: 'honorarium',    name: 'honorarium'},
-            {data: 'totalBayar',    name: 'totalBayar'},
-            {data: 'action',        name: 'action', orderable: false, searchable: false}
-            ]
+                {data: 'DT_RowIndex',   name: 'DT_RowIndex'},
+                {data: 'payDate',       name: 'payDate'},
+                {data: 'generator',     name: 'generator'},
+                {data: 'totalPegawai',  name: 'totalPegawai'},
+                {data: 'harian',        name: 'harian'},
+                {data: 'bulanan',      name: 'bulanan'},
+                {data: 'honorarium',    name: 'honorarium'},
+                {data: 'totalBayar',    name: 'totalBayar'},
+                {data: 'action',        name: 'action', orderable: false, searchable: false}
+                ]
         });
     }
 </script>

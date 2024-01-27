@@ -378,6 +378,12 @@ Route::GET('getEmployeesBulanan',[EmployeeController::class, 'getEmployeesBulana
 
 
 Route::POST('generateGajiStore',[SalaryController::class, 'store'])->middleware('auth');
+
+Route::POST('ubahStatusPenggajianHarian',[SalaryController::class, 'hapusPenggajian'])->middleware('auth');
+Route::POST('ubahStatusPenggajianBulanan',[SalaryController::class, 'hapusPenggajian'])->middleware('auth');
+
+
+
 Route::POST('slipGajiKaryawan',[SalaryController::class, 'viewSlipGaji'])->middleware('auth', 'authorized');
 
 Route::get('/slipGaji/slipGajiPerPayroll/{dpid}', [InvoiceController::class, 'slipGajiPerPayroll'])->middleware(['auth', 'authorized']);
