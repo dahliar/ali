@@ -228,13 +228,13 @@ class SalaryController extends Controller
                 $sal->delete();
             }
 
-            $affected = DB::table('detail_payrolls as dp')
-            ->where('dp.idPayroll', '=', $request->payrollId)
+            $affected = DB::table('detail_payrolls')
+            ->where('idPayroll', '=', $request->payrollId)
             ->delete();
 
 
-            $affected = DB::table('payrolls as p')
-            ->where('p.id', '=', $request->payrollId)
+            $affected = DB::table('payrolls')
+            ->where('id', '=', $request->payrollId)
             ->delete();
             return true;        
         }
