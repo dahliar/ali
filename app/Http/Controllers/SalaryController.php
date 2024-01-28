@@ -1422,7 +1422,7 @@ class SalaryController extends Controller
             ->addColumn('action', function ($row) {
 
 
-                $html = $row->id.'
+                $html = '
                 <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak daftar gaji pegawai" onclick="printPayrollList('.$row->id.')">
                 <i class="fa fa-print" style="font-size:20px"></i>
                 </button>
