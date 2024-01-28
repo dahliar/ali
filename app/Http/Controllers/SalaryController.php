@@ -224,14 +224,15 @@ class SalaryController extends Controller
                     break;
                 }
 
-
-                $flight = Salary::find($salary->id); 
-                $flight->delete();
+                $sal = Salary::find($salary->id); 
+                $sal->delete();
             }
 
             $affected = DB::table('detail_payrolls as dp')
             ->where('dp.idPayroll', '=', $request->payrollId)
             ->delete();
+
+
             $affected = DB::table('payrolls as p')
             ->where('p.id', '=', $request->payrollId)
             ->delete();
