@@ -424,7 +424,7 @@ class TransactionController extends Controller
                     $alertStatus=2;
                 } else {
 
-                    $transactionNum = $this->createtransactionnum($transactionId);
+                    $transactionNum = $this->createtransactionnum($transactionId, $jenisTransaction);
 
                     $jumlahDetilNol = DB::table('transactions as t')
                     ->join('detail_transactions as dt', 'dt.transactionId', '=', 't.id')
@@ -761,8 +761,17 @@ class TransactionController extends Controller
 
     }
 
-    public function createtransactionnum($transactionId){
-        $bagian="INV-ALS";
+    public function createtransactionnum($transactionId, $jenisTransaction){
+        $bagian="";
+
+        if ($jenisTransaction==1){
+            //export
+            $bagian="INV-ALS";
+        } else{
+            //local
+            $bagian="LINV-ALS";
+        }
+
         $month = date('m');
         $year = date('Y');
         $isActive=1;

@@ -109,7 +109,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->wherein('bagian', ['INV-ALI','INV-ALS'])
+        ->wherein('bagian', ['INV-ALI','INV-ALS','LINV-ALS'])
         ->where('transactionId','=', $transaction->id)
         ->first()->id;
 
@@ -148,7 +148,7 @@ class InvoiceController extends Controller
         //insert kedalam tabel documents
         $document_numbers_id = DB::table('document_numbers as dn')
         ->select('id')
-        ->wherein('bagian', ['INV-ALI','INV-ALS'])
+        ->wherein('bagian', ['INV-ALI','INV-ALS','LINV-ALS'])
         ->where('transactionId','=', $transaction->id)
         ->first()->id;
 

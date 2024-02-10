@@ -153,6 +153,7 @@ class Transaction extends Model
                 WHEN dn.bagian ="PI-ALS" THEN "PI"
                 WHEN dn.bagian ="INV-ALI" then "Invoice" 
                 WHEN dn.bagian ="INV-ALS" then "Invoice" 
+                WHEN dn.bagian ="LINV-ALS" then "Invoice" 
                 END) AS jenis')
         )
         ->join('document_numbers as dn', 'dn.id', '=', 'd.document_numbers_id')
