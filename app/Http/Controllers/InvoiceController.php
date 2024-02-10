@@ -392,4 +392,78 @@ class InvoiceController extends Controller
         $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.now().'.pdf';
         return $pdf->download($filename);
     }
+
+
+
+    public function createtransactionnum($transactionId, $jenisTransaction, $isUndername){
+    /*Digunakan untuk create transaction number untuk transaksi jual
+        a. Lokal                : 
+        $transactionId      =Urut transaksi lokal
+        $jenisTransaction   =2, 
+        $isUndername        =-1,
+        $bagian             =LINV
+
+        b. ekspor reguler       : 
+        $transactionId      =Urut transaksi ekspor reguler dan undername, 
+        $jenisTransaction   =1,
+        $isUndername        =0,
+        $bagian             =INV
+                    
+        c. ekspor undername     : 
+        $transactionId          =Urut transaksi ekspor reguler dan undername, 
+        $jenisTransaction   =1, 
+        $isUndername        =1, 
+        $bagian             =INVU
+    */
+
+        $year = date('Y');
+        $month = date('m');
+        $bagian="";
+
+        $data = [
+            'month'=>$month,
+            'year'=>$year,
+            'isActive'=>1
+        ];
+
+        $result = DB::table('document_numbers as dn');
+        if ($jenisTransaction==1){
+            //export
+            $result->wherein('bagian', ['INV-ALS','INVU-ALS']);
+            if ($isUndername==0){
+                //reguler
+                $data['transactionId']=$transactionId;
+                $data['bagian'] ="INV-ALS";
+            } else if ($isUndername==1){
+                //undername
+                $data['undernameId']=$transactionId;
+                $data['bagian'] ="INVU-ALS";
+            }
+        } else{
+            //local
+            $result->where('bagian', ['LINV-ALS']);
+            $data['transactionId']=$transactionId;
+            $data['bagian'] ="LINV-ALS";
+        }
+
+        $result->where(function ($query) {
+            $query->where('undernameId','!=', null)
+            ->orWhere('transactionId','!=', null);
+        })
+        ->where('year', $year);
+        $nomor = $result->max('nomor');
+
+        if ($nomor>0){
+            $nomor=$nomor+1;
+        }
+        else{
+            $nomor=1;
+        }
+        $data['nomor']= $nomor;
+        //dd($data);
+
+        $tnum = $nomor.'/'.$data['bagian'].'/'.$month.'/'.$year;
+        DB::table('document_numbers')->insert($data);
+        return $tnum;
+    }
 }

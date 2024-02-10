@@ -10,6 +10,8 @@ use App\Models\Liner;
 use App\Models\Forwarder;
 use Illuminate\Support\Facades\Storage;
 
+use App\Http\Controllers\InvoiceController;
+
 use Illuminate\Http\Request;
 use DB;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -367,7 +369,7 @@ class UndernameController extends Controller
                 ]
             );
         } else {
-         $request->validate(
+           $request->validate(
             [
                 'shipper' => 'required',
                 'shipperAddress' => 'required',
@@ -430,9 +432,9 @@ class UndernameController extends Controller
                 'status.*'=>'Pilih status transaksi'
             ]
         );
-     }
+       }
 
-     $data = [
+       $data = [
         'userId' => auth()->user()->id,
         'pebNum' =>  $request->pebNum,
         'pebDate' =>  $request->pebDate,
@@ -511,7 +513,9 @@ private function updatingUndernameData($undernameId, $currentStatus, $status, $d
                 break;
                 case 2: 
                 //dari penawaran ke finished
-                $undernameNum=$this->createUndernameNum($undernameId);
+                $invController = new InvoiceController();
+                $undernameNum = $invController->createtransactionnum($undernameId, 1, 1);
+
                 $data = [
                     'transactionNum' => $undernameNum
                 ];
@@ -525,7 +529,8 @@ private function updatingUndernameData($undernameId, $currentStatus, $status, $d
                 break;
                 case 4: 
                 //dari penawaran ke sailing
-                $undernameNum=$this->createUndernameNum($undernameId);
+                $invController = new InvoiceController();
+                $undernameNum = $invController->createtransactionnum($undernameId, 1, 1);
                 $data = [
                     'transactionNum' => $undernameNum
                 ];
@@ -582,7 +587,7 @@ private function updatingUndernameData($undernameId, $currentStatus, $status, $d
         return $retVal;
     }
 
-
+    /*
     public function createUndernameNum($undernameId){
         $bagian="INVU-ALS";
         $month = date('m');
@@ -592,7 +597,11 @@ private function updatingUndernameData($undernameId, $currentStatus, $status, $d
         $result = DB::table('document_numbers as dn')
         ->where('year', $year)
         ->where('bagian', $bagian)
-        ->where('undernameId','!=', null)
+
+        ->orWhere(function (Builder $query) {
+            $query->where('undernameId','!=', null)
+            ->where('transactionId','!=', null);
+        })
         ->max('nomor');
 
         if ($result>0){
@@ -623,6 +632,7 @@ private function updatingUndernameData($undernameId, $currentStatus, $status, $d
 
         return $tnum;
     }
+    */
 
     public function getAllUndernameDocuments(Request $request){
         $query = DB::table('documents as d')

@@ -11,6 +11,8 @@ use App\Models\Forwarder;
 use App\Models\Liner;
 use App\Models\Bank;
 
+use App\Http\Controllers\InvoiceController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use DB;
@@ -424,7 +426,9 @@ class TransactionController extends Controller
                     $alertStatus=2;
                 } else {
 
-                    $transactionNum = $this->createtransactionnum($transactionId, $jenisTransaction);
+                    //createtransactionnum($transactionId, $jenisTransaction, $isUndername)
+                    $invController = new InvoiceController();
+                    $transactionNum = $invController->createtransactionnum($transactionId, $jenisTransaction, 0);
 
                     $jumlahDetilNol = DB::table('transactions as t')
                     ->join('detail_transactions as dt', 'dt.transactionId', '=', 't.id')
@@ -761,26 +765,36 @@ class TransactionController extends Controller
 
     }
 
-    public function createtransactionnum($transactionId, $jenisTransaction){
+    /*
+    public function createtransactionnum($transactionId, $jenisTransaction, $isUndername){
+        $year = date('Y');
+
+        $result = DB::table('document_numbers as dn')
+        ->where('year', $year)
+        ->orWhere(function (Builder $query) {
+            $query->where('undernameId','!=', null)
+            ->where('transactionId','!=', null);
+        });
+
         $bagian="";
 
         if ($jenisTransaction==1){
             //export
-            $bagian="INV-ALS";
+            $result->->wherein('bagian', ['INV-ALS','INVU-ALS']);
+            if ($isUndername==0){
+                //reguler
+                $bagian="INV-ALS";
+            } else if ($isUndername==1){
+                //undername
+                $bagian="INV-ALS";
+            }
         } else{
             //local
+            $result->->where('bagian', 'LINV-ALS');
             $bagian="LINV-ALS";
         }
-
-        $month = date('m');
-        $year = date('Y');
-        $isActive=1;
-
-        $result = DB::table('document_numbers as dn')
-        ->where('year', $year)
-        ->where('bagian', $bagian)
-        ->where('transactionId','!=', null)
-        ->max('nomor');
+        
+        $result->max('nomor');
 
         if ($result>0){
             $nomor=$result+1;
@@ -789,6 +803,8 @@ class TransactionController extends Controller
             $nomor=1;
         }
 
+        $month = date('m');
+
         $data = [
             'nomor'=>$nomor,
             'transactionId'=>$transactionId,
@@ -796,12 +812,13 @@ class TransactionController extends Controller
             //'documentType'=>$documentType,
             'month'=>$month,
             'year'=>$year,
-            'isActive'=>$isActive
+            'isActive'=>1
         ];
         $tnum = $nomor.'/'.$bagian.'/'.$month.'/'.$year;
         DB::table('document_numbers')->insert($data);
         return $tnum;
     }
+    */
 
     public function createpinum($transactionId){
         $bagian="PI-ALS";

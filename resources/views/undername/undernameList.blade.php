@@ -156,7 +156,7 @@
                 </div>
                 <div class="col-md-2">
                     <div class="input-group">
-                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 year')))}}" > 
+                        <input type="date" id="start" name="start" class="form-control text-end" value="{{ old('start', date('Y-m-d', strtotime('-1 month')))}}" > 
                     </div>
                 </div>
                 <div class="col-md-2">
