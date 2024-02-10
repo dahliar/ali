@@ -68,10 +68,10 @@ class Employee extends Model
     }
 
     public function userMappingUpdate($eid, $nip, $nama, $newMappingData, $mappingid, $tanggalBerlaku, $oldOrgStructureOption){
+
         $affected = DB::table('employeeorgstructuremapping')
         ->where('id', '=', $mappingid)
         ->update(['isactive' => 0]);
-
         $newid = DB::table('employeeorgstructuremapping')->insertGetId($newMappingData);
 
         if ($oldOrgStructureOption != $newMappingData['idorgstructure']){
@@ -95,8 +95,11 @@ class Employee extends Model
                 'tanggalBerlaku'        => $tanggalBerlaku,
             ];
 
-            $adm = new AdministrationController();
-            $adm->cetakSuratMutasi($data);
+
+            //harusnya digunakan untuk membuat surat mutasi data, tp belum selesai
+            //
+            //$adm = new AdministrationController();
+            //$adm->cetakSuratMutasi($data);
         }
 
         return $newid;
