@@ -210,6 +210,35 @@ class TransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
+    public function checkTransactionNum(Request $request)
+    {
+        $result=-1;
+        if ($request->jenis==1){
+            $result = DB::table('transactions as t')
+            ->where('transactionNum', $request->transactionNum)
+            ->count();
+        }
+        return $result;
+    }
+
+    public function getCurrentTransactionNumIfExist($transactionId)
+    {
+        $nomor = DB::table('transactions as t')
+        ->join('document_numbers as dn', 'dn.transactionId', '=', 't.id')
+        ->wherein('bagian', ['INV-ALS','INVU-ALS'])
+        ->where('t.id', $transactionId)
+        ->first();
+        if($nomor){
+            return $nomor->nomor;
+        }
+        else{
+            return -1;
+        }
+    }
+
+
+
     public function edit(Transaction $transaction)
     {
         $companies = Company::all();
@@ -218,10 +247,19 @@ class TransactionController extends Controller
         $rekenings = Rekening::all();
         $countryRegister = Countries::where('isActive',1)->get();
         $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
-        
+        $transactionNum=$this->getCurrentTransactionNumIfExist($transaction->id);
+        if ($transaction->transactionNum){
+            $transactionNumFormatted=$transaction->transactionNum;
+        } else{
+            if ($transactionNum>0){
+                $transactionNumFormatted=($transactionNum+1)."/INV-ALS/".date('m')."/".date('Y');
+            } else{
+                $transactionNumFormatted="1/INV-ALS/".date('m')."/".date('Y');              
+            }
+        }
         $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
-        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners'));
+        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners','transactionNum','transactionNumFormatted'));
     }
 
     public function transactionDocument(Transaction $transaction)
