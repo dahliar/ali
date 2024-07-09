@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Purchase;
 use App\Models\Countries;
 use App\Models\Company;
+use App\Models\Currency;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
@@ -98,7 +99,8 @@ class PurchaseController extends Controller
         public function create()
         {
             $companies = Company::orderBy('name')->get();
-            return view('purchase.purchaseAdd', compact('companies'));
+            $currencies = Currency::orderBy('name')->get();
+            return view('purchase.purchaseAdd', compact('companies', 'currencies'));
 
         }
 
@@ -203,9 +205,10 @@ class PurchaseController extends Controller
      */
         public function edit(Purchase $purchase)
         {
+            $currencies = Currency::orderBy('name')->get();
             $companyName = DB::table('companies')->select('name as name')->where('id','=', $purchase->companyId)->first();
 
-            return view('purchase.purchaseEdit', compact('purchase', 'companyName'));
+            return view('purchase.purchaseEdit', compact('purchase', 'companyName', 'currencies'));
         }
 
         /**

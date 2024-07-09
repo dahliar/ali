@@ -527,18 +527,22 @@
                     <div class="col-md-3">
                         <select id="valutaType" name="valutaType" class="form-select" >
                             <option value="-1" selected>--Choose One--</option>
-                            <option value="1" @if($transaction->valutaType == 1) selected @endif>Rupiah</option>
-                            <option value="2" @if($transaction->valutaType == 2) selected @endif>US Dollar</option>
-                            <option value="3" @if($transaction->valutaType == 3) selected @endif>Renminbi</option>
+                            @foreach ($currencies as $currency)
+                            @if ( $currency->id == old('valutaType', $transaction->valutaType))
+                            <option value="{{ $currency->id }}" selected>{{ $currency->short }} - {{ $currency->name}}</option>
+                            @else
+                            <option value="{{ $currency->id }}">{{ $currency->short }} - {{ $currency->name}}</option>
+                            @endif
+                            @endforeach
                         </select>
                     </div>                    
                 </div>
                 @php
                 $valuta="";
-                switch($transaction->valutaType){
-                    case("1") : $valuta = "Rupiah";     break;
-                    case("2") : $valuta = "US Dollar";  break;
-                    case("3") : $valuta = "Rmb";        break;
+                foreach ($currencies as $currency){
+                    if ( $currency->id == old('valutaType', $transaction->valutaType)){
+                        $valuta=$currency->short;
+                    }
                 }
                 @endphp
 

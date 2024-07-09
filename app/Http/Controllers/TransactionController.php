@@ -10,6 +10,8 @@ use App\Models\TransactionNote;
 use App\Models\Forwarder;
 use App\Models\Liner;
 use App\Models\Bank;
+use App\Models\Currency;
+
 
 use App\Http\Controllers\InvoiceController;
 
@@ -64,10 +66,12 @@ class TransactionController extends Controller
         $liners = Liner::all();
         $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         $countryRegister = Countries::where('isActive',1)->get();
+        $currencies = Currency::orderBy('name')->get();
+
 
         //$notes = TransactionNote::where('transactionId',$transaction->id)->get();
 
-        return view('transaction.transactionAdd', compact('countryRegister', 'companies', 'rekenings', 'forwarders', 'liners'));
+        return view('transaction.transactionAdd', compact('countryRegister', 'companies', 'rekenings', 'forwarders', 'liners', 'currencies'));
     }
 
     /**
@@ -248,6 +252,8 @@ class TransactionController extends Controller
         $countryRegister = Countries::where('isActive',1)->get();
         $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         $transactionNum=$this->getCurrentTransactionNumIfExist($transaction->id);
+        $currencies = Currency::orderBy('name')->get();
+
         if ($transaction->transactionNum){
             $transactionNumFormatted=$transaction->transactionNum;
         } else{
@@ -259,7 +265,7 @@ class TransactionController extends Controller
         }
         $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
-        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners','transactionNum','transactionNumFormatted'));
+        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners','transactionNum','transactionNumFormatted', 'currencies'));
     }
 
     public function transactionDocument(Transaction $transaction)
@@ -685,8 +691,10 @@ class TransactionController extends Controller
     {
         $companies = Company::all();
         $rekenings = Rekening::all();
+        $currencies = Currency::orderBy('name')->get();
 
-        return view('transaction.localTransactionAdd', compact('companies', 'rekenings'));
+
+        return view('transaction.localTransactionAdd', compact('companies', 'rekenings', 'currencies'));
     }
 
     public function localStore(Request $request)
@@ -746,9 +754,10 @@ class TransactionController extends Controller
     public function localEdit(Transaction $transaction)
     {
         //dd($transaction);
+        $currencies = Currency::orderBy('name')->get();
         $companyName = Company::where('id', '=', $transaction->companyId)->first()->name;
         $rekenings = Rekening::all();
-        return view('transaction.localTransactionEdit', compact('companyName', 'rekenings', 'transaction'));
+        return view('transaction.localTransactionEdit', compact('companyName', 'rekenings', 'transaction','currencies'));
     }
 
 

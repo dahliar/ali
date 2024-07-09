@@ -8,6 +8,8 @@ use App\Models\Countries;
 use App\Models\Bank;
 use App\Models\Liner;
 use App\Models\Forwarder;
+use App\Models\Currency;
+
 use Illuminate\Support\Facades\Storage;
 
 use App\Http\Controllers\InvoiceController;
@@ -45,7 +47,9 @@ class UndernameController extends Controller
         $liners = Liner::orderBy('name', 'ASC')->get();
         $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         $countryRegister = Countries::where('isActive',1)->get();
-        return view('undername.undernameAdd', compact('countryRegister', 'companies', 'banks', 'forwarders', 'liners'));
+        $currencies = Currency::orderBy('name')->get();
+
+        return view('undername.undernameAdd', compact('countryRegister', 'companies', 'banks', 'forwarders', 'liners', 'currencies'));
     }
 
     public function undernameEdit(Undername $undername)
@@ -55,8 +59,10 @@ class UndernameController extends Controller
         $liners = Liner::all();
         $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
         $countryRegister = Countries::where('isActive',1)->get();
+        $currencies = Currency::orderBy('name')->get();
 
-        return view('undername.undernameEdit', compact('undername', 'countryRegister', 'companies', 'banks', 'forwarders', 'liners'));
+
+        return view('undername.undernameEdit', compact('undername', 'countryRegister', 'companies', 'banks', 'forwarders', 'liners', 'currencies'));
     }
 
     public function cetak_pi(Undername $undername){

@@ -485,9 +485,13 @@
                         <div class="col-md-8">
                             <select id="valutaType" name="valutaType" class="form-select" >
                                 <option value="-1" selected>--Choose One--</option>
-                                <option value="1" @if(old('valutaType', $undername->paymentValuta) == 1) selected @endif>Rupiah</option>
-                                <option value="2" @if(old('valutaType', $undername->paymentValuta) == 2) selected @endif>US Dollar</option>
-                                <option value="3" @if(old('valutaType', $undername->paymentValuta) == 3) selected @endif>Renminbi</option>
+                                @foreach ($currencies as $currency)
+                                @if ( $currency->id == old('valutaType', $undername->paymentValuta))
+                                <option value="{{ $currency->id }}" selected>{{ $currency->short }} - {{ $currency->name}}</option>
+                                @else
+                                <option value="{{ $currency->id }}">{{ $currency->short }} - {{ $currency->name}}</option>
+                                @endif
+                                @endforeach
                             </select>
                         </div>                    
                     </div>
