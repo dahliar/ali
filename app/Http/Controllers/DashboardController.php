@@ -22,6 +22,14 @@ class DashboardController extends Controller
     }
     public function infophp()
     {
+        
+
+
+
+
+
+
+
         //$pdf = Pdf::loadview("userMapping.info");
         //return $pdf->download("Proforma Invoice.pdf");
 
