@@ -139,6 +139,8 @@
 						<li>
 							<a class="dropdown-item" href="{{ url('presenceHarianHistory')}}"><i class="fas fa-tasks"></i> Arsip Presensi Harian
 							</a>
+							<a class="dropdown-item" href="{{ url('presenceBoronganHistoryPerorangan')}}"><i class="fas fa-tasks"></i> Arsip Presensi Borongan Pegawai
+							</a>
 						</li>
 					</ul>
 				</li>

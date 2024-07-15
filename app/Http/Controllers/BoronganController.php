@@ -591,4 +591,47 @@ class BoronganController extends Controller
         ->get(); 
         return $query;  
     }
+
+    public function boronganHistorySingleEmployee()
+    {
+        return view('borongan.presenceBoronganSingleEmployeeHitory');
+    }
+
+
+    public function getPresenceBoronganHistory($start, $end){
+        $query = DB::table('employees as e')
+        ->select(
+            'e.id as id', 
+            'u.name as name', 
+            'e.nik as nik',
+            'b.tanggalKerja as tanggalKerja',
+            'b.name as namaBorongan',
+            'db.netPayment as bayaran',
+        )
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->join('detail_borongans as db', 'db.employeeId', '=', 'e.id')
+        ->join('borongans as b', 'b.id', '=', 'db.boronganId')
+        ->whereBetween('tanggalKerja', [$start, $end])
+        ->orderBy('u.name')
+        ->orderBy('b.tanggalKerja');
+        
+        $query->get();
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Arsip Presensi" onclick="presenceHistory('."'".$row->id."'".')">
+            <i class="fa fa-save" style="font-size:20px"></i>
+            </button>';
+            return $html;
+        })->addIndexColumn()
+        ->editColumn('bayaran', function ($row) {
+            return 'Rp. '.number_format(($row->bayaran), 2, ',', '.');
+        })
+        ->toJson();
+    }  
+
+
+
+
 }

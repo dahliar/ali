@@ -321,6 +321,12 @@ Route::GET('boronganWorkerList/{borongan}',[BoronganController::class, 'show'])-
 Route::GET('boronganDeleteRecord/{borongan}',[BoronganController::class, 'destroy'])->middleware('auth', 'authorized');
 Route::get('getBorongans',[BoronganController::class, 'getBorongans'])->middleware('auth');
 Route::POST('storePekerjaBorongan/{borongan}',[BoronganController::class, 'storePekerja'])->name('storePekerjaBorongan')->middleware('auth');
+Route::GET('presenceBoronganHistoryPerorangan',[BoronganController::class, 'boronganHistorySingleEmployee'])->middleware('auth', 'authorized');
+Route::get('getPresenceBoronganHistory/{start}/{end}',[BoronganController::class, 'getPresenceBoronganHistory'])->middleware('auth');
+
+
+
+
 
 //Presensi Honorarium
 Route::GET('honorariumList',[HonorariumController::class, 'index'])->middleware('auth', 'authorized');
