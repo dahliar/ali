@@ -165,7 +165,7 @@
                                     <select id="valutaType" name="valutaType" class="form-select" disabled >
                                         <option value="-1" selected>--Choose One--</option>
                                         @foreach ($currencies as $currency)
-                                        @if ( $currency->valutaType == old('valutaType'))
+                                        @if ( $currency->id == old('valutaType', $purchase->valutaType))
                                         <option value="{{ $currency->id }}" selected>{{ $currency->short }} - {{ $currency->name}}</option>
                                         @else
                                         <option value="{{ $currency->id }}">{{ $currency->short }} - {{ $currency->name}}</option>
@@ -220,7 +220,7 @@
                                     <span class="label" id="spanPayment">Potongan Pajak*</span>
                                 </div>
                                 <div class="col-md-3">
-                                    <select id="valutaType" name="valutaType" class="form-select" disabled>
+                                    <select id="taxIncluded" name="taxIncluded" class="form-select" disabled>
                                         <option value="0" @if($purchase->taxIncluded == 0) selected @endif>Tidak</option>
                                         <option value="1" @if($purchase->taxIncluded == 1) selected @endif>Ya</option>
                                     </select>

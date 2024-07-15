@@ -91,18 +91,18 @@ class PurchaseController extends Controller
     }
 
 
-        /**
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-        public function create()
-        {
-            $companies = Company::orderBy('name')->get();
-            $currencies = Currency::orderBy('name')->get();
-            return view('purchase.purchaseAdd', compact('companies', 'currencies'));
+    public function create()
+    {
+        $companies = Company::orderBy('name')->get();
+        $currencies = Currency::orderBy('name')->get();
+        return view('purchase.purchaseAdd', compact('companies', 'currencies'));
 
-        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -187,29 +187,29 @@ class PurchaseController extends Controller
         ->with('status','Transaksi pembelian ke '.$company->name.' berhasil ditambahkan.');
     }
 
-        /**
+    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-        public function show(Purchase $purchase)
-        {
-        }
+    public function show(Purchase $purchase)
+    {
+    }
 
-        /**
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-        public function edit(Purchase $purchase)
-        {
-            $currencies = Currency::orderBy('name')->get();
-            $companyName = DB::table('companies')->select('name as name')->where('id','=', $purchase->companyId)->first();
+    public function edit(Purchase $purchase)
+    {
+        $currencies = Currency::orderBy('name')->get();
+        $companyName = DB::table('companies')->select('name as name')->where('id','=', $purchase->companyId)->first();
 
-            return view('purchase.purchaseEdit', compact('purchase', 'companyName', 'currencies'));
-        }
+        return view('purchase.purchaseEdit', compact('purchase', 'companyName', 'currencies'));
+    }
 
         /**
      * Update the specified resource in storage.
