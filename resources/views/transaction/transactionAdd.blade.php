@@ -278,6 +278,7 @@
                             <option value="1" @if(old('orderType') == 1) selected @endif>FOB</option>
                             <option value="2" @if(old('orderType') == 2) selected @endif>CNF</option>
                             <option value="3" @if(old('orderType') == 3) selected @endif>CFO</option>
+                            <option value="4" @if(old('orderType') == 4) selected @endif>CIF</option>
                         </select>
                     </div>
                 </div>                

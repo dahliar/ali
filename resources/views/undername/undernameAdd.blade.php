@@ -199,6 +199,8 @@
                                         </option>
                                         <option value="3" @if (old('orderType') == 3) selected @endif>CFO
                                         </option>
+                                        <option value="4" @if (old('orderType') == 4) selected @endif>CIF
+                                        </option>
                                     </select>
                                 </div>
                             </div>

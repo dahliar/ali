@@ -14,14 +14,12 @@ use Carbon\Carbon;
 
 class StockController extends Controller
 {
-    //
+    //digunakan untuk akses melihat data seluruh stock
     public function index()
     {
         $species = Species::orderBy('name')->get();
         return view('stock.stocklist', compact('species'));
     }
-
-
     public function indexTransactionBarcode($transactionId)
     {
         return view('stock.stockDetailBarcodeTransactionList', compact('transactionId'));
@@ -47,7 +45,6 @@ class StockController extends Controller
         return view('stock.transactionBarcodeList', compact('transactions'));
     }
 
-    
 
 
     public function indexTransaction()
@@ -82,9 +79,6 @@ class StockController extends Controller
         ->first();
         return view('stock.stockRecapKeluarHari', compact('transaction','loadingDate'));    
     }
-
-
-
     public function indexScanMasukHariBarcodeList($storageDate, $itemId)
     {
         $itemName = DB::table('view_item_details')->select('name as itemName')->where('itemId', '=', $itemId)->first()->itemName;
@@ -268,7 +262,6 @@ class StockController extends Controller
         return response()->json(["name" => $itemName, "message" => $message, "itemId" => $itemId]);
 
     }
-
 
     public function checkStatusBarcodeBarang(Request $request)
     {

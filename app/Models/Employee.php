@@ -33,8 +33,8 @@ class Employee extends Model
 
 
     public function userUpdate($fullname, $accessLevel, $email, $id){
-        $copy = User::get()->where('id', $id)->toArray();
-        UserHistory::insert($copy);
+        $duplicateUserData = User::get()->where('id', $id)->toArray();
+        UserHistory::insert($duplicateUserData);
 
         $affected = DB::table('users')
         ->where('id', $id)
@@ -42,8 +42,13 @@ class Employee extends Model
         return $affected;
     }
     public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender, $startdate){
+        
+        //ambil data employee yang diupdate, kemudian simpan kedalam tabel employee history
         $copy = Employee::get()->where('id', $id)->toArray();
         EmployeeHistory::insert($copy);
+
+
+
         $affected = DB::table('employees')
         ->where('id', $id)
         ->update([
@@ -106,6 +111,7 @@ class Employee extends Model
     }
 
     public function generateNIP($birthdate, $startdate){
+        
         $birthdate = new Carbon($birthdate);
         $startdate = new Carbon($startdate);
 

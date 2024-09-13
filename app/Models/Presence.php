@@ -116,6 +116,27 @@ class Presence extends Model
 
     }
     
+
+    // komentar single line
+    /*
+    *   Komentar
+    *   Multiple line
+        INPUT   : informasi data apa saja yang dibutuhkan
+                    $start  : jam mulai masuk
+                    $end    : jam mulai keluar
+                    $shift  : ini masuk ke shift berapa
+
+        PROSES  : 
+            1. Hitung berdasarkan jam masuk, tentukan dia masuk ke level jam berapa
+            2. Hitung selisih total jam
+            3. Hitung apakah ada lembur
+            4. ....
+
+        OUTPUT  :
+            1. Simpan kedalam tabel presensi dan tabel ...., jam masuk, jam keluar, jumlah jam harian, jumlah lembur, honor
+    */
+
+            
     function hitungPresenceHarian($start, $end, $shift){
         $jamKerja=0;
         $jamLembur=0;

@@ -397,6 +397,7 @@
                             <option value="1" @if($transaction->orderType == 1) selected @endif>FOB</option>
                             <option value="2" @if($transaction->orderType == 2) selected @endif>CNF</option>
                             <option value="3" @if($transaction->orderType == 3) selected @endif>CFO</option>
+                            <option value="4" @if($transaction->orderType == 4) selected @endif>CIF</option>
                         </select>
                     </div>
                 </div>  
