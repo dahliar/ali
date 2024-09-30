@@ -10,7 +10,10 @@
 @endsection
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script type="text/javascript"> 
     function myFunction(){
         Swal.fire({
@@ -70,6 +73,8 @@
     }
 
     $(document).ready(function() {
+        $('.selectSearch').select2();
+
         $('#species').on('change', function() {
             var speciesId = $(this).val();
             if (speciesId>0){
@@ -202,7 +207,7 @@
                             <span class="label" id="companyName">Supplier*</span>
                         </div>
                         <div class="col-md-4">
-                            <select id="company" name="company" class="form-select">
+                            <select id="company" name="company" class="selectSearch">
                                 <option value="-1">--Choose One--</option>
                                 @foreach ($companies as $company)
                                 @if ( $company->id == old('company'))

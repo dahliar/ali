@@ -658,7 +658,10 @@
                             </table>   
                         </div>
                     </div>
-                </div>                        
+                </div>
+
+
+                                        
                 @if(($transaction->status == 1) or ($transaction->status == 4))
                 <div class="row form-group">
                     <div class="col-3 text-end">

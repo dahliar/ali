@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use DB;
 use Illuminate\Validation\Rule;
+use Auth;
 
 
 class TransactionController extends Controller
@@ -45,6 +46,9 @@ class TransactionController extends Controller
 
     public function getAllExportTransaction(Request $request){
         return $this->transaction->getAllExportTransactionData($request);
+    }
+    public function getAllExportTransactionToRevoke(Request $request){
+        return $this->transaction->getAllExportTransactionDataToRevoke($request);
     }
     public function getAllTransactionDocuments(Request $request){
         return $this->transaction->getAllTransactionDocuments($request);
@@ -226,56 +230,102 @@ class TransactionController extends Controller
         return $result;
     }
 
-    public function getCurrentTransactionNumIfExist($transactionId)
+    public function setTransactionToBeRevoked(Request $request)
     {
-        $nomor = DB::table('transactions as t')
-        ->join('document_numbers as dn', 'dn.transactionId', '=', 't.id')
-        ->wherein('bagian', ['INV-ALS','INVU-ALS'])
-        ->where('t.id', $transactionId)
-        ->first();
-        if($nomor){
-            return $nomor->nomor;
-        }
-        else{
-            return -1;
-        }
-    }
+        if (($request->accessLevel == Auth::user()->accessLevel) and ($request->uid == Auth::user()->id)){
+            /*
+                1. Ubah tabel transaksi set status=1 offering/PI
+                2. ambil detail transactions
+                    itemId, amountPerubahan
+                3. set tabel items
+                    ubah amount = amount + amountPerubahan where id=itemId
+                4. insert ke tabel stock histories, ada penambahan barang dengan itemId=itemIdPerubahan, amount amountPerubahan
+            */
+                DB::beginTransaction();
 
+                try {
+                    DB::table('transactions')
+                    ->where('id', '=', $request->transactionId)
+                    ->update(['status' => 1]);
+                    $result = DB::table('detail_transactions as dt')
+                    ->select(
+                        'dt.itemId as itemId', 
+                        'dt.amount as amount'
+                    )
+                    ->where('transactionId', $request->transactionId)
+                    ->get();
+                    
+                    foreach ($result as $itemDetail){
+                        DB::table('items')
+                        ->where('id', $itemDetail->itemId)
+                        ->increment('amount', $itemDetail->amount);
 
-
-    public function edit(Transaction $transaction)
-    {
-        $companies = Company::all();
-        
-        $liners = Liner::all();
-        $rekenings = Rekening::all();
-        $countryRegister = Countries::where('isActive',1)->get();
-        $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
-        $transactionNum=$this->getCurrentTransactionNumIfExist($transaction->id);
-        $currencies = Currency::orderBy('name')->get();
-
-        if ($transaction->transactionNum){
-            $transactionNumFormatted=$transaction->transactionNum;
-        } else{
-            if ($transactionNum>0){
-                $transactionNumFormatted=($transactionNum+1)."/INV-ALS/".date('m')."/".date('Y');
+                        $this->stockChangeLog(1, "Transaction ID ".$request->transactionId." dari Finished ke Offering", $itemDetail->itemId, $itemDetail->amount);
+                    }
+                    DB::commit();
+                    // all good
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    // something went wrong
+                }
+                return 0;
             } else{
-                $transactionNumFormatted="1/INV-ALS/".date('m')."/".date('Y');              
+            //accessLevel dan uid tidak sama, perubahan batal
+                return 1;
+            }
+
+        }
+
+        public function getCurrentTransactionNumIfExist($transactionId)
+        {
+            $nomor = DB::table('transactions as t')
+            ->join('document_numbers as dn', 'dn.transactionId', '=', 't.id')
+            ->wherein('bagian', ['INV-ALS','INVU-ALS'])
+            ->where('t.id', $transactionId)
+            ->first();
+            if($nomor){
+                return $nomor->nomor;
+            }
+            else{
+                return -1;
             }
         }
-        $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
 
-        return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners','transactionNum','transactionNumFormatted', 'currencies'));
-    }
 
-    public function transactionDocument(Transaction $transaction)
-    {
-        return view('transaction.transactionDocuments', compact('transaction'));
-    }
-    public function localTransactionDocument(Transaction $transaction)
-    {
-        return view('transaction.localTransactionDocuments', compact('transaction'));
-    }
+
+        public function edit(Transaction $transaction)
+        {
+            $companies = Company::all();
+
+            $liners = Liner::all();
+            $rekenings = Rekening::all();
+            $countryRegister = Countries::where('isActive',1)->get();
+            $forwarders = Forwarder::where('isActive', 1)->orderBy('name', 'ASC')->get();
+            $transactionNum=$this->getCurrentTransactionNumIfExist($transaction->id);
+            $currencies = Currency::orderBy('name')->get();
+
+            if ($transaction->transactionNum){
+                $transactionNumFormatted=$transaction->transactionNum;
+            } else{
+                if ($transactionNum>0){
+                    $transactionNumFormatted=($transactionNum+1)."/INV-ALS/".date('m')."/".date('Y');
+                } else{
+                    $transactionNumFormatted="1/INV-ALS/".date('m')."/".date('Y');              
+                }
+            }
+            $pinotes = TransactionNote::where('transactionId',$transaction->id)->get();
+
+            return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners','transactionNum','transactionNumFormatted', 'currencies'));
+        }
+
+        public function transactionDocument(Transaction $transaction)
+        {
+            return view('transaction.transactionDocuments', compact('transaction'));
+        }
+        public function localTransactionDocument(Transaction $transaction)
+        {
+            return view('transaction.localTransactionDocuments', compact('transaction'));
+        }
 
     /**
      * Update the specified resource in storage.
@@ -432,6 +482,12 @@ class TransactionController extends Controller
         ->with('status',$retVal['message'])      
         ->with('alertStatus',$retVal['alertStatus'])      
         ->with('listBarang',$retVal['listBarang']);       
+    }
+
+    public function revoke()
+    {
+        $nations = Countries::where('isActive',1)->get();
+        return view('transaction.transactionRevoke', compact('nations'));
     }
 
     private function updatingTransactionData($jenisTransaction, $transactionId, $transactionNum, $currentStatus, $status, $data, $pinotes){

@@ -39,7 +39,7 @@
     };
     $(document).ready(function() {
 
-        $('.js-example-basic-single').select2();
+        $('.selectSearch').select2();
 
         $('#company').on('change', function() {
             var company = $(this).val();
@@ -121,7 +121,7 @@
                             <span class="label" id="companyName">Supplier*</span>
                         </div>
                         <div class="col-md-8">
-                            <select id="company" name="company" class="js-example-basic-single">
+                            <select id="company" name="company" class="selectSearch">
                                 <option value="-1">--Choose One--</option>
                                 @foreach ($companies as $company)
                                 @if ( $company->id == old('company'))

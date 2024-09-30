@@ -97,7 +97,10 @@ Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'
 Route::get('transactionDocument/{transaction}',[TransactionController::class, 'transactionDocument'])->middleware(['auth', 'authorized']);
 Route::POST('transactionStore',[TransactionController::class, 'store'])->middleware(['auth']);
 Route::POST('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth']);
+Route::get('transactionRevoke',[TransactionController::class, 'revoke'])->middleware(['auth']);
+
 Route::get('checkTransactionNum',[TransactionController::class, 'checkTransactionNum'])->middleware(['auth']);
+Route::POST('setTransactionToBeRevoked',[TransactionController::class, 'setTransactionToBeRevoked'])->middleware(['auth']);
 
 
 Route::get('detailtransactionList/{transaction}',[DetailTransactionController::class, 'index'])->middleware(['auth', 'authorized'])->name('detailtransactionList');
@@ -106,6 +109,7 @@ Route::get('itemDetailTransactionAdd',[DetailTransactionController::class, 'stor
 
 Route::get('itemDetailTransactionDelete/{detail_transaction}',[DetailTransactionController::class, 'destroy'])->middleware(['auth'])->name('itemDetailTransactionDelete');
 Route::GET('getAllExportTransaction', [TransactionController::class, 'getAllExportTransaction'])->middleware(['auth']);
+Route::GET('getAllExportTransactionToRevoke', [TransactionController::class, 'getAllExportTransactionToRevoke'])->middleware(['auth']);
 Route::GET('getAllDetail/{transactionId}', [DetailTransactionController::class, 'getAllDetail'])->middleware(['auth']);
 
 Route::get('/transaction/pi/{transaction}', [InvoiceController::class, 'cetak_pi'])->middleware(['auth', 'authorized']);
@@ -115,6 +119,8 @@ Route::GET('getAllTransactionDocuments', [TransactionController::class, 'getAllT
 Route::GET('getFileDownload/{filepath}', [InvoiceController::class, 'getFileDownload'])->middleware(['auth']);
 
 Route::POST('storePerubahanHargaDetailTransaksi',[DetailTransactionController::class, 'storePerubahanHargaDetailTransaksi'])->middleware(['auth']);
+
+
 
 
 
