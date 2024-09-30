@@ -75,7 +75,7 @@
                 </nav>
             </div>
             <div class="modal-body">
-                <form id="EmployeeEditForm" action="{{route('employeeUpdate')}}" method="POST" name="EmployeeEditForm" autocomplete="off">
+                <form id="EmployeeEditForm" action="{{route('employeeUpdate')}}" method="POST" name="EmployeeEditForm" autocomplete="off" enctype="multipart/form-data">
                     @csrf
                     <div class="d-grid gap-1">
                         <div class="row form-group">
@@ -313,6 +313,53 @@
                                 </select>
                             </div>
                         </div>
+
+                        @if($employee->ktp)
+                        <div class="row form-group">
+                            <div class="col-md-2 text-md-end">
+                                <span class="label">File KTP</span>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <a href="{{ url('getFileDownload').'/'.$employee->ktp }}" target="_blank">{{$employee->ktp}}</a>
+                                </div>
+                            </div>
+                        </div>       
+                        @endif                    
+                        <div class="row form-group">
+                            <div class="col-md-2 text-md-end">
+                                <span class="label">Upload KTP</span>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input class="form-control" type="file" id="ktp" name="ktp" accept="image/jpeg,image/jpg,image/png,application/pdf">
+                                </div>
+                                <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                            </div>
+                        </div>   
+                        @if($employee->kk)
+                        <div class="row form-group">
+                            <div class="col-md-2 text-md-end">
+                                <span class="label">File KK</span>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <a href="{{ url('getFileDownload').'/'.$employee->kk }}" target="_blank">{{$employee->kk}}</a>
+                                </div>
+                            </div>
+                        </div>       
+                        @endif                    
+                        <div class="row form-group">
+                            <div class="col-md-2 text-md-end">
+                                <span class="label">Upload KK</span>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input class="form-control" type="file" id="kk" name="kk" accept="image/jpeg,image/jpg,image/png,application/pdf">
+                                </div>
+                                <span style="font-size:9px" class="label">File dalam bentuk image dengan ukuran maksimal 1MB</span>
+                            </div>
+                        </div>         
 
                         <div class="row form-group">
                             <div class="col-md-2 text-end">

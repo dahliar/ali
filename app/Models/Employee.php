@@ -41,6 +41,7 @@ class Employee extends Model
         ->update(['name' => $fullname, 'accessLevel' => $accessLevel, 'email' => $email]);
         return $affected;
     }
+    /*
     public function employeeUpdate($phone, $address, $employmentStatus, $isActive, $noRekening, $bankid, $id, $isactive, $pendidikan, $bidangPendidikan, $gender, $startdate){
         
         //ambil data employee yang diupdate, kemudian simpan kedalam tabel employee history
@@ -67,6 +68,7 @@ class Employee extends Model
         ]);
         return $affected;
     }
+    */
     public function orgStructureStore($data){
         $id = DB::table('employeeorgstructuremapping')->insertGetId($data);
         return $id;

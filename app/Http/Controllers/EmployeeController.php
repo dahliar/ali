@@ -13,9 +13,12 @@ use Illuminate\Validation\Rule;
 use App\Models\Employee;
 use App\Models\StructuralPosition;
 use App\Models\WorkPosition;
+use App\Models\EmployeeHistory;
+
 use App\Http\Controllers\AdministrationController;
 use DB;
 use Auth;
+use Carbon\Carbon;
 use Milon\Barcode\DNS1D;
 
 use Illuminate\Http\Request;
@@ -72,6 +75,8 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'ktp'                   => ['mimes:jpg,jpeg,png,pdf','max:2048'],
+            'kk'                    => ['mimes:jpg,jpeg,png,pdf','max:2048'],
             'name'                  => ['required', 'string', 'max:255'],
             'username'              => ['required', 'string', 'max:255', 'unique:users'],
             'password'              => ['required', 'confirmed', Rules\Password::defaults()],
@@ -96,6 +101,8 @@ class EmployeeController extends Controller
             'bankid'                => ['required', 'gt:0']
         ],
         [
+            'ktp.max'                  => 'Ukuran file maksimal adalah 2 MB',
+            'kk.max'                   => 'Ukuran file maksimal adalah 2 MB',
             'startdate.after'  => 'Tanggal mulai harus sebelum tanggal lahir',
             'startdate.before' => 'Tanggal mulai harus sebelum hari ini',
             'birthdate.before' => 'Tanggal lahir harus sebelum hari ini'
@@ -103,6 +110,24 @@ class EmployeeController extends Controller
 
 
         //bagian proses insert kedalam table Users
+        $tanggal=Carbon::now()->toDateString();
+
+        $file="";
+        $filenameKTP="";
+        if($request->hasFile('ktp')){
+            $file = $request->ktp;
+            $filenameKTP = "KTP ".$tanggal." ".$request->name.".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filenameKTP);
+        }
+        $filenameKK="";
+        if($request->hasFile('kk')){
+            $file = $request->kk;
+            $filenameKK = "KK ".$tanggal." ".$request->name.".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filenameKK);
+        }
+
+
+
 
         $user = User::create([
             'name' => $request->name,
@@ -116,6 +141,7 @@ class EmployeeController extends Controller
 
         //insert ke table employees
         $nip=$this->employee->generateNIP($request->birthdate, $request->startdate);
+
 
         $employee = [
             'userid'                => $userid,
@@ -131,6 +157,8 @@ class EmployeeController extends Controller
             'noRekening'            => $request->noRekening,
             'bankid'                => $request->bankid,
             'jenjangPendidikan'     => $request->pendidikan,
+            'kk'                    => $filenameKK,
+            'ktp'                   => $filenameKTP,
             'bidangPendidikan'      => $request->bidangPendidikan
         ];
         $empid = $this->employee->employeeStore($employee);
@@ -154,12 +182,12 @@ class EmployeeController extends Controller
             case('3') : $empStatusString ="Kontrak Borongan";break;
         }
 
-        $adm = new AdministrationController();
+        //$adm = new AdministrationController();
 
-        $adm->cetakSuratKeputusanPegawaiBaru($empid, $mappingId, $request->employmentStatus, $request->name, $nip, $request->startdate, $empStatusString);
+        //$adm->cetakSuratKeputusanPegawaiBaru($empid, $mappingId, $request->employmentStatus, $request->name, $nip, $request->startdate, $empStatusString);
 
         return redirect('employeeList')
-        ->with('status','Item berhasil ditambahkan.');
+        ->with('status','Employee berhasil ditambahkan.');
 
     }
 
@@ -284,6 +312,8 @@ class EmployeeController extends Controller
     public function update(Request $request)
     {
         $request->validate([
+            'ktp'                   => ['mimes:jpg,jpeg,png,pdf','max:2048'],
+            'kk'                    => ['mimes:jpg,jpeg,png,pdf','max:2048'],
             'email'                 => ['email'],
             'phone'                 => ['required'],
             'fullname'              => ['required', 'string'],
@@ -299,12 +329,29 @@ class EmployeeController extends Controller
             'isactive'              => ['required']
         ],
         [
+            'ktp.max'                  => 'Ukuran file maksimal adalah 2 MB',
+            'kk.max'                   => 'Ukuran file maksimal adalah 2 MB',
             'startdate.required'            => 'Tanggal mulai harus diisi',
             'startdate.before_or_equal'     => 'Tanggal mulai harus sebelum atau sama dengan hari ini',            
         ]);
         DB::beginTransaction();
         try {
             $userUpdate = $this->employee->userUpdate($request->fullname, $request->accessLevel, $request->email, $request->userid);
+
+            $file="";
+            $filenameKTP="";
+            if($request->hasFile('ktp')){
+                $file = $request->ktp;
+                $filenameKTP = "KTP ".$request->employeeId." ".$request->fullname.".".$file->getClientOriginalExtension();
+                $file->move(base_path("storage/app/docs/"), $filenameKTP);
+            }
+            $filenameKK="";
+            if($request->hasFile('kk')){
+                $file = $request->kk;
+                $filenameKK = "KK ".$request->employeeId." ".$request->fullname.".".$file->getClientOriginalExtension();
+                $file->move(base_path("storage/app/docs/"), $filenameKK);
+            }
+            /*
             $employeeUpdate = $this->employee->employeeUpdate(
                 $request->phone, 
                 $request->address,
@@ -319,6 +366,32 @@ class EmployeeController extends Controller
                 $request->gender,
                 $request->startdate
             );
+            */
+
+
+            $copy = Employee::get()->where('id', $request->employeeId)->toArray();
+            EmployeeHistory::insert($copy);
+
+            $affected = DB::table('employees')
+            ->where('id', $request->employeeId)
+            ->update([
+                'phone'             => $request->phone, 
+                'address'           => $request->address, 
+                'employmentStatus'  => $request->employmentStatus, 
+                'isActive'          => $request->isActive,
+                'noRekening'        => $request->noRekening,
+                'gender'            => $request->gender,
+                'isactive'          => $request->isactive,
+                'jenjangPendidikan' => $request->pendidikan,
+                'bidangPendidikan'  => $request->bidangPendidikan,
+                'bankid'            => $request->bankid,
+                'startdate'         => $request->startdate,
+                'ktp'               => $filenameKTP,
+                'kk'                => $filenameKK,
+                'endDate'           => Carbon::now()->toDateString()
+            ]);
+
+
             $setActive = $this->setEmployeeActiveness($request->employeeId, $request->isactive);
             DB::commit();
             return redirect('employeeList')
