@@ -158,7 +158,7 @@ class Transaction extends Model
         )
         ->join('companies as c', 'c.id', '=', 't.companyid')
         ->join('countries as n', 'n.id', '=', 'c.nation')
-        ->where('t.jenis', '=', 1)
+        //->where('t.jenis', '=', 1)
         ->where(function($query2) use ($start, $end){
             $query2->whereBetween('loadingDate', [$start, $end])
             ->orWhereBetween('transactionDate', [$start, $end])
