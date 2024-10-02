@@ -339,6 +339,9 @@
 					</ul>
 				</li>
 				@endif
+				<li class="dropdown dropend">
+					<a class="dropdown-item" href="{{ url('documentRepository')}}"><i class="fas fa-file-pdf"></i>Dokumen Perusahaan</a>
+				</li>
 			</ul>
 		</li>
 		@if (Session::get('accessLevel') <= 1)

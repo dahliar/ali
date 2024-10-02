@@ -448,7 +448,12 @@ class AdministrationController extends Controller
     }
 
     public function getAdministrationFileDownload($filename){
-        $filepath = storage_path('/app/paperworks/'. $filename);
+        $filepath = storage_path('app/paperworks/'. $filename);
+        $headers = ['Content-Type: application/pdf'];
+        return \Response::download($filepath, $filename, $headers);
+    }
+    public function getDocumentFileDownload($filename){
+        $filepath = storage_path('app/docs/'. $filename);
         $headers = ['Content-Type: application/pdf'];
         return \Response::download($filepath, $filename, $headers);
     }
@@ -643,5 +648,93 @@ class AdministrationController extends Controller
 
         return true;
     }
+
+
+    //Document Repository
+
+    public function documentRepo()
+    {
+        return view('administration.repositoryList');
+    }
+
+    public function getAllDocuments(){
+        $query = DB::table('document_repositories as dr')
+        ->select(
+            'dr.id as id', 
+            'dr.nama as name',
+            'dr.fileurl as url',
+            'dr.keterangan as keterangan',
+            'dr.status as status',
+            'u.name as uploader',
+        )
+        ->join('users as u', 'dr.userId', '=', 'u.id')
+        ->join('employees as e', 'e.userid', '=', 'u.id')
+        ->orderBy('dr.nama')
+        ->get();
+
+        return datatables()->of($query)
+        ->editColumn('status', function ($row) {
+            $html = '';
+            if ($row->status==0){
+                $html.='<i class="far fa-check-circle" style="font-size:20px" data-toggle="tooltip" data-placement="top" data-container="body" title="Aktif"></i>';
+            } else if ($row->status==1){
+                $html.='<i class="far fa-times-circle" style="font-size:20px" data-toggle="tooltip" data-placement="top" data-container="body" title="Non-Aktif"></i>';
+            }
+            return $html;
+        })
+        ->addColumn('action', function ($row) {
+            $html = '
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Tampilkan file" onclick="getFileDownload('."'".$row->url."'".')">
+            <i class="fa fa-file"></i>
+            </button>            
+            ';            
+            return $html;
+        })->rawColumns(['status', 'action'])->addIndexColumn()->toJson();
+    }
+    public function documentRepoAdd()
+    {
+        return view('administration.repositoryAdd');
+    }
+
+
+    public function documentStore(Request $request)
+    {
+
+        $request->validate([
+            'fileDokumen'           => ['required', 'mimes:jpg,jpeg,png,pdf','max:2048'],
+            'name'                  => ['required', 'string', 'max:20'],
+            'keterangan'            => ['max:1000']
+        ],
+        [
+            'fileDokumen'           => 'Ukuran file maksimal adalah 2 MB'
+        ]);
+
+        $file="";
+        $filename="";
+        if($request->hasFile('fileDokumen')){
+            $tanggal=Carbon::now()->toDateString();
+            $file = $request->fileDokumen;
+            $filename = "Dokumen ".$request->name." ".$tanggal.".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filename);
+        }   
+
+        $dokumen = [
+            'nama'          => $request->name,
+            'keterangan'    => $request->keterangan,
+            'fileurl'       =>  $filename,
+            'userId'        => auth()->user()->id
+
+        ];
+
+        $docsid = DB::table('document_repositories')->insertGetId($dokumen);
+
+
+        return redirect('documentRepository')
+        ->with('status','Dokumen berhasil disimpan');
+
+    }
+
+
+
 
 }

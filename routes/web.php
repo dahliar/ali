@@ -495,6 +495,14 @@ Route::get('getAllEmployeePaper/{employeeId}',[AdministrationController::class, 
 Route::get('getAllPapers',[AdministrationController::class, 'getAllPapers']);
 Route::GET('getAdministrationFileDownload/{filepath}', [AdministrationController::class, 'getAdministrationFileDownload'])->middleware(['auth']);
 
+
+Route::get('documentRepository',[AdministrationController::class, 'documentRepo'])->middleware(['auth', 'authorized']);
+Route::get('getAllDocuments',[AdministrationController::class, 'getAllDocuments']);
+Route::GET('getDocumentFileDownload/{filepath}', [AdministrationController::class, 'getDocumentFileDownload'])->middleware(['auth']);
+Route::get('documentRepositoryAdd',[AdministrationController::class, 'documentRepoAdd'])->middleware(['auth', 'authorized']);
+Route::post('documentStore',[AdministrationController::class, 'documentStore'])->middleware(['auth']);
+
+
 /*
 *   Stock Opname
 *
@@ -564,7 +572,6 @@ Route::GET('getScanKeluarBarcodeList', [StockController::class, 'getScanKeluarBa
 Route::POST('updateHapusBarcode',[StockController::class, 'updateHapusBarcode'])->middleware(['auth']);
 Route::GET('getScanKeluarData', [StockController::class, 'getScanKeluarData'])->middleware(['auth']);
 Route::GET('getScannedKeluarTransaksiHari', [StockController::class, 'getScannedKeluarTransaksiHari'])->middleware(['auth']);
-
 
 
 
