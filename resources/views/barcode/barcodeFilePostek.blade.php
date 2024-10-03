@@ -31,17 +31,15 @@
         <table width="100%" >
             @foreach ($arrData as $a)
             <tr>
-                <td style="width:40%;" ROWSPAN="2">
+                <td style="width:40%;">
                     <img src="data:image/png;base64,{{DNS2D::getBarcodePNG($a['fullname'], 'QRCODE',2.5,2.5)}}"/>
                 </td>
                 <td style="width:60%;">
                     <img src="data:image/png;base64,{{DNS1D::getBarcodePNG($a['barcode'], 'C128',1,30)}}"/>
+                    <p style="font-size:12px"> {!! $a['barcode']!!}</p>
+                    <p style="font-size:12px"> {!! $name !!}</p>
                 </td>
             </tr>
-            <tr>
-                <td> <p style="font-size:20px"> {!! $a['barcode']!!}</p></td>
-            </tr>
-            <br>
             @endforeach
             <!--
                 DNS1D::getBarcodeHTML(data, jenis, lebar, tinggi, warna)
