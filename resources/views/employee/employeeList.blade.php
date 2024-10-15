@@ -64,7 +64,7 @@
     function myFunction(){
         $('#datatable').DataTable({
             ajax:'{{ url("getAllEmployees") }}',
-            serverSide: true,
+            serverSide: false,
             processing: true,
             deferRender: true,
             type: 'GET',
