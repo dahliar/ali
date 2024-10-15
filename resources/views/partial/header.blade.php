@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <!--BELUM-->
 <head>
 	<meta charset="utf-8">
