@@ -37,15 +37,17 @@
             destroy:true,
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
-                {   "width": "35%", "targets":  [1], "className": "text-left"   },
-                {   "width": "20%", "targets":  [2], "className": "text-left" },
-                {   "width": "20%", "targets":  [3], "className": "text-left" },
-                {   "width": "10%", "targets":  [4], "className": "text-left" },
+                {   "width": "30%", "targets":  [1], "className": "text-left"   },
+                {   "width": "10%", "targets":  [2], "className": "text-left"   },
+                {   "width": "15%", "targets":  [3], "className": "text-left" },
+                {   "width": "20%", "targets":  [4], "className": "text-left" },
+                {   "width": "10%", "targets":  [5], "className": "text-left" },
                 ], 
 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'name', name: 'name'},
+                {data: 'shortname', name: 'shortname'},
                 {data: 'ktp', name: 'ktp'},
                 {data: 'npwp', name: 'npwp'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
@@ -101,6 +103,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Nama</th>
+                                    <th>Kode Perusahaan</th>
                                     <th>KTP</th>
                                     <th>NPWP</th>
                                     <th>Aksi</th>

@@ -103,6 +103,15 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
+                                <span class="label" id="spanBank">Kode Nama</span>
+                            </div>
+                            <div class="col-md-4">
+                                <input id="shortname" name="shortname" class="form-control" value="{{$company->shortname}}" readonly>
+                                <input id="companyId" name="companyId" class="form-control" value="{{$company->id}}" type="hidden" readonly>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
                                 <span class="label" id="spanBank">Alamat</span>
                             </div>
                             <div class="col-md-7">

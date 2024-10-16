@@ -24,6 +24,7 @@ class CompanyController extends Controller
         ->select(
             'com.id as id', 
             'com.name as name',
+            'com.shortname as shortname',
             'com.address as address',
             'cn.name as nation',
             'com.ktpFile as ktpFile',
@@ -96,15 +97,20 @@ class CompanyController extends Controller
     {
         $request->validate([
             'name' => 'required|max:100|unique:companies',
+            'shortname' => 'required|max:4|unique:companies',
             'address' => 'required|max:4000',
             'taxIncluded' => 'required|gte:0',
             'countryId' => 'required|gt:0',
             'ktpFile' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
             'npwpFile' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
             'ktp' => 'max:16'
+        ],[
+            'name.unique' => 'Nama harus unik, ":input" sudah digunakan',
+            'shortname.unique' => 'Kode perusahaan harus unik, ":input" sudah digunakan',
         ]);
         $company = [
             'name'      => $request->name,
+            'shortname'      => $request->shortname,
             'nation'    => $request->countryId,
             'address'   =>  $request->address,
             'taxIncluded' =>  $request->taxIncluded,

@@ -159,7 +159,7 @@
                                 <option value="-1">--Choose Species First--</option>
                             </select>
                         </div>
-                    </div>
+                    </div> 
                     <div class="row form-group mb-2">
                         <div class="col-md-2 text-end">
                             <span class="label">Tanggal produksi*</span>

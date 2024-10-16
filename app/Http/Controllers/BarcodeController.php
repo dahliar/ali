@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 
 
 use App\Models\Species;
+use App\Models\Companies;
 use App\Models\Company;
 use Milon\Barcode\DNS1D;
 use Milon\Barcode\DNS2D;
@@ -27,7 +28,7 @@ class BarcodeController extends Controller
     public function create()
     {
 
-        $companies = Company::orderBy('name')->get();
+        $companies = Company::orderBy('name')->whereNotNull('shortname')->get();
         $species = Species::orderBy('name')->get();
         return view('barcode.barcodeAdd', compact('species', 'companies'));
     }
@@ -159,9 +160,12 @@ class BarcodeController extends Controller
 
         $max = DB::table('codes')
         ->where('productionDate', $transactionDate)
+        ->where('companyId', $request->company)
         ->where('itemId', $item)
         ->sum('amountPrinted');
 
+        $companyShortname = Companies::where('id', $request->company)->first()->shortname;
+        $name = $companyShortname." ".$name;
 
         $timeFormat = \Carbon\Carbon::now()->format('YmdHis');
 
