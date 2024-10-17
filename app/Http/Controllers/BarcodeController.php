@@ -156,6 +156,7 @@ class BarcodeController extends Controller
         $productionDateData = str_pad($date->year, 4, '0', STR_PAD_LEFT).
         str_pad($date->month, 2, '0', STR_PAD_LEFT).
         str_pad($date->day, 2, '0', STR_PAD_LEFT).
+        str_pad($request->company, 4, '0', STR_PAD_LEFT).
         str_pad($item, 5, '0', STR_PAD_LEFT);
 
         $max = DB::table('codes')
