@@ -41,7 +41,8 @@
                 {   "width": "10%", "targets":  [2], "className": "text-left"   },
                 {   "width": "15%", "targets":  [3], "className": "text-left" },
                 {   "width": "20%", "targets":  [4], "className": "text-left" },
-                {   "width": "10%", "targets":  [5], "className": "text-left" },
+                {   "width": "5%", "targets":   [5], "className": "text-center" },
+                {   "width": "10%", "targets":  [6], "className": "text-left" },
                 ], 
 
             columns: [
@@ -50,9 +51,8 @@
                 {data: 'shortname', name: 'shortname'},
                 {data: 'ktp', name: 'ktp'},
                 {data: 'npwp', name: 'npwp'},
+                {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
-
-
                 ]
         });
     }
@@ -106,6 +106,7 @@
                                     <th>Kode Perusahaan</th>
                                     <th>KTP</th>
                                     <th>NPWP</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>

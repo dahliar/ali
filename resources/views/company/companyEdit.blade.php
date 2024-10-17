@@ -106,8 +106,7 @@
                                 <span class="label" id="spanBank">Kode Nama</span>
                             </div>
                             <div class="col-md-4">
-                                <input id="shortname" name="shortname" class="form-control" value="{{$company->shortname}}" readonly>
-                                <input id="companyId" name="companyId" class="form-control" value="{{$company->id}}" type="hidden" readonly>
+                                <input id="shortname" name="shortname" class="form-control" value="{{$company->shortname}}">
                             </div>
                         </div>
                         <div class="row form-group">
@@ -201,6 +200,18 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="row form-group">
+                            <div class="col-md-2 text-end">
+                                <span class="label" id="spanBank">Status Data</span>
+                            </div>
+                            <div class="col-md-4">
+                                <select id="isactive" name="isactive" class="form-select" >
+                                    <option value="0" @if($company->isActive == 0) selected @endif>Non Aktif</option>
+                                    <option value="1" @if($company->isActive == 1) selected @endif>Aktif</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-end">
                                 <span class="label" id="spanBank">Kontak person</span>
@@ -209,8 +220,6 @@
                                 <button type="button" name="add" id="add" class="btn btn-primary"><i class="fa fa-plus"></i> Kontak</button>
                             </div>
                         </div>
-
-
                         <div class="row form-group">
                             <div class="col-md-2 text-end"></div>
                             <div class="col-md-10">

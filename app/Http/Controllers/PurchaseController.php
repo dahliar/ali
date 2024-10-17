@@ -98,7 +98,7 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        $companies = Company::orderBy('name')->get();
+        $companies = Company::orderBy('name')->where('isActive','1')->get();
         $currencies = Currency::orderBy('name')->get();
         return view('purchase.purchaseAdd', compact('companies', 'currencies'));
 

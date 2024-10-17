@@ -28,7 +28,7 @@ class BarcodeController extends Controller
     public function create()
     {
 
-        $companies = Company::orderBy('name')->whereNotNull('shortname')->get();
+        $companies = Company::orderBy('name')->where('isActive','1')->whereNotNull('shortname')->get();
         $species = Species::orderBy('name')->get();
         return view('barcode.barcodeAdd', compact('species', 'companies'));
     }

@@ -30,6 +30,7 @@ class CompanyController extends Controller
             'com.ktpFile as ktpFile',
             'com.npwpFile as npwpFile',
             'com.npwp as npwp',
+            'com.isActive as status',
             'com.ktp as ktp',
         )
         ->join('countries as cn', 'cn.id', '=', 'com.nation')
@@ -43,6 +44,15 @@ class CompanyController extends Controller
                 </button> ';
             }
             $html = $html.'<span class="text-left">'.$row->ktp.'</span>';
+            return $html;
+        })
+        ->editColumn('status', function ($row) {
+            $html = '';
+            if ($row->status==1){
+                $html.='<i class="far fa-check-square" style="font-size:20px" data-toggle="tooltip" data-placement="top" data-container="body" title="Aktif"></i>';
+            } else if ($row->status==0){
+                $html.='<i class="far fa-times-circle" style="font-size:20px" data-toggle="tooltip" data-placement="top" data-container="body" title="Non-Aktif"></i>';
+            }
             return $html;
         })
         ->editColumn('npwp', function ($row) {
@@ -70,7 +80,7 @@ class CompanyController extends Controller
             ;
             return $html;
         })
-        ->rawColumns(['name','action', 'ktp', 'npwp'])
+        ->rawColumns(['name','action', 'ktp', 'npwp', 'status'])
         ->addIndexColumn()->toJson();
     }
 
@@ -204,24 +214,23 @@ class CompanyController extends Controller
     {
         $request->validate([
             'address' => 'required|max:4000',
+            'shortname' => ['required', 'max:4',Rule::unique('companies')->ignore($request->companyId),],
             'taxIncluded' => 'required|gte:0',
             'countryId' => 'required|gt:0',
             'ktpFile' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
             'npwpFile' => ['mimes:jpg,jpeg,png,pdf','max:2048'],
-            'ktp' => 'max:16'
+            'ktp' => 'max:30'
         ]);
-
         $company = [
-            'nation'    => $request->countryId,
-            'address'   =>  $request->address,
-            'taxIncluded' =>  $request->taxIncluded,
-            'npwp'      => $request->npwpnum,
-            'ktp'      => $request->ktp
-
+            'nation'        => $request->countryId,
+            'address'       => $request->address,
+            'taxIncluded'   => $request->taxIncluded,
+            'npwp'          => $request->npwpnum,
+            'ktp'           => $request->ktp,
+            'isActive'      => $request->isactive
         ];
 
-        Company::where('id', $request->companyId)
-        ->update($company);
+        Company::where('id', $request->companyId)->update($company);
 
         if ($request->has('contactName') or $request->has('phone') or $request->has('email'))
         {
