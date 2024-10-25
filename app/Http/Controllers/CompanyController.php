@@ -18,6 +18,10 @@ class CompanyController extends Controller
     {
         return view('company.companyList');
     }
+    public function companyProductList()
+    {
+        return view('company.companyProductList');
+    }
 
     public function getAllCompany(){
         $query = DB::table('companies as com')
@@ -66,9 +70,14 @@ class CompanyController extends Controller
             return $html;
         })
         ->editColumn('name', function ($row) {
+            //$name = "";
+            //if ($row->shortname != ""){
+            //    $name = $row->shortname." - ";
+            //}
+            $name = $row->name." - ".$row->nation;
             $html = '
             <div class="row form-group">
-            <span class="col-12 text-left">'.$row->name." - ".$row->nation.'</span>
+            <span class="col-12 text-left">'.$name.'</span>
             </div>
             ';
             return $html;
@@ -76,6 +85,9 @@ class CompanyController extends Controller
         ->addColumn('action', function ($row) {
             $html = '<button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Company" onclick="editCompany('."'".$row->id."'".')">
             <i class="fa fa-edit" style="font-size:20px"></i>
+            </button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar Produk Beli" onclick="daftarProdukBeli('."'".$row->id."'".')">
+            <i class="fa fa-shopping-cart" style="font-size:20px"></i>
             </button>'
             ;
             return $html;

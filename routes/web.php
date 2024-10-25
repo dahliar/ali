@@ -199,6 +199,10 @@ Route::post('companyStore',[CompanyController::class, 'store'])->middleware(['au
 Route::post('companyUpdate',[CompanyController::class, 'update'])->middleware(['auth'])->name('companyUpdate');
 Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middleware(['auth']);
 
+Route::GET('companyProductList', [CompanyController::class, 'companyProductList'])->middleware(['auth']);
+
+
+
 //to get size for all species
 Route::GET('getItemsForSelectOption/{tid}/{pid}/{speciesId}', [ItemController::class, 'getItemForSelectOption'])->middleware(['auth']);
 Route::GET('getOneStore/{storeId}', [StoreController::class, 'getOneStore'])->middleware(['auth']);

@@ -33,13 +33,16 @@
     function simpanPerubahanHarga(){
         var detailId = document.getElementById("modalDetailId").value;
         var harga = document.getElementById("modalHarga").value;
+        var hargafob = document.getElementById("modalHargaFOB").value;
+
         $.ajax({
             url: '{{ url("storePerubahanHargaDetailTransaksi") }}',
             type: "POST",
             data: {
                 "_token":"{{ csrf_token() }}",
                 detailId : detailId,
-                harga: harga
+                harga: harga,
+                hargafob: hargafob
             },
             dataType: "json",
             success:function(data){
@@ -54,31 +57,6 @@
             }
         });
     }
-
-    /*
-    function functionStockKeluar(id){
-        Swal.fire({
-            title: 'Scan keluar barang?',
-            text: "Scan Produk.",
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, ke laman scan keluar.'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.open(('{{ url("scanKeluar") }}'+"/"+id), '_blank');
-            } else {
-                Swal.fire(
-                    'Batal scanning masuk!',
-                    "Scan Produk.",
-                    'info'
-                    );
-            }
-        })
-
-    }
-    */
 
     function deleteItem(detailTransaction){
         Swal.fire({
@@ -115,13 +93,14 @@
             destroy:true,
             columnDefs: [
                 {   "width": "5%",  "targets":  [0], "className": "text-center" },
-                {   "width": "30%", "targets":  [1], "className": "text-left" },
+                {   "width": "35%", "targets":  [1], "className": "text-left" },
                 {   "width": "5%", "targets":   [2], "className": "text-center" },
-                {   "width": "15%", "targets":  [3], "className": "text-end" },
+                {   "width": "10%", "targets":  [3], "className": "text-end" },
                 {   "width": "10%", "targets":  [4], "className": "text-end" },
                 {   "width": "10%", "targets":  [5], "className": "text-end" },
-                {   "width": "15%", "targets":  [6], "className": "text-end" },
-                {   "width": "10%", "targets":   [7], "className": "text-center" }
+                {   "width": "10%", "targets":  [6], "className": "text-end" },
+                {   "width": "10%", "targets":  [7], "className": "text-end" },
+                {   "width": "10%", "targets":   [8], "className": "text-center" }
                 ], 
 
             columns: [
@@ -129,6 +108,7 @@
                 {data: 'itemName', name: 'itemName'},
                 {data: 'pshortname', name: 'pshortname'},
                 {data: 'price', name: 'price'},
+                {data: 'pricefob', name: 'pricefob'},
                 {data: 'amount', name: 'amount'},
                 {data: 'weight', name: 'weight'},
                 {data: 'harga', name: 'harga'},
@@ -206,6 +186,7 @@
                         <th>Nama Barang</th>
                         <th>Packing</th>
                         <th>Harga</th>
+                        <th>HargaFOB</th>
                         <th>Jumlah</th>
                         <th>Berat</th>
                         <th>Total</th>
@@ -245,7 +226,7 @@
                         <div class="col-md-1 text-end">
                         </div>
                         <div class="col-md-4 my-auto">
-                            <span class="label">Harga</span>
+                            <span class="label">Harga Invoice</span>
                         </div>
                         <div class="col-md-6">
                             <div class="input-group">
@@ -257,7 +238,24 @@
                         </div>
                         <div class="col-md-1 text-end">
                         </div>
-                    </div>                   
+                    </div>
+                    <div class="row form-group my-auto">
+                        <div class="col-md-1 text-end">
+                        </div>
+                        <div class="col-md-4 my-auto">
+                            <span class="label">Harga FOB</span>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text" id="modalMarker" name="modalMarker">{{$marker}}</span>
+                                <input type="number" id="modalHargaFOB" name="modalHargaFOB" class="form-control text-end" value="0" step="0.01">
+                                <span class="input-group-text">per Kg</span>
+
+                            </div>
+                        </div>
+                        <div class="col-md-1 text-end">
+                        </div>
+                    </div>      
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

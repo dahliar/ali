@@ -27,6 +27,7 @@ class DetailTransaction extends Model
             'dt.transactionId as transactionId', 
             'dt.amount as amount',
             'dt.price as price',
+            'dt.pricefob as pricefob',
             'vid.itemId as itemId', 
             'vid.name as itemName', 
             'vid.weightbase as wb',
@@ -62,6 +63,13 @@ class DetailTransaction extends Model
             $html="-";
             if ($row->price >0 ){
                 $html = $row->valuta.' '.number_format($row->price, 2, ',', '.').' /Kg';
+            }
+            return $html;
+        })
+        ->editColumn('pricefob', function ($row) {
+            $html="-";
+            if ($row->pricefob >0 ){
+                $html = $row->valuta.' '.number_format($row->pricefob, 2, ',', '.').' /Kg';
             }
             return $html;
         })

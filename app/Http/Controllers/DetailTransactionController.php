@@ -203,7 +203,9 @@ class DetailTransactionController extends Controller
         $validator = Validator::make($request->all(), [
             'detailId' => ['required',
             Rule::exists('detail_transactions', 'id')->where('id', $request->detailId),], 
-            'harga' => 'required|numeric|gt:0'
+            'harga' => 'required|numeric|gt:0',
+            'hargafob' => 'required|numeric|gt:0',
+
         ]);
 
         if ($validator->fails()) {
@@ -216,6 +218,7 @@ class DetailTransactionController extends Controller
 
         $dt = DetailTransaction::where('id', $request->detailId)->first();
         $dt->price = $request->harga;
+        $dt->pricefob = $request->hargafob;
 
         $transactionId = $dt->transactionId;
         $dt->save();
