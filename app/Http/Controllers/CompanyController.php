@@ -18,9 +18,34 @@ class CompanyController extends Controller
     {
         return view('company.companyList');
     }
-    public function companyProductList()
+    public function getAllCompanyProducts(Request $request)
     {
-        return view('company.companyProductList');
+        $pembelian = DB::table('purchases as p')
+        ->select(
+            'vid.speciesName as species', 
+        )
+        ->join('detail_purchases as dp', 'p.id', '=', 'dp.purchasesId')
+        ->join('view_item_details as vid', 'dp.itemId', '=', 'vid.itemId')
+        ->where('p.companyId','=',$request->companyId)
+        ->distinct()
+        ->pluck('species'); 
+
+        $penjualan = DB::table('transactions as t')
+        ->select(
+            'vid.speciesName as species', 
+        )
+        ->join('detail_transactions as dt', 't.id', '=', 'dt.transactionid')
+        ->join('view_item_details as vid', 'dt.itemId', '=', 'vid.itemId')
+        ->where('t.companyId','=',$request->companyId)
+        ->distinct()
+        ->pluck('species'); 
+
+
+        $data[] = [
+            'pembelian' =>  $pembelian,
+            'penjualan' =>  $penjualan
+        ];
+        return $data;
     }
 
     public function getAllCompany(){

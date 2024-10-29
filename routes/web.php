@@ -199,7 +199,7 @@ Route::post('companyStore',[CompanyController::class, 'store'])->middleware(['au
 Route::post('companyUpdate',[CompanyController::class, 'update'])->middleware(['auth'])->name('companyUpdate');
 Route::GET('getAllCompany', [CompanyController::class, 'getAllCompany'])->middleware(['auth']);
 
-Route::GET('companyProductList', [CompanyController::class, 'companyProductList'])->middleware(['auth']);
+Route::GET('getAllCompanyProducts', [CompanyController::class, 'getAllCompanyProducts'])->middleware(['auth']);
 
 
 

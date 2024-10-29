@@ -26,8 +26,21 @@
     function editCompany(id){
         window.open(('{{ url("companyEdit") }}'+"/"+id), '_self');
     }
-    function daftarProdukBeli(id){
-        window.open(('{{ url("companyProductList") }}'+"/"+id), '_blank');
+    function daftarProdukBeli(companyId){
+        $.ajax({
+            url: '{{ url("getAllCompanyProducts") }}',
+            type: "GET",
+            data: {
+                "_token":"{{ csrf_token() }}",
+                companyId : companyId
+            },
+            dataType: "json",
+            success:function(data){
+                $('[name="taPenjualan"]').val(data[0].penjualan);
+                $('[name="taPembelian"]').val(data[0].pembelian);
+                $('#modalProduk').modal('show');
+            }
+        });
     }
 
     function myFunction(){
@@ -119,6 +132,43 @@
                     </div>
                 </div>
             </div>  
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalProduk" tabindex="-1" aria-labelledby="modalProduk" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="employeePresenceHarianModal">Daftar Produk</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row form-group">
+                        <div class="col-md-2 my-auto">
+                            <span class="label">Pembelian</span>
+                        </div>
+                        <div class="col-md-10">
+                            <textarea class="form-control" id="taPembelian" name="taPembelian" rows="3" disabled></textarea>
+                        </div>  
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 my-auto">
+                            <span class="label">Penjualan</span>
+                        </div>
+                        <div class="col-md-10">
+                            <textarea class="form-control" id="taPenjualan" name="taPenjualan" rows="3" disabled></textarea>
+                        </div>     
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-2 my-auto">
+                        </div>
+                        <div class="col-md-10">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>     
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
