@@ -131,16 +131,24 @@ class StockController extends Controller
     {        
         $tanggal = Carbon::now()->toDateString();
         $arr = array();
+
+
         if (!empty($request->barcode)){
             foreach ($request->barcode as $barcode){            
-                DB::table('code_usages as cu')
-                ->where('cu.fullcode', '=', $barcode)
-                ->where('cu.status', '=', 0)
-                ->update(['cu.status' => 1, 'cu.storageDate' => $tanggal]);
+                //DB::table('code_usages as cu')
+                //->where('cu.fullcode', '=', $barcode)
+                //->where('cu.status', '=', 0)
+                //->update(['cu.status' => 1, 'cu.storageDate' => $tanggal]);
 
                 array_push($arr,$barcode);
             }
         }
+
+        DB::table('code_usages as cu')
+        ->whereIn('cu.fullcode', $arr)
+        ->where('cu.status', '=', 0)
+        ->update(['cu.status' => 1, 'cu.storageDate' => $tanggal, 'cu.packagingDate' => $tanggal]);
+
 
         $query = DB::table('code_usages as cu')
         ->join('codes as c', 'c.id', '=', 'cu.codeId')
