@@ -31,8 +31,11 @@
     function tambahTransaksi(){
         window.open(('{{ url("transactionAdd") }}'), '_self');
     }
-    function documentList(id){
-        window.open(('{{ url("transactionDocument") }}'+"/"+id), '_blank');
+    function invoiceList(id){
+        window.open(('{{ url("transactionInvoice") }}'+"/"+id), '_blank');
+    }
+    function documentExportList(id){
+        window.open(('{{ url("transactionDocuments") }}'+"/"+id), '_blank');
     }
     function getFileDownload(filepath){
         window.open(('{{ url("getFileDownload") }}'+"/"+filepath), '_blank');

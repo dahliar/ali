@@ -318,7 +318,11 @@ class TransactionController extends Controller
             return view('transaction.transactionEdit', compact('countryRegister', 'pinotes', 'forwarders', 'companies', 'rekenings', 'transaction', 'liners','transactionNum','transactionNumFormatted', 'currencies'));
         }
 
-        public function transactionDocument(Transaction $transaction)
+        public function transactionInvoice(Transaction $transaction)
+        {
+            return view('transaction.transactionInvoice', compact('transaction'));
+        }
+        public function transactionDocuments(Transaction $transaction)
         {
             return view('transaction.transactionDocuments', compact('transaction'));
         }
@@ -975,4 +979,72 @@ class TransactionController extends Controller
         return $totalPayment;
     }
 
+    public function createDocumentExport(Transaction $transaction)
+    {
+        $company = DB::table('companies as c')
+        ->select(
+            'c.name as name'
+        )
+        ->where('id', $transaction->companyId)
+        ->orderBy('id', 'desc')
+        ->first()->name;
+        $shipper = $transaction->shipper;
+        $transactionId = $transaction->id;
+        return view('transaction.transactionDocumentAdd', compact('transactionId','shipper','company'));
+    }
+
+    public function transactionDocumentAddStore(Request $request)
+    {   
+        $request->validate(
+            [
+                'nama' => 'required',
+                'jenis' => 'required|gt:0',
+                'nomor' => 'required',
+                'tanggal' => 'required|date',
+                'dokumen' => 'required'
+            ],
+            [
+                'nama.required' => 'Nama harus ada',
+                'jenis.gt' => 'Pilih jenis dulu',
+                'nomor.required' => 'Nomor harus ada',
+                'tanggal.required' => 'Tanggal harus ada',
+                'dokumen.required' => 'Dokumen harus ada'
+            ]
+        );
+        $jenis = "";
+        switch($request->jenis){
+            case 1: $jenis = "PEB";break;
+            case 2: $jenis = "HCMutu";break;
+            case 3: $jenis = "HCBKI";break;
+        }
+
+
+
+        $file="";
+        $filename="";
+        if($request->hasFile('dokumen')){
+            $file = $request->dokumen;
+            $filename = "DocExport".$jenis.$request->transactionId.$request->jenis.date('YmdHi').".".$file->getClientOriginalExtension();
+            $file->move(base_path("storage/app/docs/"), $filename);
+        }
+
+        $data = [
+            'transactionId' => $request->transactionId,
+            'nama' => $request->nama,
+            'jenis' =>  $request->jenis,
+            'nomor' => $request->nomor,
+            'tanggal' => $request->tanggal,
+            'filename' => $filename,
+            'userId' => auth()->user()->id,
+
+        ];
+        
+        $lastTransactionIdStored = DB::table('document_exports')->insertGetId($data);
+        return redirect('transactionList')
+        ->with('status','Dokumen ekspor berhasil ditambahkan.');
+    }
+
+    public function getAllExportDocuments(Request $request){
+        return $this->transaction->getAllExportDocuments($request);
+    }
 }

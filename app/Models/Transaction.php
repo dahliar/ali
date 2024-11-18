@@ -115,7 +115,10 @@ class Transaction extends Model
             $html ='<button data-rowid="'.$row->id.'" style="width:100px" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Item" onclick="tambahItem('."'".$row->id."'".')"><i class="fa fa-plus""></i> Items</button> 
             <button  data-rowid="'.$row->id.'"  style="width:100px" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Transaction Data" onclick="editTransaksi('."'".$row->id."'".')"><i class="fa fa-edit""></i>Edit</button>';
             $html =$html.'
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Daftar dokumen" onclick="documentList('."'".$row->id."'".')"><i class="fa fa-file-pdf""></i> Documents</button>
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Invoice" onclick="invoiceList('."'".$row->id."'".')"><i class="fa fa-file-pdf""></i> Invoice</button>
+            ';
+            $html =$html.'
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Dokumen Ekspor" onclick="documentExportList('."'".$row->id."'".')"><i class="fa fa-file-pdf""></i> Dokumen</button>
             ';
 
 
@@ -332,6 +335,41 @@ class Transaction extends Model
             return $html;
         })
         ->rawColumns(['action', 'tanggal', 'number'])
+        ->addIndexColumn()->toJson();
+    }
+
+    public function getAllExportDocuments(Request $request){
+        $query = DB::table('document_exports as de')
+        ->select(
+            'de.id as id', 
+            'de.transactionId as transactionId', 
+            'de.nama as nama', 
+            'de.tanggal as tanggal', 
+            'de.filename as filename',
+            'c.name as companyName',
+            DB::raw('(CASE 
+                WHEN de.jenis =1 THEN "PEB"
+                WHEN de.jenis =2 THEN "HC Mutu"
+                WHEN de.jenis =3 THEN "HC BKIPM"
+                END) AS jenis')
+        )
+        ->join('transactions as t', 't.id', '=', 'de.transactionId')
+        ->join('companies as c', 'c.id', '=', 't.companyId')
+        ->orderBy('de.tanggal', 'desc')
+        ->get();  
+
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = '    
+
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Download dokumen" onclick="getFileDownload('."'".$row->filename."'".')"><i class="fa fa-file-pdf""></i>
+            </button><br>
+            ';
+
+            return $html;
+        })
+        ->rawColumns(['action', 'tanggal'])
         ->addIndexColumn()->toJson();
     }
 

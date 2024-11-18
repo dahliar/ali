@@ -76,7 +76,18 @@ Route::get('transactionList',[TransactionController::class, 'index'])->middlewar
 Route::get('transactionAdd',[TransactionController::class, 'create'])->middleware(['auth', 'authorized']);
 Route::get('transactionView',[TransactionController::class, 'show'])->middleware(['auth', 'authorized']);
 Route::get('transactionEdit/{transaction}',[TransactionController::class, 'edit'])->middleware(['auth', 'authorized']);
-Route::get('transactionDocument/{transaction}',[TransactionController::class, 'transactionDocument'])->middleware(['auth', 'authorized']);
+
+Route::get('transactionInvoice/{transaction}',[TransactionController::class, 'transactionInvoice'])->middleware(['auth', 'authorized']);
+Route::get('transactionDocuments/{transaction}',[TransactionController::class, 'transactionDocuments'])->middleware(['auth', 'authorized']);
+Route::get('transactionDocumentAdd/{transaction}',[TransactionController::class, 'createDocumentExport'])->middleware(['auth', 'authorized']);
+Route::POST('transactionDocumentAddStore',[TransactionController::class, 'transactionDocumentAddStore'])->middleware(['auth']);
+Route::GET('getAllExportDocuments', [TransactionController::class, 'getAllExportDocuments'])->middleware(['auth']);
+
+
+
+
+
+
 Route::POST('transactionStore',[TransactionController::class, 'store'])->middleware(['auth']);
 Route::POST('transactionUpdate',[TransactionController::class, 'update'])->middleware(['auth']);
 Route::get('transactionRevoke',[TransactionController::class, 'revoke'])->middleware(['auth', 'authorized']);

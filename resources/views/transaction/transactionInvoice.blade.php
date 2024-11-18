@@ -23,8 +23,60 @@
     function getFileDownload(filepath){
         window.open(('{{ url("getFileDownload") }}'+"/"+filepath), '_blank');
     };
-    function tambahDokumen(id){
-        window.open(('{{ url("transactionDocumentAdd") }}'+"/"+id), '_self');
+
+    function tambahPI(id){
+        Swal.fire({
+            title: 'Generate dokumen PI baru?',
+            text: "Akan membuat dokumen proforma invoice baru!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, create it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: ('{{ url("/transaction/pi/") }}'+"/"+id),
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Created!',
+                            'Dokumen PI baru telah dibuat.',
+                            'success'
+                            );
+                        myFunction(id);
+                    }
+                });
+            }
+        })
+    }
+    function tambahIPL(id){
+        Swal.fire({
+            title: 'Generate dokumen Invoice baru?',
+            text: "Akan membuat dokumen Invoice baru!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, create it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: ('{{ url("transaction/ipl") }}'+"/"+id),
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+                        Swal.fire(
+                            'Created!',
+                            'Invoice baru telah dibuat.',
+                            'success'
+                            );
+                        myFunction(id);
+                    }
+                });
+            }
+        })
     }
 
     function myFunction(transactionId){
@@ -33,7 +85,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             ajax:{
-                url: '{{ url("getAllExportDocuments") }}',
+                url: '{{ url("getAllTransactionDocuments") }}',
                 data: function (d){
                     d.transactionId = transactionId
                 }
@@ -46,18 +98,18 @@
             destroy:true,
             columnDefs: [
                 {   "width": "5%", "targets":  [0], "className": "text-left"   },
-                {   "width": "30%", "targets": [1], "className": "text-left" },
-                {   "width": "10%", "targets": [2], "className": "text-left" },
-                {   "width": "20%", "targets":  [3], "className": "text-left" },
-                {   "width": "15%", "targets":  [4], "className": "text-left" },
-                {   "width": "20%", "targets":   [5], "className": "text-left" }
+                {   "width": "15%", "targets": [1], "className": "text-left" },
+                {   "width": "15%", "targets": [2], "className": "text-left" },
+                {   "width": "30%", "targets":  [3], "className": "text-left" },
+                {   "width": "20%", "targets":  [4], "className": "text-left" },
+                {   "width": "15%", "targets":   [5], "className": "text-left" }
                 ], 
 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                {data: 'companyName', name: 'companyName'},
+                {data: 'documentNo', name: 'documentNo'},
                 {data: 'jenis', name: 'jenis'},
-                {data: 'nama', name: 'nama'},
+                {data: 'name', name: 'name'},
                 {data: 'tanggal', name: 'tanggal'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
                 ]
@@ -102,13 +154,23 @@
                         <li class="breadcrumb-item">
                             <a class="white-text" href="{{ url('/home') }}">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Export Documents</li>
+                        <li class="breadcrumb-item active">Transactions</li>
                     </ol>
                 </nav>
                 <div>
-                    <button onclick="tambahDokumen({{$transaction->id}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Dokumen Ekspor">
-                        <i class="fa fa-plus"></i>Tambah Dokumen Ekspor
+                    <button onclick="tambahPI({{$transaction->id}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak PI Baru">
+                        <i class="fa fa-plus"></i> Cetak PI Baru
                     </button>
+
+                    @if ($transaction->status==2)
+                    <button onclick="tambahIPL({{$transaction->id}})" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Invoice Baru">
+                        <i class="fa fa-plus"></i> Cetak Invoice Baru
+                    </button>
+                    @else
+                    <button class="btn btn-primary" disabled>
+                        <i class="fa fa-plus"></i> Cetak Invoice Baru
+                    </button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -118,9 +180,9 @@
                     <thead>
                         <tr style="font-size: 12px;">
                             <th>No</th>
-                            <th>Customer</th>
+                            <th>Nomor Dokumen</th>
                             <th>Jenis</th>
-                            <th>Nama Dokumen</th>
+                            <th>Pembuat</th>
                             <th>Tanggal</th>
                             <th>Aksi</th>
                         </tr>
