@@ -131,6 +131,7 @@
                     <tr>
                         <th style="width: 5%;">No</th>
                         <th style="width: 20%;">Nama</th>
+                        <th style="width: 15%;">No Slip</th>
                         <th style="width: 15%;">Bulanan</th>
                         <th style="width: 15%;">Harian</th>
                         <th style="width: 15%;">Borongan</th>
@@ -163,6 +164,9 @@
                         <td style="text-align: left;">
                             {{$paymonth->name}}
                         </td>
+                        <td style="text-align: center;">
+                            {{$paymonth->slipid}}{{$tahun}}{{$bulan}}
+                        </td>
                         <td style="text-align: right;">Rp. {{number_format($paymonth->bulanan, 2, ',', '.')}}
                         </td>
                         <td style="text-align: right;">Rp. {{number_format($paymonth->harian, 2, ',', '.')}}
@@ -176,6 +180,8 @@
                 </tbody>
                 <tfoot style="font-size:14px">
                     <tr>
+                        <td style="text-align: center;">
+                        </td>
                         <td style="text-align: center;">
                         </td>
                         <td style="text-align: center;">

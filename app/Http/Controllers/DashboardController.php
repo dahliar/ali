@@ -578,6 +578,7 @@ class DashboardController extends Controller
         $payroll = DB::table('detail_payrolls as dp')
         ->select(
             DB::raw('dp.employeeId as empid'),
+            DB::raw('e.nip as slipid'),
             DB::raw('u.name as name'),
             DB::raw('sum(dp.bulanan) as bulanan'),
             DB::raw('sum(dp.harian) as harian'),
@@ -593,11 +594,11 @@ class DashboardController extends Controller
         ->orderBy('u.name')
         ->get();
 
-        $tahun = $tanggal->month;
-        $bulan = $tanggal->year;
+        $tahun = $tanggal->year;
+        $bulan = $tanggal->format('m');
         $bulanTahun = $request->bulanTahun;
 
-        return view('dashboard.rekapitulasiGajiPerBulan', compact('bulanTahun', 'payroll'));
+        return view('dashboard.rekapitulasiGajiPerBulan', compact('bulanTahun', 'payroll', 'tahun', 'bulan'));
     }
 
     public function cetakRekapGajiBulanan(Request $request){
