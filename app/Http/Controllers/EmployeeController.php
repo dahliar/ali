@@ -477,10 +477,10 @@ class EmployeeController extends Controller
             DB::raw('
                 concat(
                 TIMESTAMPDIFF(YEAR, startDate, IFNULL(endDate, curdate())), 
-                " Y + ",
+                "Y + ",
                 (TIMESTAMPDIFF(MONTH,startDate,IFNULL(endDate,curdate()))-(
                 TIMESTAMPDIFF(YEAR,startDate,IFNULL(endDate,curdate())) * 12)), 
-                " M")
+                "M")
                 as lamaKerja'),
             DB::raw('
                 (CASE WHEN e.employmentStatus="1" THEN "Bulanan" WHEN e.employmentStatus="2" THEN "Harian" WHEN e.employmentStatus="3" THEN "Borongan" END) AS jenisPenggajian

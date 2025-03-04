@@ -68,7 +68,9 @@
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarKaryawan">
 						<li><a class="dropdown-item" href="{{ url('employeeList')}}"><i class="fas fa-address-card"></i> Daftar Karyawan</a></li>
+						<!--
 						<li><a class="dropdown-item" href="{{ url('employeeList2')}}"><i class="fas fa-address-card"></i> Daftar Karyawan - New Menu</a></li>
+						-->
 					</ul>
 				</li>
 				<li class="dropdown dropend">
