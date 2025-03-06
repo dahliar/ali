@@ -624,6 +624,7 @@ class DashboardController extends Controller
         $payroll = DB::table('detail_payrolls as dp')
         ->select(
             DB::raw('dp.employeeId as empid'),
+            DB::raw('e.nik as nik'),
             DB::raw('e.nip as slipid'),
             DB::raw('u.name as name'),
             DB::raw('sum(dp.bulanan) as bulanan'),
@@ -646,7 +647,7 @@ class DashboardController extends Controller
         $bulan = $tanggal->format('m');
 
 
-        $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll', 'tahun', 'bulan'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll', 'tahun', 'bulan', 'nik'))->setPaper('a4', 'landscape');
         $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
 
