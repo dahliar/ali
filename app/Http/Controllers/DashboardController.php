@@ -552,7 +552,7 @@ class DashboardController extends Controller
         )
         ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
         ->join('employees as e', 'e.id', '=', 'dp.employeeId')
-        ->whereYear('p.payDate', "2022")
+        ->whereYear('p.payDate', $tahun)
         ->groupBy(DB::raw('MONTH(p.payDate)'))
         ->whereYear('p.payDate', $request->tahun)
         ->groupBy('e.employmentStatus')
@@ -578,6 +578,7 @@ class DashboardController extends Controller
         $payroll = DB::table('detail_payrolls as dp')
         ->select(
             DB::raw('dp.employeeId as empid'),
+            DB::raw('e.nik as nik'),
             DB::raw('e.nip as slipid'),
             DB::raw('u.name as name'),
             DB::raw('sum(dp.bulanan) as bulanan'),

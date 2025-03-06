@@ -129,14 +129,15 @@
                <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
                 <thead style="text-align: center;">
                     <tr>
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 20%;">Nama</th>
-                        <th style="width: 15%;">No Slip</th>
-                        <th style="width: 15%;">Bulanan</th>
-                        <th style="width: 15%;">Harian</th>
-                        <th style="width: 15%;">Borongan</th>
-                        <th style="width: 15%;">Honorarium</th>
-                        <th style="width: 15%;">Total</th>
+                        <th style="width: 2%;">No</th>
+                        <th style="width: 18%;">Nama</th>
+                        <th style="width: 10%;">NIK</th>
+                        <th style="width: 10%;">No Slip</th>
+                        <th style="width: 12%;">Bulanan</th>
+                        <th style="width: 12%;">Harian</th>
+                        <th style="width: 12%;">Borongan</th>
+                        <th style="width: 12%;">Honorarium</th>
+                        <th style="width: 12%;">Total</th>
                     </tr>
                 </thead>
                 <tbody style="font-size:12px">
@@ -163,6 +164,9 @@
                         </td>
                         <td style="text-align: left;">
                             {{$paymonth->name}}
+                        </td>
+                        <td style="text-align: left;">
+                            {{$paymonth->nik}}
                         </td>
                         <td style="text-align: center;">
                             {{$paymonth->slipid}}{{$tahun}}{{$bulan}}
