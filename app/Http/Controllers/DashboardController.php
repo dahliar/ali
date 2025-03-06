@@ -647,7 +647,7 @@ class DashboardController extends Controller
         $bulan = $tanggal->format('m');
 
 
-        $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll', 'tahun', 'bulan', 'nik'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll', 'tahun', 'bulan'))->setPaper('a4', 'landscape');
         $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
 
