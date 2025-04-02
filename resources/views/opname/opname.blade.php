@@ -19,9 +19,10 @@
         }
     });
 
-    $(document).ready(function() {
+    function myFunction(){
+        var isChecked = document.querySelector('input[name="showData"]:checked').value;
         $('#datatable').DataTable({
-            ajax:'{{ url("getOpnameData") }}',
+            ajax:'{{ url("getOpnameData") }}'+"/"+isChecked,
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -34,16 +35,16 @@
                 {   "width": "30%", "targets":  [2], "className": "text-left" },
                 {   "width": "15%", "targets":  [3], "className": "text-end" },
                 {   "width": "12%", "targets":  [4], "className": "text-end" }
-                ], 
+            ], 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'id', name: 'id'},
                 {data: 'itemName', name: 'itemName'},
                 {data: 'jumlahPacked', name: 'jumlahPacked'},
                 {data: 'amount', name: 'amount'}
-                ]
+            ]
         });
-    });
+    };
 </script>
 
 @if (session('status'))
@@ -72,6 +73,27 @@
                 </ol>
             </nav>
             <a href="{{ url('opnameImport')}}" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Export Data Stock Opname">Import</a>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="d-grid">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="showData" id="r2" value="1" checked>
+                        <label class="form-check-label" for="inlineRadio2">Yang ada barangnya saja</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="showData" id="r3" value="0">
+                        <label class="form-check-label" for="inlineRadio3">Yang habis saja</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="showData" id="r1" value="all">
+                        <label class="form-check-label" for="inlineRadio1">Semua</label>
+                    </div>
+                </div>
+                <div class="d-grid d-md-flex">
+                    <button id="buttonShow" type="submit" class="btn btn-primary" onclick="myFunction()">Tampilkan Data</button>
+                </div>
+            </div>
         </div>
         <div class="card">
             <div class="card-body">

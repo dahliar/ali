@@ -15,8 +15,9 @@
 
 <script type="text/javascript">
     function myFunction(){
+        var isChecked = document.querySelector('input[name="showData"]:checked').value;
         $('#datatable').DataTable({
-            ajax:'{{ url("getAllSpeciesStock") }}',
+            ajax:'{{ url("getAllSpeciesStock") }}'+"/"+isChecked,
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -30,7 +31,7 @@
                 {   "width": "14%", "targets":  [4], "className": "text-end" },
                 {   "width": "14%", "targets":  [5], "className": "text-end" },
                 {   "width": "14%", "targets":  [6], "className": "text-end" }
-                ], 
+            ], 
 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -40,12 +41,9 @@
                 {data: 'unpacked', name: 'jumlahUnpacked'},
                 {data: 'total', name: 'total'},
                 {data: 'jumlahOnLoading', name: 'jumlahOnLoading'}
-                ]
+            ]
         });
     }
-    $(document).ready(function() {
-        myFunction();
-    });
 </script>
 
 @if (session('status'))
@@ -74,6 +72,27 @@
                         <li class="breadcrumb-item active">Stock per-Species</li>
                     </ol>
                 </nav>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="d-grid">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="showData" id="r2" value="1" checked>
+                            <label class="form-check-label" for="inlineRadio2">Yang ada barangnya saja</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="showData" id="r3" value="0">
+                            <label class="form-check-label" for="inlineRadio3">Yang habis saja</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="showData" id="r1" value="all">
+                            <label class="form-check-label" for="inlineRadio1">Semua</label>
+                        </div>
+                    </div>
+                    <div class="d-grid d-md-flex">
+                        <button id="buttonShow" type="submit" class="btn btn-primary" onclick="myFunction()">Tampilkan Data</button>
+                    </div>
+                </div>
             </div>
             <div class="modal-body">
                 <div class="row form-inline">

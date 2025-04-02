@@ -21,52 +21,36 @@
     });
 
     function tambahBarang(){
-        window.open(('{{ url("goodAdd") }}'), '_self');
+        window.open(('{{ url("goodCategoriesAdd") }}'), '_self');
     }
     function editBarang(id){
-        window.open(('{{ url("goodEdit") }}' + "/"+ id), '_self');
+        //window.open(('{{ url("goodEdit") }}' + "/"+ id), '_self');
     }
-    function ubahTambah(id){
-        window.open(('{{ url("goodUbahTambah") }}' + "/"+ id), '_self');
-    }
-    function ubahKurang(id){
-        window.open(('{{ url("goodUbahKurang") }}' + "/"+ id), '_self');
-    }
-
-    function myFunction(){
-        var isChecked = document.querySelector('input[name="showData"]:checked').value;
+    function myFunction(speciesId){
         $('#datatable').DataTable({
-            ajax:'{{ url("getGoods") }}'+"/"+isChecked,
+            ajax:'{{ url("getGoodCategories") }}',
             serverSide: false,
             processing: true,
             deferRender: true,
             type: 'GET',
             destroy:true,
             columnDefs: [
-                {   "width": "5%",  "targets":  [0], "className": "text-center" },
+                {   "width": "10%",  "targets":  [0], "className": "text-center" },
                 {   "width": "30%",  "targets": [1], "className": "text-left" },
-                {   "width": "10%", "targets":  [2], "className": "text-end" },
-                {   "width": "10%", "targets":  [3], "className": "text-end" },
-                {   "width": "10%", "targets":  [4], "className": "text-center" },
-                {   "width": "10%", "targets":  [5], "className": "text-center" },
-                {   "width": "10%", "targets":  [6], "className": "text-center" },
-                {   "width": "15%", "targets":  [7], "className": "text-center" }
-            ], 
+                {   "width": "40%", "targets":  [2], "className": "text-left" },
+                {   "width": "20%", "targets":  [3], "className": "text-center" },
+                ], 
 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'name', name: 'name'},
-                {data: 'amount', name: 'amount'},
-                {data: 'minimal', name: 'minimal'},
-                {data: 'satuan', name: 'satuan'},
-                {data: 'kategori', name: 'kategori'},
-                {data: 'isactive', name: 'isactive'},
+                {data: 'materialName', name: 'materialName'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
-            ]
+                ]
         });
     }
     $(document).ready(function() {
-       // myFunction();
+        myFunction();
     });
 </script>
 
@@ -100,27 +84,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="d-grid">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="showData" id="r2" value="1" checked>
-                            <label class="form-check-label" for="inlineRadio2">Yang ada barangnya saja</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="showData" id="r3" value="0">
-                            <label class="form-check-label" for="inlineRadio3">Yang habis saja</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="showData" id="r1" value="all">
-                            <label class="form-check-label" for="inlineRadio1">Semua</label>
-                        </div>
-                    </div>
-                    <div class="d-grid d-md-flex">
-                        <button id="buttonShow" type="submit" class="btn btn-primary" onclick="myFunction()">Tampilkan Data</button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-body">
                 <div class="row form-inline">
                     <div class="col-12">
                         <div class="card-body">
@@ -129,11 +92,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Nama</th>
-                                        <th>Jumlah</th>
-                                        <th>Minimal</th>
-                                        <th>Satuan</th>
-                                        <th>Kategori</th>
-                                        <th>Aktif</th>
+                                        <th>Jenis Material</th>
                                         <th>Act</th>
                                     </tr>
                                 </thead>

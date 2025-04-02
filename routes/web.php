@@ -161,7 +161,7 @@ Route::get('storeUpdate',[StoreController::class, 'update'])->middleware(['auth'
 
 //ITEM STOCKS
 Route::get('speciesStockList',[ItemController::class, 'indexStockSpecies'])->middleware(['auth', 'authorized']);
-Route::get('getAllSpeciesStock',[ItemController::class, 'getSpeciesStock'])->middleware(['auth']);
+Route::get('getAllSpeciesStock/{isChecked}',[ItemController::class, 'getSpeciesStock'])->middleware(['auth']);
 Route::get('getSizesForSpecies/{speciesId}',[ItemController::class, 'getSizeForSpecies'])->middleware(['auth']);
 Route::get('getGradesForSize/{sizeId}',[ItemController::class, 'getGradeForSize'])->middleware(['auth']);
 Route::get('getWeightbaseForSize/{sizeId}/{gradeId}',[ItemController::class, 'getWeightbaseForSize'])->middleware(['auth']);
@@ -370,7 +370,7 @@ Route::POST('passUpdate',[EmployeeController::class, 'storePassword'])->name('pa
 Route::POST('employeeStore',[EmployeeController::class, 'store'])->name('employeeStore')->middleware('auth');
 Route::POST('employeeUpdate',[EmployeeController::class, 'update'])->name('employeeUpdate')->middleware('auth');
 Route::POST('employeeMappingUpdate',[EmployeeController::class, 'updateMapping'])->name('employeeMappingUpdate')->middleware('auth');
-Route::get('getAllEmployees',[EmployeeController::class, 'getAllEmployees'])->middleware('auth');
+Route::get('getAllEmployees/{isChecked}/{empType}',[EmployeeController::class, 'getAllEmployees'])->middleware('auth');
 Route::get('getEmployeesBarcode',[EmployeeController::class, 'getEmployeesBarcode'])->middleware('auth');
 Route::get('getAllActiveEmployees',[EmployeeController::class, 'getAllActiveEmployees'])->middleware('auth');
 Route::GET('employeeMappingEdit/{employee}',[EmployeeController::class, 'editMapping'])->middleware('auth', 'authorized');
@@ -454,7 +454,23 @@ Route::post('goodStore',[GoodController::class, 'store'])->middleware('auth');
 Route::post('goodUpdate',[GoodController::class, 'update'])->middleware('auth');
 Route::post('goodUbahTambah',[GoodController::class, 'storeTambah'])->middleware('auth');
 Route::post('goodUbahKurang',[GoodController::class, 'storeKurang'])->middleware('auth');
-Route::get('getGoods', [GoodController::class, 'getGoods'])->middleware('auth');
+Route::get('getGoods/{jenis}', [GoodController::class, 'getGoods'])->middleware('auth');
+
+
+//Kategori BPP
+Route::get('goodCategories',[GoodController::class, 'goodCategoriesIndex'])->middleware(['auth', 'authorized']);
+Route::get('getGoodCategories', [GoodController::class, 'getGoodCategories'])->middleware('auth');
+ 
+Route::get('goodCategoriesAdd',[GoodController::class, 'goodCategoriesAdd'])->middleware(['auth', 'authorized']);
+Route::post('goodCategoryStore',[GoodController::class, 'goodCategoryStore'])->middleware('auth');
+
+//Kategori BPP
+Route::get('goodUnits',[GoodController::class, 'goodUnitsIndex'])->middleware(['auth', 'authorized']);
+Route::get('getGoodUnits', [GoodController::class, 'getGoodUnits'])->middleware('auth');
+ 
+Route::get('goodUnitsAdd',[GoodController::class, 'goodUnitsAdd'])->middleware(['auth', 'authorized']);
+Route::post('goodUnitsStore',[GoodController::class, 'goodUnitsStore'])->middleware('auth');
+
 
 /*
 *   Route Transaksi Undername
@@ -523,7 +539,7 @@ Route::post('documentStore',[AdministrationController::class, 'documentStore'])-
 *
 */
 Route::get('opname',[StoreController::class, 'opname'])->middleware(['auth', 'authorized']);
-Route::get('getOpnameData',[StoreController::class, 'getOpnameData'])->middleware(['auth']);
+Route::get('getOpnameData/{isChecked}',[StoreController::class, 'getOpnameData'])->middleware(['auth']);
 Route::get('opnameImport',[StoreController::class, 'opnameImport'])->middleware(['auth', 'authorized']);
 Route::get('getStockOpnameImportList', [StoreController::class, 'excelStockOpnameFileGenerator'])->middleware(['auth']);
 Route::post('stockOpnameStore',[StoreController::class, 'stockOpnameStore'])->middleware(['auth', 'authorized']);

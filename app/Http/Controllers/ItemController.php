@@ -75,8 +75,8 @@ class ItemController extends Controller
     {
         return view('item.speciesStockList');
     }
-    public function getSpeciesStock(){
-        return $this->item->getSpeciesStock();
+    public function getSpeciesStock($isChecked){
+        return $this->item->getSpeciesStock($isChecked);
     }
 
     /**

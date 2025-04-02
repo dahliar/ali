@@ -122,7 +122,7 @@ class Item extends Model
         ->rawColumns(['action1', 'action2', 'amount'])->addIndexColumn()->toJson();
     }
 
-    public function getSpeciesStock(){
+    public function getSpeciesStock($isChecked){
         $query = DB::table('items as i')
         ->select(
             'i.id as id', 
@@ -141,8 +141,13 @@ class Item extends Model
         ->where('i.isActive','=', 1)
         ->orderBy('sp.name', 'desc')
         ->orderBy('g.name', 'asc')
-        ->groupBy('sp.id')
-        ->orderBy('s.name', 'asc');
+        ->groupBy('sp.id');
+        if ($isChecked == 0){ 
+            $query->where("i.amount","=",0);
+        } else if ($isChecked == 1){
+            $query->where("i.amount",">",0);
+        } 
+        $query->orderBy('s.name', 'asc');
 
         return datatables()->of($query)
         ->addColumn('total', function ($row) {

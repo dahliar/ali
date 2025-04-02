@@ -62,8 +62,11 @@
     }
 
     function myFunction(){
+        var isChecked = document.querySelector('input[name="showData"]:checked').value;
+        var e = document.getElementById("empType");
+        var empType = e.value;
         $('#datatable').DataTable({
-            ajax:'{{ url("getAllEmployees") }}',
+            ajax:'{{ url("getAllEmployees") }}'+"/"+isChecked+"/"+empType,
             serverSide: false,
             processing: true,
             deferRender: true,
@@ -78,7 +81,7 @@
                 {   "width": "5%", "targets":  [5], "className": "text-center" },
                 {   "width": "10%", "targets":  [6], "className": "text-center" },
                 {   "width": "20%", "targets":  [7], "className": "text-left" }
-                ], 
+            ], 
 
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -89,13 +92,9 @@
                 {data: 'statusKepegawaian', name: 'statusKepegawaian'},
                 {data: 'lamaKerja', name: 'lamaKerja'},
                 {data: 'action', name: 'action', orderable: false, searchable: false}
-                ]
+            ]
         });
     }
-
-    $(document).ready(function() {
-        myFunction();
-    });
 </script>
 
 @if (session('status'))
@@ -116,7 +115,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="col-md-6">
-
                     <nav aria-label="breadcrumb" class="navbar navbar-expand-lg navbar-light">
                         <ol class="breadcrumb primary-color">
                             <li class="breadcrumb-item">
@@ -127,7 +125,6 @@
                     </nav>
                 </div>
                 <div class="col-md-6 text-end">
-
                     <button onclick="barcodeList()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Employee Barcode List"><i class="fas fa-barcode" style="font-size:20px"></i>
                     </button>
                     <button onclick="tambahTransaksi()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Pegawai"><i class="fa fa-plus" style="font-size:20px"></i>
@@ -135,29 +132,69 @@
                 </div>
             </div>
             <div class="modal-body">
-                <div class="row form-inline">
-
-                    <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama</th>
-                                <th>Username</th>
-                                <th>JK</th>
-                                <th>Karyawan</th>
-                                <th>Bekerja</th>
-                                <th>Masa Kerja</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>       
-
-
+                <div class="row align-items-center p-1">
+                    <div class="col-2">
+                        <label class="form-check-label" for="inlineRadio2">Status Kepegawaian</label>
+                    </div>
+                    <div class="col-9">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="showData" id="r2" value="1" checked>
+                            <label class="form-check-label" for="inlineRadio2">Yang Aktif saja</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="showData" id="r3" value="0">
+                            <label class="form-check-label" for="inlineRadio3">Yang Non Aktif saja</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="showData" id="r1" value="all">
+                            <label class="form-check-label" for="inlineRadio1">Semua</label>
+                        </div>
+                    </div>
                 </div>
-            </div>    
+                <div class="row  align-items-center p-1">
+                    <div class="col-2">
+                        <label class="form-check-label" for="inlineRadio2">Jenis Kepegawaian</label>
+                    </div>
+                    <div class="col-3">
+                        <div class="d-grid d-md-flex">
+                            <select class="form-select" id="empType" aria-label="Default select example">
+                                <option value="0" selected>Semua</option>
+                                <option value="2">Harian</option>
+                                <option value="3">Borongan</option>
+                                <option value="1">Bulanan</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button id="buttonShow" type="submit" class="btn btn-primary" onclick="myFunction()">Tampilkan Data</button>
+                </div>
+            </div>
         </div>
+        <div class="modal-body">
+            <div class="row form-inline">
+
+                <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Username</th>
+                            <th>JK</th>
+                            <th>Karyawan</th>
+                            <th>Aktif</th>
+                            <th>Masa Kerja</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>       
+
+
+            </div>
+        </div>    
     </div>
+</div>
 </body>
 @endsection

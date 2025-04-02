@@ -739,7 +739,7 @@ class StoreController extends Controller
         return view('opname.opname');
     }
 
-    public function getOpnameData()
+    public function getOpnameData($isChecked)
     {
         $query = DB::table('items as i')
         ->select(
@@ -775,8 +775,14 @@ class StoreController extends Controller
         ->where('i.isActive','=', 1)
         ->orderBy('sp.nameBahasa', 'asc')
         ->orderBy('g.name', 'asc')
-        ->orderBy('s.name', 'asc')
-        ->get();
+        ->orderBy('s.name', 'asc');
+
+        if ($isChecked == 0){ 
+            $query->where("i.amount","=",0);
+        } else if ($isChecked == 1){
+            $query->where("i.amount",">",0);
+        } 
+        $query->get();
 
         return datatables()->of($query) 
         ->addIndexColumn()

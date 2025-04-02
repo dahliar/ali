@@ -14,6 +14,7 @@ class GoodController extends Controller
     public function index(){
         return view('good.goodList');
     }
+
     public function create(){
         $categories = DB::table('good_categories')
         ->where('isActive', 1)
@@ -186,7 +187,7 @@ class GoodController extends Controller
             DB::commit();
             return redirect('goodList')
             ->with('status','Pengurangan jumlah barang sukses.');
-        
+
         } catch (\Exception $e) {
             DB::rollback();
             return redirect('goodList')
@@ -248,7 +249,7 @@ class GoodController extends Controller
         DB::table('good_histories')->insert($data);
     }
 
-    public function getGoods(){
+    public function getGoods($isChecked){
         $query = DB::table('goods as g')
         ->select(
             'g.id as id', 
@@ -261,8 +262,13 @@ class GoodController extends Controller
             DB::raw('(CASE WHEN g.isactive="1" THEN "Ya" WHEN g.isactive="0" THEN "Tidak" END) AS isactive')
         )
         ->join('good_units as gu', 'gu.id', '=', 'g.idUnit')
-        ->join('good_categories as gc', 'gc.id', '=', 'g.idCategories')
-        ->get();  
+        ->join('good_categories as gc', 'gc.id', '=', 'g.idCategories');
+        if ($isChecked == 0){ 
+            $query->where("g.amount","=",0);
+        } else if ($isChecked == 1){
+            $query->where("g.amount",">",0);
+        } 
+        $query->get();
 
         return datatables()->of($query)
         ->addColumn('action', function ($row) {
@@ -305,4 +311,117 @@ class GoodController extends Controller
         ->rawColumns(['action', 'amount'])
         ->addIndexColumn()->toJson();
     }
+
+
+//Good Categories
+    public function goodCategoriesIndex(){
+        return view('good.goodCategories');
+    }
+    public function goodCategoriesAdd(){
+        return view('good.goodCategoriesAdd');
+    }
+
+    public function getGoodCategories(){
+        $query = DB::table('good_categories as gc')
+        ->select(
+            'gc.id as id', 
+            'gc.name as name',
+            'gc.idMaterial as idMaterial',
+            'm.name as materialName',
+        )
+        ->join('materials as m', 'm.id', '=', 'gc.idMaterial')
+        ->orderBy('name')
+        ->get();  
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = "";
+        /*     '
+        
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Kategori" onclick="editBarang('."'".$row->id."'".')">
+            <i class="fa fa-edit" style="font-size:20px"></i>
+            </button>';
+            */
+            return $html;
+        })
+        ->rawColumns(['action'])
+        ->addIndexColumn()->toJson();
+    }
+
+    public function goodCategoryStore(Request $request)
+    {
+        $validated = $request->validate(
+            [
+                'name'      => 'required|unique:good_categories',
+            ],[
+                'name.unique' => 'Nama harus unik, ":input" sudah digunakan'
+            ]
+        );
+        $data = [
+            'name' => $request->name,
+            'idMaterial' => 1,
+            'isActive' =>  1
+        ];
+
+        $goodId=DB::table('good_categories')->insertGetId($data);
+        return redirect('goodCategories')
+        ->with('status','Kategori baru berhasil ditambahkan.');
+    }
+
+
+//Good Units
+    public function goodUnitsIndex(){
+        return view('good.goodUnits');
+    }
+    public function goodUnitsAdd(){
+        return view('good.goodUnitsAdd');
+    }
+
+    public function getGoodUnits(){
+        $query = DB::table('good_units as gu')
+        ->select(
+            'gu.id as id', 
+            'gu.name as name',
+            'gu.shortname as shortname'
+        )
+        ->orderBy('name')
+        ->get();  
+
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) {
+            $html = "";
+        /*     '
+        
+            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Kategori" onclick="editBarang('."'".$row->id."'".')">
+            <i class="fa fa-edit" style="font-size:20px"></i>
+            </button>';
+            */
+            return $html;
+        })
+        ->rawColumns(['action'])
+        ->addIndexColumn()->toJson();
+    }
+
+    public function goodUnitsStore(Request $request)
+    {
+        $validated = $request->validate(
+            [
+                'name'      => 'required|unique:good_units',
+                'shortname'      => 'required|unique:good_units',
+            ],[
+                'name.unique' => 'Nama harus unik, ":input" sudah digunakan',
+                'shortname.unique' => 'Nama pendek harus unik, ":input" sudah digunakan'
+            ]
+        );
+        $data = [
+            'name' => $request->name,
+            'shortname' => $request->shortname,
+            'isActive' =>  1
+        ];
+
+        $goodId=DB::table('good_units')->insertGetId($data);
+        return redirect('goodUnits')
+        ->with('status','Satuan baru berhasil ditambahkan.');
+    }
+
 }

@@ -457,7 +457,7 @@ class EmployeeController extends Controller
     }
 
 
-    public function getAllEmployees(){
+    public function getAllEmployees($isChecked, $empType){
         $query = DB::table('employees as e')
         ->select(
             'e.id as id', 
@@ -487,9 +487,22 @@ class EmployeeController extends Controller
                 ')
         )
         ->join('users as u', 'u.id', '=', 'e.userid')
-        ->join('access_levels as al', 'al.level', '=', 'u.accessLevel')
-        ->orderBy('u.name');
-        $query->get();
+        ->join('access_levels as al', 'al.level', '=', 'u.accessLevel');
+        
+        if ($isChecked == 0){ 
+            $query->where("e.isActive","=",0);
+        } else if ($isChecked == 1){
+            $query->where("e.isActive","=",1);
+        } 
+        if ($empType == 0){ 
+        } else if ($empType == 1){
+            $query->where("e.employmentStatus","=",1);
+        } else if ($empType == 2){
+            $query->where("e.employmentStatus","=",2);
+        } else if ($empType == 3){
+            $query->where("e.employmentStatus","=",3);
+        } 
+        $query->orderBy('u.name');
 
         return datatables()->of($query)
         ->addColumn('statusKepegawaian', function ($row) {
@@ -580,7 +593,7 @@ class EmployeeController extends Controller
             return $html;
         })
 
-        
+
 
         ->rawColumns(['action', 'nipBarcode'])
         ->addIndexColumn()->toJson();

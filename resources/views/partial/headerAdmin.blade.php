@@ -214,7 +214,7 @@
 			<ul class="dropdown-menu" aria-labelledby="navbarBarang">
 				<li class="dropdown dropend">
 					<a class="dropdown-item dropdown-toggle" href="#" id="navbarStok" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						<i class="fas fa-fish"></i> Produk
+						<i class="fas fa-fish"></i> Produk Jadi
 					</a>
 					<ul class="dropdown-menu" aria-labelledby="navbarStok">
 						<li>
@@ -225,12 +225,18 @@
 						</li>
 						@if (Session::get('accessLevel') <= 30)
 						<li>
-							<a class="dropdown-item" href="{{ url('itemStockApprovalPenambahan')}}"><i class="fas fa-box"></i> Approval Penambahan</a>
+							<a class="dropdown-item" href="{{ url('itemStockApprovalPenambahan')}}"><i class="fas fa-user-check"></i> Approval Penambahan</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="{{ url('itemStockApprovalPengurangan')}}"><i class="fas fa-box"></i> Approval Pengurangan</a>
+							<a class="dropdown-item" href="{{ url('itemStockApprovalPengurangan')}}"><i class="fas fa-user-check"></i> Approval Pengurangan</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('opname')}}"><i class="fas fa-dolly-flatbed"></i> Stock Opname </a>
 						</li>
 						@endif
+						<li>
+							<a class="dropdown-item" href="{{ url('historyPerubahanStock')}}"><i class="fas fa-history"></i> History Perubahan stock </a>
+						</li>
 					</ul>
 				</li>
 				<li class="dropdown dropend">
@@ -258,17 +264,22 @@
 						</li>
 					</ul>
 				</li>
-				<li>
-					<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i> Barang Pendukung Produksi</a>
-				</li>
 
-				@if (Session::get('accessLevel') <= 30)
-				<li>
-					<a class="dropdown-item" href="{{ url('opname')}}"><i class="fas fa-dolly-flatbed"></i> Opname </a>
-				</li>
-				@endif
-				<li>
-					<a class="dropdown-item" href="{{ url('historyPerubahanStock')}}"><i class="fas fa-history"></i> History Perubahan stock </a>
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="menuBPP" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-box"></i> Barang Pendukung Produksi
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="menuBPP">
+						<li>
+							<a class="dropdown-item" href="{{ url('goodList')}}"><i class="fas fa-box"></i>BPP</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('goodCategories')}}"><i class="fas fa-box"></i>Kategori BPP</a>
+						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('goodUnits')}}"><i class="fas fa-list-ol"></i>Satuan BPP</a>
+						</li>
+					</ul>
 				</li>
 
 			</ul>
@@ -366,16 +377,7 @@
 					<a class="dropdown-item" href="{{ url('infophp')}}"><i class="fas fa-users"></i> Info</a>
 				</li>
 			</ul>
-
 		</li>
-
-
-
-
-
-
-
-
 		@endif
 		@endif
 	</ul>
