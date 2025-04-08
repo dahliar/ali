@@ -474,12 +474,22 @@ class EmployeeController extends Controller
             'al.name as accessLevel',
             'startDate as tanggalMulai',
             'endDate as tanggalAkhir',
+
+/*
+                        DB::raw('concat(
+                TIMESTAMPDIFF(YEAR, startdate, curdate()), 
+                " Tahun + ",
+                (TIMESTAMPDIFF(MONTH, startdate, curdate()) - (TIMESTAMPDIFF(YEAR, startdate, curdate()) * 12)), 
+                " Bulan") as lamaKerja'),
+*/
+
+
             DB::raw('
                 concat(
-                TIMESTAMPDIFF(YEAR, startDate, IFNULL(endDate, curdate())), 
+                TIMESTAMPDIFF(YEAR, startDate, IFNULL(curdate(), endDate)), 
                 "Y + ",
-                (TIMESTAMPDIFF(MONTH,startDate,IFNULL(endDate,curdate()))-(
-                TIMESTAMPDIFF(YEAR,startDate,IFNULL(endDate,curdate())) * 12)), 
+                (TIMESTAMPDIFF(MONTH,startDate,IFNULL(curdate(), endDate))-(
+                TIMESTAMPDIFF(YEAR,startDate,IFNULL(curdate(), endDate)) * 12)), 
                 "M")
                 as lamaKerja'),
             DB::raw('

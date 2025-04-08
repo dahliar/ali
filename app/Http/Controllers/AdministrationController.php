@@ -57,9 +57,9 @@ class AdministrationController extends Controller
             'sp.name as structuralPosition',
             DB::raw('trim(e.address) as address'),
             DB::raw('concat(
-                TIMESTAMPDIFF(YEAR, startdate, IFNULL(endDate, curdate())), 
+                TIMESTAMPDIFF(YEAR, startdate, IFNULL(curdate(), endDate)), 
                 " Tahun + ",
-                (TIMESTAMPDIFF(MONTH, startdate, IFNULL(endDate, curdate())) - (TIMESTAMPDIFF(YEAR, startdate, IFNULL(endDate, curdate())) * 12)), 
+                (TIMESTAMPDIFF(MONTH, startdate, IFNULL(curdate(), endDate)) - (TIMESTAMPDIFF(YEAR, startdate, IFNULL(curdate(), endDate)) * 12)), 
                 " Bulan") as lamaKerja'),
             DB::raw('
                 (CASE WHEN e.isActive="0" THEN "Non-Aktif" WHEN e.isActive="1" THEN "Aktif" END) AS statusKepegawaian
