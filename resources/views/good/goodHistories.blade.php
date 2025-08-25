@@ -106,11 +106,11 @@
                         <div class="form-check form-check-inline">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="showData" id="r2" value="2" checked>
-                                <label class="form-check-label" for="inlineRadio2">Penambahan</label>
+                                <label class="form-check-label" for="inlineRadio2">Pengurangan</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="showData" id="r3" value="1">
-                                <label class="form-check-label" for="inlineRadio3">Pengurangan</label>
+                                <label class="form-check-label" for="inlineRadio3">Penambahan</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="showData" id="r1" value="all">

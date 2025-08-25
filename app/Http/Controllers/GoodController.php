@@ -459,10 +459,10 @@ class GoodController extends Controller
         }) 
         ->editColumn('jenis', function ($row) {
             if ($row->jenis == 1){
-                $html = '<i class="fa fa-minus" style="font-size:20px"></i>';
+                $html = '<i class="fa fa-plus" style="font-size:20px"></i>';
             } else
             {
-                $html = '<i class="fa fa-plus" style="font-size:20px"></i>';
+                $html = '<i class="fa fa-minus" style="font-size:20px"></i>';
             }
             return $html;
         }) 
