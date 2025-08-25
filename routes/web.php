@@ -30,6 +30,7 @@ use App\Http\Controllers\BarcodeController;
 use App\Http\Controllers\AdministrationController;
 use App\Http\Controllers\LeaveController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\TaxController;
 
 use App\Models\Rekening; 
 use App\Models\Company; 
@@ -455,6 +456,8 @@ Route::post('goodUpdate',[GoodController::class, 'update'])->middleware('auth');
 Route::post('goodUbahTambah',[GoodController::class, 'storeTambah'])->middleware('auth');
 Route::post('goodUbahKurang',[GoodController::class, 'storeKurang'])->middleware('auth');
 Route::get('getGoods/{jenis}', [GoodController::class, 'getGoods'])->middleware('auth');
+Route::get('goodHistories',[GoodController::class, 'riwayatPerubahan'])->middleware(['auth', 'authorized']);
+Route::get('getGoodHistories/{jenis}/{start}/{end}', [GoodController::class, 'getGoodHistories'])->middleware('auth');
 
 
 //Kategori BPP
@@ -603,6 +606,20 @@ Route::GET('getScanKeluarBarcodeList', [StockController::class, 'getScanKeluarBa
 Route::POST('updateHapusBarcode',[StockController::class, 'updateHapusBarcode'])->middleware(['auth']);
 Route::GET('getScanKeluarData', [StockController::class, 'getScanKeluarData'])->middleware(['auth']);
 Route::GET('getScannedKeluarTransaksiHari', [StockController::class, 'getScannedKeluarTransaksiHari'])->middleware(['auth']);
+
+
+
+/*
+*   TAX 
+*   PAJAK
+*/
+
+
+Route::get('taxes',[TaxController::class, 'index'])->middleware(['auth', 'authorized']);
+Route::GET('getTaxes/{isChecked}', [TaxController::class, 'getTaxes'])->middleware(['auth']);
+Route::get('taxesAdd',[TaxController::class, 'taxesAdd'])->middleware(['auth', 'authorized']);
+Route::post('taxesStore',[TaxController::class, 'taxesStore'])->middleware(['auth']);
+
 
 
 

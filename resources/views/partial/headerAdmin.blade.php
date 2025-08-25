@@ -279,6 +279,9 @@
 						<li>
 							<a class="dropdown-item" href="{{ url('goodUnits')}}"><i class="fas fa-list-ol"></i>Satuan BPP</a>
 						</li>
+						<li>
+							<a class="dropdown-item" href="{{ url('goodHistories')}}"><i class="fas fa-list-ol"></i>Riwayat Perubahan BPP</a>
+						</li>
 					</ul>
 				</li>
 
@@ -330,8 +333,6 @@
 							</a>
 							<a class="dropdown-item" href="{{ url('standarBoronganApproval')}}"><i class="fas fa-folder-open"></i> Approval Standar Borongan
 							</a>
-
-
 						</li>
 					</ul>
 				</li>
@@ -349,6 +350,16 @@
 						</li>
 						<li>
 							<a class="dropdown-item" href="{{ url('workPositionList')}}"><i class="fas fa-building"></i> Bagian</a>
+						</li>
+					</ul>
+				</li>
+				<li class="dropdown dropend">
+					<a class="dropdown-item dropdown-toggle" href="#" id="navbarPenggajian" data-bs-auto-close="true" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-file-invoice-dollar"></i></i> Tax
+					</a>
+					<ul class="dropdown-menu" aria-labelledby="navbarPenggajian">
+						<li>
+							<a class="dropdown-item" href="{{ url('taxes')}}"><i class="fas fa-file-invoice-dollar"></i> Tax</a>
 						</li>
 					</ul>
 				</li>
