@@ -20,19 +20,6 @@
         }
     });
 
-    function tambahBarang(){
-        window.open(('{{ url("goodAdd") }}'), '_self');
-    }
-    function editBarang(id){
-        window.open(('{{ url("goodEdit") }}' + "/"+ id), '_self');
-    }
-    function ubahTambah(id){
-        window.open(('{{ url("goodUbahTambah") }}' + "/"+ id), '_self');
-    }
-    function ubahKurang(id){
-        window.open(('{{ url("goodUbahKurang") }}' + "/"+ id), '_self');
-    }
-
     function myFunction(){
         var start = document.getElementById("start").value;
         var end = document.getElementById("end").value;
@@ -97,8 +84,6 @@
                         <li class="breadcrumb-item active">Riwayat Perubahan</li>
                     </ol>
                 </nav>
-                <button onclick="tambahBarang()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Tambah Barang"><i class="fa fa-plus"></i>
-                </button>
             </div>
             <div class="modal-body">
                 <div class="row">
