@@ -453,29 +453,16 @@ class GoodController extends Controller
 
 
         return datatables()->of($query)
-        ->addColumn('action', function ($row) {
-            $html = '
-            <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Barang Masuk" disabled>
-            <i class="fa fa-plus" style="font-size:20px"></i>
-            </button>
-            <button class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Barang Keluar" disabled>
-            <i class="fa fa-minus" style="font-size:20px"></i>
-            </button>
-            <button  data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit & stock opname Barang" onclick="editBarang('."'".$row->id."'".')">
-            <i class="fa fa-edit" style="font-size:20px"></i>
-            </button>';
-            return $html;
-        })
         ->editColumn('jumlah', function ($row) {
             $html = $row->jumlah.' '.$row->satuan;
             return $html;
         }) 
         ->editColumn('jenis', function ($row) {
             if ($row->jenis == 1){
-                $html = '<i class="fa fa-plus" style="font-size:20px"></i>';
+                $html = '<i class="fa fa-minus" style="font-size:20px"></i>';
             } else
             {
-                $html = '<i class="fa fa-minus" style="font-size:20px"></i>';
+                $html = '<i class="fa fa-plus" style="font-size:20px"></i>';
             }
             return $html;
         }) 
