@@ -9,13 +9,22 @@
 @endsection
 
 @section('content')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.css"/>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.datatables.net/v/dt/dt-1.11.5/datatables.min.js" type="text/javascript" ></script>
+
+
 <script type="text/javascript">
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function cetakSlipPersonal(id, tahun, bulan){
+        alert(bulan);
+        window.open(('{{ url("slipGaji/slipGajiBulanan") }}'+"/"+id+"/"+tahun+"/"+bulan), '_blank');
+    };
 
     function cetak(){
         $bulanTahun = document.getElementById("bulanTahun").value;
@@ -63,6 +72,63 @@
         form.submit();
         document.body.removeChild(form);
     }
+
+
+    function myFunction(){
+        var bulanTahun = document.getElementById("bulanTahun").value;
+        if (bulanTahun===""){
+            Swal.fire(
+                'Pilihan kosong!',
+                "Pilih data dulu",
+                'warning'
+                );  
+        }
+        else
+        {
+            $('#datatable').DataTable({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                ajax:{
+                    url: '{{ url("getDataRekapitulasiGajiPerBulan") }}',
+                    data: function (d){
+                        d.bulanTahun = bulanTahun
+                    }
+                },
+                dataType: 'json',            
+                serverSide: false,
+                processing: true,
+                deferRender: true,
+                type: 'GET',
+                destroy:true,
+                columnDefs: [
+                    {   "width": "2%", "targets": [0], "className": "text-left"   },
+                    {   "width": "18%", "targets": [1], "className": "text-left" },
+                    {   "width": "10%", "targets": [2], "className": "text-left" },
+                    {   "width": "10%", "targets": [3], "className": "text-left" },
+                    {   "width": "10%", "targets": [4], "className": "text-end"   },
+                    {   "width": "10%", "targets": [5], "className": "text-end" },
+                    {   "width": "10%", "targets": [6], "className": "text-end" },
+                    {   "width": "10%", "targets": [7], "className": "text-end" },
+                    {   "width": "10%", "targets": [8], "className": "text-end"   },
+                    {   "width": "10%", "targets": [9], "className": "text-center"   }
+                ], 
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    {data: 'name', name: 'name'},
+                    {data: 'nik', name: 'nik'},
+                    {data: 'slipid', name: 'slipid', orderable: false, searchable: false},
+                    {data: 'bulanan', name: 'bulanan'},
+                    {data: 'harian', name: 'harian'},
+                    {data: 'borongan', name: 'borongan'},
+                    {data: 'honorarium', name: 'honorarium', orderable: false, searchable: false},
+                    {data: 'total', name: 'total'},
+                    {data: 'action', name: 'action'},
+                ]
+            });
+        }
+    }
+
 </script>
 @if ($errors->any())
 <div class="alert alert-success">
@@ -96,127 +162,47 @@
             </div>
         </div>
         <div class="card card-header">
-            <form action="{{url('getRekapitulasiGajiPerBulan')}}" method="get">
-                {{ csrf_field() }}
-                <div class="row form-group">
-                    <div class="col-md-2">
-                        @if(!empty($bulanTahun))
-                        <input type="month" name="bulanTahun" id="bulanTahun" class="form-control" value={{$bulanTahun}} max="{{date('Y-m')}}">
-                        <input type="hidden" name="valBulanTahun" id="valBulanTahun" value={{$bulanTahun}}>
-                        @else
-                        <input type="month" name="bulanTahun" id="bulanTahun" class="form-control" max="{{date('Y-m')}}">
-                        <input type="hidden" name="valBulanTahun" id="valBulanTahun" value="0000-00">
-                        @endif
-                    </div>
-                    <div class="col-md-2">
-                        <button type="submit" id="hitButton" class="form-control btn-primary">Cari</button>
-                    </div>
-                    @if(!empty($payroll))
-                    @if(count($payroll)>1)
-                    <div class="col-md-2">
-                        <button type="button" id="hitButton" class="form-control btn-primary" onclick="cetak()">Print</button>
-                    </div>               
-                    @endif                 
-                    @endif
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <input type="month" name="bulanTahun" id="bulanTahun" class="form-control" max="{{date('Y-m')}}">
                 </div>
-            </form>
+                <div class="col-md-8">
+                    <button onclick="myFunction()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-search">  Cari</i>
+                    </button>
+                    <!--
+                    <button onclick="cetak()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-print">  Cetak</i>
+                    -->
+                    </button>
+                </div>               
+            </div>
         </div>
         <div class="card card-body">
             <div class="row form-group">
-               @if(!empty($payroll))
-               <input type="hidden" name="payroll" id="payroll" value="{{$payroll}}">
-
-               <table style="width: 100%;" class="center table table-striped table-hover table-bordered">
-                <thead style="text-align: center;">
-                    <tr>
-                        <th style="width: 2%;">No</th>
-                        <th style="width: 18%;">Nama</th>
-                        <th style="width: 10%;">NIK</th>
-                        <th style="width: 10%;">No Slip</th>
-                        <th style="width: 12%;">Bulanan</th>
-                        <th style="width: 12%;">Harian</th>
-                        <th style="width: 12%;">Borongan</th>
-                        <th style="width: 12%;">Honorarium</th>
-                        <th style="width: 12%;">Total</th>
-                    </tr>
-                </thead>
-                <tbody style="font-size:12px">
-                    @php 
-                    $no=1;
-                    $totalBulanan=0;
-                    $totalHarian=0;
-                    $totalBorongan=0;
-                    $totalHonorarium=0;
-                    $total=0;
-                    @endphp
-                    @foreach($payroll as $paymonth)
-                    @php
-                    $totalBulanan+=$paymonth->bulanan;
-                    $totalHarian+=$paymonth->harian;
-                    $totalBorongan+=$paymonth->borongan;
-                    $totalHonorarium+=$paymonth->honorarium;
-                    $totalBulan=($paymonth->bulanan+$paymonth->harian+$paymonth->borongan+$paymonth->honorarium);
-                    $total+=$totalBulan;
-                    @endphp
-                    <tr>
-                        <td style="text-align: center;">
-                            {{$no}}
-                        </td>
-                        <td style="text-align: left;">
-                            {{$paymonth->name}}
-                        </td>
-                        <td style="text-align: left;">
-                            {{$paymonth->nik}}
-                        </td>
-                        <td style="text-align: center;">
-                            {{$paymonth->slipid}}{{$tahun}}{{$bulan}}
-                        </td>
-                        <td style="text-align: right;">Rp. {{number_format($paymonth->bulanan, 2, ',', '.')}}
-                        </td>
-                        <td style="text-align: right;">Rp. {{number_format($paymonth->harian, 2, ',', '.')}}
-                        </td>
-                        <td style="text-align: right;">Rp. {{number_format($paymonth->borongan, 2, ',', '.')}}</td>
-                        <td style="text-align: right;">Rp. {{number_format($paymonth->honorarium, 2, ',', '.')}}</td>
-                        <td style="text-align: right;">{{number_format($totalBulan, 2, ',', '.')}}</td>
-                        @php $no+=1;    @endphp                                    
-                    </tr>
-                    @endforeach
-                </tbody>
-                <tfoot style="font-size:14px">
-                    <tr>
-                        <td style="text-align: center;">
-                        </td>
-                        <td style="text-align: center;">
-                        </td>
-                        <td style="text-align: center;">
-                        </td>
-                        <td style="text-align: right;">
-                            Rp. {{number_format($totalBulanan, 2, ',', '.')}}
-                        </td>
-                        <td style="text-align: right;">
-                            Rp. {{number_format($totalHarian, 2, ',', '.')}}
-                        </td>
-                        <td style="text-align: right;">
-                            Rp. {{number_format($totalBorongan, 2, ',', '.')}}
-                        </td>
-                        <td style="text-align: right;">
-                            Rp. {{number_format($totalHonorarium, 2, ',', '.')}}
-                        </td>
-                        <td style="text-align: right;">
-                            Rp. {{number_format($total, 2, ',', '.')}}
-                        </td>
-                    </tr>
-                </tfooter>
-            </table>
-
-
-            @endif
+                <table class="table table-striped table-hover table-bordered data-table"  id="datatable">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th style="width: 2%;text-align: center;">No</th>
+                            <th style="width: 18%;text-align: center">Nama</th>
+                            <th style="width: 10%;text-align: center">NIK</th>
+                            <th style="width: 10%;text-align: center">No Slip</th>
+                            <th style="width: 10%;text-align: center">Bulanan</th>
+                            <th style="width: 10%;text-align: center">Harian</th>
+                            <th style="width: 10%;text-align: center">Borongan</th>
+                            <th style="width: 10%;text-align: center">Honorarium</th>
+                            <th style="width: 10%;text-align: center">Total</th>
+                            <th style="width: 10%;text-align: center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:14px">
+                    </tbody>
+                </table>     
+            </div>
         </div>
+        Laman ini akan menampilkan data 
+        <ol>
+            <li>Dalam rentang tanggal terpilih</li>
+            <li>Data gaji yang dihitung melihat proses generate gaji</li>
+        </ol>
     </div>
-    Laman ini akan menampilkan data 
-    <ol>
-        <li>Dalam rentang tanggal terpilih</li>
-        <li>Data gaji yang dihitung melihat proses generate gaji</li>
-    </ol>
 </body>
 @endsection

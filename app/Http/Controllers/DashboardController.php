@@ -22,14 +22,6 @@ class DashboardController extends Controller
     }
     public function infophp()
     {
-        
-
-
-
-
-
-
-
         //$pdf = Pdf::loadview("userMapping.info");
         //return $pdf->download("Proforma Invoice.pdf");
 
@@ -563,7 +555,63 @@ class DashboardController extends Controller
     public function rekapitulasiGajiPerBulan(){
         return view('dashboard.rekapitulasiGajiPerBulan');
     }
-    public function getRekapitulasiGajiPerBulan(Request $request){
+
+    //versiNew
+    public function getDataRekapitulasiGajiPerBulan(Request $request){
+        $tanggal = \Carbon\Carbon::create($request->bulanTahun);
+//        dd($request->bulanTahun);
+        $payroll = DB::table('detail_payrolls as dp')
+        ->select(
+            DB::raw('dp.employeeId as empid'),
+            DB::raw('e.nik as nik'),
+            DB::raw("concat(e.nip,$tanggal->year,$tanggal->month) as slipid"),
+            DB::raw("$tanggal->year as tahun"),
+            DB::raw("$tanggal->month as bulan"),
+            DB::raw('u.name as name'),
+            DB::raw('sum(dp.bulanan) as bulanan'),
+            DB::raw('sum(dp.harian) as harian'),
+            DB::raw('sum(dp.borongan) as borongan'),
+            DB::raw('sum(dp.honorarium) as honorarium')
+        )
+        ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
+        ->join('employees as e', 'e.id', '=', 'dp.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->whereMonth('p.payDate', $tanggal->month)
+        ->whereYear('p.payDate', $tanggal->year)
+        ->groupBy('dp.employeeId')
+        ->orderBy('u.name')
+        ->get();
+        return datatables()->of($payroll)
+        ->editColumn('bulanan', function ($row) {
+            return number_format($row->bulanan, 2, ',', '.');
+        })
+        ->editColumn('harian', function ($row) {
+            return number_format($row->harian, 2, ',', '.');
+        })
+        ->editColumn('borongan', function ($row) {
+            return number_format($row->borongan, 2, ',', '.');
+        })
+        ->editColumn('honorarium', function ($row) {
+            return number_format($row->honorarium, 2, ',', '.');
+        })
+        ->addColumn('total', function ($row) {
+            $html=$row->bulanan+$row->harian+$row->borongan+$row->honorarium;
+            $html=number_format($html, 2, ',', '.');
+            return $html;
+        })
+        ->addColumn('action', function ($row) {
+            $html='<button  data-rowid="'.$row->empid.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Cetak Slip Personal" onclick="cetakSlipPersonal('."'".$row->empid."','".$row->tahun."','".$row->bulan."'".')">
+            <i class="fas fa-print" style="font-size:20px"></i>
+            </button>';
+            return $html;
+        })
+        ->addIndexColumn()
+        ->toJson();
+    }
+
+
+    //versiOLD, ada pemrosesan di view-->should not
+    public function getRekapitulasiGajiPerBulanV1(Request $request){       
         $request->validate(
             [
                 'bulanTahun'    => 'required|before_or_equal:now',
@@ -650,10 +698,6 @@ class DashboardController extends Controller
         $pdf = PDF::loadview('invoice.rekapGajiBulanan', compact('monthYear', 'payroll', 'tahun', 'bulan'))->setPaper('a4', 'landscape');
         $filename = 'Rekap Gaji '.$monthYear.' cetak tanggal '.today().'.pdf';
         return $pdf->download($filename);
-
-
-
-
     }
 
     public function rekapitulasiPembelianPerBulan(){

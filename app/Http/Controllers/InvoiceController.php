@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Employee;
 use App\Models\Transaction;
 use App\Models\DetailTransaction;
 use App\Models\Purchase;
@@ -390,6 +391,68 @@ class InvoiceController extends Controller
         
         $pdf = PDF::loadview('invoice.slipGajiPegawai', compact('endDate','startDate','employee', 'payroll', 'detail_payroll', 'presence', 'bulanan','harian', 'borongan', 'honorarium'));
         $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.now().'.pdf';
+        return $pdf->download($filename);
+    }
+
+
+    public function slipGajiBulanan($empId, $tahun, $bulan){
+
+        $employee =  DB::table('employees as e')
+        ->select(
+            'e.nip as nip',
+            'e.nik as nik',
+            'u.name as name',
+            'e.noRekening as noRekening'
+        )
+        ->join('banks as ba', 'ba.id', '=', 'e.bankid')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->where('e.id', '=', $empId)->first();
+
+
+        $tanggal = \Carbon\Carbon::create($tahun, $bulan, 1);
+        $bulanName="";
+        switch($tanggal->month){
+            case 1 : $bulanName="Januari";break;
+            case 2 : $bulanName="Februari";break;
+            case 3 : $bulanName="Maret";break;
+            case 4 : $bulanName="April";break;
+            case 5 : $bulanName="Mei";break;
+            case 6 : $bulanName="Juni";break;
+            case 7 : $bulanName="Juli";break;
+            case 8 : $bulanName="Agustus";break;
+            case 9 : $bulanName="September";break;
+            case 10 : $bulanName="Oktober";break;
+            case 11 : $bulanName="November";break;
+            case 12 : $bulanName="Desember";break;
+        }
+
+        $payroll = DB::table('detail_payrolls as dp')
+        ->select(
+            DB::raw('dp.employeeId as empid'),
+            DB::raw('e.nik as nik'),
+            DB::raw('e.nip as nip'),
+            DB::raw('u.name as name'),
+            DB::raw('sum(dp.bulanan) as bulanan'),
+            DB::raw('sum(dp.harian) as harian'),
+            DB::raw('sum(dp.borongan) as borongan'),
+            DB::raw('sum(dp.honorarium) as honorarium')
+        )
+        ->join('payrolls as p', 'p.id', '=', 'dp.idPayroll')
+        ->join('employees as e', 'e.id', '=', 'dp.employeeId')
+        ->join('users as u', 'u.id', '=', 'e.userid')
+        ->where('e.id', $empId)
+        ->whereMonth('p.payDate', $tanggal->month)
+        ->whereYear('p.payDate', $tanggal->year)
+        ->groupBy('dp.employeeId')
+        ->orderBy('u.name')
+        ->first();
+
+        $monthYear = $bulan.' '.$tanggal->year;
+        $tahun = $tanggal->year;
+        $bulan = $tanggal->format('m');
+        
+        $pdf = PDF::loadview('invoice.slipGajiBulanan', compact('employee', 'payroll', 'tahun', 'bulanName'));
+        $filename = 'Slip Gaji '.$employee->nip.' '.$employee->name.' '.$employee->nip.' '.$tahun.' '.$bulanName.' '.now().'.pdf';
         return $pdf->download($filename);
     }
 

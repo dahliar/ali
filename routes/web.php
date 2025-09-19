@@ -306,6 +306,7 @@ Route::POST('ubahStatusPenggajianBulanan',[SalaryController::class, 'hapusPengga
 Route::POST('slipGajiKaryawan',[SalaryController::class, 'viewSlipGaji'])->middleware('auth', 'authorized');
 Route::get('/slipGaji/slipGajiPerPayroll/{dpid}', [InvoiceController::class, 'slipGajiPerPayroll'])->middleware(['auth', 'authorized']);
 Route::get('/slipGaji/slipGajiPerPayrollBulanan/{dpid}', [InvoiceController::class, 'slipGajiPerPayrollBulanan'])->middleware(['auth', 'authorized']);
+Route::get('/slipGaji/slipGajiBulanan/{id}/{bulan}/{tahun}', [InvoiceController::class, 'slipGajiBulanan'])->middleware(['auth', 'authorized']);
 
 //Penggajian harian
 Route::GET('salaryHarianList',[SalaryController::class, 'indexHarian'])->middleware('auth', 'authorized');
@@ -410,6 +411,10 @@ Route::get('rekapitulasiGaji',[DashboardController::class, 'rekapitulasiGaji'])-
 Route::post('getRekapitulasiGaji', [DashboardController::class, 'getRekapitulasiGaji'])->middleware(['auth']);
 Route::get('rekapitulasiGajiPerBulan',[DashboardController::class, 'rekapitulasiGajiPerBulan'])->middleware(['auth', 'authorized']);
 Route::get('getRekapitulasiGajiPerBulan', [DashboardController::class, 'getRekapitulasiGajiPerBulan'])->middleware(['auth']);
+Route::get('getDataRekapitulasiGajiPerBulan', [DashboardController::class, 'getDataRekapitulasiGajiPerBulan'])->middleware(['auth']);
+
+
+
 Route::POST('cetakRekapGajiBulanan', [DashboardController::class, 'cetakRekapGajiBulanan'])->middleware(['auth', 'authorized']);
 Route::get('rekapitulasiPembelianPerBulan',[DashboardController::class, 'rekapitulasiPembelianPerBulan'])->middleware(['auth', 'authorized']);
 Route::post('getRekapitulasiPembelianPerBulan', [DashboardController::class, 'getRekapitulasiPembelianPerBulan'])->middleware(['auth']);
