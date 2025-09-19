@@ -103,7 +103,7 @@ class Species extends Model
 
         return $query->first();
     }
-
+    //this
     public function getAllSpeciesItemData($speciesId){
         $query = DB::table('items as i')
         ->select(
@@ -117,8 +117,9 @@ class Species extends Model
                 si.name," Packing ",
                 weightbase," Kg/", p.shortname
             ) as itemName'),
-            DB::raw('concat(i.amount," ", p.shortname, " * ", i.weightbase, " Kg") as packing'), 
-            DB::raw('concat((i.amount * i.weightbase), " Kg") as amount'), 
+            'p.shortname as shortname',
+            'i.weightbase as wb',
+            'i.amount as amount',
             'i.imageurl as url', 
             DB::raw('(CASE WHEN i.isActive=0 THEN "Tidak" WHEN i.isActive="1" THEN "Ya" END) AS isActive'),
         )
@@ -137,9 +138,17 @@ class Species extends Model
         if ($speciesId>0){
             $query->where('sp.id','=', $speciesId);
         }
-        $query->get();    
+        $query->get();
 
         return datatables()->of($query)
+        ->editColumn('packing', function ($row) {
+            $html = number_format($row->amount, 2, ',', '.').' '.$row->shortname;
+            return $html;
+        })
+        ->editColumn('amount', function ($row) {
+            $html = number_format($row->amount, 2, ',', '.').' '.$row->wb;
+            return $html;
+        })
         ->addColumn('action', function ($row) {
             $html="";
             $html = '<button onclick="editSpeciesItem('."'".$row->id."'".')" data-rowid="'.$row->id.'" class="btn btn-xs btn-light" data-toggle="tooltip" data-placement="top" data-container="body" title="Edit Item"><i class="fa fa-edit" style="font-size:20px"></i></button>';
