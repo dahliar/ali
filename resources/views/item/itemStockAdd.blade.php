@@ -14,17 +14,13 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
     function totalAmount(){
-        var packedLama = parseFloat(document.getElementById("packedLama").textContent);
+        var packedLama = parseFloat(document.getElementById("packedLama").value);
         var packedTambah = parseFloat(document.getElementById("packedTambah").value);
         document.getElementById("packedTotal").value = new Number(packedTambah + packedLama);
 
-        var unpackedLama = parseFloat(document.getElementById("unpackedLama").textContent);
+        var unpackedLama = parseFloat(document.getElementById("unpackedLama").value);
         var unpackedTambah = parseFloat(document.getElementById("unpackedTambah").value);
         document.getElementById("unpackedTotal").value = new Number(unpackedTambah + unpackedLama);
-
-        //var unpackedLama = parseFloat(document.getElementById("unpackedLama").value);
-        //var unpackedTambah = parseFloat(document.getElementById("unpackedTambah").value);
-        //document.getElementById("unpackedTotal").value = new Number(unpackedTambah + unpackedLama);
     }
 </script>
 @if (session('success'))
@@ -139,13 +135,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <!--
-                                    <input id="packedLama" name="packedLama" type="number" class="form-control text-end" value="{{old('packedLama', $oneItem->amount)}}" disabled="true">
-                                    <input id="packedLama" name="packedLama" type="number" class="form-control text-end" value="{{old('packedLama', number_format($oneItem->amount, 2, ',', '.'))}}" disabled="true">
+                                    <input id="packedLama" name="packedLama" type="number" class="form-control text-end" value="{{old('packedLama', number_format($oneItem->amount, 2))}}" disabled="true">
                                     <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
-                                    -->
-                                    <span class="label" id="packedLama" name="packedLama">{{number_format($oneItem->amount, 2, ',', '.')}}</span>
-                                    <span class="label">{{$oneItem->packingShortname}}</span>
                                 </div>
                             </div>
                         </div> 
@@ -194,14 +185,8 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <!--
                                     <input id="unpackedLama" name="unpackedLama" type="number" class="form-control text-end" value="{{old('unpackedLama', $oneItem->amountUnpacked)}}" disabled="true">
                                     <span class="input-group-text col-3">Kg</span>
-                                    -->
-
-                                    <span class="label" id="unpackedLama" name="unpackedLama">{{number_format($oneItem->amountUnpacked, 2, ',', '.')}}</span>
-                                    <span class="label">{{$oneItem->packingShortname}}</span>
-
                                 </div>
                             </div>
                         </div> 
