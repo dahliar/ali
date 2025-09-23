@@ -135,7 +135,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="packedLama" name="packedLama" type="number" class="form-control text-end" value="{{old('packedLama', number_format($oneItem->amount, 2))}}" disabled="true">
+                                    <input id="packedLama" name="packedLama" type="number" class="form-control text-end" value="{{old('packedLama', number_format($oneItem->amount, 2, '.', ''))}}" disabled="true">
                                     <span class="input-group-text col-3">{{$oneItem->packingShortname}}</span>
                                 </div>
                             </div>
@@ -185,7 +185,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <input id="unpackedLama" name="unpackedLama" type="number" class="form-control text-end" value="{{old('unpackedLama', number_format($oneItem->amountUnpacked, 2))}}" disabled="true">
+                                    <input id="unpackedLama" name="unpackedLama" type="number" class="form-control text-end" value="{{old('unpackedLama', number_format($oneItem->amountUnpacked, 2, '.', ''))}}" disabled="true">
                                     <span class="input-group-text col-3">Kg</span>
                                 </div>
                             </div>
