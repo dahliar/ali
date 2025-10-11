@@ -270,12 +270,16 @@
 								<option value="2023">2023</option>
 								<option value="2024">2024</option>
 								<option value="2025">2025</option>
+								<option value="2026">2026</option>
+								<option value="2027">2027</option>
 								@else
 								<option value="-1"   @if(old('tahun', $tahun) == -1) selected @endif>--Pilih tahun--</option>
 								<option value="2022" @if(old('tahun', $tahun) == 2022) selected @endif>2022</option>
 								<option value="2023" @if(old('tahun', $tahun) == 2023) selected @endif>2023</option>
 								<option value="2024" @if(old('tahun', $tahun) == 2024) selected @endif>2024</option>
 								<option value="2025" @if(old('tahun', $tahun) == 2025) selected @endif>2025</option>
+								<option value="2026" @if(old('tahun', $tahun) == 2026) selected @endif>2026</option>
+								<option value="2027" @if(old('tahun', $tahun) == 2027) selected @endif>2027</option>
 								@endif
 							</select>
 						</div>
