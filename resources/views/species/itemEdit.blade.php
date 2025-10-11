@@ -229,7 +229,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="input-group">
-                                    <input id="amount" name="amount" type="text" class="form-control text-end" value="{{$item->amount}}" readonly>
+                                    <input id="amount" name="amount" type="text" class="form-control text-end" value="{{number_format($item->amount, 2, '.', '')}}" readonly>
                                     <span id="spanAmount" class="input-group-text col-4">Kg</span>
                                 </div>
                             </div>
