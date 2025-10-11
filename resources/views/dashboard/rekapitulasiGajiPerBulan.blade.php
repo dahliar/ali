@@ -22,13 +22,11 @@
     });
 
     function cetakSlipPersonal(id, tahun, bulan){
-        alert(bulan);
         window.open(('{{ url("slipGaji/slipGajiBulanan") }}'+"/"+id+"/"+tahun+"/"+bulan), '_blank');
     };
 
     function cetak(){
         $bulanTahun = document.getElementById("bulanTahun").value;
-        $valBulanTahun = document.getElementById("valBulanTahun").value;
         
         if ($bulanTahun=="") {
             Swal.fire(
@@ -37,19 +35,10 @@
                 'warning'
                 );
         } else {
-            if ($valBulanTahun!=$bulanTahun){
-                Swal.fire(
-                    'Terdapat perubahan opsi pilihan.',
-                    "Cari data dulu!",
-                    'info'
-                    );
-            }
-            else {
-                openWindowWithPost('{{ url("cetakRekapGajiBulanan") }}', {
-                    '_token': "{{ csrf_token() }}" ,
-                    bulanTahun: $bulanTahun
-                });
-            }
+            openWindowWithPost('{{ url("cetakRekapGajiBulanan") }}', {
+                '_token': "{{ csrf_token() }}" ,
+                bulanTahun: $bulanTahun
+            });
         }
     }
 
@@ -169,9 +158,7 @@
                 <div class="col-md-8">
                     <button onclick="myFunction()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-search">  Cari</i>
                     </button>
-                    <!--
                     <button onclick="cetak()" class="btn btn-primary" data-toggle="tooltip" data-placement="top" data-container="body" title="Filter"><i class="fas fa-print">  Cetak</i>
-                    -->
                     </button>
                 </div>               
             </div>
