@@ -126,10 +126,10 @@
                             <option value="-1" selected>--Choose One--</option>
                             <option value="2022" @if($tahun == 2022) selected @endif>2022</option>
                             <option value="2023" @if($tahun == 2023) selected @endif>2023</option>
-                            <option value="2024" @if($tahun == 2024) selected @endif>2023</option>
-                            <option value="2025" @if($tahun == 2025) selected @endif>2023</option>
-                            <option value="2026" @if($tahun == 2026) selected @endif>2023</option>
-                            <option value="2027" @if($tahun == 2027) selected @endif>2023</option>
+                            <option value="2024" @if($tahun == 2024) selected @endif>2024</option>
+                            <option value="2025" @if($tahun == 2025) selected @endif>2025</option>
+                            <option value="2026" @if($tahun == 2026) selected @endif>2026</option>
+                            <option value="2027" @if($tahun == 2027) selected @endif>2027</option>
                         </select>
                         @endif
                     </div>
