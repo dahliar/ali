@@ -187,8 +187,8 @@
         </div>
         Laman ini akan menampilkan data 
         <ol>
-            <li>Dalam rentang tanggal terpilih</li>
-            <li>Data gaji yang dihitung melihat proses generate gaji</li>
+            <li>Dalam rentang bulan terpilih</li>
+            <li>Data yang dihitung adalah data antara tanggal 1-akhir bulan</li>
         </ol>
     </div>
 </body>

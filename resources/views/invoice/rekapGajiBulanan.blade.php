@@ -89,7 +89,7 @@
                         <th style="width: 12%;">Total</th>
                     </tr>
                 </thead>
-                <tbody style="font-size:12px">
+                <tbody style="font-size:10px">
                     @php 
                     $no=1;
                     $totalBulanan=0;
@@ -131,8 +131,9 @@
                     </tr>
                     @endforeach
                 </tbody>
-                <tfoot style="font-size:12px">
+                <tfoot style="font-size:10px">
                     <tr>
+                        <td style="text-align: center;"></td>
                         <td style="text-align: center;"></td>
                         <td style="text-align: center;"></td>
                         <td style="text-align: center;"></td>

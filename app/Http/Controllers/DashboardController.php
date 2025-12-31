@@ -212,7 +212,8 @@ class DashboardController extends Controller
                 ->join('species as sp', 'sp.id', '=', 's.speciesId')
                 ->where('i.isActive', '=', '1')
                 ->groupBy('sp.id')
-                ->orderBy('sp.nameBahasa')
+                ->orderBy('jumlahSpecies', "desc")
+                ->limit(20)
                 ->get();
 
 
